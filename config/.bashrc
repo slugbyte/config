@@ -4,16 +4,16 @@ history -a
 set globstar
 set nocaseglob
 
-# ENV 
-export DOT_ROOT=$HOME/workspace/dot
-export EDITOR=$(which nvim)
-export PATH="$DOT_ROOT/bin:$PATH"
-export PS1="\[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
-
 # PLUGINS
+export DOT_ROOT=$HOME/workspace/dot
 for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
   . $plugin
 done
+
+# ENV 
+export EDITOR=$(which nvim)
+export PATH="$DOT_ROOT/bin:$PATH"
+export PS1="\[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
 
 # ALIAS
 alias ls="ls -GF"
