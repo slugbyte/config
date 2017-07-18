@@ -5,13 +5,13 @@ set globstar
 set nocaseglob
 
 # ENV 
-export DOT_ROOT=$HOME/.bash
+export DOT_ROOT=$HOME/workspace/dot
 export EDITOR=$(which nvim)
 export PATH="$DOT_ROOT/bin:$PATH"
 export PS1="\[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
 
 # PLUGINS
-for plugin in ~/.bash/plugin/*.plugin.sh;do
+for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
   . $plugin
 done
 
