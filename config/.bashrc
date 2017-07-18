@@ -41,4 +41,3 @@ handle_error(){
   echo "ERROR: command[$(history | tail -n 1| sed 's/.......//')] status($status)"
 }
 trap handle_error ERR
-

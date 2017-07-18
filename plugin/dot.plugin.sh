@@ -74,8 +74,10 @@ dot_pull(){
 
 dot_sync(){
   local config
-  for config in $DOT_ROOT/config/*;do
-    cp -f $config ~/
+  for config in $DOT_ROOT/config/{*,.*};do
+    if [[ -f $config ]]; then 
+      cp -f $config ~/
+    fi 
   done
   . ~/.bashrc
   echo "sync complete"
