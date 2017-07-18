@@ -1,4 +1,4 @@
-export GITAWAREPROMPT=$BASH_PLUGIN_DIR/modules/git-aware-prompt
+export GITAWAREPROMPT=$DOT_ROOT/plugin/modules/git-aware-prompt
 
 if [[ ! -e $GITAWAREPROMPT ]];then 
   echo "hello"

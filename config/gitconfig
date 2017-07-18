@@ -1,8 +1,0 @@
-[user]
-	name = Duncan Marsh
-	email = slugbyte@slugbyte.com
-[merge]
-	prompt = true
-	tool = vimdiff2
-[mergetool]
-	keepBackup = false
