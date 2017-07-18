@@ -5,7 +5,7 @@ set globstar
 set nocaseglob
 
 # PLUGINS
-export DOT_ROOT=$HOME/workspace/dot
+export DOT_ROOT=$HOME/workspace/config
 for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
   . $plugin
 done
