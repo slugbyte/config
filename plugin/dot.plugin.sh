@@ -12,19 +12,43 @@
 dot_help(){
   echo -e 'DOT SUBROUTINES:
     help -- print dot help
-    make -- create a config, script, or plugin
-    copy -- copy a config, script, or plugins into dot
     list -- list configs, scripts, or plugins
+    copy -- copy a config, script, or plugins into dot
     edit -- edit configs, scripts, or plugins
-    drop -- remove a config, script, or plugin
     push -- upload changes
     pull -- download changes
-    load -- install changes'
+    sync -- install changes'
+}
+
+dot_list(){
+  echo "config"
+  for config in $DOT_ROOT/config/{*,.*};do
+    if [[ -f $config ]]; then 
+      echo "    $(basename $config)"
+    fi 
+  done 
+
+  echo "plugin"
+  for config in $DOT_ROOT/plugin/{*,.*};do
+    if [[ -f $config ]]; then 
+      local filename=$(basename $config)
+      echo "    ${filename/.plugin.sh}"
+    fi 
+  done 
+
+  echo "bin"
+  for config in $DOT_ROOT/bin/{*,.*};do
+    if [[ -f $config ]]; then 
+      local filename=$(basename $config)
+      echo "    ${filename}"
+    fi 
+  done 
 }
 
 dot_edit(){
   local type=$1
   local filename=$2
+  [[ $type = 'plugin' ]] && filename=${filename}.plugin.sh
   local filepath=$DOT_ROOT/$type/$filename
   if [[ -n $type ]] && [[ -n $filename ]];then 
     if [[ -e $filepath ]];then 
@@ -90,6 +114,9 @@ dot(){
   fi 
   local subroutine=${1}
   case $subroutine in
+    'list')
+      dot_list
+      ;;
     'sync')
       dot_sync
       ;;
