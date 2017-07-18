@@ -3,7 +3,7 @@
 #### dot
 > the bash function that helps me maintain this repo
 
-dot is defined in `plugin/dot.plugin.sh`. its a small shell script with little user validation `:p`.
+dot is defined in `plugin/dot.plugin.sh`. its a small shell script with little to no user validation `:p`.
 
 config's assets are organized by dot in the following dirs...
 * **config** -- the dotfiles 
