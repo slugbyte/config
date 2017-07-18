@@ -29,7 +29,7 @@ dot_edit(){
   if [[ -n $type ]] && [[ -n $filename ]];then 
     if [[ -e $filepath ]];then 
       $EDITOR $filepath
-      if [[ type = 'config' ]];then 
+      if [[ $type = 'config' ]];then 
         cp $filepath $HOME/$filename
       fi 
     else 
@@ -46,6 +46,9 @@ dot_copy(){
   if [[ -n $type ]] && [[ -n $filepath ]];then 
     if [[ -e $filepath ]];then 
       cp -f $filepath $DOT_ROOT/$type/$(basename $filepath)
+      if [[ $type = 'config' ]];then 
+        cp $filepath $HOME/$(basename $filepath)
+      fi 
     else 
       echo no such $type $filename
     fi
@@ -69,6 +72,15 @@ dot_pull(){
   git pull origin master
 }
 
+dot_sync(){
+  local config
+  for config in $DOT_ROOT/config/*;do
+    cp -f $config ~/
+  done
+  . ~/.bashrc
+  echo "sync complete"
+}
+
 dot(){
   if [[ ! -n $DOT_ROOT ]];then 
     echo "ERROR: \$DOT_ROOT needs to be set"
@@ -76,6 +88,9 @@ dot(){
   fi 
   local subroutine=${1}
   case $subroutine in
+    'sync')
+      dot_sync
+      ;;
     'pull')
       dot_pull
       ;;
