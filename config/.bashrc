@@ -31,9 +31,9 @@ alias p="git push origin"
 alias l="git pull origin"
 alias b="git branch -a"
 alias ch="git checkout"
-alias ..="cd .."
-alias e=edit.sh
 alias vim='echo instead use: e'
+alias e=edit.sh
+alias ..="cd .."
 
 # TRAPS
 handle_error(){
