@@ -94,6 +94,14 @@ dot_pull(){
   pushd . 
   cd $DOT_ROOT
   git pull origin master
+  popd
+}
+
+dot_stat(){
+  pushd . 
+  cd $DOT_ROOT
+  git status
+  popd
 }
 
 dot_sync(){
@@ -116,6 +124,9 @@ dot(){
   case $subroutine in
     'list')
       dot_list
+      ;;
+    'stat')
+      dot_stat
       ;;
     'sync')
       dot_sync
