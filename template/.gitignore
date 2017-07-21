@@ -1,6 +1,5 @@
 build
 db
-*.env 
 
 # Created by https://www.gitignore.io/api/go,osx,vim,java,node,xcode,linux,clojure,windows
 ### Clojure ###
