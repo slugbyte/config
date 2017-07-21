@@ -15,6 +15,7 @@ dot_help(){
     list -- list configs, scripts, or plugins
     copy -- copy a config, script, or plugins into dot
     edit -- edit configs, scripts, or plugins
+    stat -- check dots git status
     push -- upload changes
     pull -- download changes
     sync -- install changes'
@@ -45,6 +46,23 @@ dot_list(){
   done 
 }
 
+dot_copy(){
+  local type=$1
+  local filepath=$2
+  if [[ -n $type ]] && [[ -n $filepath ]];then 
+    if [[ -e $filepath ]];then 
+      cp -f $filepath $DOT_ROOT/$type/$(basename $filepath)
+      if [[ $type = 'config' ]];then 
+        cp $filepath $HOME/$(basename $filepath)
+      fi 
+    else 
+      echo no such $type $filename
+    fi
+  else 
+    echo "USER ERROR: must supply type and filepath"
+  fi 
+}
+
 dot_edit(){
   local type=$1
   local filename=$2
@@ -64,22 +82,14 @@ dot_edit(){
   fi 
 }
 
-dot_copy(){
-  local type=$1
-  local filepath=$2
-  if [[ -n $type ]] && [[ -n $filepath ]];then 
-    if [[ -e $filepath ]];then 
-      cp -f $filepath $DOT_ROOT/$type/$(basename $filepath)
-      if [[ $type = 'config' ]];then 
-        cp $filepath $HOME/$(basename $filepath)
-      fi 
-    else 
-      echo no such $type $filename
-    fi
-  else 
-    echo "USER ERROR: must supply type and filepath"
-  fi 
+
+dot_stat(){
+  pushd . 
+  cd $DOT_ROOT
+  git status
+  popd
 }
+
 
 dot_push(){
   pushd . 
@@ -94,13 +104,6 @@ dot_pull(){
   pushd . 
   cd $DOT_ROOT
   git pull origin master
-  popd
-}
-
-dot_stat(){
-  pushd . 
-  cd $DOT_ROOT
-  git status
   popd
 }
 
