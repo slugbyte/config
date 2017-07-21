@@ -145,20 +145,15 @@ dot_proj_copy(){
   else 
     local project=$1
     local destination=$2
-    cp -r $DOT_ROOT/template/${project} ${destination}
+    local project_path=$DOT_ROOT/template/${project}
+    if [[ -e $project_path ]];then 
+      cp -r $project_path ${destination}
+    else 
+      echo "USER ERROR: project ($project) does not exist"
+    fi 
   fi 
 }
 
-dot_proj_copy(){
-  if (( $# < 1 ));then 
-    echo "USER ERROR: missing project name"
-    return 
-  else 
-    local project=$1
-    local destination=$2
-    cp -r $DOT_ROOT/template/${project} ${destination}
-  fi 
-}
 
 dot_proj_edit(){
   if (( $# < 1 ));then 
