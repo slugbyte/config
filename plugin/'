@@ -120,30 +120,6 @@ dot_sync(){
   echo "sync complete"
 }
 
-dot_proj_help(){
-  echo 'DOT PROJ SUBROUTINES:
-  help -- print dot proj help
-  make -- make a new project template
-  copy -- copy an existing project directory
-  edit -- edit an existing project directory'
-}
-
-dot_proj(){
-  # help
-  # make 
-  # copy 
-  # edit 
-  local subroutine=$1
-  case $subroutine in 
-    'help')
-      dot_proj_help
-      ;;
-    *)
-      dot_proj_help
-      ;;
-  esac 
-}
-
 dot(){
   if [[ ! -n $DOT_ROOT ]];then 
     echo "ERROR: \$DOT_ROOT needs to be set"
@@ -171,9 +147,6 @@ dot(){
       ;;
     'edit')
       dot_edit $2 $3
-      ;;
-    'proj')
-      dot_proj $2 $3
       ;;
     'help')
       dot_help
