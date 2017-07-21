@@ -120,9 +120,66 @@ dot_sync(){
   echo "sync complete"
 }
 
+dot_proj_list(){
+  echo "project templates"
+  ls $DOT_ROOT/template |tr '/ ' ' \n' |sed 's/^/    /'
+}
+
+dot_proj_make(){
+  if (( $# < 1 ));then 
+    echo "USER ERROR: missing project name"
+    return 
+  else 
+    pushd . 
+    local project_name=$1
+    local project_path=$DOT_ROOT/template/${project_name}
+    mkdir -p $project_path
+    cd $project_path
+  fi 
+}
+
+dot_proj_copy(){
+  if (( $# < 2 ));then 
+    echo "USER ERROR: missing project name and destination"
+    return 
+  else 
+    local project=$1
+    local destination=$2
+    cp -r $DOT_ROOT/template/${project} ${destination}
+  fi 
+}
+
+dot_proj_copy(){
+  if (( $# < 1 ));then 
+    echo "USER ERROR: missing project name"
+    return 
+  else 
+    local project=$1
+    local destination=$2
+    cp -r $DOT_ROOT/template/${project} ${destination}
+  fi 
+}
+
+dot_proj_edit(){
+  if (( $# < 1 ));then 
+    echo "USER ERROR: missing project name"
+    return 
+  else 
+    local project=$1
+    local project_path=$DOT_ROOT/template/${project}
+    if [[ -e $project_path ]];then 
+      pushd . 
+      cd $DOT_ROOT/template/${project}
+    else 
+      echo "USER ERROR: project (${project}) does not exist"
+    fi 
+  fi 
+}
+
 dot_proj_help(){
   echo 'DOT PROJ SUBROUTINES:
   help -- print dot proj help
+  list -- list all exisoting projects
   make -- make a new project template
   copy -- copy an existing project directory
   edit -- edit an existing project directory'
@@ -138,6 +195,18 @@ dot_proj(){
     'help')
       dot_proj_help
       ;;
+    'list')
+      dot_proj_list
+      ;;
+    'make')
+      dot_proj_make $2
+      ;;
+    'copy')
+      dot_proj_copy $2 $3
+      ;;
+    'edit')
+      dot_proj_edit $2 
+      ;;
     *)
       dot_proj_help
       ;;
@@ -148,6 +217,10 @@ dot(){
   if [[ ! -n $DOT_ROOT ]];then 
     echo "ERROR: \$DOT_ROOT needs to be set"
     return 1 
+  fi 
+  if (( $# == 0 ));then 
+    dot_help
+    return 
   fi 
   local subroutine=${1}
   case $subroutine in
@@ -173,14 +246,13 @@ dot(){
       dot_edit $2 $3
       ;;
     'proj')
-      dot_proj $2 $3
+      dot_proj $2 $3 $4
       ;;
     'help')
       dot_help
       ;;
     *)
-      echo "USER ERROR"
-      dot_help
+      echo "USER ERROR: (${subroutine}) is not a subroutine"
       ;;
   esac
 }
