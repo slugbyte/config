@@ -220,7 +220,7 @@ dot(){
   local subroutine=${1}
   case $subroutine in
     'list')
-      dot_list
+      dot_list | less
       ;;
     'stat')
       dot_stat
