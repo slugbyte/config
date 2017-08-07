@@ -5,9 +5,13 @@ Plug 'jpalardy/vim-slime'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Valloric/YouCompleteMe'
+" Plug 'pangloss/vim-javascript'
 call plug#end()
 
 " OPTIONS 
+set foldmethod=indent
+set foldnestmax=5
+set nofoldenable
 set number                 " turn on line numbers
 set backspace=2            " make backspace work like all other apps
 set incsearch              " vim starts searching while typing search string
@@ -38,4 +42,3 @@ colorscheme jellybeans
 " PLUGIN CONFIG
 let g:slime_target="tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
-
