@@ -5,7 +5,7 @@ import {Provider} from 'react-redux'
 import storeCreate from './lib/store-create'
 
 let AppContainer = () => (
-  <Provider store={appStoreCreate()}>
+  <Provider store={storeCreate()}>
     <App/>
   </Provider>
 )
