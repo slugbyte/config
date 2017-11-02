@@ -11,8 +11,10 @@ for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
 done
 
 # ENV 
+export GOROOT="$HOME/.go/1.9.2"
+export GOPATH="$HOME/workspace/gopath"
 export EDITOR=$(which nvim)
-export PATH="$DOT_ROOT/bin:$PATH"
+export PATH="$DOT_ROOT/bin:$GOROOT/bin:$GOPATH/bin:$PATH"
 export PS1="\[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
 
 # ALIAS

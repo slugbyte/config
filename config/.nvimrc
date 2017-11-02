@@ -5,6 +5,7 @@ Plug 'jpalardy/vim-slime'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Valloric/YouCompleteMe'
+Plug 'fatih/vim-go'
 " Plug 'pangloss/vim-javascript'
 call plug#end()
 

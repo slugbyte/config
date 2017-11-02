@@ -7,15 +7,22 @@ trash(){
   mv $@ $HOME/.Trash/
 }
 
-_trash_clean(){
+alias rimraf='rm -rf'
+
+_clean_trash(){
   rm -rf $HOME/.Trash/*
 }
 
-_download_clean(){
+_clean_download(){
   rm -rf $HOME/Downloads/*
 }
 
+_clean_swap(){
+  rm -rf $HOME/.local/share/nvim/swap
+}
+
 _clean(){
-  _trash_clean
-  _download_clean
+  _clean_swap
+  _clean_trash
+  _clean_download
 }
