@@ -11,6 +11,7 @@ for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
 done
 
 # ENV 
+export LSCOLORS=gxfxcxdxcxegedabagacad
 export GOROOT="$HOME/.go/1.9.2"
 export GOPATH="$HOME/workspace/gopath"
 export EDITOR=$(which nvim)
@@ -36,6 +37,7 @@ alias ch="git checkout"
 alias vim='echo instead use: e'
 alias e=edit.sh
 alias ..="cd .."
+alias t="e $HOME/workspace/TODO.md"
 
 # TRAPS
 handle_error(){

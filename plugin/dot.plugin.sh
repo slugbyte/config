@@ -148,7 +148,7 @@ dot_proj_copy(){
     local destination=$2
     local project_path=$DOT_ROOT/template/${project}
     if [[ -e $project_path ]];then 
-      cp -r $project_path ${destination}
+      cp -R $project_path ${destination}
     else 
       echo "USER ERROR: project ($project) does not exist"
     fi 
