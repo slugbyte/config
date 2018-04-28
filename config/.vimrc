@@ -6,10 +6,12 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Valloric/YouCompleteMe'
 Plug 'fatih/vim-go'
+Plug 'rust-lang/rust.vim'
 " Plug 'pangloss/vim-javascript'
 call plug#end()
 
 " OPTIONS 
+filetype plugin on
 set foldmethod=indent
 set foldnestmax=5
 set nofoldenable
@@ -43,3 +45,6 @@ colorscheme jellybeans
 " PLUGIN CONFIG
 let g:slime_target="tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
+
+let g:rustfmt_autosave=1 
+let g:rust_clip_command='pbcopy'

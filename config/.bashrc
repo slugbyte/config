@@ -5,7 +5,7 @@ set globstar
 set nocaseglob
 
 # PLUGINS
-export DOT_ROOT=$HOME/workspace/config
+export DOT_ROOT=$HOME/workspace/slug-bench/config
 for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
   . $plugin
 done
@@ -14,8 +14,8 @@ done
 export LSCOLORS=gxfxcxdxcxegedabagacad
 export GOROOT="$HOME/.go/1.9.2"
 export GOPATH="$HOME/workspace/gopath"
-export EDITOR=$(which nvim)
-export PATH="$DOT_ROOT/bin:$GOROOT/bin:$GOPATH/bin:$PATH"
+export EDITOR=$(which vim)
+export PATH="$DOT_ROOT/bin:$GOROOT/bin:$GOPATH/bin:$HOME/.cargo/bin:$PATH"
 export PS1="\[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
 
 # ALIAS
