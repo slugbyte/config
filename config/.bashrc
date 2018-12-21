@@ -47,9 +47,11 @@ alias b="git branch -avv"
 alias vim='echo instead use: e'
 alias e='edit.sh'
 alias ..="cd .."
+alias j=','
 alias t="e $HOME/workspace/TODO.md"
 alias vbox='/Applications/VirtualBox.app/Contents/Resources/VirtualBoxVM.app/Contents/MacOS/VBoxManage' 
 alias gencerts='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes'
+
 
 bin(){
   mv $1 $HOME/.Trash/
