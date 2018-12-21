@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # dot directory structure
 # / 
 # | - config/
@@ -20,7 +19,7 @@ dot_help(){
     edit -- edit configs, scripts, or plugins
     stat -- git status dot
     push -- git commit and push dot to github
-    pull -- git pull config from github
+    pull -- git pull config from github and dot sync
     sync -- hardlink configs from $DOT_ROOT into $HOME'
 }
 
@@ -88,6 +87,17 @@ dot_stat(){
 }
 
 
+dot_sync(){
+  local config
+  for config in $DOT_ROOT/config/{*,.*};do
+    if [[ -f $config ]]; then 
+      ln -f $config $HOME/$(basename $config)
+    fi 
+  done
+  . ~/.bashrc
+  echo "sync complete"
+}
+
 dot_push(){
   pushd . 
   cd $DOT_ROOT
@@ -100,19 +110,8 @@ dot_push(){
 dot_pull(){
   pushd . 
   cd $DOT_ROOT
-  git pull origin master
+  git pull origin master && dot_sync
   popd
-}
-
-dot_sync(){
-  local config
-  for config in $DOT_ROOT/config/{*,.*};do
-    if [[ -f $config ]]; then 
-      ln -f $config $HOME/$(basename $config)
-    fi 
-  done
-  . ~/.bashrc
-  echo "sync complete"
 }
 
 dot_proj_list(){

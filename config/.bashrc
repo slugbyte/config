@@ -17,7 +17,7 @@ export GOROOT="$HOME/.go/1.9.2"
 export GOPATH="$HOME/workspace/gopath"
 export EDITOR=$(which vim)
 export PATH="$DOT_ROOT/bin:$GOROOT/bin:$GOPATH/bin:$HOME/.cargo/bin:$PATH"
-export PS1="\u@\h  \[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
+export PS1="\u@\h \[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 
