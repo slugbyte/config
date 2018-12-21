@@ -21,8 +21,14 @@ export PS1="\u@\h \[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 
+if [[ $(uname -s) = 'Darwin' ]];then
+  ls_color_flag='-G'
+else 
+  ls_color_flag='--color=auto'
+fi 
+
 # ALIAS
-alias ls="ls -GF"
+alias ls="ls -F $ls_color_flag"
 alias ll="ls -lah"
 alias la="ls -a"
 alias l1="ls -1a"
