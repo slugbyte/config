@@ -10,7 +10,8 @@ Plug 'rust-lang/rust.vim'
 " Plug 'pangloss/vim-javascript'
 call plug#end()
 
-" OPTIONS 
+
+"OPTIONS 
 filetype plugin on
 set foldmethod=indent
 set foldnestmax=5
@@ -37,6 +38,27 @@ imap ii <Esc>
 map L $
 map H ^
 let mapleader = "\<Space>"
+
+" TOGGLE COPY PASTEABLE MOUSE MODE
+function ToggleMouseMode()
+  if  &mouse == "a"
+    set mouse=v nonumber
+  else 
+    set mouse=a number
+  endif
+endfunction
+map M :call ToggleMouseMode()<CR>
+
+function TogglePasteMode()
+  if  &paste == 0
+    set paste
+    echo "paste mode on"
+  else 
+    set nopaste
+    echo "paste mode off"
+  endif
+endfunction
+map <C-p> :call TogglePasteMode()<CR>
 
 " COLORS
 syntax enable             

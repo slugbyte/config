@@ -18,10 +18,10 @@ dot_help(){
     list -- list configs, scripts, or plugins
     copy -- copy a config, script, or plugins into dot
     edit -- edit configs, scripts, or plugins
-    stat -- check dots git status
-    push -- upload changes
-    pull -- download changes
-    sync -- install changes'
+    stat -- git status dot
+    push -- git commit and push dot to github
+    pull -- git pull config from github
+    sync -- copy config from $DOT_ROOT into $HOME'
 }
 
 dot_list(){
@@ -55,9 +55,6 @@ dot_copy(){
   if [[ -n $type ]] && [[ -n $filepath ]];then 
     if [[ -e $filepath ]];then 
       cp -f $filepath $DOT_ROOT/$type/$(basename $filepath)
-      if [[ $type = 'config' ]];then 
-        cp $filepath $HOME/$(basename $filepath)
-      fi 
     else 
       echo no such $type $filename
     fi
