@@ -21,7 +21,7 @@ dot_help(){
     stat -- git status dot
     push -- git commit and push dot to github
     pull -- git pull config from github
-    sync -- copy config from $DOT_ROOT into $HOME'
+    sync -- hardlink configs from $DOT_ROOT into $HOME'
 }
 
 dot_list(){
@@ -71,9 +71,6 @@ dot_edit(){
   if [[ -n $type ]] && [[ -n $filename ]];then 
     if [[ -e $filepath ]];then 
       $EDITOR $filepath
-      if [[ $type = 'config' ]];then 
-        cp $filepath $HOME/$filename
-      fi 
     else 
       echo no such $type $filename
     fi
@@ -111,7 +108,7 @@ dot_sync(){
   local config
   for config in $DOT_ROOT/config/{*,.*};do
     if [[ -f $config ]]; then 
-      cp -f $config ~/
+      ln -f $config $HOME/$(basename $config)
     fi 
   done
   . ~/.bashrc
