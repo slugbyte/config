@@ -10,9 +10,7 @@ for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
   . $plugin
 done
 
-
 # ENV 
-export LSCOLORS=gxfxcxdxcxegedabagacad
 export GOROOT="$HOME/.go/1.9.2"
 export GOPATH="$HOME/workspace/gopath"
 export EDITOR=$(which vim)
@@ -23,8 +21,10 @@ export FULLNAME='Duncan Marsh'
 
 if [[ $(uname -s) = 'Darwin' ]];then
   ls_color_flag='-G'
+  export LSCOLORS=gxfxcxdxcxegedabagacad
 else 
   ls_color_flag='--color=auto'
+  export LS_COLORS='di=32:ln=35:so=36:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
 fi 
 
 # ALIAS
