@@ -18,8 +18,9 @@ dot_help(){
     copy -- copy a config, script, or plugins into dot
     edit -- edit configs, scripts, installers, or plugins
     stat -- git status dot
-    push -- git commit and push dot to github
-    pull -- git pull config from github and dot sync
+    push -- git commit and push 
+    pull -- git pull and dot sync
+    diff -- git diff 
     sync -- hardlink configs from $DOT_ROOT into $HOME'
 }
 
@@ -118,6 +119,13 @@ dot_pull(){
   pushd . 
   cd $DOT_ROOT
   git pull origin master && dot_sync
+  popd
+}
+
+dot_diff(){
+  pushd . 
+  cd $DOT_ROOT
+  git diff
   popd
 }
 
@@ -234,6 +242,9 @@ dot(){
       ;;
     'push')
       dot_push
+      ;;
+    'diff')
+      dot_diff
       ;;
     'copy')
       dot_copy $2 $3
