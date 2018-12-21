@@ -14,9 +14,9 @@
 dot_help(){
   echo -e 'DOT SUBROUTINES:
     help -- print dot help
-    list -- list configs, scripts, or plugins
+    list -- list configs, scripts, installers, or plugins
     copy -- copy a config, script, or plugins into dot
-    edit -- edit configs, scripts, or plugins
+    edit -- edit configs, scripts, installers, or plugins
     stat -- git status dot
     push -- git commit and push dot to github
     pull -- git pull config from github and dot sync
@@ -26,6 +26,13 @@ dot_help(){
 dot_list(){
   echo "config"
   for config in $DOT_ROOT/config/{*,.*};do
+    if [[ -f $config ]]; then 
+      echo "    $(basename $config)"
+    fi 
+  done 
+
+  echo "install"
+  for config in $DOT_ROOT/install/{*,.*};do
     if [[ -f $config ]]; then 
       echo "    $(basename $config)"
     fi 
