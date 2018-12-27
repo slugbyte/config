@@ -18,6 +18,7 @@ export PATH="$DOT_ROOT/bin:$GOROOT/bin:$GOPATH/bin:$HOME/.cargo/bin:$PATH"
 export PS1="\u@\h \[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
+export PAGER=$(which less)
 
 if [[ $(uname -s) = 'Darwin' ]];then
   ls_color_flag='-G'

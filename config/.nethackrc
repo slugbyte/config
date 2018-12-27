@@ -1,0 +1,6 @@
+OPTIONS=color,!autopickup,catname:rugo,role:val,race:dwa,align:law,gender:fem,statushilites:1,hitpointbar,time,showexp
+OPTIONS=hilite_status:hitpoints/100%/brightgreen
+OPTIONS=hilite_status:hitpoints/<100%/green
+OPTIONS=hilite_status:hitpoints/<60%/yellow
+OPTIONS=hilite_status:hitpoints/<40%/red
+OPTIONS=hilite_status:experience-level/changed/white/always/cyan
