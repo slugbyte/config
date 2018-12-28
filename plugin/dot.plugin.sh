@@ -147,6 +147,17 @@ dot_proj_make(){
   fi 
 }
 
+dot_proj_load(){
+  if (( $# < 2 ));then 
+    echo "USER ERROR: missing from_path and project_name "
+    return 
+  else 
+    [[ -d $DOT_ROOT/template/$2 ]] && rm -rf "$DOT_ROOT/template/$2" 
+    cp -rf "$1" "$DOT_ROOT/template/$2"
+    echo "LOADED $2"
+  fi 
+}
+
 dot_proj_copy(){
   if (( $# < 2 ));then 
     echo "USER ERROR: missing project name and destination"
@@ -185,6 +196,7 @@ dot_proj_help(){
   help -- print dot proj help
   list -- list all exisoting projects
   make -- make a new project template
+  load -- copy an existing directory as a new template
   copy -- copy an existing project directory
   edit -- edit an existing project directory'
 }
@@ -204,6 +216,9 @@ dot_proj(){
       ;;
     'make')
       dot_proj_make $2
+      ;;
+    'load')
+      dot_proj_load $2 $3
       ;;
     'copy')
       dot_proj_copy $2 $3

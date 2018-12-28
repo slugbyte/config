@@ -4,3 +4,6 @@ OPTIONS=hilite_status:hitpoints/<100%/green
 OPTIONS=hilite_status:hitpoints/<60%/yellow
 OPTIONS=hilite_status:hitpoints/<40%/red
 OPTIONS=hilite_status:experience-level/changed/white/always/cyan
+BIND=^X:getpos.autodescribe
+BIND={:menu_first_page
+BIND=v:loot
