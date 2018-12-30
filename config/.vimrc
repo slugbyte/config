@@ -28,6 +28,7 @@ set encoding=utf8          " set standared encoding as utf8
 set ruler                  " allways show the current position
 set laststatus=2           " allways show the status line
 set cursorline             " place a line uner the line where the cursor is
+set scrolloff=5
 let g:is_bash=1            " .sh files are bash scripts bourne scripts
 if has('mouse')            " enable the mouse if its supported
   set mouse=a

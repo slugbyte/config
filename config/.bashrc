@@ -41,6 +41,7 @@ alias A="git add ."
 alias s="git status"
 alias c="git commit"
 alias C="git commit -m"
+alias tag='git tag'
 alias ch="git checkout"
 alias p="git push origin"
 alias l="git pull origin"
