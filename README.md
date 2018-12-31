@@ -27,7 +27,7 @@ Dot has a bin directory that gets added to the bash $PATH, nuf said.
 #### System Installers
 When dot is install it has the option to run installers that are specific for different OS's. The installers fetch my favorite tools using the appropriate package manager.   
 
-## Repo Organization 
+## Organization 
 * **config/** -- the dotfiles 
 * **bin/** -- the executable files  (added to `$PATH`)
 * **plugin/** --  the bash scripts that should be sourced by interative shell
