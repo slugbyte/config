@@ -15,8 +15,9 @@ dot_help(){
   echo -e 'DOT SUBROUTINES:
     help -- print dot help
     list -- list configs, scripts, installers, or plugins
-    copy -- copy a config, script, or plugins into dot
+    load -- copy a config, script, or plugins into dot
     edit -- edit configs, scripts, installers, or plugins
+    temp -- manage scaffolding templates
     stat -- git status dot
     push -- git commit and push 
     pull -- git pull and dot sync
@@ -56,7 +57,7 @@ dot_list(){
   done 
 }
 
-dot_copy(){
+dot_load(){
   local type=$1
   local filepath=$2
   if [[ -n $type ]] && [[ -n $filepath ]];then 
@@ -129,12 +130,12 @@ dot_diff(){
   popd
 }
 
-dot_proj_list(){
+dot_temp_list(){
   echo "project templates"
   ls $DOT_ROOT/template |tr '/ ' ' \n' |sed 's/^/    /'
 }
 
-dot_proj_make(){
+dot_temp_make(){
   if (( $# < 1 ));then 
     echo "USER ERROR: missing project name"
     return 
@@ -147,7 +148,7 @@ dot_proj_make(){
   fi 
 }
 
-dot_proj_load(){
+dot_temp_load(){
   if (( $# < 2 ));then 
     echo "USER ERROR: missing from_path and project_name "
     return 
@@ -158,7 +159,7 @@ dot_proj_load(){
   fi 
 }
 
-dot_proj_copy(){
+dot_temp_copy(){
   if (( $# < 2 ));then 
     echo "USER ERROR: missing project name and destination"
     return 
@@ -175,7 +176,7 @@ dot_proj_copy(){
 }
 
 
-dot_proj_edit(){
+dot_temp_edit(){
   if (( $# < 1 ));then 
     echo "USER ERROR: missing project name"
     return 
@@ -191,7 +192,7 @@ dot_proj_edit(){
   fi 
 }
 
-dot_proj_help(){
+dot_temp_help(){
   echo 'DOT PROJ SUBROUTINES:
   help -- print dot proj help
   list -- list all exisoting projects
@@ -201,7 +202,7 @@ dot_proj_help(){
   edit -- edit an existing project directory'
 }
 
-dot_proj(){
+dot_temp(){
   # help
   # make 
   # copy 
@@ -209,25 +210,25 @@ dot_proj(){
   local subroutine=$1
   case $subroutine in 
     'help')
-      dot_proj_help
+      dot_temp_help
       ;;
     'list')
-      dot_proj_list
+      dot_temp_list
       ;;
     'make')
-      dot_proj_make $2
+      dot_temp_make $2
       ;;
     'load')
-      dot_proj_load $2 $3
+      dot_temp_load $2 $3
       ;;
     'copy')
-      dot_proj_copy $2 $3
+      dot_temp_copy $2 $3
       ;;
     'edit')
-      dot_proj_edit $2 
+      dot_temp_edit $2 
       ;;
     *)
-      dot_proj_help
+      dot_temp_help
       ;;
   esac 
 }
@@ -261,14 +262,14 @@ dot(){
     'diff')
       dot_diff
       ;;
-    'copy')
-      dot_copy $2 $3
+    'load')
+      dot_load $2 $3
       ;;
     'edit')
       dot_edit $2 $3
       ;;
-    'proj')
-      dot_proj $2 $3 $4
+    'temp')
+      dot_temp $2 $3 $4
       ;;
     'help')
       dot_help
