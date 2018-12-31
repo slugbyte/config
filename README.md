@@ -1,5 +1,7 @@
 # config and tools
 
+![Shreded green glitch with black moss](https://assets.slugbyte.com/github/github-header-00007.png)  
+
 ## dot
 > the bash function that helps me maintain this repo
 
