@@ -17,5 +17,4 @@ description
 1. Post links to Twitter
 
 ## NOTES
-
 ## References
