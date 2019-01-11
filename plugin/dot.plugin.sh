@@ -233,7 +233,7 @@ dot_temp(){
   esac 
 }
 
-dot(){
+dot_one(){
   if [[ ! -n $DOT_ROOT ]];then 
     echo "ERROR: \$DOT_ROOT needs to be set"
     return 1 
@@ -280,3 +280,28 @@ dot(){
   esac
 }
 
+
+#_dot(){
+
+  #candidates=(help list load edit temp stat push pull diff sync)
+  #if [[ $COMP_LINE =~ "dot edit"  ]];then 
+    #candidates=(plugin config )
+  #elif [[ $COMP_LINE =~ "dot temp edit"  ]];then 
+    #candidates=($(compgen -W "$(dot temp list | tail -n +2)"))
+  #elif [[ $COMP_LINE =~ "dot temp copy"  ]];then 
+    #candidates=($(compgen -W "$(dot temp list | tail -n +2)"))
+  #elif [[ $COMP_LINE =~ "dot temp load"  ]];then 
+    #candidates=($(compgen -f ))
+  #elif [[ $COMP_LINE =~ "dot temp"  ]];then 
+    #candidates=(help list make load copy edit)
+  #fi 
+
+    #COMPREPLY=()
+      #for candidate in ${candidates[@]}; do
+          #if [[ "$candidate" == "$2"* ]]; then
+              #COMPREPLY+=("$candidate")
+          #fi
+      #done 
+#}
+
+#complete -F _dot dot

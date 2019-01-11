@@ -1,18 +1,21 @@
 " PLUGINS 
 call plug#begin('~/.vim/plugged')
-Plug 'flazz/vim-colorschemes'
-Plug 'jpalardy/vim-slime'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Valloric/YouCompleteMe'
-Plug 'fatih/vim-go'
+Plug 'flazz/vim-colorschemes'
+Plug 'scrooloose/nerdtree'
 Plug 'rust-lang/rust.vim'
+Plug 'jpalardy/vim-slime'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
 " Plug 'pangloss/vim-javascript'
 call plug#end()
 
 
 "OPTIONS 
 filetype plugin on
+set showbreak=+++
 set foldmethod=indent
 set foldnestmax=5
 set nofoldenable
@@ -29,6 +32,7 @@ set ruler                  " allways show the current position
 set laststatus=2           " allways show the status line
 set cursorline             " place a line uner the line where the cursor is
 set scrolloff=5
+set completeopt-=preview
 let g:is_bash=1            " .sh files are bash scripts bourne scripts
 if has('mouse')            " enable the mouse if its supported
   set mouse=a
@@ -39,7 +43,6 @@ imap ii <Esc>
 map L $
 map H ^
 let mapleader = "\<Space>"
-
 " TOGGLE COPY PASTEABLE MOUSE MODE
 function ToggleMouseMode()
   if  &mouse == "a"
@@ -60,6 +63,10 @@ function TogglePasteMode()
   endif
 endfunction
 map <C-p> :call TogglePasteMode()<CR>
+
+command Nt e . 
+
+"au BufRead,BufNewFile *.txt,*.tex,*.md set wrap linebreak nolist textwidth=80 wrapmargin=0
 
 " COLORS
 syntax enable             

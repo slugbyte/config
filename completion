@@ -1,0 +1,26 @@
+// make a completion dsl
+{
+  help: null,
+  sync: null, 
+  diff: null, 
+  push: null,
+  pull: null, 
+  list: null, 
+  stat: null, 
+  edit: {
+    config: null,
+    plugin: null,
+  },
+  temp: {
+    help: null, 
+    list: null,
+    make: null,
+    load: null, 
+    copy: null, 
+    edit: null, 
+  }
+}
+
+  
+
+

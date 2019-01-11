@@ -78,7 +78,10 @@ _commacd_forward_by_prefix() {
 
 # jump forward (`,`)
 _commacd_forward() {
-  if [[ -z "$*" ]]; then return 1; fi
+  if [[ -z "$*" ]]; then 
+    pwd
+    return 0; 
+  fi
   local IFS=$'\n'
   local dir=($(_commacd_forward_by_prefix "$@"))
   if [[ "$COMMACD_NOTTY" == "on" ]]; then
@@ -226,10 +229,10 @@ _commacd_backward_forward_completion() {
   _commacd_completion _commacd_backward_forward
 }
 
-alias ,=_commacd_forward
-alias ,,=_commacd_backward
-alias ,,,=_commacd_backward_forward
+alias j=_commacd_forward
+alias jj=_commacd_backward
+alias jjj=_commacd_backward_forward
 
-complete -o filenames -F _commacd_forward_completion ,
-complete -o filenames -F _commacd_backward_completion ,,
-complete -o filenames -F _commacd_backward_forward_completion ,,,
+complete -o filenames -F _commacd_forward_completion j
+complete -o filenames -F _commacd_backward_completion jj
+complete -o filenames -F _commacd_backward_forward_completion jjj

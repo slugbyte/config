@@ -4,13 +4,14 @@ history -a
 set globstar
 set nocaseglob
 
-# PLUGINS
+# LOAD PLUGINS
 export DOT_ROOT=$HOME/workspace/slug-bench/config
 for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
   . $plugin
 done
 
 # ENV 
+export DOT="$HOME/.dot"
 export GOROOT="$HOME/.go/1.9.2"
 export GOPATH="$HOME/workspace/gopath"
 export PAGER=$(which less)
@@ -29,28 +30,38 @@ else
 fi 
 
 # ALIAS
+# ------ NAV AND FS
 alias ls="ls -F $ls_color_flag"
 alias ll="ls -lah"
 alias la="ls -a"
 alias l1="ls -1a"
-alias r=". ~/.bashrc"
+alias ..="$(which cd) .."
 alias md="mkdir -p"
 alias rimraf="rm -rf"
+# ------ GIT
+alias g='git'
 alias a="git add"
 alias A="git add ."
 alias s="git status"
-alias c="git commit"
-alias C="git commit -m"
+alias x="git commit"
+alias c='git add . && git commit'
+alias C="git add . && git commit -m"
 alias tag='git tag'
 alias ch="git checkout"
-alias p="git push origin"
+alias p="git push origin HEAD"
 alias l="git pull origin"
 alias b="git branch -avv"
-alias vim='echo instead use: e'
+alias B='git branch'
+# ------ UTIL
 alias e='edit.sh'
-alias ..="cd .."
-alias j=','
-alias jj=',,'
+alias py='python3'
+alias pe='pipenv'
+alias less='less -r'
+alias r=". ~/.bashrc"
+alias psh='pipenv shell'
+alias ip="curl ipinfo.io/ip"
+alias vim='echo use e'
+alias cd='echo use j, jj, or jjj'
 alias t="e $HOME/workspace/TODO.md"
 alias vbox='/Applications/VirtualBox.app/Contents/Resources/VirtualBoxVM.app/Contents/MacOS/VBoxManage' 
 alias gencerts='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes'
