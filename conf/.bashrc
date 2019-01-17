@@ -21,6 +21,7 @@ export PS1="\u@\h \[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 
+# TODO 
 if [[ $(uname -s) = 'Darwin' ]];then
   ls_color_flag='-G'
   export LSCOLORS=gxfxcxdxcxegedabagacad
@@ -46,22 +47,26 @@ alias s="git status"
 alias x="git commit"
 alias c='git add . && git commit'
 alias C="git add . && git commit -m"
-alias tag='git tag'
+alias tag='git tag' 
 alias ch="git checkout"
 alias p="git push origin HEAD"
 alias l="git pull origin"
 alias b="git branch -avv"
 alias B='git branch'
 # ------ UTIL
+alias q='exit'
+alias m='make'
 alias e='edit.sh'
 alias py='python3'
 alias pe='pipenv'
 alias less='less -r'
 alias r=". ~/.bashrc"
-alias psh='pipenv shell'
+alias pon='pipenv shell'
+alias poff='deactivate'
 alias ip="curl ipinfo.io/ip"
 alias vim='echo use e'
-alias cd='echo use j, jj, or jjj'
+#alias cd='echo use j, jj, or jjj'
+alias h='j $HOME'
 alias t="e $HOME/workspace/TODO.md"
 alias vbox='/Applications/VirtualBox.app/Contents/Resources/VirtualBoxVM.app/Contents/MacOS/VBoxManage' 
 alias gencerts='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes'

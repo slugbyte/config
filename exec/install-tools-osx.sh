@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # if no brew install brew 
 [[ $(uname -s) = 'Darwin' ]] && {
   [[ $(which brew) ]] || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
