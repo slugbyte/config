@@ -5,18 +5,17 @@ set globstar
 set nocaseglob
 
 # LOAD PLUGINS
-export DOT_ROOT=$HOME/workspace/slug-bench/config
-for plugin in $DOT_ROOT/plugin/*.plugin.sh;do
+export MOLD_ROOT="$HOME/workspace/slug-bench/config"
+for plugin in $MOLD_ROOT/plug/* ;do
   . $plugin
 done
 
 # ENV 
-export DOT="$HOME/.dot"
 export GOROOT="$HOME/.go/1.9.2"
 export GOPATH="$HOME/workspace/gopath"
 export PAGER=$(which less)
 export EDITOR=$(which vim)
-export PATH="$DOT_ROOT/bin:$GOROOT/bin:$GOPATH/bin:$HOME/.cargo/bin:$PATH"
+export PATH="$MOLD_ROOT/exec:$GOROOT/bin:$GOPATH/bin:$HOME/.cargo/bin:$PATH"
 export PS1="\u@\h \[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
