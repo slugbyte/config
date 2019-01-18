@@ -1,12 +1,10 @@
-# [Mold](https://github.com/slugbyte/mold) Root 
+# [Mold](https://github.com/slugbyte/mold) Root Highlights
 
 ![Shreded green glitch with black moss](https://assets.slugbyte.com/github/github-header-00007.png)  
 
  <!-- TODO: write about my system config highlights -->
  
- ## Highlights
- 
- ### f 
+## f 
  `f` is a bash function that will use [fzf](https://github.com/junegunn/fzf) to select output from [the_silver_searcher](https://github.com/ggreer/the_silver_searcher) and then open the selected line in vim.
  
 ######  `Usage: f [search string]`  
