@@ -64,11 +64,18 @@ find_git_dirty() {
 
 PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
 
-# Default Git enabled prompt with dirty state
-# export PS1="\u@\h \w \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
+ # TODO rename these colors based on where they are used in PROMPT (User, Hostname, Working Dir,  Git)
+color_count=$(tput colors)
+if (( color_count > 0 ));then 
+  color_black="$(tput setaf 0)" #black
+  color_red="$(tput setaf 1)" #red
+  color_green="$(tput setaf 2)" #green
+  color_yellow="$(tput setaf 3)" #yellow
+  color_blue="$(tput setaf 4)" #blue
+  color_magenta="$(tput setaf 5)" #magenta
+  color_cyan="$(tput setaf 6)" #cyan
+  color_white="$(tput setaf 7)" #white
+  color_reset="$(tput sgr0)" #default foreground color
+fi 
 
-# Another variant:
-# export PS1="\[$bldgrn\]\u@\h\[$txtrst\] \w \[$bldylw\]\$git_branch\[$txtcyn\]\$git_dirty\[$txtrst\]\$ "
-
-# Default Git enabled root prompt (for use with "sudo -s")
-# export SUDO_PS1="\[$bakred\]\u@\h\[$txtrst\] \w\$ "
+export PS1="\u@\h \[$color_cyan\]\W \[$color_yellow\]\$git_branch\[$color_red\]\$git_dirty\[$color_reset\]\n✿ "
