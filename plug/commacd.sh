@@ -229,6 +229,8 @@ _commacd_backward_forward_completion() {
   _commacd_completion _commacd_backward_forward
 }
 
+# I modifyed the following aliases from using ","s to using "j"s, because "j" is easier to type. 
+# I like to think "j" as shorthand "jump".
 alias j=_commacd_forward
 alias jj=_commacd_backward
 alias jjj=_commacd_backward_forward
