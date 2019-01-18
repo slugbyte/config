@@ -18,6 +18,7 @@ get_file_path(){
 }
 
 (( argv_length > 0)) && {
+  # fzf and open selected file file
   [[ $flag = '-f' ]] && {
     file_path=$(get_file_path)
 
@@ -25,6 +26,17 @@ get_file_path(){
       $EDITOR "$file_path"
       exit 0 
     }
+
+    echo 'byebye'
+    exit 0
+  }
+
+  # create an executable
+  [[ $flag = '-x' ]] && {
+    file_path=$2
+    touch "$file_path"
+    chmod 755 "$file_path"
+    $EDITOR "$file_path"
 
     echo 'byebye'
     exit 0
