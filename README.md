@@ -135,6 +135,12 @@ p() {
   fi
 }
 ```
+### `t [args]` - smart git tag
+List tags, delete tags, and create/sign tags.  
+**Examples**  
+List tags with messages: `$ t`  
+Create and sign tag: `$ t v0.1.1`
+Delete tag: `$ t v0.1.1` 
 
 ## Favorite Open Source Tools
 * [aria2c](https://aria2.github.io/) - An ultra-fast download utility with support for HTTP(S), FTP, SFTP, BitTorrent, and Metalink

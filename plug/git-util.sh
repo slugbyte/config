@@ -25,7 +25,7 @@ git_pull() {
   fi 
   if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
-      echo "Error: Cannot push from detached state."
+      echo "Error: Cannot pull from detached state."
       return 1
     fi 
     echo "Pulling from $branch"
@@ -42,5 +42,13 @@ git_commit(){
 }
 
 git_tag(){
-  git tag -s $1 && git verify-tag $1
+  if (( $# < 1 ));then 
+    git tag -n99
+    return 0
+  elif (( $# > 1 ));then 
+    git tag "$@"
+    return 0
+  else
+    git tag -s "$@" && git verify-tag $1
+  fi 
 }
