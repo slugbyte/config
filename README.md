@@ -74,8 +74,18 @@ The simplest todo list slash general notes utily I could think of is an alias th
 `alias t='vim $HOME/.todo.md`  
 
 ## Git Shorthand  
-#### c + [message] to `add -A && git commit -S [-m message]`
-<!--TODO  -->
+#### c + smart git commit
+* Add all untracked changes
+* Run git commit with -S to signing using gpg and -v to show diff in the commit. Allow users to pass flags.
+* Run git verify-commit HEAd, to log that the   
+**EXAMPLES**  
+Commit with vim: `$ c`
+Commit with a message: `$ c -m 'Initial commit'
+``` bash 
+git_commit(){
+  git add -A && git commit -v -S "$@" && git verify-commit HEAD
+}
+```
 #### l + [args] to `git pull origin <current branch> [args]`
 <!--TODO  -->
 #### p + [args] to `git push origin <current branch> [args]`
