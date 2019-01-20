@@ -29,6 +29,9 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+" NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Settings
 syntax enable              " turn on syntax highlighting
 colorscheme yuejiu         " use the yuejiu syntax colorscheme
@@ -74,6 +77,8 @@ vmap <leader>j :move+<cr>
 vmap <leader>k :move-2<cr>
 vmap <leader>h <<
 vmap <leader>l >>
+" Toggle NERDtree
+nmap <leader>t :NERDTreeToggle<CR>
 " Save and Quit 
 nnoremap <leader>q :wqall<cr>
 nnoremap <leader>s :w <cr>:echo "saved"<cr>
