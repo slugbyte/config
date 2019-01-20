@@ -42,6 +42,7 @@ set mouse=a                " allow the mouse to interact with vim
 set incsearch              " vim starts searching while typing search string
 set tabstop=2              " make \t appear to be two spaces wide
 set expandtab              " convert tab to spaces (unless a filetype plugin changes that)
+set ignorecase             " non-case sensitve serach
 set cursorline             " highlight the line current cursor line
 set shiftwidth=2           " make vim indent functions apply or remove two spaces 
 set backspace=2            " make backspace work like all other apps
@@ -98,7 +99,7 @@ command! Todo Lines todo
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions 
 " M  will toggle the mouse between 
 " vim select and clipboard select
-function ToggleMouseMode()
+function! ToggleMouseMode()
   if  &mouse == "a"
     " cilpboard select will also hide line numbers
     set mouse=v nonumber
@@ -112,7 +113,7 @@ endfunction
 map M :call ToggleMouseMode()<CR>
 
 " <C-p> will toggle pastemode 
-function TogglePasteMode()
+function! TogglePasteMode()
   if  &paste == 0
     set paste ruler
     echo "paste mode on"
@@ -125,14 +126,13 @@ map <C-p> :call TogglePasteMode()<CR>
 
 " duck duck go something 
 " inspired by https://github.com/junegunn/dotfiles/blob/master/vimrc#L1012
-function! s:duck(pat, lucky)
-  let q = ''.substitute(a:pat, '["\n]', ' ', 'g').''
-  let q = substitute(q, '[[:punct:] ]',
-       \ '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
-  call system(printf('open "https://duckduckgo.com/?q=%s"',  q))
+function! s:duck(pat)
+  let query = substitute(a:pat, '["\n]', ' ', 'g')
+  let query = substitute(query, '[[:punct:] ]', '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
+  call system(printf('open "https://duckduckgo.com/?q=%s"', query))
 endfunction
 
-nnoremap <leader>? :call <SID>duck(expand("<cWORD>"), 0)<cr>
-nnoremap <leader>! :call <SID>duck(expand("<cWORD>"), 1)<cr>
-xnoremap <leader>? "gy:call <SID>duck(@g, 0)<cr>gv
-xnoremap <leader>! "gy:call <SID>duck(@g, 1)<cr>gv
+" duck line and delete
+noremap <leader>? <S-v>"gy:call <SID>duck(@g)<cr>gvddl
+" Duck command
+command! -nargs=1 Duck call s:duck(<f-args>)
