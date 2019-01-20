@@ -438,15 +438,17 @@ _complete_goto_zsh()
   return $ret
 }
 
+alias g='goto'
+
 # Register the goto completions.
 if [ -n "${BASH_VERSION}" ]; then
   if ! [[ $(uname -s) =~ Darwin* ]]; then
-    complete -o filenames -F _complete_goto_bash goto
+    complete -o filenames -F _complete_goto_bash g
   else
-    complete -F _complete_goto_bash goto
+    complete -F _complete_goto_bash g
   fi
 elif [ -n "${ZSH_VERSION}" ]; then
-  compdef _complete_goto_zsh goto
+  compdef _complete_goto_zsh g
 else
   echo "Unsupported shell."
   exit 1
