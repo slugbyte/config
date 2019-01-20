@@ -139,7 +139,7 @@ p() {
 List tags, delete tags, and create/sign tags.  
 **Examples**  
 List tags with messages: `$ t`  
-Create and sign tag: `$ t v0.1.1`
+Create and sign tag: `$ t v0.1.1`  
 Delete tag: `$ t v0.1.1` 
 
 ## Favorite Open Source Tools
