@@ -13,6 +13,7 @@ export GPG_TTY=$(tty)
 
 # Mold Init
 export MOLD_ROOT="$HOME/workspace/slug-bench/config"
+export MOLD_SIGN='true'
 export PATH="$MOLD_ROOT/exec:$PATH"
 for plug in $MOLD_ROOT/plug/* ;do
   . $plug

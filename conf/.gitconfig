@@ -1,7 +1,4 @@
 [user]
 	name = Duncan Marsh
 	email = slugbyte@slugbyte.com
-[tag]
-  forceSignAnnotated = true
-[alias]
-   commit = commit -S
+  signingkey = E48090E4 
