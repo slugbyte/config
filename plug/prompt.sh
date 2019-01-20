@@ -12,29 +12,33 @@ find_git_branch() {
   local branch
   if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
-      GIT_BRANCH='\[$color_git_detached\](detached)'
-    else 
-      GIT_BRANCH='\[$color_git_branch\][$branch]'
+      GIT_DETACHED='(detached)'
+      GIT_BRANCH=''
+     else 
+      GIT_BRANCH="[$branch]"
+      GIT_DETACHED=''
     fi
   else
-    GIT_BRANCH=""
+    GIT_BRANCH=''
   fi
 }
+
 find_git_dirty() {
   local status=$(git status --porcelain 2> /dev/null)
   if [[ "$status" != "" ]]; then
-    GIT_DIRTY='\[$color_git_dirty\]%'
+    git_dirty='*'
   else
-    GIT_DIRTY=''
+    git_dirty=''
   fi
 }
+
 PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
 
 
 # Prompt content
 (( $UID == 0 )) && PROMPT_USER="\[$color_user\]\u "
 PROMPT_DIR="\[$color_dir\]\W "
-PROMPT_GIT="${GIT_BRANCH}${GIT_DIRTY}"
+PROMPT_GIT="\[$color_git_branch\]\$GIT_BRANCH\[$color_git_detached\]\$GIT_DETACHED\${GIT_DIRTY}"
 
 # Set Prompt
 PS1="${PROMPT_USER}${PROMPT_DIR}${PROMPT_GIT}\[$color_reset\]\n✿ "
