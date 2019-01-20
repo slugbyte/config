@@ -1,17 +1,33 @@
-# Git Helper Aliases and Functions
-alias g='git'
-alias a="git add"
-alias A="git add ."
-alias s="git status"
-alias x="git commit"
-alias c='git add . && git commit'
-alias C="git add . && git commit -m"
-alias tag='git tag' 
-alias ch="git checkout"
-alias b="git branch -avv"
-alias B='git branch'
+git_push() {
+  local branch
+  if (( $# > 0 ));then 
+    echo "Pushing to $@"
+    git push origin $@
+    return 0
+  fi 
+  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+    echo "Pushing to $branch"
+    git push origin $branch
+    return 0
+  else
+    print "Error: Cannot push from detached state."
+    return 1
+  fi
+}
 
-# TODO make "p" and "l" default to the current branch 
-# but also accect an arg for specifying the branch
-alias p="git push origin HEAD"
-alias l="git pull origin"
+git_pull() {
+  local branch
+  if (( $# > 0 ));then 
+    echo "Pulling from $@"
+    git pull origin $@
+    return 0
+  fi 
+  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+    echo "Pulling from $branch"
+    git pull origin $branch
+    return 0
+  else
+    print "Error: Cannot pull a detached state."
+    return 1
+  fi
+}

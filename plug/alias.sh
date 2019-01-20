@@ -16,19 +16,13 @@ alias l1="ls -1a"
 alias ..="$(which cd) .."
 
 # ------ UTIL
-alias q='exit'
-alias m='make'
-alias e='edit.sh'
 alias py='python3'
 alias pe='pipenv'
-alias h='j $HOME'
 alias md="mkdir -p"
 alias rimraf="rm -rf"
 alias less='less -r'
-alias r=". ~/.bashrc"
 alias vim='echo use e'
 alias poff='deactivate'
 alias pon='pipenv shell'
-alias t="e $HOME/workspace/TODO.md"
 alias vbox='/Applications/VirtualBox.app/Contents/Resources/VirtualBoxVM.app/Contents/MacOS/VBoxManage' 
 alias gencerts='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes'

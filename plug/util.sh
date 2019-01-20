@@ -7,7 +7,7 @@ trash(){
 }
 
 # Log Local and Public Ip
-i(){
+ip_address(){
   echo -n 'local:  '
   ifconfig en0 inet | tail -n 1 | cut -d ' ' -f 2
   echo -n 'public: '
@@ -35,7 +35,7 @@ load(){
 }
 
 # FzF and Open To Line in Vim 
-f(){
+fzf_vim(){
   local result=$( ag "$1" | fzf ) 
   local path=$( echo "$result" | cut -d ':' -f 1 )
   local linenum=$( echo "$result" | cut -d ':' -f 2 )

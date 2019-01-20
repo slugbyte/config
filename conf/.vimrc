@@ -1,17 +1,35 @@
-" Plugins 
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugins
 call plug#begin('~/.vim/plugged')
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/nerdcommenter'
+Plug 'junegunn/vim-easy-align'
 Plug 'Valloric/YouCompleteMe'
 Plug 'scrooloose/nerdtree'
 Plug 'rust-lang/rust.vim'
 Plug 'jpalardy/vim-slime'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/goyo.vim'
 Plug 'slugbyte/yuejiu'
 call plug#end()
 
-" Settings
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugin Settings
+" Vim-Slime
+let g:slime_target="tmux"
+let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
+
+" Rust lang 
+let g:rustfmt_autosave=1 
+let g:rust_clip_command='pbcopy'
+
+" Vim Align 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Settings
 syntax enable              " turn on syntax highlighting
 colorscheme yuejiu         " use the yuejiu syntax colorscheme
 filetype plugin on         " allow plugins to be applied to specifc file types
@@ -36,30 +54,43 @@ set wildmode=list:longest  " configure tab completion to list all matches when t
 set wildmenu               " enable tab completion in the command bar
 let g:is_bash=1            " treat .sh files as bash scripts
 
-" Key Mappings
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Key Mappings
 " double tap "i" to escape 
-imap ii <Esc>
+" imap II <Esc> TODO STOP USING II 
 " L jumps to end of line
 map L $
 " H jumps to beginning of line
 map H ^
 " Use the spacebar as the leader key
 let mapleader = "\<Space>"
+" qq to requort Q to replay
+nnoremap Q @q
+" move lines 
+nmap <leader>j :move+<cr>
+nmap <leader>k :move-2<cr>
+nmap <leader>h <<
+nmap <leader>l >>
+vmap <leader>j :move+<cr>
+vmap <leader>k :move-2<cr>
+vmap <leader>h <<
+vmap <leader>l >>
+" Save and Quit 
+nnoremap <leader>q :wqall<cr>
+nnoremap <leader>s :w <cr>:echo "saved"<cr>
 
-" Commands
-command! Dir e .                  " open the current directory
-command! Reload source ~/.vimrc   " reload the vim config
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Shorthand
+inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
+"inoreabbrev <expr> #doc "<!DOCTYPE html>" 
 
-" Plugin Settings
-" Vim-Slime
-let g:slime_target="tmux"
-let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands
+" open the current dir
+command! Dir e .     
+" reload the ~/.vimrc
+command! Reload source ~/.vimrc   
+" Find todos in all lines
+command! Todo Lines todo 
 
-" Rust lang 
-let g:rustfmt_autosave=1 
-let g:rust_clip_command='pbcopy'
-
-" Functions
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions 
 " M  will toggle the mouse between 
 " vim select and clipboard select
 function ToggleMouseMode()

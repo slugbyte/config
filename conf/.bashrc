@@ -1,4 +1,4 @@
-# OPTIONS
+# Options
 shopt -s histappend
 history -a
 set globstar
