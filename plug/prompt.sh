@@ -12,9 +12,9 @@ find_git_branch() {
   local branch
   if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
-      GIT_BRANCH="\[$color_git_detached\](detached)"
+      GIT_BRANCH='\[$color_git_detached\](detached)'
     else 
-      GIT_BRANCH="\[$color_git_branch\][$branch]"
+      GIT_BRANCH='\[$color_git_branch\][$branch]'
     fi
   else
     GIT_BRANCH=""
@@ -23,7 +23,7 @@ find_git_branch() {
 find_git_dirty() {
   local status=$(git status --porcelain 2> /dev/null)
   if [[ "$status" != "" ]]; then
-    GIT_DIRTY="\[$color_git_dirty\]%"
+    GIT_DIRTY='\[$color_git_dirty\]%'
   else
     GIT_DIRTY=''
   fi
