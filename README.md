@@ -100,7 +100,7 @@ l() {
   fi
   if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
-      echo "Error: Cannot push from detached state."
+      echo "Error: Cannot pull from detached state without a branch name argument"
       return 1
     fi
     echo "Pulling from $branch"
