@@ -79,8 +79,8 @@ The simplest todo list slash general notes utily I could think of is an alias th
 * Run git commit with -S to signing using gpg and -v to show diff in the commit. Allow users to pass flags.
 * Run git verify-commit HEAd, to log that the   
 **EXAMPLES**  
-Commit with vim: `$ c`
-Commit with a message: `$ c -m 'Initial commit'
+Commit with vim: `$ c`  
+Commit with a message: `$ c -m 'Initial commit'`  
 ``` bash 
 git_commit(){
   git add -A && git commit -v -S "$@" && git verify-commit HEAD
