@@ -119,7 +119,7 @@ Push to the current branch `$ p`
 Force push to the current branch `$ p --force`  
 Push to the current branch with tags `$ p --follow-tags`  
 ``` bash
-git_push() {
+p() {
   local branch
   if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
