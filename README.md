@@ -65,9 +65,9 @@ defuzz(){
 }
 ```
 
-## t is for todo list
+## todo
 The simplest todo list slash general notes utily I could think of is an alias that allways opens the same file in a text editor.  
-`alias t='vim $HOME/.todo.md`  
+`alias toto='vim $HOME/.todo.md`  
 
 ## Git Shorthand  
 ### `c [args]` - smart git commit
