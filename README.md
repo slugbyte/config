@@ -70,7 +70,7 @@ The simplest todo list slash general notes utily I could think of is an alias th
 `alias t='vim $HOME/.todo.md`  
 
 ## Git Shorthand  
-#### c [args] - smart git commit
+### `c [args]` - smart git commit
 * First run `git add -A` to add all the untracked changes
 * Then run `git commit` with the following flags
     * with `-S` to sign the commit using gpg (if the signing fails so does the commit)
@@ -85,7 +85,7 @@ c(){
   git add -A && git commit -v -S "$@" && git verify-commit HEAD
 }
 ```  
-#### l [branch] - smart git pull
+### `l [branch]` - smart git pull
 Pull from the current branch or a specific branch. `l` will also print errors for not a git repository, or trying to pull from a detached head.  
 **EXAMPLES**  
 Pull the current branch: `$ l`  
@@ -112,8 +112,29 @@ l() {
   fi
 }
 ```
-#### p [flags] - smart git push
-<!--TODO  -->
+### `p [flags]` - smart git push
+Push to the current branch and allow flags to be passed.  
+**Example**  
+Push to the current branch `$ p`  
+Force push to the current branch `$ p --force`
+Push to the current branch with tags `$ p --follow-tags`  
+``` bash
+git_push() {
+  local branch
+  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+    if [[ "$branch" == "HEAD" ]]; then
+      echo "Error: Cannot push from detached state."
+      return 1
+    fi
+    echo "Pushing to $branch $@"
+    git push origin $branch $@ -v
+    return 0
+  else
+    echo "Error: Not a git repository"
+    return 1
+  fi
+}
+```
 
 ## Favorite Open Source Tools
 * [aria2c](https://aria2.github.io/) - An ultra-fast download utility with support for HTTP(S), FTP, SFTP, BitTorrent, and Metalink
