@@ -82,7 +82,7 @@ The simplest todo list slash general notes utily I could think of is an alias th
 Commit with vim: `$ c`  
 Commit with a message: `$ c -m 'Initial commit'`  
 ``` bash 
-git_commit(){
+c(){
   git add -A && git commit -v -S "$@" && git verify-commit HEAD
 }
 ```
