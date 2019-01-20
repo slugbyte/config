@@ -117,3 +117,17 @@ function TogglePasteMode()
   endif
 endfunction
 map <C-p> :call TogglePasteMode()<CR>
+
+" duck duck go something 
+" inspired by https://github.com/junegunn/dotfiles/blob/master/vimrc#L1012
+function! s:duck(pat, lucky)
+  let q = ''.substitute(a:pat, '["\n]', ' ', 'g').''
+  let q = substitute(q, '[[:punct:] ]',
+       \ '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
+  call system(printf('open "https://duckduckgo.com/?q=%s"',  q))
+endfunction
+
+nnoremap <leader>? :call <SID>duck(expand("<cWORD>"), 0)<cr>
+nnoremap <leader>! :call <SID>duck(expand("<cWORD>"), 1)<cr>
+xnoremap <leader>? "gy:call <SID>duck(@g, 0)<cr>gv
+xnoremap <leader>! "gy:call <SID>duck(@g, 1)<cr>gv
