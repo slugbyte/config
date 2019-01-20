@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+_colors(){
+  figlet 'ansi color'
+  for x in {0..63};do 
+    x=$(( x * 4 ))
+    for y in {0..3};do 
+      color=$(( x + y ))
+      echo -n $(tput setab $(( $color ))) $(tput setaf 15) 
+      printf " %3g  " $color
+      echo -n $(tput setab 0) 
+    done; 
+    for y in {0..3};do 
+      color=$(( x + y ))
+      echo -n $(tput setaf $(( $color ))) $(tput setab 0) 
+      printf "%3g" $color
+      echo -n $(tput setab 0) 
+    done; 
+    echo ""
+  done
+}
+
+_colors | less -r

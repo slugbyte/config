@@ -95,6 +95,35 @@ defuzz(){
 The simplest todo list slash general notes utily I could think of is an alias that allways opens the same file in a text editor.  
 `alias toto='vim $HOME/.todo.md`  
 
+## colors
+Show a table of all the ansi color codes.  
+**Example**  
+`$ colors`
+![colors cli example](https://assets.slugbyte.com/github/misc/colors-example.png)
+``` bash 
+#!/usr/bin/env bash
+_colors(){
+  figlet 'ansi color'
+  for x in {0..63};do 
+    x=$(( x * 4 ))
+    for y in {0..3};do 
+      color=$(( x + y ))
+      echo -n $(tput setab $(( $color ))) $(tput setaf 15) 
+      printf " %3g  " $color
+      echo -n $(tput setab 0) 
+    done; 
+    for y in {0..3};do 
+      color=$(( x + y ))
+      echo -n $(tput setaf $(( $color ))) $(tput setab 0) 
+      printf "%3g" $color
+      echo -n $(tput setab 0) 
+    done; 
+    echo ""
+  done
+}
+_colors | less -r
+```
+
 ## Git Shorthand  
 ### `c [args]` - smart git commit
 * First run `git add -A` to add all the untracked changes
