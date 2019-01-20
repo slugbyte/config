@@ -1,3 +1,5 @@
+# pretty log
+alias log='git log --graph --oneline --tags'
 # push to current branch with args
 git_push() {
   local branch
