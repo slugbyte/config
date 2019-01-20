@@ -3,14 +3,14 @@ git_push() {
   local branch
   if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
-      print "Error: Cannot push from detached state."
+      echo "Error: Cannot push from detached state."
       return 1
     fi 
     echo "Pushing to $branch $@" 
     git push origin $branch $@ -v
     return 0
   else
-    print "Error: Not a git repository"
+    echo "Error: Not a git repository"
     return 1
   fi
 }
@@ -25,14 +25,14 @@ git_pull() {
   fi 
   if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
-      print "Error: Cannot push from detached state."
+      echo "Error: Cannot push from detached state."
       return 1
     fi 
     echo "Pulling from $branch"
     git pull origin $branch -v
     return 0
   else
-    print "Error: Not a git repository"
+    echo "Error: Not a git repository"
     return 1
   fi
 }
