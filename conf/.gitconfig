@@ -3,5 +3,5 @@
 	email = slugbyte@slugbyte.com
 [tag]
   forceSignAnnotated = true
-[commit]
-  forceSignAnnotated = true
+[alias]
+   commit = commit -S
