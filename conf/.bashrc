@@ -9,6 +9,7 @@ export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 export PAGER=$(which less)
 export EDITOR=$(which vim)
+export GPG_TTY=$(tty)
 
 # Mold Init
 export MOLD_ROOT="$HOME/workspace/slug-bench/config"
