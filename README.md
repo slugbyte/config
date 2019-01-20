@@ -30,7 +30,7 @@ A list of some of my favorite CLI tools for boosting programming workflow in the
 * [tree](http://mama.indstate.edu/users/ice/tree/) - list contents of directories in a tree-like-format
 
 ## Config Highlights
-Below are some highlights of tools I created in this repository for enhancing my own coding workflow.
+Below are some highlights of tools I created in this repository for enhancing my own coding workflow.  
 **NOTE:** I have developed the habbit of using a lot of single charicter alias shorthand and 
 It's allways worked well for me. However, I have heard many strong arguments aginst the practice
 and would urge people to think twice before they create the habit. That said, Its allready been a part
