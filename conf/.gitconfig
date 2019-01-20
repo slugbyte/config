@@ -1,3 +1,7 @@
 [user]
 	name = Duncan Marsh
 	email = slugbyte@slugbyte.com
+[tag]
+  forceSignAnnotated = true
+[commit]
+  forceSignAnnotated = true
