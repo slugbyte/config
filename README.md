@@ -32,7 +32,6 @@ f(){
 ## fuzz and defuzz
 `fuzz` is a bash function that will use gpg to sign and encrypt a file or directory. If a directory is supplied fuzz will automaticly create a tarball from it and then encrypt the tarball. Once an encrypted file has been created fuzz will also delete the unencryped content.   
 `defuzz` is a bash function that will use gpg to decrypt a file or encrypted tarbal. If the encryped file was a tarbal it will automaticly be unpacked into a directory. Once the encrypted file has been decrypedted into a normal file or direcotry, the encrypted file will be deleted.  
-Fuzz and defuzz will both kill the gpg-agent after each run, this will force you to use your password each time you encryped or decrypt a file.  
 **Example**
 ![fuzz and defuzz example](https://assets.slugbyte.com/github/misc/fuzz-defuzz-example.png)  
 ``` bash 
@@ -46,12 +45,10 @@ fuzz(){
     gpg -sea -r $EMAIL $1.tar.gz
     rm -rf $1
     rm $1.tar.gz
-    killall gpg-agent || echo ''
     return 0
   fi
   gpg -sea -r $EMAIL $1
   rm $1
-  killall gpg-agent || echo ''
 }
 
 defuzz(){
@@ -65,7 +62,6 @@ defuzz(){
     tar -xzf $output
     rm $output
   fi
-  killall gpg-agent || echo ''
 }
 ```
 
@@ -89,9 +85,34 @@ c(){
   git add -A && git commit -v -S "$@" && git verify-commit HEAD
 }
 ```  
-#### l [args] - smart git pull
-<!--TODO  -->
-#### p [args] - smart git push
+#### l [branch] - smart git pull
+Pull from the current branch or a specific branch. `l` will also print errors for not a git repository, or trying to pull from a detached head.  
+**EXAMPLES**  
+Pull the current branch: `$ l`  
+Pull the foobar branch: `$ l foobar`  
+```bash
+l() {
+  local branch
+  if (( $# > 0 ));then
+    echo "Pulling from $@"
+    git pull origin $@ -v
+    return 0
+  fi
+  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+    if [[ "$branch" == "HEAD" ]]; then
+      echo "Error: Cannot push from detached state."
+      return 1
+    fi
+    echo "Pulling from $branch"
+    git pull origin $branch -v
+    return 0
+  else
+    echo "Error: Not a git repository"
+    return 1
+  fi
+}
+```
+#### p [flags] - smart git push
 <!--TODO  -->
 
 ## Favorite Open Source Tools
@@ -102,6 +123,7 @@ c(){
 * [fzf](https://github.com/junegunn/fzf) - A command-line fuzzy finder
 * [git aware prompt](https://github.com/jimeh/git-aware-prompt) - Display git branch name in your terminal prompt
 * [goto](https://github.com/iridakos/goto) - A shell utility to quickly navigate to aliased directories supporting auto-completion
+* [gpg](https://www.gnupg.org/) - allows you to encrypt and sign your data and communications
 * [httpie](https://httpie.org/) - a command line HTTP client with an intuitive UI, JSON support, and syntax highlighting
 * [the\_silver\_searcher](https://github.com/ggreer) - A code-searching tool similar to ack, but faster
 * [tldr](https://tldr.sh/) - Simplified and community-driven man pages
