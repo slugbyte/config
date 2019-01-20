@@ -52,3 +52,12 @@ git_tag(){
     git tag -s "$@" && git verify-tag $1
   fi 
 }
+
+git_branch(){
+  if (( $# < 1 ));then 
+    git branch -av
+    return 0
+  else
+    git branch "$@"
+  fi 
+}

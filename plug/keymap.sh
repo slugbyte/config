@@ -1,5 +1,5 @@
 alias a="git add"
-alias b="git branch -av"
+alias b="git_branch"
 alias c="git_commit"
 alias ch="git checkout"
 alias d=""

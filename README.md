@@ -141,6 +141,35 @@ List tags, delete tags, and create/sign tags.
 List tags with messages: `$ t`  
 Create and sign tag: `$ t v0.1.1`  
 Delete tag: `$ t v0.1.1` 
+``` bash
+t(){
+  if (( $# < 1 ));then 
+    git tag -n99
+    return 0
+  elif (( $# > 1 ));then 
+    git tag "$@"
+    return 0
+  else
+    git tag -s "$@" && git verify-tag $1
+  fi 
+}
+```
+### `b [args]` - smart git branch
+List branches and delete branches.  
+**Examples**  
+Run `git branch -av`: `$ b`   
+Delete branch: `$ b -D branch-name`  
+``` bash
+b(){
+  if (( $# < 1 ));then 
+    git branch -av
+    return 0
+  else
+    git branch "$@"
+  fi 
+}
+```
+
 
 ## Favorite Open Source Tools
 * [aria2c](https://aria2.github.io/) - An ultra-fast download utility with support for HTTP(S), FTP, SFTP, BitTorrent, and Metalink
