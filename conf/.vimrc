@@ -1,11 +1,11 @@
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugins
 call plug#begin('~/.vim/plugged')
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'neovimhaskell/haskell-vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/vim-easy-align'
 Plug 'Valloric/YouCompleteMe'
 Plug 'scrooloose/nerdtree'
-Plug 'rust-lang/rust.vim'
 Plug 'jpalardy/vim-slime'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'

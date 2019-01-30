@@ -1,6 +1,7 @@
 alias a="git add"
 alias b="git_branch"
 alias c="git_commit"
+alias C="git_commit -m"
 alias ch="git checkout"
 alias d="echo naw"
 alias e="edit.sh"

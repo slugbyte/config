@@ -444,11 +444,14 @@ alias g='goto'
 if [ -n "${BASH_VERSION}" ]; then
   if ! [[ $(uname -s) =~ Darwin* ]]; then
     complete -o filenames -F _complete_goto_bash g
+    complete -o filenames -F _complete_goto_bash goto
   else
     complete -F _complete_goto_bash g
+    complete -F _complete_goto_bash goto
   fi
 elif [ -n "${ZSH_VERSION}" ]; then
   compdef _complete_goto_zsh g
+  compdef _complete_goto_zsh goto
 else
   echo "Unsupported shell."
   exit 1
