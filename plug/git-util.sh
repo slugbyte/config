@@ -40,7 +40,7 @@ git_pull() {
 }
 
 git_commit(){
-  git add -A && git commit -v -S "$@" && git verify-commit HEAD
+  git commit -v -S "$@" && git verify-commit HEAD
 }
 
 git_tag(){

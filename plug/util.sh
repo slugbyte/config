@@ -14,6 +14,10 @@ ip_address(){
   curl ipinfo.io/ip
 }
 
+ff() {
+  find . -iname "$@"
+}
+
 # Add Color to Man Pages
 man() {
   env \
