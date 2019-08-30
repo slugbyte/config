@@ -1,6 +1,7 @@
 # Python Related Utilitys
 
 PYENV_VERSION=3.7.2
+export PYTHON_CONFIGURE_OPTS="--enable-framework"
 eval "$(pyenv init -)"
 #alias py='python3'
 alias pyoff='deactivate'
