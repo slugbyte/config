@@ -1,7 +1,7 @@
 [user]
 	name = Duncan Marsh
 	email = slugbyte@slugbyte.com
-  signingkey = B7B8ADAE
+  signingkey = 156DCF5CE48090E4
 [alias]
   f= !git fetch -v
   auto= !git add -A && git commit -v -S && git push origin HEAD
