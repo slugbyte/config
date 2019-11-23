@@ -13,7 +13,7 @@ alias ls="ls -F $ls_flag"
 alias ll="ls -lah"
 alias la="ls -a"
 alias l1="ls -1a"
-alias ..="$(which cd) .."
+alias ..="cd .."
 
 # ------ UTIL
 alias md="mkdir -p"

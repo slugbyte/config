@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+mkdir -p 50
+mkdir -p 250
+mkdir -p 500
+mkdir -p 1000 
+mkdir -p 1500
+mkdir -p original
+for x in ./$@;do
+  name=$(basename $x)
+  name=${name/.png/}
+  convert -resize 50 $x ./50/${name}-50.png
+  convert -resize 250 $x ./250/${name}-250.png
+  convert -resize 500 $x ./500/${name}-500.png
+  convert -resize 1000 $x ./1000/${name}-1000.png
+  convert -resize 1500 $x ./1500/${name}-1500.png
+  mv $x ./original/
+  echo converted $x done
+done

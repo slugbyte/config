@@ -1,4 +1,5 @@
 alias a="git add"
+alias A="git add ."
 alias b="git_branch"
 alias c="git_commit"
 alias C="git_commit -m"
