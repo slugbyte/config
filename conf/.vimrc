@@ -155,3 +155,8 @@ command! A Ag
 command! L Lines
 command! BL BLines
 
+" Filetype mapings
+au BufRead,BufNewFile *.md.txt set syntax=markdown
+au BufRead,BufNewFile *.js.txt set syntax=javascript
+au BufRead,BufNewFile *.html.txt set syntax=html
+
