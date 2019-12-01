@@ -26,31 +26,29 @@ Plug 'tpope/vim-eunuch'
 Plug 'airblade/vim-gitgutter'
 Plug 'slugbyte/yuejiu'
 call plug#end()
-
+"
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugin Settings
 " Vim-Slime
 let g:slime_target="tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 
 " NERDTree
-nmap <leader>t :NERDTreeToggle<CR> 
+" auto close vim when only buf left is NerdTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 let NERDTreeQuitOnOpen=1
+map <C-p> :NERDTreeToggle<CR>
 
-function! s:noop()
-endfunction
 " UltiSnips
 let g:UltiSnipsExpandTrigger="<f12>"
 let g:UltiSnipsJumpForwardTrigger="<f11>"
 let g:UltiSnipsJumpBackwardTrigger="<f10>"
-    
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Settings
 syntax enable              "  turn on syntax highlighting
 colorscheme yuejiu         "  use the yuejiu syntax colorscheme
 filetype plugin on         "  allow plugins to be applied to specifc file types
 set ruler                  "  show the cursor position in the status bar
-set number                 "  turn on line numbers
+set number relativenumber  "  hybrid relative number
 set mouse=a                "  allow the mouse to interact with vim
 set incsearch              "  vim starts searching while typing search string
 set tabstop=2              "  make \t appear to be two spaces wide
@@ -82,29 +80,42 @@ map H ^
 let mapleader = "\<Space>"
 " qq to requort Q to replay
 nnoremap Q @q
+
 " move lines 
-nmap <leader>j :move+<cr>
-nmap <leader>k :move-2<cr>
-nmap <leader>h <<
-nmap <leader>l >>
-vmap <leader>j :move+<cr>
-vmap <leader>k :move-2<cr>
-vmap <leader>h <<
-vmap <leader>l >>
-" Save and Quit 
-nnoremap <leader>q :wqall<cr>
-nnoremap <leader>s :w <cr>:echo "saved"<cr>
+nnoremap <leader>K mz:m-2<CR>`z==
+nnoremap <leader>J mz:m+<CR>`z==
+vnoremap <leader>K :m'<-2<CR>gv=`>my`<mzgv`yo`z
+vnoremap <leader>J :m'>+<CR>gv=`<my`>mzgv`yo`z
+
+" window managment
+nmap <leader>s :sp<cr>
+nmap <leader>v :vs<cr>
+nmap <leader>o :on<cr>
+nmap <leader>d :hide<cr>
+nmap <leader>h :wincmd h<cr>
+nmap <leader>j :wincmd j<cr>
+nmap <leader>k :wincmd k<cr>
+nmap <leader>l :wincmd l<cr>
+nmap <leader>< :15 wincmd <<cr>
+nmap <leader>> :15 wincmd ><cr>
+nmap <leader>= :10 wincmd +<cr>
+nmap <leader>- :10 wincmd -<cr>
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Shorthand
+" TODO: convert this to a snippet
 inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 "inoreabbrev <expr> #doc "<!DOCTYPE html>" 
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands
-" open the current dir
-command! Dir e .     
-" reload the ~/.vimrc
+" rkload the ~/.vimrc
 command! Reload source ~/.vimrc   
-" Find todos in all lines
+
+" FZF shorthand
+command! F Files 
+command! B Buffers
+command! A Ag
+command! L Lines
+command! BL BLines
 command! Todo Lines todo 
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions 
@@ -113,7 +124,8 @@ command! Todo Lines todo
 function! ToggleMouseMode()
   if  &mouse == "a"
     " cilpboard select will also hide line numbers
-    set mouse=v nonumber
+    set norelativenumber
+    set mouse=v nonumber 
     echo "mouse mode clipboard"
   else 
     " vim select will also show line numbers
@@ -121,7 +133,7 @@ function! ToggleMouseMode()
     echo "mouse mode vim"
   endif
 endfunction
-map M :call ToggleMouseMode()<CR>
+nmap <leader>M :call ToggleMouseMode()<CR>
 
 " <C-p> will toggle pastemode 
 function! TogglePasteMode()
@@ -133,7 +145,20 @@ function! TogglePasteMode()
     echo "paste mode off"
   endif
 endfunction
-map <C-p> :call TogglePasteMode()<CR>
+nmap <leader>P :call TogglePasteMode()<CR>
+
+" <f5> will toggle relative number
+function! ToggleNumber()
+  if &relativenumber == 0
+    set number relativenumber
+    echo "relative number on"
+  else 
+    set norelativenumber
+    echo "relative number off"
+  endif
+endfunction
+nmap <leader>N :call ToggleNumber()<CR>
+
 
 " duck duck go something 
 " inspired by https://github.com/junegunn/dotfiles/blob/master/vimrc#L1012
@@ -148,15 +173,7 @@ noremap <leader>? <S-v>"gy:call <SID>duck(@g)<cr>gvddl
 " Duck command
 command! -nargs=1 Duck call s:duck(<f-args>)
 
-" FZF shorthand
-command! F Files
-command! B Buffers
-command! A Ag
-command! L Lines
-command! BL BLines
-
-" Filetype mapings
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Filetype Commands
 au BufRead,BufNewFile *.md.txt set syntax=markdown
 au BufRead,BufNewFile *.js.txt set syntax=javascript
 au BufRead,BufNewFile *.html.txt set syntax=html
-

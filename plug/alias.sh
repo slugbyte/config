@@ -17,6 +17,7 @@ alias ..="cd .."
 
 # ------ UTIL
 alias md="mkdir -p"
+alias cp='cp -r'
 alias rimraf="rm -rf"
 alias less='less -r'
 alias vim='echo use e'

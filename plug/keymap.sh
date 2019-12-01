@@ -6,11 +6,12 @@ alias C="git_commit -m"
 alias ch="git checkout"
 alias d="echo naw"
 alias e="edit.sh"
-alias f="fzf_vim"
-#alias g="git" # allready aliased in goto.sh
-alias h="cd ~"
+alias f="e -c ':Ag'"
+alias F="e -c ':Files'"
+# g allready aliased in goto.sh
+alias h='git log --graph --oneline'
 alias i="ip_address"
-#alias j="echo naw" # allready aliased in commacd.sh 
+# j allready aliased in commacd.sh 
 alias k="echo naw"
 alias l="git_pull"
 alias m="echo naw"
