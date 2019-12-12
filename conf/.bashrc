@@ -5,6 +5,7 @@ set globstar
 set nocaseglob
 
 # Environment Variabels
+
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 export PAGER=$(which less)

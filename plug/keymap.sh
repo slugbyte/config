@@ -6,8 +6,9 @@ alias C="git_commit -m"
 alias ch="git checkout"
 alias d="echo naw"
 alias e="edit.sh"
-alias f="e -c ':Ag'"
-alias F="e -c ':Files'"
+alias f="e -c ':Files'"
+alias ff="e -c ':Ag'"
+alias F="git fetch -p"
 # g allready aliased in goto.sh
 alias h='git log --graph --oneline'
 alias i="ip_address"

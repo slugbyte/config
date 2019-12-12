@@ -14,7 +14,7 @@ ip_address(){
   curl ipinfo.io/ip
 }
 
-ff() {
+findi() {
   find . -iname "$@"
 }
 
@@ -147,4 +147,8 @@ grammarly(){
   open "$1.txt" -a /Applications/Grammarly.app
   sleep 2
   txtify "$1.txt"
+}
+
+set_screenshot_dir(){
+  defaults write com.apple.screencapture location "$1"
 }

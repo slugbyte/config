@@ -2,13 +2,14 @@
 call plug#begin('~/.vim/plugged')
 " LANG
 Plug 'pangloss/vim-javascript'
-Plug 'fatih/vim-go' 
+Plug 'tpope/vim-fireplace'
 
 " TEXT
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'godlygeek/tabular'
 Plug 'SirVer/ultisnips'
+Plug 'slugbyte/paredit.vim'
 
 " UTIL
 Plug 'christoomey/vim-tmux-navigator'
@@ -42,6 +43,10 @@ map <C-p> :NERDTreeToggle<CR>
 let g:UltiSnipsExpandTrigger="<f12>"
 let g:UltiSnipsJumpForwardTrigger="<f11>"
 let g:UltiSnipsJumpBackwardTrigger="<f10>"
+
+"Paredit
+let g:paredit_leader='\'
+let g:paredit_shortmaps=1
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Settings
 syntax enable              "  turn on syntax highlighting

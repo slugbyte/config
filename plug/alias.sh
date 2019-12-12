@@ -15,6 +15,8 @@ alias la="ls -a"
 alias l1="ls -1a"
 alias ..="cd .."
 
+alias liquid='java -jar $MOLD_ROOT/exec/liq.jar'
+
 # ------ UTIL
 alias md="mkdir -p"
 alias cp='cp -r'
