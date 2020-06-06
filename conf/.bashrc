@@ -6,6 +6,7 @@ set nocaseglob
 
 # Environment Variabels
 
+export BASH_SILENCE_DEPRECATION_WARNING=1
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 export PAGER=$(which less)

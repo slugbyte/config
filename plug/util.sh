@@ -152,3 +152,10 @@ grammarly(){
 set_screenshot_dir(){
   defaults write com.apple.screencapture location "$1"
 }
+
+torrent(){
+  #hash=$1
+  #curl -O "https://itorrents.org/torrent/${hash}.torrent"
+  curl -O "https://itorrents.org/torrent/0471DE36BCA7039BBCC84342933903AD1FBFCBED.torrent"
+  #aria2c "${hash}.torrent"
+}

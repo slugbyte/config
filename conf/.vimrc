@@ -3,6 +3,7 @@ call plug#begin('~/.vim/plugged')
 " LANG
 Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-fireplace'
+Plug 'slugbyte/vim-clojure-static'
 
 " TEXT
 Plug 'scrooloose/nerdcommenter'
@@ -44,9 +45,19 @@ let g:UltiSnipsExpandTrigger="<f12>"
 let g:UltiSnipsJumpForwardTrigger="<f11>"
 let g:UltiSnipsJumpBackwardTrigger="<f10>"
 
-"Paredit
+" Paredit
 let g:paredit_leader='\'
 let g:paredit_shortmaps=1
+
+" YouCompleteMe
+au BufRead,BufNewFile *.clj let g:ycm_seed_identifiers_with_syntax=1 
+
+" Fireplace
+"autocmd Filetype clojure unmap! ;
+"autocmd Filetype clojure unmap! I 
+autocmd Filetype clojure nmap ; cpp
+autocmd Filetype clojure nmap \| cmm
+"autocmd Filetype clojure nmap I cqp
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Settings
 syntax enable              "  turn on syntax highlighting
@@ -163,7 +174,6 @@ function! ToggleNumber()
   endif
 endfunction
 nmap <leader>N :call ToggleNumber()<CR>
-
 
 " duck duck go something 
 " inspired by https://github.com/junegunn/dotfiles/blob/master/vimrc#L1012
