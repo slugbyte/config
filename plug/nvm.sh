@@ -5,5 +5,5 @@ fi
 
 . "$NVM_DIR/nvm.sh"
 
-nvm use 12.16.3
+nvm use 12
 
