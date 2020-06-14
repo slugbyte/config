@@ -5,6 +5,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-fireplace'
 Plug 'slugbyte/vim-clojure-static'
 
+
 " TEXT
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
@@ -25,6 +26,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-eunuch'
 
 " UI
+Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 Plug 'slugbyte/yuejiu'
 call plug#end()
@@ -192,3 +194,5 @@ command! -nargs=1 Duck call s:duck(<f-args>)
 au BufRead,BufNewFile *.md.txt set syntax=markdown
 au BufRead,BufNewFile *.js.txt set syntax=javascript
 au BufRead,BufNewFile *.html.txt set syntax=html
+
+let g:syntastic_javascript_checkers=['eslint']

@@ -5,7 +5,6 @@ set globstar
 set nocaseglob
 
 # Environment Variabels
-
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
@@ -20,6 +19,12 @@ export MOLD_SIGN='true'
 export PATH="$MOLD_ROOT/exec:$PATH"
 for plug in $MOLD_ROOT/plug/* ;do
   . $plug
+done
+
+# LOAD SECRETS
+export SECRET_DIR="$HOME/.secret"
+for  secret in $SECRET_DIR/*.secret.sh; do 
+  . secret
 done
 
 # Verbose Error Exit Status
