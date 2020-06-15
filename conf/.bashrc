@@ -24,7 +24,7 @@ done
 # LOAD SECRETS
 export SECRET_DIR="$HOME/.secret"
 for  secret in $SECRET_DIR/*.secret.sh; do 
-  . secret
+  . $secret
 done
 
 # Verbose Error Exit Status

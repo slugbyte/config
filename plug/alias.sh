@@ -15,7 +15,7 @@ alias la="ls -a"
 alias l1="ls -1a"
 alias ..="cd .."
 
-alias liquid='java -jar $MOLD_ROOT/exec/liq.jar'
+#alias liquid='java -jar $MOLD_ROOT/exec/liq.jar'
 
 # ------ UTIL
 alias md="mkdir -p"
@@ -26,3 +26,4 @@ alias vim='echo use e'
 alias todo='e ~/workspace/TODO.md'
 alias vbox='/Applications/VirtualBox.app/Contents/Resources/VirtualBoxVM.app/Contents/MacOS/VBoxManage' 
 alias gencerts='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes'
+alias wifi='osx-wifi-cli'
