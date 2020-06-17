@@ -26,7 +26,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-eunuch'
 
 " UI
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 Plug 'slugbyte/yuejiu'
 call plug#end()
@@ -68,6 +68,7 @@ filetype plugin on         "  allow plugins to be applied to specifc file types
 set ruler                  "  show the cursor position in the status bar
 set number relativenumber  "  hybrid relative number
 set mouse=a                "  allow the mouse to interact with vim
+set autoread               "  when you run checktime it will refresh the file
 set incsearch              "  vim starts searching while typing search string
 set tabstop=2              "  make \t appear to be two spaces wide
 set expandtab              "  convert tab to spaces (unless a filetype plugin changes that)

@@ -2,6 +2,5 @@
 	name = Duncan Marsh
 	email = slugbyte@slugbyte.com
   signingkey = 156DCF5CE48090E4
-[alias]
-  f= !git fetch -v
-  auto= !git add -A && git commit -v -S && git push origin HEAD
+[includeIf "gitdir:~/workspace/rolo-bench/"]
+  path = ~/workspace/rolo-bench/.gitconfig
