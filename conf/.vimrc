@@ -137,6 +137,14 @@ command! L Lines
 command! BL BLines
 command! Todo Lines todo 
 
+" Npm Lint
+function! LintFix()
+  silent exe "!npm run lint:fix" 
+  redraw!
+  bufdo! checktime
+endfunction
+command! LF call LintFix()
+
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions 
 " M  will toggle the mouse between 
 " vim select and clipboard select
