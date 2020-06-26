@@ -1,15 +1,7 @@
 # Alias
 
 # ------ NAV AND FS
-if [[ $(uname -s) = 'Darwin' ]];then
-  ls_flag='-G'
-  export LSCOLORS=gxfxcxdxcxegedabagacad
-else 
-  ls_flag='--color=auto --group-directories-first'
-  export LS_COLORS='di=32:ln=35:so=36:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
-fi 
-
-alias ls="ls -F $ls_flag"
+alias ls="exa -F --group-directories-first $ls_flag"
 alias ll="ls -lah"
 alias la="ls -a"
 alias l1="ls -1a"

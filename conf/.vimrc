@@ -5,7 +5,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-fireplace'
 Plug 'slugbyte/vim-clojure-static'
 
-
 " TEXT
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
@@ -15,9 +14,14 @@ Plug 'slugbyte/paredit.vim'
 
 " UTIL
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'Valloric/YouCompleteMe'
 Plug 'jpalardy/vim-slime'
 Plug 'tpope/vim-fugitive'
+
+if has('nvim')
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+else 
+  Plug 'Valloric/YouCompleteMe'
+endif
 
 " NAV
 Plug 'scrooloose/nerdtree'
@@ -35,6 +39,14 @@ call plug#end()
 " Vim-Slime
 let g:slime_target="tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
+
+
+" tmux-navigator
+let g:tmux_navigator_save_on_switch = 1
+nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 
 " NERDTree
 " auto close vim when only buf left is NerdTree
@@ -115,10 +127,13 @@ nmap <leader>h :wincmd h<cr>
 nmap <leader>j :wincmd j<cr>
 nmap <leader>k :wincmd k<cr>
 nmap <leader>l :wincmd l<cr>
+nmap <leader>n :wincmd n<cr>
+nmap <leader>c :close<cr>
 nmap <leader>< :15 wincmd <<cr>
 nmap <leader>> :15 wincmd ><cr>
 nmap <leader>= :10 wincmd +<cr>
 nmap <leader>- :10 wincmd -<cr>
+
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Shorthand
 " TODO: convert this to a snippet
@@ -127,6 +142,7 @@ inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Commands
 " rkload the ~/.vimrc
+command! C :close
 command! Reload source ~/.vimrc   
 
 " FZF shorthand
@@ -161,6 +177,20 @@ function! ToggleMouseMode()
   endif
 endfunction
 nmap <leader>M :call ToggleMouseMode()<CR>
+
+" Toggle case sensitive search
+function! ToggleCaseFunc()
+  set ignorecase!
+  if  &ignorecase == 0
+    " turn ignore case off
+    echo "ignorecase off"
+  else 
+    " turn ignore case on
+    echo "ignorecase on"
+  endif
+endfunction
+command! ToggleCase call ToggleCaseFunc()
+
 
 " <C-p> will toggle pastemode 
 function! TogglePasteMode()
