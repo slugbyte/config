@@ -3,14 +3,15 @@ call plug#begin('~/.vim/plugged')
 " LANG
 Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-fireplace'
-Plug 'slugbyte/vim-clojure-static'
+Plug 'git@github.com:slugbyte/vim-clojure-static.git'
 
 " TEXT
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'godlygeek/tabular'
 Plug 'SirVer/ultisnips'
-Plug 'slugbyte/paredit.vim'
+Plug 'git@github.com:slugbyte/paredit.vim'
+Plug 'git@github.com:slugbyte/snip.git'
 
 " UTIL
 Plug 'christoomey/vim-tmux-navigator'
@@ -20,7 +21,7 @@ Plug 'tpope/vim-fugitive'
 if has('nvim')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 else 
-  Plug 'Valloric/YouCompleteMe'
+   Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
 endif
 
 " NAV
@@ -32,7 +33,7 @@ Plug 'tpope/vim-eunuch'
 " UI
 "Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
-Plug 'slugbyte/yuejiu'
+Plug 'git@github.com:slugbyte/yuejiu'
 call plug#end()
 "
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugin Settings
