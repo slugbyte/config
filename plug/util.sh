@@ -1,11 +1,5 @@
 # General Utilitys
 
-# Safely Delete Something
-trash(){
-  mkdir -p $HOME/.Trash
-  mv $1 $HOME/.Trash/
-}
-
 # Log Local and Public Ip
 ip_address(){
   echo -n 'local:  '
@@ -29,13 +23,6 @@ man() {
     LESS_TERMCAP_ue=$(printf "\e[0m") \
     LESS_TERMCAP_us=$(printf "\e[1;32m") \
       man "$@"
-}
-
-# Source a file in a script(s) directory
-# TODO check check dir and script exists and only log ok if actually OK
-load(){
-  source script/${1}.sh
-  echo ${color_magenta}loaded${color_reset} ${1}
 }
 
 # FzF and Open To Line in Vim 

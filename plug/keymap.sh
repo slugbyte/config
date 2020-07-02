@@ -17,11 +17,13 @@ alias i="ip_address"
 # j allready aliased in commacd.sh 
 alias k="echo naw"
 alias l="git_pull"
+alias lu="git_pull_upstream"
 alias m="echo naw"
 alias n="nvim"
 alias nd='nvim $(find . -name "*.*" | grep "./")'
 alias o="echo naw"
 alias p="git_push"
+alias pu="git_push_upstream"
 alias q="echo naw"
 alias r="source ~/.bashrc"
 alias s="git status"

@@ -63,3 +63,42 @@ git_branch(){
   fi 
 }
 
+
+git_push_upstream() {
+  local branch
+  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+    if [[ "$branch" == "HEAD" ]]; then
+      echo "Error: Cannot push from detached state."
+      return 1
+    fi 
+    echo "Pushing to $branch $@" 
+    git push upstream $branch $@ -v
+    return 0
+  else
+    echo "Error: Not a git repository"
+    return 1
+  fi
+}
+
+# pull from arg or current branch
+git_pull_upstream() {
+  local branch
+  if (( $# > 0 ));then 
+    echo "Pulling from $@"
+    git pull upstream $@ -v
+    return 0
+  fi 
+  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+    if [[ "$branch" == "HEAD" ]]; then
+      echo "Error: Cannot pull from detached state."
+      return 1
+    fi 
+    echo "Pulling from $branch"
+    git pull upstream $branch -v
+    return 0
+  else
+    echo "Error: Not a git repository"
+    return 1
+  fi
+}
+
