@@ -1,7 +1,22 @@
-dockill(){
+dokill(){
   docker kill $(docker ps -q)
+  echo "killed all containers "
 }
 
-docrm(){
+dorm(){
   docker rm $(docker ps -a -q)
+  echo "removed all containers"
 }
+
+donuke(){
+  dokill
+  dorm
+}
+
+alias dock="docker"
+alias doru="dock run"
+alias dori="doru -it"
+alias dorsh="dori --entrypoint sh"
+alias dorvosh="dorsh -v $(pwd):/mnt"
+alias dob="dock build"
+alias dops="dock ps -a"

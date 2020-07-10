@@ -5,5 +5,4 @@ fi
 
 . "$NVM_DIR/nvm.sh"
 
-nvm use 12
-
+#nvm use 12

@@ -9,7 +9,7 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 export PAGER=$(which less)
-export EDITOR=$(which vim)
+export EDITOR=$(which nvim)
 export GPG_TTY=$(tty)
 export LC_ALL='en_US.UTF-8'
 
@@ -33,3 +33,9 @@ handle_error(){
   echo "ERROR: command[$(history | tail -n 1| sed 's/.......//')] status($status)"
 }
 trap handle_error ERR
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/slugbyte/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/Users/slugbyte/Downloads/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/slugbyte/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/slugbyte/Downloads/google-cloud-sdk/completion.bash.inc'; fi

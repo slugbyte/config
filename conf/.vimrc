@@ -11,18 +11,19 @@ Plug 'tpope/vim-surround'
 Plug 'godlygeek/tabular'
 Plug 'SirVer/ultisnips'
 Plug 'git@github.com:slugbyte/paredit.vim'
-Plug 'git@github.com:slugbyte/snip.git'
+"Plug 'git@github.com:slugbyte/snip.git'
 
 " UTIL
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jpalardy/vim-slime'
 Plug 'tpope/vim-fugitive'
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
 
-if has('nvim')
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-else 
-   Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
-endif
+"if has('nvim')
+  "Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"else 
+   "Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
+"endif
 
 " NAV
 Plug 'scrooloose/nerdtree'
@@ -34,6 +35,8 @@ Plug 'tpope/vim-eunuch'
 "Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 Plug 'git@github.com:slugbyte/yuejiu'
+Plug 'itchyny/lightline.vim'
+Plug 'itchyny/vim-gitbranch'
 call plug#end()
 "
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugin Settings
@@ -41,6 +44,23 @@ call plug#end()
 let g:slime_target="tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 
+" lightline
+let g:lightline = {
+  \ 'colorscheme': 'seoul256',
+  \ 'active': {
+  \   'left': [ [ 'mode', 'paste' ],
+  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+  \ },
+  \ 'component_function': {
+  \   'gitbranch': 'gitbranch#name',
+  \   'filename': 'LightlineFilename'
+  \ },
+  \ }
+
+function! LightlineFilename()
+  let filename = expand('%') !=# '' ? expand('%') : '[No Name]'
+  return filename
+endfunction
 
 " tmux-navigator
 let g:tmux_navigator_save_on_switch = 1
@@ -99,6 +119,10 @@ set foldmethod=indent      "  fold and unfold text based on indent level
 set completeopt-=preview   "  stop plugins from adding a docs window on tab completion
 set wildmode=list:longest  "  configure tab completion to list all matches when there is more than one
 set wildmenu               "  enable tab completion in the command bar
+if has('nvim')
+  set hlsearch!
+endif
+
 let g:is_bash=1            "  treat .sh files as bash scripts
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Key Mappings
@@ -112,6 +136,14 @@ map H ^
 let mapleader = "\<Space>"
 " qq to requort Q to replay
 nnoremap Q @q
+
+" serarch highlight
+nnoremap <F9> :set hlsearch!<CR>
+
+" vim-command-line key binding
+cnoremap <C-A> <Home>
+cnoremap <C-L> <S-Right>
+cnoremap <C-H> <S-Left>
 
 " move lines 
 nnoremap <leader>K mz:m-2<CR>`z==
@@ -234,5 +266,7 @@ command! -nargs=1 Duck call s:duck(<f-args>)
 au BufRead,BufNewFile *.md.txt set syntax=markdown
 au BufRead,BufNewFile *.js.txt set syntax=javascript
 au BufRead,BufNewFile *.html.txt set syntax=html
+au BufRead,BufNewFile Dockerfile* set syntax=dockerfile
+au BufRead,BufNewFile .env.* set syntax=sh
 
 let g:syntastic_javascript_checkers=['eslint']

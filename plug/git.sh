@@ -1,3 +1,6 @@
+alias stash="git stash -u"
+alias unstash="git stash pop"
+
 # pretty log
 # push to current branch with args
 git_push() {
@@ -39,7 +42,7 @@ git_pull() {
 }
 
 git_commit(){
-  git commit -v -S "$@" && git verify-commit HEAD
+  git commit -S "$@" && git verify-commit HEAD
 }
 
 git_tag(){
