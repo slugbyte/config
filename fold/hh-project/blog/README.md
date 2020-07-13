@@ -1,2 +1,0 @@
-# Blog post 
-</-- image header -->
