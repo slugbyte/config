@@ -1,5 +1,15 @@
 alias stash="git stash -u"
 alias unstash="git stash pop"
+alias clone="git clone --recursive"
+
+
+alias subu="git submodule update"
+
+# add submodule
+suba(){
+  git submodule add $@
+  git submodule init
+}
 
 # pretty log
 # push to current branch with args
@@ -47,13 +57,13 @@ git_commit(){
 
 git_tag(){
   if (( $# < 1 ));then 
-    git tag -n99
-    return 0
+    return 1
   elif (( $# > 1 ));then 
-    git tag "$@"
+    git tag -a -s $@
     return 0
   else
-    git tag -s "$@" && git verify-tag $1
+    git tag -s -a $@ && git verify-tag $1
+    return 0
   fi 
 }
 

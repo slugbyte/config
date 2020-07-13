@@ -7,6 +7,10 @@ color_git_dirty="$(tput setaf 111 2>/dev/null || echo '')"
 color_reset="$(tput sgr 0 2>/dev/null || echo '\e[0m')" 
 
 # Prompt Git Helpers
+find_git_remote(){
+  GIT_REMOTE=$(git remote -v 2> /dev/null |cut -d : -f 2 | cut -d ' ' -f 1 | cut -d '.' -f 1 | uniq)
+}
+
 find_git_branch() {
   # Based on: http://stackoverflow.com/a/13003854/170413
   local branch
@@ -26,13 +30,13 @@ find_git_branch() {
 find_git_dirty() {
   local status=$(git status --porcelain 2> /dev/null)
   if [[ "$status" != "" ]]; then
-    git_dirty='*'
+    GIT_DIRTY='x'
   else
-    git_dirty=''
+    GIT_DIRTY=''
   fi
 }
 
-PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
+PROMPT_COMMAND="find_git_branch; find_git_dirty; find_git_remote; $PROMPT_COMMAND"
 
 
 # Prompt content
@@ -41,4 +45,4 @@ PROMPT_DIR="\[$color_dir\]\W "
 PROMPT_GIT="\[$color_git_branch\]\$GIT_BRANCH\[$color_git_detached\]\$GIT_DETACHED\${GIT_DIRTY}"
 
 # Set Prompt
-PS1="${PROMPT_USER}${PROMPT_DIR}${PROMPT_GIT}\[$color_reset\]\n✿ "
+PS1="${PROMPT_USER}${PROMPT_DIR}${PROMPT_GIT} \[$color_dir\]\$GIT_REMOTE\[$color_reset\]\n✿ "
