@@ -1,12 +1,12 @@
 #!/bin/bash
 
 function hackerText(){
-numChar=$(echo $1 | wc -m | sed -e 's/^[ \t]*//')
-for c in $(seq 0 $(expr $numChar - 1 )); do
+  numChar=$(echo $1 | wc -m | sed -e 's/^[ \t]*//')
+  for c in $(seq 0 $(expr $numChar - 1 )); do
+    sleep $2
+    echo -n  "${1:$c:1}"
+  done
   sleep $2
-  echo -n  "${1:$c:1}"
-done
-sleep $2
 }
 
 clear 

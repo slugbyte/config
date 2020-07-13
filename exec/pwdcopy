@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-pwd | tr -d '\n' | pbcopy

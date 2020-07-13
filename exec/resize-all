@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 mkdir -p 50
 mkdir -p 250
 mkdir -p 500

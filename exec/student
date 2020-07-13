@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-set -euo pipefail
+# TODO: make this into a node cli
 
+set -euo pipefail
 students_file=$HOME/.students
 
 if [[ ${1:-} == '-r' ]]; then 

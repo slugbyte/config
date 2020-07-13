@@ -1,5 +1,9 @@
 # General Utilitys
 
+pwdcopy(){
+  pwd | tr -d '\n' | pbcopy
+}
+
 # Log Local and Public Ip
 ip_address(){
   echo -n 'local:  '
