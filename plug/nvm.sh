@@ -4,5 +4,3 @@ if [[ ! -e $NVM_DIR ]];then
 fi 
 
 . "$NVM_DIR/nvm.sh"
-
-#nvm use 12
