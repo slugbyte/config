@@ -43,6 +43,7 @@ go
 graphite2
 greed
 harfbuzz
+helm
 htop
 httpie
 icu4c
@@ -97,6 +98,7 @@ mono
 moon-buggy
 msgpack
 mycli
+mysql
 ncurses
 neovim
 nethack
@@ -123,6 +125,7 @@ pipenv
 pixman
 pkg-config
 postgresql
+protobuf
 pstree
 pyenv
 python
@@ -141,6 +144,7 @@ sdl2_mixer
 shared-mime-info
 sl
 snappy
+sops
 speedtest-cli
 speex
 sqlite

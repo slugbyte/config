@@ -1,18 +1,25 @@
+# SHORTHAND
+alias pt="git push --tag"
+alias chd='git checkout development'
+alias chs='git checkout staging'
+alias chp='git checkout production'
+alias chm='git checkout master'
 alias stash="git stash -u"
 alias unstash="git stash pop"
 alias clone="git clone --recursive"
-
-
 alias subu="git submodule update"
-
-# add submodule
+alias acp="A && c && p"
+# ACP at bottom 
 suba(){
   git submodule add $@
-  git submodule init
 }
 
-# pretty log
+git_log(){
+  git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit
+}
+
 # push to current branch with args
+# TODO: refacotr git_push and git_push_upstream to use a helper fn
 git_push() {
   local branch
   if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
@@ -55,6 +62,10 @@ git_commit(){
   git commit -S "$@" && git verify-commit HEAD
 }
 
+git_commit_message(){
+  git_commit -m "$(echo $@)"
+}
+
 git_tag(){
   if (( $# < 1 ));then 
     return 1
@@ -75,7 +86,6 @@ git_branch(){
     git branch "$@"
   fi 
 }
-
 
 git_push_upstream() {
   local branch
@@ -115,3 +125,9 @@ git_pull_upstream() {
   fi
 }
 
+# a c-m p
+ACP(){
+  git add .
+  git_commit_message $@
+  git_push
+}

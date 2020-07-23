@@ -12,6 +12,8 @@ export PAGER=$(which less)
 export EDITOR=$(which nvim)
 export GPG_TTY=$(tty)
 export LC_ALL='en_US.UTF-8'
+export w=$HOME/workspace
+export d=$HOME/workspace/DOWNLOAD
 
 # Mold Init
 export MOLD_ROOT="$HOME/.mold"

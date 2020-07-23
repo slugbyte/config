@@ -18,6 +18,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'jpalardy/vim-slime'
 Plug 'tpope/vim-fugitive'
 Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
+Plug 'Konfekt/vim-scratchpad'
 
 "if has('nvim')
   "Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -249,6 +250,16 @@ function! ToggleNumber()
 endfunction
 nmap <leader>N :call ToggleNumber()<CR>
 
+" toggle scratch pad
+function! ScratchPad()
+  sp
+  let wat = fnamemodify(bufname("%"), ":e")
+  echo wat
+  "e ~/.scratchpad.md
+endfunction
+
+command! Scratch call ScratchPad()<cr>
+
 " duck duck go something 
 " inspired by https://github.com/junegunn/dotfiles/blob/master/vimrc#L1012
 function! s:duck(pat)
@@ -270,3 +281,10 @@ au BufRead,BufNewFile Dockerfile* set syntax=dockerfile
 au BufRead,BufNewFile .env.* set syntax=sh
 
 let g:syntastic_javascript_checkers=['eslint']
+
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% YANK To Clipboard
+nnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
+nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
