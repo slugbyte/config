@@ -1,4 +1,5 @@
 shopt -s histappend
+
 # Options
 history -a
 set globstar
@@ -35,9 +36,3 @@ handle_error(){
   echo "ERROR: command[$(history | tail -n 1| sed 's/.......//')] status($status)"
 }
 trap handle_error ERR
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/slugbyte/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/Users/slugbyte/Downloads/google-cloud-sdk/path.bash.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/slugbyte/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/slugbyte/Downloads/google-cloud-sdk/completion.bash.inc'; fi
