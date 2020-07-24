@@ -17,6 +17,7 @@ A list of some of my favorite CLI tools for boosting programming workflow in the
 * [aria2c](https://aria2.github.io/) - An ultra-fast download utility with support for HTTP(S), FTP, SFTP, BitTorrent, and Metalink
 * [bat](https://github.com/sharkdp/bat) - a cat clone with syntax highlighting 
 * [commacd](https://github.com/shyiko/commacd) - a faster way to move around in bash
+* [exa](https://the.exa.website) - A modern ls with git awareness and color code files based on regex :)
 * [figlet](http://www.figlet.org/) - A program for makin large letters out of text
 * [fzf](https://github.com/junegunn/fzf) - A command-line fuzzy finder
 * [git aware prompt](https://github.com/jimeh/git-aware-prompt) - Display git branch name in your terminal prompt
@@ -24,10 +25,12 @@ A list of some of my favorite CLI tools for boosting programming workflow in the
 * [gpg](https://www.gnupg.org/) - allows you to encrypt and sign your data and communications
 * [httpie](https://httpie.org/) - a command line HTTP client with an intuitive UI, JSON support, and syntax highlighting
 * [nvim](https://neovim.io/) - the future of vim (the text editor) 
+* [sops](https://github.com/mozilla/sops) - encrypt and decrypt the keys of config files with PGP or a cloud KMS providers keys
 * [the\_silver\_searcher](https://github.com/ggreer) - A code-searching tool similar to ack, but faster
 * [tldr](https://tldr.sh/) - Simplified and community-driven man pages
 * [tmux](https://github.com/tmux/tmux) - tmux is a terminal multiplexer
 * [tree](http://mama.indstate.edu/users/ice/tree/) - list contents of directories in a tree-like-format
+* [zoxide](https://github.com/ajeetdsouza/zoxide) - a blazing fast alternative to cd, inspired by `z`, that remembers your directorys
 
 ## Config Highlights
 Below are some highlights of tools I created in this repository for enhancing my own coding workflow.  
