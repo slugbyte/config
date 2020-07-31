@@ -13,9 +13,9 @@ alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
 alias f="echo naw"
 alias F="git fetch -p"
 alias g="echo naw"
-alias h='git log --graph --oneline'
+# h is allready used by commacd.sh
 alias i="ip_address"
-# j allready aliased in commacd.sh 
+# j allready aliased in z.sh
 alias k="echo naw"
 alias l="git_pull"
 alias L="git_log"
@@ -27,7 +27,7 @@ alias o="echo naw"
 alias p="git_push"
 alias pu="git_push_upstream"
 alias q="echo naw"
-alias r="source ~/.bashrc"
+alias r="source ~/.zshrc"
 alias R="git reset"
 alias s="git status"
 alias t="git_tag"
@@ -36,4 +36,4 @@ alias v="echo naw"
 alias w="echo naw"
 alias x="echo naw"
 alias y="echo naw"
-#alias z="echo naw" # allready aliased by z
+alias z="echo naw" 

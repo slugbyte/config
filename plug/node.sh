@@ -1,6 +1,6 @@
 alias nt="npm run test -- -R tap"
-alias nl="npm run lint"
-alias nlf="npm run lint:fix"
+alias noli="npm run lint"
+alias nolf="npm run lint:fix"
 
 export NVM_DIR="$HOME/.nvm"
 if [[ ! -e $NVM_DIR ]];then 

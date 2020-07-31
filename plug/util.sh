@@ -1,5 +1,9 @@
 # General Utilitys
 
+wash-swap(){
+  rm -f $HOME/.local/share/nvim/swap/*
+}
+
 pwdcopy(){
   pwd | tr -d '\n' | pbcopy
 }
@@ -96,57 +100,57 @@ bin_info(){
   echo "ERROR: no such command"
 }
 
-r_ext(){
-  if [[ -z $1 ]]; then 
-    >2& echo "ERROR: no target supplied" 
-    return -1
-  fi 
+#r_ext(){
+  #if [[ -z $1 ]]; then 
+    #>2& echo "ERROR: no target supplied" 
+    #return -1
+  #fi 
 
-  filename="$1"
-  f_len=${#filename}
-  ext="$2"
-  e_len=${#ext}
-  extension=${1:f_len-e_len}
+  #filename="$1"
+  #f_len=${#filename}
+  #ext="$2"
+  #e_len=${#ext}
+  #extension=${1:f_len-e_len}
 
-  if [[ "$extension" == "$ext" ]];then 
-    mv $filename "${filename::f_len-e_len}"
-    echo renamed  "${filename::f_len-e_len}"
-  else 
-    mv $filename "${filename}${ext}"
-    echo renamed  "${filename}${ext}"
-  fi 
-}
+  #if [[ "$extension" == "$ext" ]];then 
+    #mv $filename "${filename::f_len-e_len}"
+    #echo renamed  "${filename::f_len-e_len}"
+  #else 
+    #mv $filename "${filename}${ext}"
+    #echo renamed  "${filename}${ext}"
+  #fi 
+#}
 
-txtify(){
-  if [[ -z $1 ]]; then 
-    >2& echo "ERROR: no target supplied" 
-    return -1
-  fi 
-  r_ext "$1" ".txt"
-}
+#txtify(){
+  #if [[ -z $1 ]]; then 
+    #>2& echo "ERROR: no target supplied" 
+    #return -1
+  #fi 
+  #r_ext "$1" ".txt"
+#}
 
-backupify() {
-  if [[ -z $1 ]]; then 
-    >2& echo "ERROR: no target supplied" 
-    return -1
-  fi 
-  r_ext "$1" ".backup"
-}
+#backupify() {
+  #if [[ -z $1 ]]; then 
+    #>2& echo "ERROR: no target supplied" 
+    #return -1
+  #fi 
+  #r_ext "$1" ".backup"
+#}
 
-grammarly(){
-  txtify "$1"
-  open "$1.txt" -a /Applications/Grammarly.app
-  sleep 2
-  txtify "$1.txt"
-}
+#grammarly(){
+  #txtify "$1"
+  #open "$1.txt" -a /Applications/Grammarly.app
+  #sleep 2
+  #txtify "$1.txt"
+#}
 
-set_screenshot_dir(){
-  defaults write com.apple.screencapture location "$1"
-}
+#set_screenshot_dir(){
+  #defaults write com.apple.screencapture location "$1"
+#}
 
-torrent(){
-  #hash=$1
-  #curl -O "https://itorrents.org/torrent/${hash}.torrent"
-  curl -O "https://itorrents.org/torrent/0471DE36BCA7039BBCC84342933903AD1FBFCBED.torrent"
-  #aria2c "${hash}.torrent"
-}
+#torrent(){
+  ##hash=$1
+  ##curl -O "https://itorrents.org/torrent/${hash}.torrent"
+  #curl -O "https://itorrents.org/torrent/0471DE36BCA7039BBCC84342933903AD1FBFCBED.torrent"
+  ##aria2c "${hash}.torrent"
+#}

@@ -1,14 +1,17 @@
-shopt -s histappend
-
 # Options
-history -a
-set globstar
-set nocaseglob
+setopt no_clobber # let me overwrite files
+setopt rm_star_silent # dont ask to delete
+setopt chase_links # resolve symlinks
+setopt extended_glob # better glob 
+setopt glob_dots # glob include dotfiles
+
+# better zsh completion
+zstyle ':completion:*' menu select
 
 # Environment Variabels
-export BASH_SILENCE_DEPRECATION_WARNING=1
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
+export SHELL=$(which zsh)
 export PAGER=$(which less)
 export EDITOR=$(which nvim)
 export GPG_TTY=$(tty)
@@ -21,18 +24,20 @@ export MOLD_ROOT="$HOME/.mold"
 export MOLD_SIGN='true'
 export PATH="$MOLD_ROOT/exec:$PATH"
 for plug in $MOLD_ROOT/plug/* ;do
-  . $plug
+  source $plug
 done
 
 # LOAD SECRETS
 export SECRET_DIR="$HOME/.secret"
 for  secret in $SECRET_DIR/env/*.sh; do 
-  . $secret
+  source $secret
 done
 
-# Verbose Error Exit Status
+# Custom Error Exit Status
 handle_error(){
-  local status=$?
-  echo "ERROR: command[$(history | tail -n 1| sed 's/.......//')] status($status)"
+  echo "FAILED: status code $?"
 }
-trap handle_error ERR
+
+# TODO: STOP THE TRAP FROM FIRING ON PROMPT PRECMD find_git*
+#trap handle_error ERR
+

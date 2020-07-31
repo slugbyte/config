@@ -10,6 +10,7 @@ cairo
 chezscheme
 cmake
 cmatrix
+colordiff
 cowsay
 dav1d
 dnote

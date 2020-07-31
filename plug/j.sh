@@ -6,7 +6,7 @@ _z_cd() {
     fi
 }
 
-z() {
+j() {
     if [ "$#" -eq 0 ]; then
         _z_cd ~ || return "$?"
     elif [ "$#" -eq 1 ] && [ "$1" = '-' ]; then
@@ -39,16 +39,7 @@ alias zri='zoxide remove -i'
 
 
 _zoxide_hook() {
-    if [ -z "${_ZO_PWD}" ]; then
-        _ZO_PWD="${PWD}"
-    elif [ "${_ZO_PWD}" != "${PWD}" ]; then
-        _ZO_PWD="${PWD}"
-        zoxide add
-    fi
+    zoxide add
 }
 
-case "$PROMPT_COMMAND" in
-    *_zoxide_hook*) ;;
-    *) PROMPT_COMMAND="_zoxide_hook${PROMPT_COMMAND:+;${PROMPT_COMMAND}}" ;;
-esac
-
+chpwd_functions=(${chpwd_functions[@]} "_zoxide_hook")

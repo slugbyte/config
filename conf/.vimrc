@@ -4,36 +4,35 @@ call plug#begin('~/.vim/plugged')
 Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-fireplace'
 Plug 'git@github.com:slugbyte/vim-clojure-static.git'
-
-" TEXT
+"" TEXT
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'godlygeek/tabular'
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'git@github.com:slugbyte/paredit.vim'
 "Plug 'git@github.com:slugbyte/snip.git'
 
-" UTIL
+"" UTIL
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jpalardy/vim-slime'
 Plug 'tpope/vim-fugitive'
 Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
 Plug 'Konfekt/vim-scratchpad'
 
-"if has('nvim')
-  "Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"else 
-   "Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
-"endif
+""if has('nvim')
+  ""Plug 'neoclide/coc.nvim', {'branch': 'release'}
+""else 
+   ""Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
+""endif
 
-" NAV
+"" NAV
 Plug 'scrooloose/nerdtree'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-eunuch'
 
-" UI
-"Plug 'scrooloose/syntastic'
+"" UI
+Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 Plug 'git@github.com:slugbyte/yuejiu'
 Plug 'itchyny/lightline.vim'
@@ -76,11 +75,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 let NERDTreeQuitOnOpen=1
 map <C-p> :NERDTreeToggle<CR>
 
-" UltiSnips
-let g:UltiSnipsExpandTrigger="<f12>"
-let g:UltiSnipsJumpForwardTrigger="<f11>"
-let g:UltiSnipsJumpBackwardTrigger="<f10>"
-
 " Paredit
 let g:paredit_leader='\'
 let g:paredit_shortmaps=1
@@ -106,7 +100,7 @@ set autoread               "  when you run checktime it will refresh the file
 set incsearch              "  vim starts searching while typing search string
 set tabstop=2              "  make \t appear to be two spaces wide
 set expandtab              "  convert tab to spaces (unless a filetype plugin changes that)
-set ignorecase             "  non-case sensitve serach
+"set ignorecase             "  non-case sensitve serach
 set cursorline             "  highlight the line current cursor line
 set shiftwidth=2           "  make vim indent functions apply or remove two spaces
 set backspace=2            "  make backspace work like all other apps
@@ -138,8 +132,6 @@ let mapleader = "\<Space>"
 " qq to requort Q to replay
 nnoremap Q @q
 
-" serarch highlight
-nnoremap <F9> :set hlsearch!<CR>
 
 " vim-command-line key binding
 cnoremap <C-A> <Home>
@@ -198,7 +190,7 @@ command! LF call LintFix()
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions 
 " M  will toggle the mouse between 
 " vim select and clipboard select
-function! ToggleMouseMode()
+function! MouseModeToggle()
   if  &mouse == "a"
     " cilpboard select will also hide line numbers
     set norelativenumber
@@ -210,10 +202,10 @@ function! ToggleMouseMode()
     echo "mouse mode vim"
   endif
 endfunction
-nmap <leader>M :call ToggleMouseMode()<CR>
+command! MouseModeToggle :call MouseModeToggle()<CR>
 
 " Toggle case sensitive search
-function! ToggleCaseFunc()
+function! IgnoreCaseToggle()
   set ignorecase!
   if  &ignorecase == 0
     " turn ignore case off
@@ -223,23 +215,23 @@ function! ToggleCaseFunc()
     echo "ignorecase on"
   endif
 endfunction
-command! ToggleCase call ToggleCaseFunc()
+command! IgnoreCaseToggle call IgnoreCaseToggle()
 
 
 " <C-p> will toggle pastemode 
-function! TogglePasteMode()
+function! PasteModeToggle()
   if  &paste == 0
-    set paste ruler
+    set paste ruler 
     echo "paste mode on"
   else 
-    set nopaste ruler
+    set nopaste ruler 
     echo "paste mode off"
   endif
 endfunction
-nmap <leader>P :call TogglePasteMode()<CR>
+command! PasteModeToggle :call PasteModeToggle()<CR>
 
 " <f5> will toggle relative number
-function! ToggleNumber()
+function! RelativeNumberToggle()
   if &relativenumber == 0
     set number relativenumber
     echo "relative number on"
@@ -248,30 +240,7 @@ function! ToggleNumber()
     echo "relative number off"
   endif
 endfunction
-nmap <leader>N :call ToggleNumber()<CR>
-
-" toggle scratch pad
-function! ScratchPad()
-  sp
-  let wat = fnamemodify(bufname("%"), ":e")
-  echo wat
-  "e ~/.scratchpad.md
-endfunction
-
-command! Scratch call ScratchPad()<cr>
-
-" duck duck go something 
-" inspired by https://github.com/junegunn/dotfiles/blob/master/vimrc#L1012
-function! s:duck(pat)
-  let query = substitute(a:pat, '["\n]', ' ', 'g')
-  let query = substitute(query, '[[:punct:] ]', '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
-  call system(printf('open "https://duckduckgo.com/?q=%s"', query))
-endfunction
-
-" duck line and delete
-noremap <leader>? <S-v>"gy:call <SID>duck(@g)<cr>gvddl
-" Duck command
-command! -nargs=1 Duck call s:duck(<f-args>)
+command! RelativeNumberToggle :call RelativeNumberToggle()<CR>
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Filetype Commands
 au BufRead,BufNewFile *.md.txt set syntax=markdown
@@ -288,3 +257,20 @@ nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
 nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
 xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
 xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+
+
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FKEYS
+map <f1> :echo "naw"<CR>
+map <f2> :echo "naw"<CR>
+map <f3> :echo "naw"<CR>
+map <f4> :echo "naw"<CR>
+map <f5> :RelativeNumberToggle<CR>
+map <f6> :MouseModeToggle <CR>
+map <f7> :PasteModeToggle <CR>
+map <f8> :IgnoreCaseToggle<CR>
+" serarch highlight
+map <f9> :set hlsearch!<CR>
+" UltiSnips
+let g:UltiSnipsExpandTrigger="<f12>"
+let g:UltiSnipsJumpForwardTrigger="<f11>"
+let g:UltiSnipsJumpBackwardTrigger="<f10>"

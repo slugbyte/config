@@ -2,7 +2,7 @@
 
 fuzz(){
   if [[ -z $1 ]]; then 
-    >2& echo "ERROR: no target supplied" 
+    echo "ERROR: no target supplied" 2>&1 1>/dev/null
     return -1
   fi 
   if [[ -d $1 ]]; then 
@@ -18,7 +18,8 @@ fuzz(){
 
 defuzz(){
   if [[ -z $1 ]]; then 
-    >2& echo "ERROR: no target supplied" 
+    #>2& echo "ERROR: no target supplied" 
+    echo "ERROR: no target supplied" 2>&1 1>/dev/null
     return -1
   fi 
   output=${1/.asc/}
