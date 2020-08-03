@@ -1,11 +1,18 @@
 # TODO convert to zsh
-#_mold(){
-  #MOLD_COMPLETE=$(mold --complete $COMP_LINE) 
+
+#compdef _mold mold
+
+ _mold(){ 
+   local state 
+  _arguments  $(mold --complete $line )  
+
   #if [[ $MOLD_COMPLETE == '__MAGIC_MOLD__' ]]; then 
+
     ## "__MAGIC_MOLD__" turns on file path competion
     #for canidate in $(compgen -f $2); do 
       #if [[ "$canidate" == "$2"* ]];then
         #COMPREPLY+=("$canidate")
+        #compadd "$canidate"
       #fi 
     #done
   #else 
@@ -15,5 +22,6 @@
       #fi 
     #done
   #fi
-#}
+}
+
 #complete -F _mold mold

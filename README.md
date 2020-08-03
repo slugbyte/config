@@ -13,10 +13,12 @@ Here are a few great resources that I use for reseaching shell and sys-config re
 
 
 ## My Favorite Open Source Tools
-A list of some of my favorite CLI tools for boosting programming workflow in the command line.  
+A list of some of my favorite command line tools for enhancing programming workflow and enjoyment 😋
 * [aria2c](https://aria2.github.io/) - An ultra-fast download utility with support for HTTP(S), FTP, SFTP, BitTorrent, and Metalink
 * [bat](https://github.com/sharkdp/bat) - a cat clone with syntax highlighting 
 * [commacd](https://github.com/shyiko/commacd) - a faster way to move around in bash
+* [eureka](https://github.com/simeg/eureka) - an idea log with managed by git
+* [espanso](https://espanso.org/) - a cross plantform text expander written in rust
 * [exa](https://the.exa.website) - A modern ls with git awareness and color code files based on regex :)
 * [figlet](http://www.figlet.org/) - A program for makin large letters out of text
 * [fzf](https://github.com/junegunn/fzf) - A command-line fuzzy finder
@@ -27,6 +29,7 @@ A list of some of my favorite CLI tools for boosting programming workflow in the
 * [nvim](https://neovim.io/) - the future of vim (the text editor) 
 * [sops](https://github.com/mozilla/sops) - encrypt and decrypt the keys of config files with PGP or a cloud KMS providers keys
 * [the\_silver\_searcher](https://github.com/ggreer) - A code-searching tool similar to ack, but faster
+* [task](https://taskwarrior.org/) - a flexible, fast, powerful, and unobtrusive todo list.
 * [tldr](https://tldr.sh/) - Simplified and community-driven man pages
 * [tmux](https://github.com/tmux/tmux) - tmux is a terminal multiplexer
 * [tree](http://mama.indstate.edu/users/ice/tree/) - list contents of directories in a tree-like-format

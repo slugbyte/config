@@ -11,7 +11,7 @@ alias ea="e -c ':Ag'"
 alias ef="e -c ':Files'"
 alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
 alias f="echo naw"
-alias F="git fetch -p"
+alias F="git fetch -pv"
 alias g="echo naw"
 # h is allready used by commacd.sh
 alias i="ip_address"
