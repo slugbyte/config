@@ -2,41 +2,47 @@
 call plug#begin('~/.vim/plugged')
 " LANG
 Plug 'pangloss/vim-javascript'
-Plug 'tpope/vim-fireplace'
+
 Plug 'git@github.com:slugbyte/vim-clojure-static.git'
+
 "" TEXT
 Plug 'scrooloose/nerdcommenter'
-Plug 'tpope/vim-surround'
+"Plug 'tpope/vim-surround' TODO: remap y
 Plug 'godlygeek/tabular'
 "Plug 'SirVer/ultisnips'
 Plug 'git@github.com:slugbyte/paredit.vim'
-"Plug 'git@github.com:slugbyte/snip.git'
 
+"Plug 'git@github.com:slugbyte/snip.git'
+" Plug 'hal3e/vim-workman'
 "" UTIL
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jpalardy/vim-slime'
-Plug 'tpope/vim-fugitive'
+"Plug 'tpope/vim-fugitive' // fix y map
 Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
-Plug 'Konfekt/vim-scratchpad'
+"Plug 'Konfekt/vim-scratchpad'
 
 ""if has('nvim')
-  ""Plug 'neoclide/coc.nvim', {'branch': 'release'}
+""Plug 'neoclide/coc.nvim', {'branch': 'release'}
 ""else 
-   ""Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
+""Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
 ""endif
 
-"" NAV
+
 Plug 'scrooloose/nerdtree'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-eunuch'
 
 "" UI
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 Plug 'git@github.com:slugbyte/yuejiu'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
+
+"" KEYMAP
+Plug 'slugbyte/unruley-worker', {'branch': 'stage-3'}
+
 call plug#end()
 "
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugin Settings
@@ -46,16 +52,16 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 
 " lightline
 let g:lightline = {
-  \ 'colorscheme': 'seoul256',
-  \ 'active': {
-  \   'left': [ [ 'mode', 'paste' ],
-  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-  \ },
-  \ 'component_function': {
-  \   'gitbranch': 'gitbranch#name',
-  \   'filename': 'LightlineFilename'
-  \ },
-  \ }
+      \ 'colorscheme': 'seoul256',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'gitbranch#name',
+      \   'filename': 'LightlineFilename'
+      \ },
+      \ }
 
 function! LightlineFilename()
   let filename = expand('%') !=# '' ? expand('%') : '[No Name]'
@@ -103,7 +109,7 @@ set expandtab              "  convert tab to spaces (unless a filetype plugin ch
 "set ignorecase             "  non-case sensitve serach
 set cursorline             "  highlight the line current cursor line
 set shiftwidth=2           "  make vim indent functions apply or remove two spaces
-set backspace=2            "  make backspace work like all other apps
+set backspace=2            "  make backspace 
 set scrolloff=5            "  when scrolling up keep 5 lines of code at the top of the screen
 set nofoldenable           "  stop vim from folding indent levels when opening a file
 set laststatus=2           "  show the status line
@@ -124,13 +130,13 @@ let g:is_bash=1            "  treat .sh files as bash scripts
 " double tap "i" to escape 
 " imap II <Esc> TODO STOP USING II 
 " L jumps to end of line
-map L $
+map Y $
 " H jumps to beginning of line
-map H ^
+map O ^
 " Use the spacebar as the leader key
 let mapleader = "\<Space>"
 " qq to requort Q to replay
-nnoremap Q @q
+"nnoremap Q @q
 
 
 " vim-command-line key binding
@@ -139,10 +145,10 @@ cnoremap <C-L> <S-Right>
 cnoremap <C-H> <S-Left>
 
 " move lines 
-nnoremap <leader>K mz:m-2<CR>`z==
-nnoremap <leader>J mz:m+<CR>`z==
-vnoremap <leader>K :m'<-2<CR>gv=`>my`<mzgv`yo`z
-vnoremap <leader>J :m'>+<CR>gv=`<my`>mzgv`yo`z
+"nnoremap <leader>K mz:m-2<CR>`z==
+"nnoremap <leader>J mz:m+<CR>`z==
+"vnoremap <leader>K :m'<-2<CR>gv=`>my`<mzgv`yo`z
+"vnoremap <leader>J :m'>+<CR>gv=`<my`>mzgv`yo`z
 
 " window managment
 nmap <leader>s :sp<cr>
@@ -180,12 +186,12 @@ command! BL BLines
 command! Todo Lines todo 
 
 " Npm Lint
-function! LintFix()
+function! Nolf()
   silent exe "!npm run lint:fix" 
   redraw!
   bufdo! checktime
 endfunction
-command! LF call LintFix()
+command! Nolf call Nolf()
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions 
 " M  will toggle the mouse between 
@@ -252,11 +258,10 @@ au BufRead,BufNewFile .env.* set syntax=sh
 let g:syntastic_javascript_checkers=['eslint']
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% YANK To Clipboard
-nnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
-nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
-nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
-xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
-xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+"nnoremap <expr> k (v:register ==# '"' ? '"+' : '')
+"nnoremap <expr> kk (v:register ==# '"' ? '"+' : '') . 'yy'
+"xnoremap <expr> k (v:register ==# '"' ? '"+' : '') . 'y'
+"xnoremap <expr> K (v:register ==# '"' ? '"+' : '') . 'Y'
 
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FKEYS
@@ -265,12 +270,13 @@ map <f2> :echo "naw"<CR>
 map <f3> :echo "naw"<CR>
 map <f4> :echo "naw"<CR>
 map <f5> :RelativeNumberToggle<CR>
-map <f6> :MouseModeToggle <CR>
-map <f7> :PasteModeToggle <CR>
-map <f8> :IgnoreCaseToggle<CR>
+map <f6> :Mousefifief'noi/me/usernameModeToggle <CR>
+map <f7> :PastesocialContactsdeToggle <CR>
+map <f8> :Ignorogglsparke<CR>
 " serarch highlight
 map <f9> :set hlsearch!<CR>
 " UltiSnips
+
 let g:UltiSnipsExpandTrigger="<f12>"
 let g:UltiSnipsJumpForwardTrigger="<f11>"
 let g:UltiSnipsJumpBackwardTrigger="<f10>"

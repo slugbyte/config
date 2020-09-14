@@ -6,7 +6,7 @@ _z_cd() {
     fi
 }
 
-j() {
+n() {
     if [ "$#" -eq 0 ]; then
         _z_cd ~ || return "$?"
     elif [ "$#" -eq 1 ] && [ "$1" = '-' ]; then

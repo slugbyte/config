@@ -1,6 +1,6 @@
 # Python Related Utilitys
 
-PYENV_VERSION=3.7.4
+PYENV_VERSION=3.8.5
 export PYTHON_CONFIGURE_OPTS="--enable-framework"
 eval "$(pyenv init -)"
 #alias py='python3'

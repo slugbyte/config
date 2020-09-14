@@ -1,5 +1,6 @@
 alias a="git add"
 alias A="git add ."
+alias Ag="e -c ':Ag'"
 alias b="git_branch"
 alias c="git_commit"
 alias C="git_commit -m"
@@ -7,21 +8,19 @@ alias cn="git_commit --no-verify"
 alias ch="git checkout"
 alias d="git diff"
 alias e="edit.sh"
-alias ea="e -c ':Ag'"
-alias ef="e -c ':Files'"
 alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
-alias f="echo naw"
-alias F="git fetch -pv"
+alias F="e -c ':Files'"
+alias f="git fetch -pv"
 alias g="echo naw"
 # h is allready used by commacd.sh
 alias i="ip_address"
-# j allready aliased in z.sh
+alias j="echo naw"
 alias k="echo naw"
 alias l="git_pull"
 alias L="git_log"
 alias lu="git_pull_upstream"
 alias m="echo naw"
-alias n="echo naw"
+# n is allready used in n.sh
 alias nd='echo naw'
 alias o="echo naw"
 alias p="git_push"

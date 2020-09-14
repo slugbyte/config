@@ -320,8 +320,8 @@ _commacd_backward_forward_completion() {
 }
 
 alias h=_commacd_forward
-alias hh=_commacd_backward
-alias hhh=_commacd_backward_forward
+alias nn=_commacd_backward
+alias nnn=_commacd_backward_forward
 
 if [ -n "$BASH_VERSION" ]; then
   complete -o filenames -F _commacd_forward_completion h

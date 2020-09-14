@@ -8,7 +8,8 @@ dorm(){
   echo "removed all containers"
 }
 
-donuke(){
+docleanup(){
+  echo "docker cleanup"
   dokill
   dorm
 }
