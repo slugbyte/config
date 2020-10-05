@@ -22,7 +22,7 @@ git_log(){
 # TODO: refacotr git_push and git_push_upstream to use a helper fn
 git_push() {
   local branch
-  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
       echo "Error: Cannot push from detached state."
       return 1
@@ -44,7 +44,7 @@ git_pull() {
     git pull origin $@ -v
     return 0
   fi 
-  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
       echo "Error: Cannot pull from detached state."
       return 1
@@ -89,7 +89,7 @@ git_branch(){
 
 git_push_upstream() {
   local branch
-  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
       echo "Error: Cannot push from detached state."
       return 1
@@ -111,7 +111,7 @@ git_pull_upstream() {
     git pull upstream $@ -v
     return 0
   fi 
-  if branch=$(git rev-parse --abbrev-ref head 2> /dev/null); then
+  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
       echo "Error: Cannot pull from detached state."
       return 1

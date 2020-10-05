@@ -8,3 +8,5 @@
   path = ~/workspace/hh-bench/bot/.gitconfig
 [pull]
   rebase = false
+[gpg]
+  program = gpg2
