@@ -1,0 +1,63 @@
+[colors]
+  backbround = #ffae00
+
+[section/base]
+  top = true
+  width = 100%
+  height = ${env:WM_STYLE_BAR_HEIGHT:}
+  offset-x = 0
+  offset-y = 0
+  enable-ipc = true
+  override-redirect = true
+  
+[bar/right]
+  inherit = section/base
+  monitor = ${env:WM_STYLE_MONITOR_RIGHT:}
+  modules-left = monitor_focus_right bspwm
+  modules-right = pulseaudio date 
+
+[bar/left]
+  inherit = section/base
+  monitor = ${env:WM_STYLE_MONITOR_LEFT:}
+  modules-right = cpu
+  modules-left = monitor_focus_left bspwm
+
+[module/date]
+  type = internal/date
+  interval = 1
+  date = " %Y-%m-%d %H:%M:%S "
+
+[module/hostname]
+  type = custom/script
+  exec = uuidgen
+  interval = .1
+  tail = true
+
+[module/cpu]
+  type = internal/cpu
+  interval = 0.5
+
+[module/bspwm]
+  type = internal/bspwm
+  label-dimmed-foreground #555
+  label-focused = " 0"
+  label-occupied= " ~"
+  label-empty = " *"
+  label-urgent = " !"
+
+[module/pulseaudio]
+  type = internal/pulseaudio
+  use-ui-max = false
+  label-muted = X
+
+[module/monitor_focus_left]
+  type = custom/script
+  exec = check_monitor_focus $WM_STYLE_MONITOR_LEFT
+  tail = true
+  internal = 1
+
+[module/monitor_focus_right]
+  type = custom/script
+  exec = check_monitor_focus $WM_STYLE_MONITOR_RIGHT
+  internal = 1
+  tail = true

@@ -22,11 +22,11 @@ alias lu="git_pull_upstream"
 alias m="echo naw"
 # n is allready used in n.sh
 alias nd='echo naw'
-alias o="echo naw"
+alias o="lf"
 alias p="git_push"
 alias pu="git_push_upstream"
 alias q="echo naw"
-alias r="source ~/.zshrc"
+alias r="source ~/.config/zsh/.zshrc"
 alias R="git reset"
 alias s="git status"
 alias t="git_tag"

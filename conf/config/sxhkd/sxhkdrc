@@ -1,0 +1,65 @@
+super + Return
+  terminal
+
+super + space
+  rofi -show run
+
+super + t ; {y,o}
+  bspc node -m {west, east} -f
+
+super + k
+  xdo close
+
+super + f
+  fullscreen_toggle
+
+super + alt + t
+  bspc node -t tiled
+
+super + p
+  polybar_toggle
+
+super + Tab
+  swap_monitor_focus
+
+super + {1,2,3,4}
+  bspc desktop -f {1,2,3,4}.local
+
+super + alt + x
+  xdo close
+
+super + alt + q
+  __quit_x__
+
+super + alt + r
+  bspc wm -r
+
+super + alt + f
+  bspc node -t floating
+
+super + alt + s
+  bspc node -g sticky
+
+super + alt + {_,shift} + Tab
+  bspc desktop -f {next,prev}.local
+
+super + alt + {1,2,3,4}
+  bspc node -d {1,2,3,4}.local --follow
+
+super + {_,ctrl} + {y,n,e,o}
+  bspc node {-f,-p} {west,south,north,east}
+
+super + {alt,shift} + {y,n,e,o}
+  bspc node {-s,-n} {west,south,north,east} -f
+
+alt + {_,shift} + Tab
+  bspc node -f {next,prev}.leaf.local
+
+shift + super + alt + {y,n,e,o}
+  bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+super + alt + ctrl + shift + {y,n,e,o}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+super + alt + ctrl + {8,9,0}
+  bspc config window_gap {40,5,0}

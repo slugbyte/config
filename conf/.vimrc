@@ -1,42 +1,34 @@
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugins
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plug')
 " LANG
 Plug 'pangloss/vim-javascript'
-
-Plug 'git@github.com:slugbyte/vim-clojure-static.git'
+" TODO: fix forked and personal plugs
+" Plug 'git@github.com:slugbyte/vim-clojure-static.git'
 
 "" TEXT
 Plug 'scrooloose/nerdcommenter'
-"Plug 'tpope/vim-surround' TODO: remap y
 Plug 'godlygeek/tabular'
 "Plug 'SirVer/ultisnips'
-Plug 'git@github.com:slugbyte/paredit.vim'
-
 "Plug 'git@github.com:slugbyte/snip.git'
-" Plug 'hal3e/vim-workman'
+"Plug 'tpope/vim-surround' TODO: remap y
+"Plug 'git@github.com:slugbyte/paredit.vim'
+
 "" UTIL
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jpalardy/vim-slime'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'tpope/vim-fugitive' // fix y map
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
-"Plug 'Konfekt/vim-scratchpad'
-
-""if has('nvim')
-""Plug 'neoclide/coc.nvim', {'branch': 'release'}
-""else 
-""Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
-""endif
-
 
 Plug 'scrooloose/nerdtree'
-Plug '/usr/local/opt/fzf'
+Plug '/bin/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-eunuch'
 
 "" UI
 "Plug 'scrooloose/syntastic'
+"Plug 'git@github.com:slugbyte/yuejiu'
 Plug 'airblade/vim-gitgutter'
-Plug 'git@github.com:slugbyte/yuejiu'
+Plug 'slugbyte/yuejiu'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
 
@@ -97,7 +89,7 @@ autocmd Filetype clojure nmap \| cmm
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Settings
 syntax enable              "  turn on syntax highlighting
-colorscheme yuejiu         "  use the yuejiu syntax colorscheme
+colorscheme yuejiu
 filetype plugin on         "  allow plugins to be applied to specifc file types
 set ruler                  "  show the cursor position in the status bar
 set number relativenumber  "  hybrid relative number
@@ -263,7 +255,6 @@ let g:syntastic_javascript_checkers=['eslint']
 "xnoremap <expr> k (v:register ==# '"' ? '"+' : '') . 'y'
 "xnoremap <expr> K (v:register ==# '"' ? '"+' : '') . 'Y'
 
-
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FKEYS
 map <f1> :echo "naw"<CR>
 map <f2> :echo "naw"<CR>
@@ -280,3 +271,5 @@ map <f9> :set hlsearch!<CR>
 let g:UltiSnipsExpandTrigger="<f12>"
 let g:UltiSnipsJumpForwardTrigger="<f11>"
 let g:UltiSnipsJumpBackwardTrigger="<f10>"
+
+source ~/.config/nvim/config/coc.vim

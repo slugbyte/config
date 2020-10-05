@@ -1,0 +1,8 @@
+#!/bin/bash
+CURRENT=$(bspc query -T -m |jq '.name')
+
+if [[ $CURRENT = "\"$1\"" ]];then 
+  echo " +"
+else
+  echo " -"
+fi

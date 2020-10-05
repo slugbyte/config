@@ -1,0 +1,4 @@
+xmodmap ~/.config/x/xmodmap & 
+setbg &
+env
+exec bspwm

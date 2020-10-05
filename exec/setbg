@@ -1,0 +1,3 @@
+#!/bin/sh
+feh --bg-tile $HOME/.config/wallpaper/light.png
+rm $HOME/.fehbg

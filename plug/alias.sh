@@ -1,6 +1,6 @@
 # Alias
 # warning
-alias vim='echo dude, use e!'
+# alias vim='echo dude, use e!'
 #alias cd='echo dude, use j!'
 
 # ------ NAV AND FS
@@ -23,3 +23,13 @@ alias gencerts='openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem
 alias wifi='osx-wifi-cli'
 
 alias tree='tree -I "node_modules|target"'
+
+alias xs="sudo xbps-query -Rs"
+alias xi="sudo xbps-install -y"
+alias xr="sudo xbps-remove -R"
+alias xu="sudo xbps-install -Syu"
+
+alias copy='xclip -selection c'
+alias paste='xclip -selection c -o'
+
+alias bubye='sudo shutdown -h now'

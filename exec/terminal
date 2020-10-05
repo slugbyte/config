@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# try and open alacritty in currnt dir :]
+
+RESULT=$(xdotool getactivewindow getwindowname)
+
+CHECK=$(echo $RESULT |cut -d ':' -f 1)
+WORKDIR=$(echo $RESULT |cut -d ':' -f 2)
+
+if [[ $CHECK = '__XOXO__' ]]; then 
+  alacritty --working-directory $WORKDIR
+else 
+  alacritty
+fi
+

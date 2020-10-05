@@ -1,0 +1,6 @@
+#!/bin/bash
+
+killall polybar
+killall conky
+killall sxhkd
+bspc quit
