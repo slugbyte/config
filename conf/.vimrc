@@ -1,4 +1,4 @@
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugins
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plugins
 call plug#begin('~/.vim/plugged')
 " LANG
 Plug 'pangloss/vim-javascript'
@@ -118,11 +118,15 @@ set encoding=utf8          "  treat all text as utf-8
 set showbreak="+++ "       "  mark the lines that overflow screen width using +++
 set foldmethod=indent      "  fold and unfold text based on indent level
 set completeopt-=preview   "  stop plugins from adding a docs window on tab completion
-set wildmode=list:longest  "  configure tab completion to list all matches when there is more than one
+set wildmode=longest:full "  configure tab completion to list all matches when there is more than one
 set wildmenu               "  enable tab completion in the command bar
-if has('nvim')
-  set hlsearch!
-endif
+set timeout
+set ttimeout
+"augroup Fastescape
+  "autocmd!
+  "au InsertEnter * set timeoutlen=0
+  "au InsertLeave * set timeoutlen=1000
+"augroup end
 
 let g:is_bash=1            "  treat .sh files as bash scripts
 
@@ -208,7 +212,7 @@ function! MouseModeToggle()
     echo "mouse mode vim"
   endif
 endfunction
-command! MouseModeToggle :call MouseModeToggle()<CR>
+command! MouseModeToggle :call MouseModeToggle()
 
 " Toggle case sensitive search
 function! IgnoreCaseToggle()
@@ -226,15 +230,25 @@ command! IgnoreCaseToggle call IgnoreCaseToggle()
 
 " <C-p> will toggle pastemode 
 function! PasteModeToggle()
-  if  &paste == 0
-    set paste ruler 
+  if &paste == 0
+    set paste ruler
     echo "paste mode on"
-  else 
-    set nopaste ruler 
+  else
+    set nopaste ruler
     echo "paste mode off"
   endif
 endfunction
-command! PasteModeToggle :call PasteModeToggle()<CR>
+command! PasteModeToggle :call PasteModeToggle()
+
+function! HighlightModeToggle()
+  set hlsearch!
+  if &hlsearch == 0
+    echo "highlight mode off"
+  else
+    echo "highlight mode on"
+  endif
+endfunction
+command! HighlightModeToggle :call HighlightModeToggle()
 
 " <f5> will toggle relative number
 function! RelativeNumberToggle()
@@ -246,7 +260,7 @@ function! RelativeNumberToggle()
     echo "relative number off"
   endif
 endfunction
-command! RelativeNumberToggle :call RelativeNumberToggle()<CR>
+command! RelativeNumberToggle :call RelativeNumberToggle()
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Filetype Commands
 au BufRead,BufNewFile *.md.txt set syntax=markdown
@@ -254,6 +268,11 @@ au BufRead,BufNewFile *.js.txt set syntax=javascript
 au BufRead,BufNewFile *.html.txt set syntax=html
 au BufRead,BufNewFile Dockerfile* set syntax=dockerfile
 au BufRead,BufNewFile .env.* set syntax=sh
+
+augroup softwrap
+  autocmd VimResized *.md if (&columns > 80) | set columns=80 | endif
+  autocmd BufEnter *.md if (&columns > 80) | set columns=80 | endif
+augroup END
 
 let g:syntastic_javascript_checkers=['eslint']
 
@@ -265,18 +284,15 @@ let g:syntastic_javascript_checkers=['eslint']
 
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FKEYS
-map <f1> :echo "naw"<CR>
-map <f2> :echo "naw"<CR>
-map <f3> :echo "naw"<CR>
-map <f4> :echo "naw"<CR>
-map <f5> :RelativeNumberToggle<CR>
-map <f6> :Mousefifief'noi/me/usernameModeToggle <CR>
-map <f7> :PastesocialContactsdeToggle <CR>
-map <f8> :Ignorogglsparke<CR>
-" serarch highlight
-map <f9> :set hlsearch!<CR>
+noremap <leader>n :RelativeNumberToggle<CR>
+noremap <leader>p :PasteModeToggle<CR>
+noremap <leader>c :IgnoreCaseToggle<CR>
+nnoremap <leader>h :HighlightModeToggle<CR>
+nnoremap <leader>m :MouseModeToggle<CR>
 " UltiSnips
 
 let g:UltiSnipsExpandTrigger="<f12>"
 let g:UltiSnipsJumpForwardTrigger="<f11>"
 let g:UltiSnipsJumpBackwardTrigger="<f10>"
+
+
