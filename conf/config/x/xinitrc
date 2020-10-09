@@ -1,4 +1,3 @@
 xmodmap ~/.config/x/xmodmap & 
 setbg &
-env
-exec bspwm
+dbus-run-session bspwm

@@ -14,13 +14,13 @@
   inherit = section/base
   monitor = ${env:WM_STYLE_MONITOR_RIGHT:}
   modules-left = monitor_focus_right bspwm
-  modules-right = pulseaudio date 
+  modules-right = alsa date 
 
 [bar/left]
   inherit = section/base
   monitor = ${env:WM_STYLE_MONITOR_LEFT:}
   modules-right = cpu
-  modules-left = monitor_focus_left bspwm
+  modules-left = wat monitor_focus_left bspwm
 
 [module/date]
   type = internal/date
@@ -45,19 +45,16 @@
   label-empty = " *"
   label-urgent = " !"
 
-[module/pulseaudio]
-  type = internal/pulseaudio
-  use-ui-max = false
+[module/alsa]
+  type = internal/alsa
   label-muted = X
 
 [module/monitor_focus_left]
-  type = custom/script
-  exec = check_monitor_focus $WM_STYLE_MONITOR_LEFT
-  tail = true
-  internal = 1
+  type = custom/ipc
+  hook-0 = check_monitor_focus $WM_STYLE_MONITOR_LEFT
+  initial = 1
 
 [module/monitor_focus_right]
-  type = custom/script
-  exec = check_monitor_focus $WM_STYLE_MONITOR_RIGHT
-  internal = 1
-  tail = true
+  type = custom/ipc
+  hook-0 = check_monitor_focus $WM_STYLE_MONITOR_RIGHT
+  initial = 1

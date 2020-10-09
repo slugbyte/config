@@ -39,8 +39,10 @@ super + alt ctrl + q
   wm_quit_x_server
 
 # NEOI (DESKTOP)
+alt + d; {y,n,e,o}
+  bspc desktop -f {1,2,3,4}.local
 
-alt + s; {n,e,o,i}
+alt + ctrl + {y,n,e,o}
   bspc desktop -f {1,2,3,4}.local
 
 # YNEO (NODE, MONITOR)
@@ -60,11 +62,11 @@ alt + {f,u}
   wm_bspc_with_polybar_hooks monitor -f {west,east}
 
 # -- GROW WINDOW
-alt + ctrl + {y,n,e,o}
+super + alt + ctrl + {y,n,e,o}
   bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
 # -- SHRINK WINDOW
-super + alt + ctrl + {y,n,e,o}
+super + alt + ctrl + shift + {y,n,e,o}
 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
 # TAB
@@ -91,17 +93,17 @@ super + p; {y,n,e,o}
   bspc node -p {west,south,north,east}
 
 # -- move node to monitor
-alt + s; {y, o}
+alt + s; {f, u}
   wm_bspc_with_polybar_hooks node -m {west,east} -f
 
 # -- move node to desktop
-alt + d; {n,e,o,i} 
+alt + s; {y,n,e,o} 
   bspc node -d {1,2,3,4}.local --follow
 
 # -- set window gap
-alt + g; {n,e,o,i}
+alt + g; {y,n,e,o}
   bspc config window_gap {0,5,20,45}
 
 # -- change node type
-alt + m ; {n,e,o,i}
+alt + m ; {y,n,e,o}
   bspc node -t {tiled, fullscreen, floating}
