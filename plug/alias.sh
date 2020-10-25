@@ -24,11 +24,6 @@ alias wifi='osx-wifi-cli'
 
 alias tree='tree -I "node_modules|target"'
 
-alias xs="sudo xbps-query -Rs"
-alias xi="sudo xbps-install -y"
-alias xr="sudo xbps-remove -R"
-alias xu="sudo xbps-install -Syu"
-
 alias copy='xclip -selection c'
 alias paste='xclip -selection c -o'
 

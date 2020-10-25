@@ -7,7 +7,7 @@ bindkey "^U" backward-kill-line      # ctl-u delete cur line insert mode
 bindkey -a "^U" backward-kill-line   # ctl-u delete cur line normal mode
 bindkey '^a' vi-beginning-of-line    # ctl a jumps to beginning of line insert mode
 bindkey -a '^a' vi-beginning-of-line # ctl a jumps to beginning of line normal mode
-bindkey '^g' vi-end-of-line          # cta s jumps to end of line insert mode
+
 bindkey -a '^g' vi-end-of-line       # cta s jumps to end of line normal mode
 bindkey '^r' history-incremental-pattern-search-backward
 
@@ -18,11 +18,11 @@ bindkey -a 'o' vi-forward-char
 bindkey -a 'Y' vi-beginning-of-line  # shift y jumps to beginning of lin in normal mode
 bindkey -a 'O' vi-end-of-line        # shift o jumps to end of line in normal mode
 
-bindkey -a 'h' vi-find-next-char
-bindkey -a 'H' vi-find-prev-char
+bindkey -a 't' vi-find-next-char
+bindkey -a 'T' vi-find-prev-char
 
-bindkey -a "'" vi-repeat-find
-bindkey -a '"' vi-rev-repeat-find
+bindkey -a "h" vi-repeat-find
+bindkey -a 'H' vi-rev-repeat-find
 
 bindkey -a 'f' vi-repeat-search
 bindkey -a 'F' vi-rev-repeat-search
@@ -30,11 +30,9 @@ bindkey -a 'F' vi-rev-repeat-search
 bindkey -a 'k' vi-yank
 bindkey -a 'K' vi-yank-whole-line
 
-bindkey -a 's' vi-forward-word
-bindkey -a 'S' vi-backward-word
+bindkey -a 'w' vi-forward-word
+bindkey -a 'W' vi-backward-word
 
-bindkey -a 'E' vi-forward-word-end
-bindkey -a 'E' vi-forward-word-end
 bindkey -a 'E' vi-forward-word-end
 bindkey -a 'J' vi-forward-blank-word-end
 bindkey -a 'l' vi-open-line-below

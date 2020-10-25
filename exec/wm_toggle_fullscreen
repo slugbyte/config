@@ -1,8 +1,12 @@
 #!/bin/bash
 source $HOME/.config/mold/plug/wm_style.sh
-PADDING=$(bspc config top_padding)
 
-if [[ $PADDING -eq $WM_STYLE_BAR_HEIGHT ]];then 
+bspc node -t \~fullscreen
+STATE=$(bspc query -T -n focused |jq '.client.state')
+
+echo STATE $STATE
+
+if [[ $STATE = '"fullscreen"' ]] ;then 
   polybar-msg cmd hide
   bspc config top_padding 0
 else

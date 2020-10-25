@@ -16,7 +16,6 @@ export PAGER=$(which less)
 export EDITOR=$(which vim)
 export GPG_TTY=$(tty)
 export LC_ALL='en_US.UTF-8'
-export ZDOTDIR="$HOME/.config/zsh"
 
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache

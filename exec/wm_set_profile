@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source $HOME/.config/mold/plug/wm_style.sh
+
+if [[ $1 -eq 1 ]];then 
+  bspc config window_gap $WM_STYLE_GAP_LARGE
+  bspc config border_width $WM_STYLE_BORDER_LARGE
+elif [[ $1 -eq 2 ]]; then
+  bspc config window_gap $WM_STYLE_GAP_MEDIUM
+  bspc config border_width $WM_STYLE_BORDER_MEDIUM
+elif [[ $1 -eq 3 ]];then
+  bspc config window_gap $WM_STYLE_GAP_SMALL
+  bspc config border_width $WM_STYLE_BORDER_SMALL
+else 
+  bspc config window_gap $WM_STYLE_GAP_NONE
+  bspc config border_width $WM_STYLE_BORDER_EXTRA_SMALL
+fi

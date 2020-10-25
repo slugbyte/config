@@ -1,4 +1,5 @@
 #!/bin/bash
+source $HOME/.config/mold/plug/wm_style.sh
 
 bspc node -t \~fullscreen
 STATE=$(bspc query -T -n focused |jq '.client.state')
