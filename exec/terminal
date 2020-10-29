@@ -8,7 +8,11 @@ CHECK=$(echo $RESULT |cut -d ':' -f 1)
 WORKDIR=$(echo $RESULT |cut -d ':' -f 2)
 
 if [[ $CHECK = '__XOXO__' ]]; then 
-  alacritty --working-directory $WORKDIR
+  if [ -e $WORKDIR ]; then
+    alacritty --working-directory $WORKDIR
+  else 
+    alacritty
+  fi
 else 
   alacritty
 fi

@@ -9,6 +9,7 @@ alias unstash="git stash pop"
 alias clone="git clone --recursive"
 alias subu="git submodule update"
 alias acp="A && c && p"
+
 # ACP at bottom 
 suba(){
   git submodule add $@

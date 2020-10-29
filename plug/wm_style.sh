@@ -13,6 +13,9 @@ export WM_STYLE_BORDER_LARGE=4
 export WM_STYLE_MONITOR_LEFT='DisplayPort-2'
 export WM_STYLE_MONITOR_RIGHT='HDMI-A-0'
 
-export WM_STYLE_ACTIVE_COLOR='#999999'
+export WM_STYLE_ACTIVE_COLOR='#666666'
 export WM_STYLE_NORMAL_COLOR='#222222'
-export WM_STYLE_FOCUSED_COLOR='#feea00'
+export WM_STYLE_FOCUSED_COLOR='#aaaaaa'
+#export WM_STYLE_FOCUSED_COLOR='#feea00'
+
+alias wm_no_border='bspc config border_width 0'

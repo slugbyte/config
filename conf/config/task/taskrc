@@ -30,5 +30,5 @@ include /usr/share/doc/task/rc/dark-yellow-green.theme
 #include /usr/share/doc/task/rc/no-color.theme
 verbose=blank,footnote,label,new-id,affected,edit,special,project,sync,unwait
 context.yehaw=project:yehaw
-context.wat=project:wat
-context=yehaw
+context=ahha
+context.ahha=project:ahha

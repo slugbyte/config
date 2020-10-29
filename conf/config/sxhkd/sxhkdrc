@@ -6,7 +6,7 @@ alt + space
   firefox
 
 alt + Return
-  rofi -show run
+  rofi -m 0 -show run
 
 # GENERAL
 # -- close window
