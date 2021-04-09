@@ -19,7 +19,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'tpope/vim-fugitive' // fix y map
 
 Plug 'scrooloose/nerdtree'
-Plug '/bin/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-eunuch'
 
@@ -172,6 +172,8 @@ inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype
 command! C :close
 command! Reload source ~/.vimrc   
 
+
+command! Jformat execute '%!python -m json.tool' | w  
 " FZF shorthand
 command! F Files 
 command! B Buffers
@@ -285,4 +287,14 @@ let g:UltiSnipsExpandTrigger="<f12>"
 let g:UltiSnipsJumpForwardTrigger="<f11>"
 let g:UltiSnipsJumpBackwardTrigger="<f10>"
 
-source ~/.config/nvim/config/coc.vim
+"source ~/.config/nvim/config/coc.vim
+"
+"coc 
+"" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"

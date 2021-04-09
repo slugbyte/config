@@ -13,7 +13,7 @@ export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 export SHELL=$(which zsh)
 export PAGER=$(which less)
-export EDITOR=$(which vim)
+export EDITOR=$(which nvim)
 export GPG_TTY=$(tty)
 export LC_ALL='en_US.UTF-8'
 export ZDOTDIR="$HOME/.config/zsh"
@@ -32,10 +32,10 @@ for plug in $MOLD_ROOT/plug/* ;do
 done
 
 # LOAD SECRETS
-# export SECRET_DIR="$HOME/.secret"
-# for  secret in $SECRET_DIR/env/*.sh; do 
-#   source $secret
-# done
+export SECRET_DIR="$HOME/.secret"
+for  secret in $SECRET_DIR/env/*.sh; do 
+  source $secret
+done
 # 
 # Custom Error Exit Status
 handle_error(){
