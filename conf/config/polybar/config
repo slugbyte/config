@@ -39,7 +39,7 @@
 
 [module/bspwm]
   type = internal/bspwm
-  label-dimmed-foreground #555
+  label-dimmed-foreground = #555
   label-focused = " 0"
   label-occupied= " ~"
   label-empty = " *"

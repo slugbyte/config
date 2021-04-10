@@ -4,15 +4,18 @@ source $HOME/.config/mold/plug/wm_style.sh
 
 killall sxhkd polybar conky
 
-
 sxhkd &
 polybar left &
 polybar right & 
 conky &
+ibus-daemon -drx &
 xinput set-prop 14 293 0.8
 
-bspc monitor DisplayPort-2 -d 1 2 3 4
-bspc monitor HDMI-A-0 -d 1 2 3 4
+
+
+
+bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2 3 4
+bspc monitor $WM_STYLE_MONITOR_RIGHT -d 1 2 3 4
 bspc monitor -f HDMI-A-0
 
 bspc config top_padding $WM_STYLE_BAR_HEIGHT

@@ -17,10 +17,22 @@ export EDITOR=$(which vim)
 export GPG_TTY=$(tty)
 export LC_ALL='en_US.UTF-8'
 
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus
+
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
 export XDG_DATA_HOME=$HOME/.local/share
 export XDG_RUNTIME_DIR=$HOME/.runtime
+
+export XDG_DESKTOP_DIR="$HOME/"
+export XDG_DOCUMENTS_DIR="$HOME/doc"
+export XDG_DOWNLOAD_DIR="$HOME/tmp/"
+export XDG_MUSIC_DIR="$HOME/doc/"
+export XDG_PICTURES_DIR="$HOME/doc/"
+export XDG_VIDEOS_DIR="$HOME/doc/"
+
 
 # Mold Init
 export MOLD_ROOT="$HOME/.config/mold"

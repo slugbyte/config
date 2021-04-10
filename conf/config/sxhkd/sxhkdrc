@@ -5,124 +5,107 @@ super + space
 alt + space
   firefox
 
-alt + Return
+super + Return
   rofi -m 0 -show run
 
-# GENERAL
-# -- close window
-super + k
-  xdo close
-
+# EXIT
 # -- close window
 super + alt + w
   xdo close
 
 # -- quit aplication
 super + alt + q
-  bspc node --kill
 
-# -- toggle fullscreen
-super + alt + f
-  wm_toggle_fullscreen
-
-# -- toggle polybar
-super + alt + p
-  wm_toggle_polybar
-
-alt + shift + p
-  wm_toggle_polybar
-
-# -- tiled mode
-super + alt + t
- bspc node -t tiled 
-
-alt + shift + t
- bspc node -t tiled 
-
-# -- toggle floating
-alt + shift + f
-  bspc node -t \~floating
-  
-# -- create a sticky node
-super + alt + s
-  bspc node -g sticky
-
-# NEOI (DESKTOP)
-alt + shift + {n,e,o,i}
-  bspc desktop -f {1,2,3,4}.local
-
-# YNEO (NODE)
-# -- FOCUS NODE
+# FOCUS
+# -- YNEO (NODE)
 super + {y,n,e,o}
   wm_bspc_with_polybar_hooks node -f {west,south,north,east}
 
 alt + {y,n,e,o}
   wm_bspc_with_polybar_hooks node -f {west,south,north,east}
 
-# -- SWAP NODE
-super + alt + {y,n,e,o}
-  wm_bspc_with_polybar_hooks node -s {west,south,north,east}.local -f
+# -- NEOI (DESKTOP)
+alt + shift + {n,e,o,i}
+  bspc desktop -f {1,2,3,4}.local
 
-# FU (MONITOR)
-# -- FOCUS MONITOR
-alt + {f,u}
-  wm_bspc_with_polybar_hooks monitor -f {west,east}
-
+# -- FU (MONITOR) 
 super + {f,u}
   wm_bspc_with_polybar_hooks monitor -f {west,east}
 
-# -- GROW WINDOW
-super + alt + shift + {y,n,e,o}
-  bspc node -z {left -100 0,bottom 0 100,top 0 -100,right 100 0}
+alt + {f,u}
+  wm_bspc_with_polybar_hooks monitor -f {west,east}
 
-# -- SHRINK WINDOW
-super + alt + ctrl + {y,n,e,o}
-	bspc node -z {right -100 0,top 0 100,bottom 0 -100,left 100 0}
-
-# -- TAB LOCAL NODE FOCUS
-alt + {_,shift} + Tab
-  bspc node -f {next,prev}.leaf.local
-
-# -- TAB MONITOR FOCUS
+# -- tab monitors
 super + Tab
   wm_toggle_monitor_focus
 
-# -- TAB DESKTOP
-alt + ctrl + {_,shift} + Tab
-  bspc desktop -f {next,prev}.local
+alt + Tab
+  wm_toggle_monitor_focus
 
-# (s) swap node, (r) rearange node
-super + {s,r}; {y,n,e,o}
-  wm_bspc_with_polybar_hooks node -{s,n} {west,south,north,east} -f
+# -- tab desktops
+super + alt + Tab
+  bspc desktop -f prev.local
 
-# position node
+alt + shift + Tab
+  bspc desktop -f next.local
+
+# SWAP 
+super + alt + {y,n,e,o}
+  wm_bspc_with_polybar_hooks node -s {west,south,north,east} -f
+
+# REARANGE
+# (s) swap node
+super + r; {y,n,e,o}
+  wm_bspc_with_polybar_hooks node -n {west,south,north,east} -f
+
+
 super + p; {y,n,e,o}
   bspc node -p {west,south,north,east}
 
-# -- move node to monitor
-alt + s; {f, u}
-  wm_bspc_with_polybar_hooks node -m {west,east} -f
-
+# SELECT and FOLLOW
+# -- select monitor
 super + s; {f, u}
   wm_bspc_with_polybar_hooks node -m {west,east} -f
 
-# -- move node to desktop
-alt + s; {n,e,o,i} 
+# -- select desktop
+super + s; {n,e,o,i} 
   bspc node -d {1,2,3,4}.local --follow
 
-# -- set window gap
-alt + g; {n,e,o,i}
+# TOGGLE MODES
+# -- gaps
+super + t; {n,e,o,i}
   wm_set_profile {4,3,2,1}
 
-# DANGER (HYPER, SAC)
-# --- kill app
-super + alt + ctrl + k
-  xdo kill
+# -- tiled vs floating
+super + t; {t,f}
+  bspc node -t {tiled,\~floating}
 
+# -- maximize (fullscreen)
+super + t; m
+  wm_toggle_fullscreen
+
+# -- sticky
+super + t; s
+  bspc node -g sticky
+
+# -- bar visibility
+super + t; b
+  wm_toggle_polybar
+
+# DANGER (HYPER, SAC)
 # --- quit x window server
 super + alt + shift + ctrl + q
   wm_quit_x_server
 
 # -- reload bspwm
-super + shift + ctrl + alt + r
+super + alt + shift + ctrl + r
   bspc wm -r
+
+# DEPRICATED
+# # -- GROW WINDOW
+# super + alt + shift + {y,n,e,o}
+#   bspc node -z {left -100 0,bottom 0 100,top 0 -100,right 100 0}
+# 
+# # -- SHRINK WINDOW
+# super + alt + ctrl + {y,n,e,o}
+#   bspc node -z {right -100 0,top 0 100,bottom 0 -100,left 100 0}
