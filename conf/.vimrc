@@ -179,6 +179,7 @@ command! A Ag
 command! L Lines
 command! BL BLines
 command! Todo Lines todo 
+command! Jformat execute '%!python -m json.tool' |w
 
 " Npm Lint
 function! Nolf()
