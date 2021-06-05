@@ -12,6 +12,8 @@ alias ..="cd .."
 
 #alias liquid='java -jar $MOLD_ROOT/exec/liq.jar'
 
+alias soundon="pulseaudio_set_card_profile && alsactl restore"
+
 # ------ UTIL
 alias md="mkdir -p"
 alias cp='cp -r'
