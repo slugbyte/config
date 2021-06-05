@@ -1,22 +1,53 @@
 # SHORTHAND
-alias pt="git push --tag"
-alias chd='git checkout development'
-alias chs='git checkout staging'
-alias chp='git checkout production'
-alias chm='git checkout master'
+alias hard="git reset --hard"
+alias soft="git reset --hard"
 alias stash="git stash -u"
 alias unstash="git stash pop"
 alias clone="git clone --recursive"
-alias subu="git submodule update"
-alias acp="A && c && p"
+alias remote="git remote -v"
 
-# ACP at bottom 
-suba(){
-  git submodule add $@
+
+origin_set(){
+  git remote remove origin 2> /dev/null
+  git remote add origin $@
+  git remote -v
+}
+
+tag_delete(){
+  git tag -d $1
+  git push origin :refs/tags/$1
+}
+
+git_rebase(){
+  git rebase -S $@
+}
+
+git_update(){
+  # update from arg or current branch
+  local branch
+  if (( $# > 0 ));then 
+    echo "update from from origin/$@"
+    git fetch -v
+    git_rebase origin/$@ 
+    return 0
+  fi 
+  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
+    if [[ "$branch" == "HEAD" ]]; then
+      echo "Error: Cannot update from detached state."
+      return 1
+    fi 
+    echo "update from from origin/$branch"
+    git fetch -v
+    git_rebase origin/$branch
+    return 0
+  else
+    echo "Error: Not a git repository"
+    return 1
+  fi
 }
 
 git_log(){
-  git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit
+  git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit 
 }
 
 # push to current branch with args
@@ -29,7 +60,7 @@ git_push() {
       return 1
     fi 
     echo "Pushing to $branch $@" 
-    git push origin $branch $@ -v
+    git push origin $branch $@ -v --follow-tags
     return 0
   else
     echo "Error: Not a git repository"
@@ -124,11 +155,4 @@ git_pull_upstream() {
     echo "Error: Not a git repository"
     return 1
   fi
-}
-
-# a c-m p
-ACP(){
-  git add .
-  git_commit_message $@
-  git_push
 }

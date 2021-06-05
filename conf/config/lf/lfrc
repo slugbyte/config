@@ -1,5 +1,5 @@
+# docs https://pkg.go.dev/github.com/gokcehan/lf#hdr-Configuration
 set preview true 
-set color256 true
 set ignorecase true
 set hidden true
 set number true
@@ -20,13 +20,20 @@ map f search-next
 map F search-prev
 map m mark-save
 map M mark-load
-map s shell
+map t select
 map a shell-async
 map w shell-wait
 
+${{ mkdir -p ~/.trash }}
+cmd trash ${{ use trash $f }}
+
 cmd open ${{
-  case $(file --mime-type $f -b) in
-    text/*) $EDITOR $fx;;
-    *) for f in $fx; do setsid $OPENER $f > /dev/null 2> /dev/null & done;;
-  esac
+   test -L $f && f=$(readlink -f $f)
+   case $(file --mime-type "$f" -bL) in
+      text/*|application/json|inode/x-empty) $EDITOR "$fx";;
+      *) for f in $fx; do xdg-open $f > /dev/null 2> /dev/null & done;;
+   esac
 }}
+
+set previewer ~/.config/lf/preview
+set cleaner ~/.config/lf/cleaner

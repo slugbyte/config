@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+md -p $HOME/doc/
+mousepad $HOME/doc/scratchpad.md

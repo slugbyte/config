@@ -51,16 +51,6 @@ new_script(){
   chmod 755 $@
 }
 
-# Safly delete a file
-trash(){
-  (( $# > 0 )) || {
-    echo 'USAGE ERROR: no files provided'
-    return 1
-  }
-  mkdir -p $HOME/.Trash
-  mv $@ $HOME/.Trash/
-}
-
 # Empty Trash
 empty_trash(){
   rm -rf $HOME/.Trash/*

@@ -28,3 +28,15 @@ alias copy='xclip -selection c'
 alias paste='xclip -selection c -o'
 
 alias bubye='sudo shutdown -h now'
+
+image() {
+  echo "boom $PWD/$1"
+	if [ -n "$DISPLAY" ]; then
+		declare -p -A cmd=([action]=add [identifier]="PREVIEW" \
+			[x]="$4" [y]="$5" [width]="$(($2-1))" [height]="$(($3-1))" [scaler]="contain" \
+			[path]="$PWD/$1") > "$FIFO_UEBERZUG"
+		return 1
+	else
+		chafa "$1" -s "${4}x${5}"
+	fi
+}

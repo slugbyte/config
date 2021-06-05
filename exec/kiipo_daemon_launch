@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+mkdir -p $HOME/.log
+#pm2 kill
+
+cd $HOME/workspace/kiipo/legacy/labfront_admin_portal_backend
+/home/slugbyte/.config/nvm/versions/node/v16.1.0/bin/pm2 start $HOME/workspace/kiipo/legacy/labfront_admin_portal_backend/bin/www --name labfront_admin_portal_backend -o $HOME/.log/labfront_admin_portal_backend.stdout.txt -e $HOME/.log/labfront_admin_portal_backend.stderr.txt
+
+cd $HOME/workspace/kiipo/legacy/labfront_admin_portal_frontend
+/home/slugbyte/.config/nvm/versions/node/v16.1.0/bin/pm2 start $HOME/workspace/kiipo/legacy/labfront_admin_portal_frontend/bin/serve.js --name labfront_admin_portal_frontend -o $HOME/.log/labfront_admin_portal_frontend.stdout.txt -e $HOME/.log/labfront_admin_portal_frontend.stderr.txt
+
+cd $HOME/workspace/kiipo/legacy/labfront_admin_portal_frontend
+
+/home/slugbyte/.config/nvm/versions/node/v16.1.0/bin/pm2 save --force

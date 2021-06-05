@@ -41,7 +41,7 @@ bindkey -a 'L' vi-open-line-above
 # C-x C-e edit this command in vim 
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey '\C-x\C-e' edit-command-line
+bindkey '\C-t\C-t' edit-command-line
 
 
 # [Shift - Tab] move through the completion menu backwards :)

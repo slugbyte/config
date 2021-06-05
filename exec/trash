@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if [[ -d $HOME/.trash ]]; then 
+  for f in $@; do
+    name=$(basename $f)
+    if [[ -d $f ]];then 
+      date=$(date +'%Y-%m-%d_%H-%M')
+      mv $f "$HOME/.trash/${date}_${RANDOM}_${name}" --force
+    else 
+      checksum=$(shasum $f | cut -d ' ' -f 1 | sed -e 's/[[:space:]]*$//')
+      mv $f "$HOME/.trash/${checksum}_${name}" --force
+    fi 
+  done
+else 
+  echo ERROR: no trash bin 
+  >&2 exit 1
+fi

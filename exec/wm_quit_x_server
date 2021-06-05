@@ -3,4 +3,5 @@
 killall polybar
 killall conky
 killall sxhkd
+killall xautolock
 bspc quit
