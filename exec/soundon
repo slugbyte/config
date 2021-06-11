@@ -1,3 +1,4 @@
 #!/usr/bin/env bash 
 pactl set-card-profile 0 off
 pactl set-card-profile 1 output:analog-surround-21+input:analog-stereo
+alsactl restore 

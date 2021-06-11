@@ -11,7 +11,7 @@ conky &
 ibus-daemon -drx &
 xinput set-prop 14 293 0.8
 
-
+# test
 
 
 bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2 3 4

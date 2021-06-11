@@ -51,10 +51,10 @@
 
 [module/monitor_focus_left]
   type = custom/ipc
-  hook-0 = check_monitor_focus $WM_STYLE_MONITOR_LEFT
+  hook-0 = wm_check_monitor_focus $WM_STYLE_MONITOR_LEFT
   initial = 1
 
 [module/monitor_focus_right]
   type = custom/ipc
-  hook-0 = check_monitor_focus $WM_STYLE_MONITOR_RIGHT
+  hook-0 = wm_check_monitor_focus $WM_STYLE_MONITOR_RIGHT
   initial = 1

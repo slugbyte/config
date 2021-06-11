@@ -1,9 +1,11 @@
-asset
+hide
+note/scratchpad.md
+data
+code
 bench
-log
 temp
+log
 secret
-doc
 
 # Created by https://www.gitignore.io/api/go,vim,osx,node,rust,macos,linux,python,windows
 # Edit at https://www.gitignore.io/?templates=go,vim,osx,node,rust,macos,linux,python,windows
