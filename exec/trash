@@ -5,10 +5,14 @@ if [[ -d $HOME/.trash ]]; then
     name=$(basename $f)
     if [[ -d $f ]];then 
       date=$(date +'%Y-%m-%d_%H-%M')
-      mv $f "$HOME/.trash/${date}_${RANDOM}_${name}" --force
+      output_path="$HOME/.trash/${date}_${RANDOM}_${name}"
+      mv $f $output_path --force
+      touch $output_path
     else 
       checksum=$(shasum $f | cut -d ' ' -f 1 | sed -e 's/[[:space:]]*$//')
-      mv $f "$HOME/.trash/${checksum}_${name}" --force
+      output_path="$HOME/.trash/${checksum}_${name}"
+      mv $f $output_path --force
+      touch $output_path
     fi 
   done
 else 

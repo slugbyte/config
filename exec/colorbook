@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # make a screen width aware version of this with node
 
 for count in $(seq 1 255); do 

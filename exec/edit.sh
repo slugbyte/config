@@ -41,6 +41,15 @@ get_file_path(){
     echo 'byebye'
     exit 0
   }
+
+  # edit an executable script on $PATH
+  [[ $flag = '-w' ]] && {
+    file_path=$2
+    $EDITOR "$(which $file_path)"
+
+    echo 'byebye'
+    exit 0
+  }
   
   $EDITOR "$@"
   exit 0

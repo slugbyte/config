@@ -2,12 +2,20 @@
 mkdir -p $HOME/.log
 #pm2 kill
 
-cd $HOME/workspace/kiipo/legacy/labfront_admin_portal_backend
-/home/slugbyte/.config/nvm/versions/node/v16.1.0/bin/pm2 start $HOME/workspace/kiipo/legacy/labfront_admin_portal_backend/bin/www --name labfront_admin_portal_backend -o $HOME/.log/labfront_admin_portal_backend.stdout.txt -e $HOME/.log/labfront_admin_portal_backend.stderr.txt
+LOG_DIR="$HOME/workspace/log"
 
-cd $HOME/workspace/kiipo/legacy/labfront_admin_portal_frontend
-/home/slugbyte/.config/nvm/versions/node/v16.1.0/bin/pm2 start $HOME/workspace/kiipo/legacy/labfront_admin_portal_frontend/bin/serve.js --name labfront_admin_portal_frontend -o $HOME/.log/labfront_admin_portal_frontend.stdout.txt -e $HOME/.log/labfront_admin_portal_frontend.stderr.txt
+cd $HOME/workspace/bench/kiipo/legacy/labfront_admin_portal_backend
 
-cd $HOME/workspace/kiipo/legacy/labfront_admin_portal_frontend
+pm2 start $HOME/workspace/bench/kiipo/legacy/labfront_admin_portal_backend/bin/www \
+  --name labfront_admin_portal_backend \
+  -o $LOG_DIR/labfront_admin_portal_backend.stdout.txt \
+  -e $LOG_DIR/labfront_admin_portal_backend.stderr.txt
 
-/home/slugbyte/.config/nvm/versions/node/v16.1.0/bin/pm2 save --force
+
+cd $HOME/workspace/bench/kiipo/legacy/labfront_admin_portal_frontend
+pm2 start $HOME/workspace/bench/kiipo/legacy/labfront_admin_portal_frontend/bin/serve.js \
+  --name labfront_admin_portal_frontend \
+  -o $LOG_DIR/labfront_admin_portal_frontend.stdout.txt \
+  -e $LOG_DIR/labfront_admin_portal_frontend.stderr.txt
+
+pm2 save --force
