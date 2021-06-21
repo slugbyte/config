@@ -1,0 +1,2 @@
+#!/bin/sh 
+lesskey -o $HOME/.less $HOME/.config/less/lessrc

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+name=$1
+if [[ -z $name ]]; then
+  name='screenshot'
+fi
+
+scrot "$HOME/workspace/temp/screenshot/%Y-%m-%d_%H-%M_$name.png" -s -f 

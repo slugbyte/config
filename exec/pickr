@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+_colors(){
+  for x in {0..63};do 
+    x=$(( x * 4 ))
+    for y in {0..3};do 
+      color=$(( x + y ))
+      echo -n $(tput setab $(( $color ))) $(tput setaf 15) 
+      printf "     %3g     " $color
+      echo -n $(tput setab 0) 
+      echo -n $(tput setaf $(( $color ))) $(tput setab 0) 
+      printf "%3g " $color
+      echo -n $(tput setab 0) 
+    done; 
+  done
+  echo ""
+}
+
+_colors 

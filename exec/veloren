@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+flatpak run net.veloren.airshipper 

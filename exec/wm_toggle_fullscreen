@@ -1,0 +1,16 @@
+#!/bin/bash
+source $HOME/.config/mold/plug/wm_style.sh
+
+bspc node -t \~fullscreen
+STATE=$(bspc query -T -n focused |jq '.client.state')
+
+echo STATE $STATE
+
+if [[ $STATE = '"fullscreen"' ]] ;then 
+  polybar-msg cmd hide
+  bspc config top_padding 0
+else
+  polybar-msg cmd show
+  bspc config top_padding $WM_STYLE_BAR_HEIGHT
+fi
+

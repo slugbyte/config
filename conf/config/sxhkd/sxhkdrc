@@ -1,0 +1,111 @@
+# LAUNCHER
+super + space 
+  terminal
+
+alt + space
+  firefox
+
+super + Return
+  rofi -m 0 -show run
+
+# EXIT
+# -- close window
+super + alt + w
+  xdo close
+
+# -- quit aplication
+super + alt + q
+
+# FOCUS
+# -- YNEO (NODE)
+super + {y,n,e,o}
+  wm_bspc_with_polybar_hooks node -f {west,south,north,east}
+
+alt + {y,n,e,o}
+  wm_bspc_with_polybar_hooks node -f {west,south,north,east}
+
+# -- NEOI (DESKTOP)
+alt + shift + {n,e,o,i}
+  bspc desktop -f {1,2,3,4}.local
+
+# -- FU (MONITOR) 
+super + {f,u}
+  wm_bspc_with_polybar_hooks monitor -f {west,east}
+
+alt + {f,u}
+  wm_bspc_with_polybar_hooks monitor -f {west,east}
+
+# -- tab monitors
+super + Tab
+  wm_toggle_monitor_focus
+
+alt + Tab
+  wm_toggle_monitor_focus
+
+# -- tab desktops
+super + alt + Tab
+  bspc desktop -f prev.local
+
+alt + shift + Tab
+  bspc desktop -f next.local
+
+# SWAP 
+super + alt + {y,n,e,o}
+  wm_bspc_with_polybar_hooks node -s {west,south,north,east} -f
+
+# REARANGE
+# (s) swap node
+super + r; {y,n,e,o}
+  wm_bspc_with_polybar_hooks node -n {west,south,north,east} -f
+
+
+super + p; {y,n,e,o}
+  bspc node -p {west,south,north,east}
+
+# SELECT and FOLLOW
+# -- select monitor
+super + s; {f, u}
+  wm_bspc_with_polybar_hooks node -m {west,east} -f
+
+# -- select desktop
+super + s; {n,e,o,i} 
+  bspc node -d {1,2,3,4}.local --follow
+
+# TOGGLE MODES
+# -- gaps
+super + t; {n,e,o,i}
+  wm_set_profile {4,3,2,1}
+
+# -- tiled vs floating
+super + t; {t,f}
+  bspc node -t {tiled,\~floating}
+
+# -- maximize (fullscreen)
+super + t; m
+  wm_toggle_fullscreen
+
+# -- sticky
+super + t; s
+  bspc node -g sticky
+
+# -- bar visibility
+super + t; b
+  wm_toggle_polybar
+
+# DANGER (HYPER, SAC)
+# --- quit x window server
+super + alt + shift + ctrl + q
+  wm_quit_x_server
+
+# -- reload bspwm
+super + alt + shift + ctrl + r
+  bspc wm -r
+
+# DEPRICATED
+# # -- GROW WINDOW
+# super + alt + shift + {y,n,e,o}
+#   bspc node -z {left -100 0,bottom 0 100,top 0 -100,right 100 0}
+# 
+# # -- SHRINK WINDOW
+# super + alt + ctrl + {y,n,e,o}
+#   bspc node -z {right -100 0,top 0 100,bottom 0 -100,left 100 0}
