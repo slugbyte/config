@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -e
+
+# NOTE:
+# this file works together with plug/lfcd.sh
+# lfcd passes in a LFCD_TMP that is used autocd on exit
+
+LFCD_TMP=$1 # passed in by lfcd()
+
+cleanup() {
+  exec 3>&-
+	rm "$FIFO_UEBERZUG"
+}
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  lf -last-dir-path="$LFCD_TMP" "${@:2}"
+else
+	[ ! -d "$HOME/.cache/lf" ] && mkdir --parents "$HOME/.cache/lf"
+	export FIFO_UEBERZUG="$HOME/.cache/lf/ueberzug-$$"
+	mkfifo "$FIFO_UEBERZUG"
+	ueberzug layer -s <"$FIFO_UEBERZUG" -p bash &
+	exec 3>"$FIFO_UEBERZUG"
+	trap cleanup EXIT
+  lf -last-dir-path="$LFCD_TMP" "${@:2}" 3>&-
+fi

@@ -1,0 +1,9 @@
+#!/bin/bash
+source $HOME/.config/mold/plug/wm_style.sh
+CURRENT=$(bspc query -T -m| jq '.name')
+
+if [[ $CURRENT = "\"$WM_STYLE_MONITOR_LEFT\"" ]];then
+  wm_bspc_with_polybar_hooks monitor -f $WM_STYLE_MONITOR_RIGHT
+else 
+  wm_bspc_with_polybar_hooks monitor -f $WM_STYLE_MONITOR_LEFT
+fi

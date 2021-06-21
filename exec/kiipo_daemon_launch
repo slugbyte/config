@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#pm2 kill
+
+LOG_DIR="$HOME/workspace/tail"
+mkdir -p $LOG_DIR
+
+cd $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend
+
+pm2 start $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend/bin/www \
+  --name labfront_admin_portal_backend \
+  -o $LOG_DIR/labfront_admin_portal_backend.stdout.txt \
+  -e $LOG_DIR/labfront_admin_portal_backend.stderr.txt
+
+
+cd $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend
+pm2 start $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend/bin/serve.js \
+  --name labfront_admin_portal_frontend \
+  -o $LOG_DIR/labfront_admin_portal_frontend.stdout.txt \
+  -e $LOG_DIR/labfront_admin_portal_frontend.stderr.txt
+
+pm2 save --force

@@ -1,0 +1,2 @@
+#!/bin/sh
+feh --bg-tile $HOME/workspace/data/img/wallpaper/light.png

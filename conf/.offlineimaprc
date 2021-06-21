@@ -1,0 +1,24 @@
+[general]
+accounts = main
+
+[Account main] 
+localrepository = main_local
+remoterepository = main_remote
+autorefresh = 10
+
+[Repository main_local]
+type = Maildir
+localfolders = ~/.mail
+sync_deletes = yes
+
+[Repository main_remote]
+type = IMAP
+remoteport = 1143
+remotehost = 127.0.0.1
+remoteuser = duncan@slugbyte.com
+remotepass = 7AsdB1CosH-bGbWki77Bpw
+keepalive = 60
+holdconnectionopen = yes
+expunge = yes
+ssl = no
+
