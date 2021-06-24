@@ -1,4 +1,5 @@
 # lf notes
+the `lf_preview` and `lf_cleaner` comands are in $w/exec
 
 ## Resources 
 * [docs](https://pkg.go.dev/github.com/gokcehan/lf)
