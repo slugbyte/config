@@ -35,5 +35,5 @@ cmd open ${{
    esac
 }}
 
-set previewer ~/workspace/conf/config/lf/preview
-set cleaner ~/workspace/conf/config/lf/cleaner
+set previewer lf_preview
+set cleaner lf_cleaner
