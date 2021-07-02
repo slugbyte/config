@@ -28,6 +28,9 @@ alt + {y,n,e,o}
 alt + shift + {n,e,o,i}
   bspc desktop -f {1,2,3,4}.local
 
+alt + shift + {n,e,o,i}
+  bspc monitor '^2' && bspc desktop -f {1,2}.local
+
 # -- FU (MONITOR) 
 super + {f,u}
   wm_bspc_with_polybar_hooks monitor -f {west,east}

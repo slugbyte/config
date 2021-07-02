@@ -1,4 +1,13 @@
-#!/usr/bin/env bash 
-pactl set-card-profile 0 off
-pactl set-card-profile 1 output:analog-surround-21+input:analog-stereo
+#!/usr/bin/env bash
+# HDMI 
+pactl set-card-profile alsa_card.pci-0000_0c_00.1  output:hdmi-stereo
+
+# Starship/Matisse 
+pactl set-card-profile alsa_card.pci-0000_0e_00.4 output:analog-surround-21+input:analog-stereo
+
+# Webcam
+pactl set-card-profile alsa_card.usb-046d_HD_Pro_Webcam_C920_ABC735EF-02  input:analog-stereo
+
+# USB Video
+pactl set-card-profile alsa_card.usb-MACROSILICON_USB_Video-02 off
 alsactl restore 

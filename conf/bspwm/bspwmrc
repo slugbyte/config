@@ -1,6 +1,12 @@
 #!/bin/bash
  
 source $HOME/.config/mold/plug/wm_style.sh
+# tell x what the monitor order is
+xrandr \
+  --output $WM_STYLE_MONITOR_RIGHT \
+  --mode '1920x1080' --rotate normal --right-of $WM_STYLE_MONITOR_LEFT \
+  --output $WM_STYLE_MONITOR_LEFT \
+  --mode '1920x1080' --rotate normal 
 
 killall sxhkd polybar conky
 
@@ -11,8 +17,9 @@ conky &
 ibus-daemon -drx &
 xinput set-prop 14 293 0.8
 
-bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2 3 4
-bspc monitor $WM_STYLE_MONITOR_RIGHT -d 1 2 3 4
+
+bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2
+bspc monitor $WM_STYLE_MONITOR_RIGHT -d a b
 bspc monitor -f $WM_STYLE_MONITOR_RIGHT
 
 bspc config top_padding $WM_STYLE_BAR_HEIGHT
@@ -23,5 +30,7 @@ bspc config focused_border_color $WM_STYLE_FOCUSED_COLOR
 
 bspc config window_gap $WM_STYLE_GAP_NONE
 bspc config border_width $WM_STYLE_BORDER_EXTRA_SMALL
+
+bspc config monitor_swap $WM_STYLE_MONITOR_RIGHT $WM_STYLE_MONITOR_LEFT
 
 bspc config split_ratio 0.5

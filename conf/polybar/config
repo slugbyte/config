@@ -14,12 +14,12 @@
   inherit = section/base
   monitor = ${env:WM_STYLE_MONITOR_RIGHT:}
   modules-left = monitor_focus_right bspwm
-  modules-right = alsa date 
+  modules-right = cpu memory pulseaudio date 
 
 [bar/left]
   inherit = section/base
   monitor = ${env:WM_STYLE_MONITOR_LEFT:}
-  modules-right = cpu
+  modules-right = cpu filesystem memory pulseaudio date
   modules-left = wat monitor_focus_left bspwm
 
 [module/date]
@@ -35,7 +35,8 @@
 
 [module/cpu]
   type = internal/cpu
-  interval = 0.5
+  label = [CPU %percentage%]
+  interval = 2
 
 [module/bspwm]
   type = internal/bspwm
@@ -45,9 +46,24 @@
   label-empty = " *"
   label-urgent = " !"
 
-[module/alsa]
-  type = internal/alsa
-  label-muted = X
+[module/memory]
+  type = internal/memory
+  label = [MEM %percentage_free%]
+  internal = 3
+
+[module/pulseaudio]
+  type = internal/pulseaudio
+  sink = alsa_output.pci-0000_0c_00.1.hdmi-stereo
+  label-muted = [VOL X]
+  label-volume = [VOL %percentage%]
+  interval = 1
+
+[module/filesystem]
+  type = internal/filesystem
+  mount-0 = /
+  label = [DISK %percentage_used%]
+  internal = 60
+
 
 [module/monitor_focus_left]
   type = custom/ipc
