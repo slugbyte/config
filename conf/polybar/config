@@ -53,7 +53,7 @@
 
 [module/pulseaudio]
   type = internal/pulseaudio
-  sink = alsa_output.pci-0000_0c_00.1.hdmi-stereo
+  sink = alsa_output.pci-0000_0e_00.4.analog-surround-21
   label-muted = [VOL X]
   label-volume = [VOL %percentage%]
   interval = 1

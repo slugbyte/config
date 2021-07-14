@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+trash ~/.var/app/com.mojang.Minecraft/data/1.17/saves/mountain
+
+zip_file=$(ls ~/.var/app/com.mojang.Minecraft/data/1.17/backups | tail -n 1)
+
+unzip ~/.var/app/com.mojang.Minecraft/data/1.17/backups/$zip_file -d ~/.var/app/com.mojang.Minecraft/data/1.17/saves
+
