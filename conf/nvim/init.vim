@@ -16,9 +16,13 @@ call plug#begin('~/.config/nvim/plug')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
   " Telescope
-  Plug 'nvim-lua/popup.nvim'
-  Plug 'nvim-lua/plenary.nvim'
-  Plug 'nvim-telescope/telescope.nvim'
+  " Plug 'nvim-lua/popup.nvim'
+  " Plug 'nvim-lua/plenary.nvim'
+  " Plug 'nvim-telescope/telescope.nvim'
+
+  " FZF
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
 
   " UI
   Plug 'airblade/vim-gitgutter'
@@ -89,46 +93,55 @@ let g:lightline = {
       \ },
       \ 'component_function': {
       \   'gitbranch': 'gitbranch#name',
-      \   'filename': 'LightlineFilename'
       \ },
       \ }
 
-function! LightlineFilename()
-  let filename = expand('%') !=# '' ? expand('%') : '[No Name]'
-  return filename
-endfunction
+      " \   'filename': 'Lightline/Filename'
+" function! LightlineFilename()
+"   let filename = expand('%') !=# '' ? expand('%') : '[No Name]'
+"   return filename
+" endfunction
+
+" FZF
+" let g:fzf_default_command = 'rg --files --hidden --ignore'
+command! F Files
+command! S Rg
+
+" command! H Telescope grep_string
+" command! G Telescope git_files
+" command! B Telescope buffers
+" command! R Telescope registers
 
 " Telescope
-let g:fzf_default_command = 'rg --files'
-command! F Telescope find_files find_command=rg,--ignore,--hidden,--files
-command! H Telescope grep_string
-command! G Telescope git_files
-command! B Telescope buffers
-command! S Telescope live_grep
-command! R Telescope registers
+" command! F Telescope find_files
+" command! H Telescope grep_string
+" command! G Telescope git_files
+" command! B Telescope buffers
+" command! S Telescope live_grep
+" command! R Telescope registers
 
-lua << EOF
-  local actions = require('telescope.actions')
-  require('telescope').setup{
-   defaults = {
-     mappings = {
-       i = {
-         ["<C-h>"] = actions.select_vertical,
-         ["<C-s>"] = actions.select_horizontal,
-       },
-       n = {
-         ["<C-h>"] = actions.select_vertical,
-         ["<C-s>"] = actions.select_horizontal,
-       }
-     },
-     layout_strategy = "vertical",
-     file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-     grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-     qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
-     buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker,
-   }
-  }
-EOF
+" lua << EOF
+"   local actions = require('telescope.actions')
+"   require('telescope').setup{
+"    defaults = {
+"      mappings = {
+"        i = {
+"          ["<C-h>"] = actions.select_vertical,
+"          ["<C-s>"] = actions.select_horizontal,
+"        },
+"        n = {
+"          ["<C-h>"] = actions.select_vertical,
+"          ["<C-s>"] = actions.select_horizontal,
+"        }
+"      },
+"      layout_strategy = "vertical",
+"      file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
+"      grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
+"      qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+"      buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker,
+"    }
+"   }
+" EOF
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions
 " Npm Lint
@@ -242,6 +255,7 @@ map n gn
 map e ge
 map y gy
 map o go
+au VimEnter * unmap @
 
 " vim-command-line key binding
 cnoremap <C-A> <Home>
