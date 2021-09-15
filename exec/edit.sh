@@ -3,7 +3,6 @@ set -o pipefail
 
 argv_length=${#@}
 flag=${1:-}
-export FZF_DEFAULT_COMMAND='ag -g ""'
 
 get_file_path(){
   local file_path=$(fzf || echo '')
