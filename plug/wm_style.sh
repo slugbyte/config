@@ -10,7 +10,8 @@ export WM_STYLE_BORDER_SMALL=3
 export WM_STYLE_BORDER_MEDIUM=4
 export WM_STYLE_BORDER_LARGE=4
 
-export WM_STYLE_MONITOR_RIGHT='DisplayPort-1'
+# run `$ xrander` to troubleshoot moonitor names
+export WM_STYLE_MONITOR_RIGHT='DisplayPort-0'
 export WM_STYLE_MONITOR_LEFT='HDMI-A-0'
 
 export WM_STYLE_ACTIVE_COLOR='#666666'

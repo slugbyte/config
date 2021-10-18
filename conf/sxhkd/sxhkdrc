@@ -6,30 +6,33 @@ alt + space
   firefox
 
 super + Return
-  rofi -m 0 -show run
+  rofi -m 1 -show run
 
 # EXIT
 # -- close window
-super + alt + w
+alt + w
   xdo close
-
-# -- quit aplication
-super + alt + q
 
 # FOCUS
 # -- YNEO (NODE)
 super + {y,n,e,o}
   wm_bspc_with_polybar_hooks node -f {west,south,north,east}
 
-alt + {y,n,e,o}
-  wm_bspc_with_polybar_hooks node -f {west,south,north,east}
+# alt + {y,n,e,o}
+#   wm_bspc_with_polybar_hooks node -f {west,south,north,east}
 
 # -- NEOI (DESKTOP)
-alt + shift + {n,e,o,i}
-  bspc desktop -f {1,2,3,4}.local
+super + alt + {n,e}
+  bspc monitor -f '^1' && bspc desktop -f {1,2}
 
-alt + shift + {n,e,o,i}
-  bspc monitor '^2' && bspc desktop -f {1,2}.local
+super + alt + {o,i}
+  bspc monitor -f '^2' && bspc desktop -f {a,b}
+
+alt + {n,e}
+  bspc monitor -f '^1' && bspc desktop -f {1,2}
+
+alt + {o,i}
+  bspc monitor -f '^2' && bspc desktop -f {a,b}
 
 # -- FU (MONITOR) 
 super + {f,u}
@@ -45,24 +48,26 @@ super + Tab
 alt + Tab
   wm_toggle_monitor_focus
 
-# -- tab desktops
+# -- tab nodes in desktop
 super + alt + Tab
-  bspc desktop -f prev.local
-
-alt + shift + Tab
-  bspc desktop -f next.local
+  bspc node -f next.local.window
 
 # SWAP 
-super + alt + {y,n,e,o}
+alt + shift {y,n,e,o}
   wm_bspc_with_polybar_hooks node -s {west,south,north,east} -f
 
 # REARANGE
 # (s) swap node
-super + r; {y,n,e,o}
+super + alt + r; {y,n,e,o}
+  wm_resize expand {west,south,north,east} 100
+
+super + alt + d; {y,n,e,o}
+  wm_resize shrink {east,north,south,west} 100
+
+super + alt + q; {y,n,e,o}
   wm_bspc_with_polybar_hooks node -n {west,south,north,east} -f
 
-
-super + p; {y,n,e,o}
+super + alt + p; {y,n,e,o}
   bspc node -p {west,south,north,east}
 
 # SELECT and FOLLOW
@@ -71,13 +76,17 @@ super + s; {f, u}
   wm_bspc_with_polybar_hooks node -m {west,east} -f
 
 # -- select desktop
-super + s; {n,e,o,i} 
-  bspc node -d {1,2,3,4}.local --follow
+super + s; {n,e,o,i}
+  bspc node -d {1,2,a,b} --follow
 
 # TOGGLE MODES
 # -- gaps
 super + t; {n,e,o,i}
-  wm_set_profile {4,3,2,1}
+  wm_set_profile {4, 3,2,1}
+
+# -- resize to fixed ratio
+super + s; {k,y,l}
+  bspc node $(bspc query -N -n @parent) -r {0.65,0.5,0.35}
 
 # -- tiled vs floating
 super + t; {t,f}

@@ -1,6 +1,8 @@
 #!/bin/bash
  
 source $HOME/.config/mold/plug/wm_style.sh
+
+
 # tell x what the monitor order is
 xrandr \
   --output $WM_STYLE_MONITOR_RIGHT \
@@ -12,7 +14,7 @@ killall sxhkd polybar conky
 
 sxhkd &
 polybar left &
-polybar right & 
+polybar right &
 conky &
 ibus-daemon -drx &
 xinput set-prop 14 293 0.8
