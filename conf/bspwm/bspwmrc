@@ -10,15 +10,15 @@ xrandr \
   --output $WM_STYLE_MONITOR_LEFT \
   --mode '1920x1080' --rotate normal 
 
-killall sxhkd polybar conky
+killall sxhkd polybar conky ibus-daemon
 
 sxhkd &
 polybar left &
 polybar right &
 conky &
+dropbox start &
 ibus-daemon -drx &
 xinput set-prop 14 293 0.8
-
 
 bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2
 bspc monitor $WM_STYLE_MONITOR_RIGHT -d a b

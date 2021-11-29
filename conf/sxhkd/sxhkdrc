@@ -18,16 +18,7 @@ alt + w
 super + {y,n,e,o}
   wm_bspc_with_polybar_hooks node -f {west,south,north,east}
 
-# alt + {y,n,e,o}
-#   wm_bspc_with_polybar_hooks node -f {west,south,north,east}
-
 # -- NEOI (DESKTOP)
-super + alt + {n,e}
-  bspc monitor -f '^1' && bspc desktop -f {1,2}
-
-super + alt + {o,i}
-  bspc monitor -f '^2' && bspc desktop -f {a,b}
-
 alt + {n,e}
   bspc monitor -f '^1' && bspc desktop -f {1,2}
 
@@ -52,22 +43,22 @@ alt + Tab
 super + alt + Tab
   bspc node -f next.local.window
 
-# SWAP 
+# SWAP
 alt + shift {y,n,e,o}
   wm_bspc_with_polybar_hooks node -s {west,south,north,east} -f
 
-# REARANGE
-# (s) swap node
-super + alt + r; {y,n,e,o}
+# RESIZE
+super + r; {y,n,e,o}
   wm_resize expand {west,south,north,east} 100
 
-super + alt + d; {y,n,e,o}
+super + d; {y,n,e,o}
   wm_resize shrink {east,north,south,west} 100
 
-super + alt + q; {y,n,e,o}
+super + g; {y,n,e,o}
   wm_bspc_with_polybar_hooks node -n {west,south,north,east} -f
 
-super + alt + p; {y,n,e,o}
+# SPLIT DIRECTION SELECT
+super + p; {y,n,e,o}
   bspc node -p {west,south,north,east}
 
 # SELECT and FOLLOW
@@ -81,19 +72,19 @@ super + s; {n,e,o,i}
 
 # TOGGLE MODES
 # -- gaps
-super + t; {n,e,o,i}
-  wm_set_profile {4, 3,2,1}
+# super + t; {n,e,o,i}
+  # wm_set_profile {4, 3,2,1}
 
-# -- resize to fixed ratio
-super + s; {k,y,l}
+ -- resize to fixed ratio
+super + t; {y,n,o}
   bspc node $(bspc query -N -n @parent) -r {0.65,0.5,0.35}
 
-# -- tiled vs floating
-super + t; {t,f}
+# -- tiled vs floating (u for up)
+super + t; {t,u}
   bspc node -t {tiled,\~floating}
 
-# -- maximize (fullscreen)
-super + t; m
+# -- fullscreen
+super + t; f
   wm_toggle_fullscreen
 
 # -- sticky
@@ -112,6 +103,10 @@ super + alt + shift + ctrl + q
 # -- reload bspwm
 super + alt + shift + ctrl + r
   bspc wm -r
+
+# -- lock
+super + alt + l
+  slock
 
 # DEPRICATED
 # # -- GROW WINDOW

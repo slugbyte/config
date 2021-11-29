@@ -233,8 +233,12 @@ command! EditConfig :e ~/.config/nvim/init.vim
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Mappings
 let mapleader = " "
-" <leader>c is check spelling
-nmap <leader>c <Plug>(coc-codeaction-selected)aw
+" <leader>s is check spelling
+nmap <leader>s <Plug>(coc-codeaction-selected)aw
+nmap <leader>S :CocCommand cSpell.addWordToUserDictionnary<cr>
+
+" <leader> c is toggle comment
+nmap <leader>c gcc
 " <leader>t is goto any char on screen
 map <leader>t <Plug>(easymotion-overwin-f)
 " <leader>c is close the current pane
@@ -242,9 +246,9 @@ map <leader>x 'close<CR>
 " <leader>o is close the current pane
 map <leader>o 'on<CR>
 " search file names quick
-map <leader>f 'F<CR>
+map <leader>n 'F<CR>
 " search file content quick
-map <leader>s 'S<CR>
+nmap <leader>N 'S<CR>
 " write
 map <leader>w 'w<CR>
 " quit

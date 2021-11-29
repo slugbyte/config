@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source $HOME/.config/mold/plug/wm_style.sh
+source $HOME/workspace/plug/wm_style.sh
 
 if [[ $1 -eq 1 ]];then 
   bspc config window_gap $WM_STYLE_GAP_LARGE

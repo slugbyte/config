@@ -1,29 +1,29 @@
-dokill(){
-  docker kill $(docker ps -q)
+alias dock='sudo docker'
+
+dkill(){
+  dock kill $(dock ps -q)
   echo "killed all containers "
 }
 
-dorm(){
-  docker rm $(docker ps -a -q)
+drm(){
+  dock rm $(dock ps -a -q)
   echo "removed all containers"
 }
 
-docleanup(){
+dclean (){
   echo "docker cleanup"
-  dokill
-  dorm
+  dkill
+  drm
 }
 
-alias dock="docker"
-alias doru="dock run"
-alias dori="doru -it"
-alias dorsh="dori --entrypoint sh"
-alias dorvosh="dorsh -v $(pwd):/mnt"
-alias dob="dock build"
-alias dops="dock ps -a"
+alias drun="dock run"
+alias druni="doru -it"
+alias drunsh="dori --entrypoint sh"
+alias dbuild="dock build"
+alias dpsa="dock ps -a"
 
 alias deri="docker exec -it"
 
-dersh(){
+dexecsh(){
   docker exec -it $1 sh
 }
