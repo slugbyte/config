@@ -5,7 +5,7 @@ drop
 .obsidian
 hide
 note/scratchpad.md
-exec/_chrysalis.AppImage
+exec/*.AppImage
 data
 code
 bench
