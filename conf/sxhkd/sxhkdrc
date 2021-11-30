@@ -58,8 +58,11 @@ super + g; {y,n,e,o}
   wm_bspc_with_polybar_hooks node -n {west,south,north,east} -f
 
 # SPLIT DIRECTION SELECT
-super + p; {y,n,e,o}
+super + j; {y,n,e,o}
   bspc node -p {west,south,north,east}
+
+super + p;
+  CM_LAUNCHER=rofi clipmenu
 
 # SELECT and FOLLOW
 # -- select monitor
