@@ -1,4 +1,5 @@
 wm_set_bg &
+clipmenud &
 pulseaudio --start &
 pulseaudio_set_card_profile &
 xautolock -time 5 -locker slock -detectsleep &
