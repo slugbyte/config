@@ -1,7 +1,7 @@
 ## init pyenv
 export PYENV_VERSION=3.8.5
 export PYENV_ROOT="$HOME/.config/pyenv"
-prependpath "$PYENV_ROOT/bin"
+export PATH="$PYENV_ROOT/bin:$PATH"
 
 pyup(){
   eval "$(pyenv init -)"

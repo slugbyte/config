@@ -5,7 +5,7 @@ tt(){
   fi
 
   if [ -e package.json ];then 
-    npm run test $@
+    npm run test -- $@
     return 0
   fi
 
