@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
-# HDMI 
+# HDMI
 
-CARD_HDMI=alsa_card.pci-0000_0c_00.1 
-CARD_WEBCAM=alsa_card.usb-046d_HD_Pro_Webcam_C920_ABC735EF-02 
-CARD_STARSHIP=alsa_card.pci-0000_0e_00.4 
-CARD_USB_VIDEO=alsa_card.usb-MACROSILICON_USB_Video-02 
+CARD_HDMI=alsa_card.pci-0000_0c_00.1
+CARD_WEBCAM=alsa_card.usb-046d_HD_Pro_Webcam_C920_ABC735EF-02
+CARD_STARSHIP=alsa_card.pci-0000_0e_00.4
+CARD_USB_VIDEO=alsa_card.usb-MACROSILICON_USB_Video-02
 
 # pactl set-card-profile $CARD_HDMI output:hdmi-stereo
-pactl set-card-profile $CARD_HDMI off
+pactl set-card-profile $CARD_HDMI off || true
 
 # USB Video
-pactl set-card-profile $CARD_USB_VIDEO off
+pactl set-card-profile $CARD_USB_VIDEO off || true
 
-# Starship/Matisse 
-pactl set-card-profile $CARD_STARSHIP output:analog-surround-21
+# Starship/Matisse
+pactl set-card-profile $CARD_STARSHIP output:analog-surround-21 || true
 # pactl set-card-profile $CARD_STARSHIP output:analog-surround-21:analog-stereo
 
 # Webcam
-pactl set-card-profile $CARD_WEBCAM input:analog-stereo
+pactl set-card-profile $CARD_WEBCAM input:analog-stereo || true
 
-alsactl restore 
+alsactl restore
