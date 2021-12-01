@@ -7,7 +7,7 @@ __ta () {
 
 alias tl='__ta priority:L'
 alias tm='__ta priority:M'
-alias to='__ta priority:H'
+alias th='__ta priority:H'
 alias td='task done'
 alias ts='task summary'
 alias tc='task context'
