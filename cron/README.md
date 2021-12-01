@@ -1,5 +1,8 @@
 # run.sh
+Each directory has a list of executable files that will be run using `run.sh`
+with a chron scheduler. 
 
-## USEAGE
+## `run.sh` USAGE
+Pass a directory name as the first parameter `$ ./run.sh [dirname]`  
 
-`./run.sh hour` `./run.sh day`
+Example: `./run.sh hour`
