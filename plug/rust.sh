@@ -1,6 +1,6 @@
 export RUSTUP_HOME=$HOME/.config/rustup
 export CARGO_HOME=$HOME/.config/cargo
-prependpath $CARGO_HOME/bin:$HOME/.cargo/bin
+export PATH="$CARGO_HOME/bin:$PATH"
 
 alias cr="cargo run"
 alias ct="cargo test"
