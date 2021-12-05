@@ -238,7 +238,7 @@ nmap <leader>s <Plug>(coc-codeaction-selected)aw
 nmap <leader>S :CocCommand cSpell.addWordToUserDictionnary<cr>
 
 " <leader> c is toggle comment
-nmap <leader>c gcc
+map <leader>c gcc
 " <leader>t is goto any char on screen
 map <leader>t <Plug>(easymotion-overwin-f)
 " <leader>c is close the current pane
