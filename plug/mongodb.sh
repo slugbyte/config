@@ -1,4 +1,6 @@
 mongod(){
+   sudo docker kill mongodb &> /dev/null
+   sudo docker rm mongodb &> /dev/null
    sudo docker run --network bridge -v $w/dump/mongodb:/data/db -p 27017:27017 --name mongodb \
   -e MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME \
   -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD \
