@@ -1,7 +1,7 @@
 [general]
 accounts = main
 
-[Account main] 
+[Account main]
 localrepository = main_local
 remoterepository = main_remote
 autorefresh = 10
@@ -16,7 +16,7 @@ type = IMAP
 remoteport = 1143
 remotehost = 127.0.0.1
 remoteuser = duncan@slugbyte.com
-remotepass = 7AsdB1CosH-bGbWki77Bpw
+remotepass = $OFFLINE_IMAP_REMOTE_PASS
 keepalive = 60
 holdconnectionopen = yes
 expunge = yes

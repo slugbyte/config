@@ -24,19 +24,20 @@ export XDG_DATA_HOME=$HOME/.local/share
 export XDG_RUNTIME_DIR=$HOME/.runtime
 
 # Mold Init
-export MOLD_ROOT="$HOME/.config/mold"
+export MOLD_ROOT="$HOME/workspace"
 export MOLD_SIGN='true'
-export PATH="$MOLD_ROOT/exec:$PATH"
+export PATH="$MOLD_ROOT/exec:$MOLD_ROOT/exec/ignore:$PATH"
+export w=$MOLD_ROOT
 for plug in $MOLD_ROOT/plug/* ;do
   source $plug
 done
 
 # LOAD SECRETS
-# export SECRET_DIR="$HOME/.secret"
-# for  secret in $SECRET_DIR/env/*.sh; do 
-#   source $secret
-# done
-# 
+export SECRET_DIR="$MOLD_ROOT/hide"
+for  secret in $SECRET_DIR/env/*.sh; do 
+  source $secret
+done
+
 # Custom Error Exit Status
 handle_error(){
   echo "FAILED: status code $?"
@@ -55,3 +56,5 @@ precmd(){
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH=$(clean_path)

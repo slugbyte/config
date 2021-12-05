@@ -36,11 +36,8 @@ alt + {f,u}
 super + Tab
   wm_toggle_monitor_focus
 
-alt + Tab
-  wm_toggle_monitor_focus
-
 # -- tab nodes in desktop
-super + alt + Tab
+alt + Tab
   bspc node -f next.local.window
 
 # SWAP

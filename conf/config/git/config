@@ -2,8 +2,6 @@
 	name = Duncan Marsh
 	email = slugbyte@slugbyte.com
   signingkey = 0A56A83BE20DC703
-[includeIf "gitdir:~/workspace/rolo-bench/"]
-  path = ~/workspace/rolo-bench/.gitconfig
 [includeIf "gitdir:~/workspace/hh-bench/bot/"]
   path = ~/workspace/hh-bench/bot/.gitconfig
 [pull]
