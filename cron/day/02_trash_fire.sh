@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 get_file_list(){
-  find $HOME/.trash/ -maxdepth 1 -mtime 20
+  find $HOME/.trash/ -maxdepth 1 -mtime +20
 }
 
 count=$(get_file_list | wc -l)
