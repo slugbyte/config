@@ -1,7 +1,4 @@
 #!/bin/bash
-
-killall polybar
-killall conky
-killall sxhkd
-killall xautolock
-bspc quit
+for stop_script in $MOLD_ROOT/init/x/stop/*; do 
+  source stop_script
+done
