@@ -2,7 +2,7 @@
 ![Shreded green glitch with black moss](https://assets.slugbyte.com/github/github-header-00007.png)  
 
 ## About This Repository
-This repository holds my dotfiles in *conf/* , shell script "plugins" in *plug/*, executable scripts in *exec/*, file templates in *leaf/*, notes in *note/*, and cron tasks *cron/*. I manage this repository it using a tool I created called [mold](https://github.com/slugbyte/mold), that enables me to both track and manage this repository's content and quickly sync its configuration on multiple machines.  
+This repository holds my dotfiles in *conf/* , shell script "plugins" in *plug/*, executable scripts in *exec/*, file templates in *leaf/*, init scripts in *init*, and cron tasks *cron/*. I manage this repository it using a tool I created called [mold](https://github.com/slugbyte/mold), that enables me to both track and manage this repository's content and quickly sync its configuration on multiple machines.
 
 ## Great Shell Resources
 Here are a few great resources that I use for reseaching shell and sys-config related information!   
