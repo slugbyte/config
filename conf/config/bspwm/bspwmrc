@@ -1,7 +1,6 @@
 #!/bin/bash
- 
-source $HOME/.config/mold/plug/wm_style.sh
 
+source $MOLD_ROOT/plug/wm_style.sh
 
 # tell x what the monitor order is
 xrandr \
@@ -10,20 +9,9 @@ xrandr \
   --output $WM_STYLE_MONITOR_LEFT \
   --mode '1920x1080' --rotate normal 
 
-killall sxhkd polybar conky ibus-daemon
-
-# TODO make MOLD INIT that bspwm will loop through and execute
-sxhkd &
-polybar left &
-polybar right &
-conky &
-dropbox start &
-ibus-daemon -drx &
-xinput set-prop 14 293 0.8
-kiipo_daemon_launch &
-
 bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2
 bspc monitor $WM_STYLE_MONITOR_RIGHT -d a b
+
 bspc monitor -f $WM_STYLE_MONITOR_RIGHT
 
 bspc config top_padding $WM_STYLE_BAR_HEIGHT
@@ -38,3 +26,10 @@ bspc config border_width $WM_STYLE_BORDER_EXTRA_SMALL
 bspc config monitor_swap $WM_STYLE_MONITOR_RIGHT $WM_STYLE_MONITOR_LEFT
 
 bspc config split_ratio 0.5
+
+# load init scripts
+for init_script in $MOLD_ROOT/init/wm/*;do
+  source $init_script
+done
+
+# xinput set-prop 14 293 0.8

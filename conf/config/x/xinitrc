@@ -1,6 +1,3 @@
-wm_set_bg &
-pulseaudio --start &
-xautolock -time 5 -locker slock -detectsleep &
-clipmenud &
-espanso start &
-dbus-run-session bspwm
+for init_script in $MOLD_ROOT/init/x/*;do
+  source $init_script
+done
