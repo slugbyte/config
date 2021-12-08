@@ -1,12 +1,12 @@
 # init/x daemon
-killall pulseaudio
-killall xautolock
-killall ibus-daemon
-killall clipmenud
-killall dropbox
-pm2 kill
+killall pulseaudio || true
+killall xautolock || true
+killall ibus-daemon || true
+killall clipmenud || true
+killall dropbox || true
+pm2 kill || true
 
 # init/wm daemon
-killall sxhkd
-killall polybar
-killall conky
+killall sxhkd || true
+killall polybar || true
+killall conky || true
