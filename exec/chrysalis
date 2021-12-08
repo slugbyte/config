@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-sudo _chrysalis.AppImage
+sudo chrysalis.AppImage
