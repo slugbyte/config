@@ -1,4 +1,7 @@
 call plug#begin('~/.config/nvim/plug')
+  " HARPOON
+  Plug 'nvim-lua/plenary.nvim' 
+  Plug 'ThePrimeagen/harpoon'
   " LANG
   Plug 'cespare/vim-toml'
   Plug 'leafgarland/typescript-vim'
@@ -85,6 +88,11 @@ let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_keys = "123456789"
 
 " lightline
+function! LightlineFilename()
+  let filename = expand('%') !=# '' ? expand('%') : '[No Name]'
+  return filename
+endfunction
+
 let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ 'active': {
@@ -93,55 +101,24 @@ let g:lightline = {
       \ },
       \ 'component_function': {
       \   'gitbranch': 'gitbranch#name',
+      \   'filename': 'LightlineFilename',
       \ },
       \ }
 
-      " \   'filename': 'Lightline/Filename'
-" function! LightlineFilename()
-"   let filename = expand('%') !=# '' ? expand('%') : '[No Name]'
-"   return filename
-" endfunction
-
 " FZF
-" let g:fzf_default_command = 'rg --files --hidden --ignore'
+let g:fzf_default_command = 'rg --files --hidden --ignore'
 command! F Files
 command! S Rg
 
-" command! H Telescope grep_string
-" command! G Telescope git_files
-" command! B Telescope buffers
-" command! R Telescope registers
-
-" Telescope
-" command! F Telescope find_files
-" command! H Telescope grep_string
-" command! G Telescope git_files
-" command! B Telescope buffers
-" command! S Telescope live_grep
-" command! R Telescope registers
-
-" lua << EOF
-"   local actions = require('telescope.actions')
-"   require('telescope').setup{
-"    defaults = {
-"      mappings = {
-"        i = {
-"          ["<C-h>"] = actions.select_vertical,
-"          ["<C-s>"] = actions.select_horizontal,
-"        },
-"        n = {
-"          ["<C-h>"] = actions.select_vertical,
-"          ["<C-s>"] = actions.select_horizontal,
-"        }
-"      },
-"      layout_strategy = "vertical",
-"      file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-"      grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-"      qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
-"      buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker,
-"    }
-"   }
-" EOF
+" HARPOON
+command HarpoonAddFile :lua require("harpoon.mark").add_file()<CR>
+command HarpoonNavFile1 :lua require("harpoon.ui").nav_file(1)<CR>
+command HarpoonNavFile2 :lua require("harpoon.ui").nav_file(2)<CR>
+command HarpoonNavFile3 :lua require("harpoon.ui").nav_file(3)<CR>
+command HarpoonNavFile4 :lua require("harpoon.ui").nav_file(4)<CR>
+command HarpoonToggleQuickMenu :lua require("harpoon.ui").toggle_quick_menu()<CR>
+command HarpoonGotoTerminal1 :lua require("harpoon.term").gotoTerminal(1)<CR>
+command HarpoonGotoTerminal2 :lua require("harpoon.term").gotoTerminal(2)<CR>
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions
 " Npm Lint
@@ -244,15 +221,22 @@ map <leader>t <Plug>(easymotion-overwin-f)
 " <leader>c is close the current pane
 map <leader>x 'close<CR>
 " <leader>o is close the current pane
-map <leader>o 'on<CR>
+" map <leader>o 'on<CR>
 " search file names quick
-map <leader>n 'F<CR>
+map <leader>f 'F<CR>
 " search file content quick
-nmap <leader>N 'S<CR>
+nmap <leader>F 'S<CR>
 " write
 map <leader>w 'w<CR>
 " quit
 map <leader>q 'q<CR>
+
+map <leader>y 'HarpoonToggleQuickMenu<CR>
+map <leader>Y 'HarpoonAddFile<CR>
+map <leader>n 'HarpoonNavFile1<CR>
+map <leader>e 'HarpoonNavFile2<CR>
+map <leader>o 'HarpoonNavFile3<CR>
+map <leader>i 'HarpoonNavFile4<CR>
 
 " {n,e,y,o} use visual navigaton instead of line navigaton
 map n gn
