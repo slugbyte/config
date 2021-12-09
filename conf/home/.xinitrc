@@ -1,0 +1,1 @@
+/home/slugbyte/.config/x/xinitrc
