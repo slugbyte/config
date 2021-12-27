@@ -1,7 +1,7 @@
 call plug#begin('~/.config/nvim/plug')
   " HARPOON
   Plug 'nvim-lua/plenary.nvim' 
-  Plug 'ThePrimeagen/harpoon'
+  " Plug 'ThePrimeagen/harpoon'
   " LANG
   Plug 'cespare/vim-toml'
   Plug 'leafgarland/typescript-vim'
@@ -215,7 +215,7 @@ nmap <leader>s <Plug>(coc-codeaction-selected)aw
 nmap <leader>S :CocCommand cSpell.addWordToUserDictionnary<cr>
 
 " <leader> c is toggle comment
-map <leader>c gcc
+map <leader>c gcc<esc>
 " <leader>t is goto any char on screen
 map <leader>t <Plug>(easymotion-overwin-f)
 " <leader>c is close the current pane
@@ -238,6 +238,8 @@ map <leader>e 'HarpoonNavFile2<CR>
 map <leader>o 'HarpoonNavFile3<CR>
 map <leader>i 'HarpoonNavFile4<CR>
 
+
+
 " {n,e,y,o} use visual navigaton instead of line navigaton
 map n gn
 map e ge
@@ -245,7 +247,13 @@ map y gy
 map o go
 au VimEnter * unmap @
 
+" map <C-o> to fullscreen a pain
+map <C-f> 'on<CR>
+
 " vim-command-line key binding
-cnoremap <C-A> <Home>
-cnoremap <C-L> <S-Right>
-cnoremap <C-H> <S-Left>
+nnoremap <C-Down> :m .+1<CR>==
+nnoremap <C-Up> :m .-2<CR>==
+inoremap <C-Down> <Esc>:m .+1<CR>==gi
+inoremap <C-Up> <Esc>:m .-2<CR>==gi
+vnoremap <C-Down> :m '>+1<CR>gv=gv
+vnoremap <C-Up> :m '<-2<CR>gv=gv

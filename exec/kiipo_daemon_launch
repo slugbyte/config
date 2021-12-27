@@ -18,4 +18,11 @@ pm2 start $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend/bin/s
   -o $LOG_DIR/labfront_admin_portal_frontend.stdout.txt \
   -e $LOG_DIR/labfront_admin_portal_frontend.stderr.txt
 
+cd $HOME/workspace/code/kiipo/pomelo/backend
+NODE_ENV=develop pm2 start $HOME/workspace/code/kiipo/pomelo/backend/src/api/bin/run.js \
+  --name pomelo_backend_develop \
+  -o $LOG_DIR/pomelo_backend_develop.stdout.txt \
+  -e $LOG_DIR/pomelo_backend_develop.stderr.txt
+
 pm2 save --force
+
