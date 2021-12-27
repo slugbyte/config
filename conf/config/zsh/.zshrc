@@ -2,59 +2,51 @@
 setopt no_clobber # let me overwrite files
 setopt rm_star_silent # dont ask to delete
 setopt chase_links # resolve symlinks
-setopt extended_glob # better glob 
+setopt extended_glob # better glob
 setopt glob_dots # glob include dotfiles
-
-# better zsh completion
-zstyle ':completion:*' menu select
+zstyle ':completion:*' menu select # better zsh completion
 
 # Environment Variabels
-export EMAIL='slugbyte@slugbyte.com'
-export FULLNAME='Duncan Marsh'
-export SHELL=$(which zsh)
-export PAGER=$(which less)
-export EDITOR=$(which vim)
-export GPG_TTY=$(tty)
-export LC_ALL='en_US.UTF-8'
+# ZSH
 export ZDOTDIR="$HOME/.config/zsh"
 
+# MOLD
+export MOLD_ROOT="$HOME/workspace"
+export w=$MOLD_ROOT
+export PATH="$MOLD_ROOT/exec:$MOLD_ROOT/exec/ignore:$PATH"
+
+# XDG
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
 export XDG_DATA_HOME=$HOME/.local/share
 export XDG_RUNTIME_DIR=$HOME/.runtime
 
-# Mold Init
-export MOLD_ROOT="$HOME/workspace"
-export MOLD_SIGN='true'
-export PATH="$MOLD_ROOT/exec:$MOLD_ROOT/exec/ignore:$PATH"
-export w=$MOLD_ROOT
+# WHOAMI
+export EMAIL='slugbyte@slugbyte.com'
+export FULLNAME='Duncan Marsh'
+
+# GENERAL
+export SHELL=$(which zsh)
+export PAGER=$(which less)
+export EDITOR=$(which vim)
+export LC_ALL='en_US.UTF-8'
+
+# LOAD SHELL PLUGIN
 for plug in $MOLD_ROOT/plug/* ;do
-  source $plug
+  if ! [[ -d $secret ]]; then
+    source $plug
+  fi
 done
 
 # LOAD SECRETS
 export SECRET_DIR="$MOLD_ROOT/hide"
-for  secret in $SECRET_DIR/env/*.sh; do 
-  source $secret
+for  secret in $SECRET_DIR/env/*.sh; do
+  if ! [[ -d $secret ]]; then
+    source $secret
+  fi
 done
 
-# Custom Error Exit Status
-handle_error(){
-  echo "FAILED: status code $?"
-}
-
-# TODO: STOP THE TRAP FROM FIRING ON PROMPT PRECMD find_git*
-#trap handle_error ERR
-
-# set the window titile for the terminal script
-print -n "\e]2;__XOXO__:$PWD"
-
-precmd(){
-  print -n "\e]2;__XOXO__:$PWD"
-}
-
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-export PATH=$(clean_path)
+# dedupe the path
+if [[ -x "$(command -v clean_path)" ]];then
+  export PATH=$(clean_path)
+fi
