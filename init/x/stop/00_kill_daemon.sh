@@ -1,7 +1,8 @@
 # init/x daemon
-killall pulseaudio || true
+killall pipewire || true
+killall pipewire-pulse || true
 killall xautolock || true
-killall ibus-daemon || true
+# killall ibus-daemon || true
 killall clipmenud || true
 killall dropbox || true
 pm2 kill || true

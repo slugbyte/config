@@ -9,18 +9,19 @@
   offset-y = 0
   enable-ipc = true
   override-redirect = true
-  
-[bar/right]
-  inherit = section/base
-  monitor = ${env:WM_STYLE_MONITOR_RIGHT:}
-  modules-left = monitor_focus_right bspwm
-  modules-right = cpu memory pulseaudio date 
 
-[bar/left]
+[bar/main]
   inherit = section/base
-  monitor = ${env:WM_STYLE_MONITOR_LEFT:}
-  modules-right = cpu filesystem memory pulseaudio date
-  modules-left = wat monitor_focus_left bspwm
+  monitor = ${env:WM_STYLE_MONITOR_MAIN:}
+  modules-left = bspwm
+  modules-right = cpu memory filesystem pulseaudio date battery
+
+[module/battery]
+  type = internal/battery
+  full-at = 99
+  battery = BAT0
+  adapter = AD
+  label-charging = (%percentage%)
 
 [module/date]
   type = internal/date
@@ -35,7 +36,7 @@
 
 [module/cpu]
   type = internal/cpu
-  label = [CPU %percentage%]
+  label = [CPU %percentage%%]
   interval = 2
 
 [module/bspwm]
@@ -48,7 +49,7 @@
 
 [module/memory]
   type = internal/memory
-  label = [MEM %percentage_free%]
+  label = [MEM %percentage_used%%]
   internal = 3
 
 [module/pulseaudio]
@@ -59,18 +60,7 @@
   interval = 1
 
 [module/filesystem]
-  type = internal/filesystem
+  type = internal/fs
   mount-0 = /
-  label = [DISK %percentage_used%]
-  internal = 60
-
-
-[module/monitor_focus_left]
-  type = custom/ipc
-  hook-0 = wm_check_monitor_focus $WM_STYLE_MONITOR_LEFT
-  initial = 1
-
-[module/monitor_focus_right]
-  type = custom/ipc
-  hook-0 = wm_check_monitor_focus $WM_STYLE_MONITOR_RIGHT
-  initial = 1
+  label-mounted = [DISK %percentage_used%%]
+  interval = 20 

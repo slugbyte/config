@@ -4,15 +4,13 @@ source $MOLD_ROOT/plug/wm_style.sh
 
 # tell x what the monitor order is
 xrandr \
-  --output $WM_STYLE_MONITOR_RIGHT \
-  --mode '1920x1080' --rotate normal --right-of $WM_STYLE_MONITOR_LEFT \
-  --output $WM_STYLE_MONITOR_LEFT \
-  --mode '1920x1080' --rotate normal 
+  --output $WM_STYLE_MONITOR_MAIN \
+  --mode '1920x1080' --rotate normal \
+  --set TearFree on
 
-bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2
-bspc monitor $WM_STYLE_MONITOR_RIGHT -d a b
+bspc monitor $WM_STYLE_MONITOR_MAIN -d 1 2 a b 
 
-bspc monitor -f $WM_STYLE_MONITOR_RIGHT
+bspc monitor -f $WM_STYLE_MONITOR_MAIN
 
 bspc config top_padding $WM_STYLE_BAR_HEIGHT
 

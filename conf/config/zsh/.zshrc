@@ -13,7 +13,7 @@ export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 export SHELL=$(which zsh)
 export PAGER=$(which less)
-export EDITOR=$(which vim)
+export EDITOR=$(which nvim)
 export GPG_TTY=$(tty)
 export LC_ALL='en_US.UTF-8'
 export ZDOTDIR="$HOME/.config/zsh"
@@ -34,9 +34,11 @@ done
 
 # LOAD SECRETS
 export SECRET_DIR="$MOLD_ROOT/hide"
-for  secret in $SECRET_DIR/env/*.sh; do 
-  source $secret
-done
+if [[ -d $SECRET_DIR ]];then
+	for  secret in $SECRET_DIR/env/*.sh; do 
+	  source $secret
+	done
+fi
 
 # Custom Error Exit Status
 handle_error(){
@@ -57,4 +59,4 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PATH=$(clean_path)
+# export PATH=$(clean_path)

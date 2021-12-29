@@ -1,3 +1,6 @@
+font:
+  normal:
+    family: NotoSansMono
 colors:
   primary:
     background: '#000000'

@@ -6,7 +6,7 @@ alt + space
   firefox
 
 super + Return
-  rofi -m 1 -show run
+  rofi -show run
 
 # EXIT
 # -- close window
@@ -20,21 +20,10 @@ super + {y,n,e,o}
 
 # -- NEOI (DESKTOP)
 alt + {n,e}
-  bspc monitor -f '^1' && bspc desktop -f {1,2}
+  bspc desktop -f {1,2}
 
 alt + {o,i}
-  bspc monitor -f '^2' && bspc desktop -f {a,b}
-
-# -- FU (MONITOR) 
-super + {f,u}
-  wm_bspc_with_polybar_hooks monitor -f {west,east}
-
-alt + {f,u}
-  wm_bspc_with_polybar_hooks monitor -f {west,east}
-
-# -- tab monitors
-super + Tab
-  wm_toggle_monitor_focus
+  bspc desktop -f {a,b}
 
 # -- tab nodes in desktop
 alt + Tab
@@ -60,11 +49,6 @@ super + j; {y,n,e,o}
 
 super + p;
   CM_LAUNCHER=rofi clipmenu
-
-# SELECT and FOLLOW
-# -- select monitor
-super + s; {f, u}
-  wm_bspc_with_polybar_hooks node -m {west,east} -f
 
 # -- select desktop
 super + s; {n,e,o,i}
