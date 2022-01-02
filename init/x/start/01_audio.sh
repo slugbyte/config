@@ -1,2 +1,2 @@
 pipewire &
-$(sleep 1; pipewire-pulse &) &
+pipewire-pulse &
