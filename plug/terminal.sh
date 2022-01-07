@@ -2,7 +2,9 @@
 terminal_title_set(){
   print -n "\e]2;__XOXO__:$PWD"
 }
+
 terminal_title_set
+
 precmd(){
- terminal_title_set 
+  terminal_title_set 
 }

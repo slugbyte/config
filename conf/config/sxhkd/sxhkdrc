@@ -19,11 +19,12 @@ super + {y,n,e,o}
   wm_bspc_with_polybar_hooks node -f {west,south,north,east}
 
 # -- NEOI (DESKTOP)
-alt + {n,e}
-  bspc monitor -f '^1' && bspc desktop -f {1,2}
+alt + {n,e,o,i}
+  wm_select_desktop {0,1,2,3}
+  # bspc monitor -f '^1' && bspc desktop -f {1,2}
 
-alt + {o,i}
-  bspc monitor -f '^2' && bspc desktop -f {a,b}
+# alt + {o,i}
+#   bspc monitor -f '^2' && bspc desktop -f {a,b}
 
 # -- FU (MONITOR) 
 super + {f,u}
@@ -68,7 +69,8 @@ super + s; {f, u}
 
 # -- select desktop
 super + s; {n,e,o,i}
-  bspc node -d {1,2,a,b} --follow
+  wm_move_to_desktop {0,1,2,3}
+  # bspc node -d {1,2,a,b} --follow
 
 # TOGGLE MODES
 # -- gaps

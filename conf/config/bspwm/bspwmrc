@@ -12,8 +12,8 @@ xrandr \
 xrandr --output $WM_STYLE_MONITOR_LEFT --set TearFree on
 xrandr --output $WM_STYLE_MONITOR_RIGHT --set TearFree on
 
-bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2
-bspc monitor $WM_STYLE_MONITOR_RIGHT -d a b
+bspc monitor $WM_STYLE_MONITOR_LEFT -d 1 2 3 4
+bspc monitor $WM_STYLE_MONITOR_RIGHT -d a b c d
 
 bspc monitor -f $WM_STYLE_MONITOR_RIGHT
 

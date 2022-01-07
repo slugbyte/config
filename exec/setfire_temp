@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ls -a $MOLD_ROOT/temp | grep -v .gitignore | grep -v README.md  | grep -v '^\.$' | grep -v '^\..$' |xargs -I {} trash "${MOLD_ROOT}/temp/{}"
