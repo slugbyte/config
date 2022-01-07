@@ -1,8 +1,11 @@
 #!/bin/bash
 
+SCREENSHOT_DIR=$HOME/Dropbox/img/screenshot
+mkdir -p $SREENSHOT_DIR
+
 name=$1
 if [[ -z $name ]]; then
   name='screenshot'
 fi
 
-scrot "$HOME/workspace/data/screenshot/%Y-%m-%d_%H-%M_$name.png" -s -f
+scrot "$SCREENSHOT_DIR/%Y-%m-%d_%H-%M_$name.png" -s -f

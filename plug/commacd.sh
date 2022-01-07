@@ -24,6 +24,7 @@
 # @license MIT
 
 # turn on case-insensitive search by default
+export COMMACD_CD="z"
 
 if [ -n "$ZSH_VERSION" ]; then
   # CAUTION: if you name local variable "path" (when no_case_glob is set) it

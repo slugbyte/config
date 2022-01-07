@@ -1,1 +1,2 @@
-pulseaudio --start &
+pipewire &
+pipewire-pulse &

@@ -1,3 +1,8 @@
+alias ls="exa -F --group-directories-first $ls_flag"
+alias ll="ls -lah"
+alias la="ls -a"
+alias l1="ls -1a"
+
 exa_fg(){
   echo "38;5;$1"
 }

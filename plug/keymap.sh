@@ -1,10 +1,13 @@
+#
 alias a="git add"
 alias A="git add ."
 alias b="git_branch"
+alias bubye='sudo shutdown -h now'
 alias c="git_commit"
 alias C="git_commit -m"
-alias cn="git_commit --no-verify"
 alias ch="git checkout"
+alias cn="git_commit --no-verify"
+alias cp='cp -r'
 alias d="sudo docker"
 alias e="edit.sh"
 alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
@@ -20,6 +23,7 @@ alias l="git_pull"
 alias L="git_log"
 alias lu="git_pull_upstream"
 alias m="echo naw"
+alias md="mkdir -p"
 # n is allready used in n.sh
 alias nd='echo naw'
 alias o="lfcd"
@@ -38,3 +42,4 @@ alias w="cd $w"
 alias x="git reset"
 alias y="echo naw"
 alias z="echo naw" 
+
