@@ -111,14 +111,14 @@ command! F Files
 command! S Rg
 
 " HARPOON
-command HarpoonAddFile :lua require("harpoon.mark").add_file()<CR>
-command HarpoonNavFile1 :lua require("harpoon.ui").nav_file(1)<CR>
-command HarpoonNavFile2 :lua require("harpoon.ui").nav_file(2)<CR>
-command HarpoonNavFile3 :lua require("harpoon.ui").nav_file(3)<CR>
-command HarpoonNavFile4 :lua require("harpoon.ui").nav_file(4)<CR>
-command HarpoonToggleQuickMenu :lua require("harpoon.ui").toggle_quick_menu()<CR>
-command HarpoonGotoTerminal1 :lua require("harpoon.term").gotoTerminal(1)<CR>
-command HarpoonGotoTerminal2 :lua require("harpoon.term").gotoTerminal(2)<CR>
+" command HarpoonAddFile :lua require("harpoon.mark").add_file()<CR>
+" command HarpoonNavFile1 :lua require("harpoon.ui").nav_file(1)<CR>
+" command HarpoonNavFile2 :lua require("harpoon.ui").nav_file(2)<CR>
+" command HarpoonNavFile3 :lua require("harpoon.ui").nav_file(3)<CR>
+" command HarpoonNavFile4 :lua require("harpoon.ui").nav_file(4)<CR>
+" command HarpoonToggleQuickMenu :lua require("harpoon.ui").toggle_quick_menu()<CR>
+" command HarpoonGotoTerminal1 :lua require("harpoon.term").gotoTerminal(1)<CR>
+" command HarpoonGotoTerminal2 :lua require("harpoon.term").gotoTerminal(2)<CR>
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Functions
 " Npm Lint
@@ -231,12 +231,12 @@ map <leader>w 'w<CR>
 " quit
 map <leader>q 'q<CR>
 
-map <leader>y 'HarpoonToggleQuickMenu<CR>
-map <leader>Y 'HarpoonAddFile<CR>
-map <leader>n 'HarpoonNavFile1<CR>
-map <leader>e 'HarpoonNavFile2<CR>
-map <leader>o 'HarpoonNavFile3<CR>
-map <leader>i 'HarpoonNavFile4<CR>
+" map <leader>y 'HarpoonToggleQuickMenu<CR>
+" map <leader>Y 'HarpoonAddFile<CR>
+" map <leader>n 'HarpoonNavFile1<CR>
+" map <leader>e 'HarpoonNavFile2<CR>
+" map <leader>o 'HarpoonNavFile3<CR>
+" map <leader>i 'HarpoonNavFile4<CR>
 
 
 

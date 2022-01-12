@@ -6,7 +6,7 @@ alt + space
   firefox
 
 super + Return
-  rofi -m 0 -show run
+  rofi -m 1 -show combi -combi-modi "run,window,calc,emoji" -modi combi
 
 # EXIT
 # -- close window
