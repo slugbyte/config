@@ -8,6 +8,9 @@ alt + space
 super + Return
   rofi -m 1 -show combi -combi-modi "run,window,calc,emoji" -modi combi
 
+super + l
+  rofi -m 1 -show combi -combi-modi "run,window,calc,emoji" -modi combi
+
 # EXIT
 # -- close window
 alt + w
