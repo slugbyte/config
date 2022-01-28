@@ -2,3 +2,4 @@
 # bashcompinit
 . .config/zsh/.zshrc
 
+

@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [[ -z "$MOLD_ROOT" ]];then
+  echo "ERROR: \$MOLD_ROOT not set" 1>&2
+  exit 1
+fi
+
 config_root="$MOLD_ROOT/conf/config/"
 config_path_tree=$(find $config_root -name '*')
 
