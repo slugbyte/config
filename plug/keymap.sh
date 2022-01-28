@@ -10,6 +10,7 @@ alias cn="git_commit --no-verify"
 alias cp='cp -r'
 alias d="sudo docker"
 alias e="edit.sh"
+alias E="nvim -u $HOME/.vimrc"
 alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
 alias F="e -c ':F'"
 alias f="git fetch -pv"
