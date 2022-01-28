@@ -1,5 +1,18 @@
+-- alias
+local cmd = vim.cmd
+local fn = vim.fn
+local g = vim.g
+local o = vim.opt
+local map = vim.api.nvim_set_keymap
+
 -- plugin
-require "paq" {
+local paq_install_path = fn.stdpath('data')..'/site/pack/paqs/opt/paq-nvim'
+
+if fn.empty(fn.glob(paq_install_path)) > 0 then
+    cmd('!git clone --depth 1 https://github.com/savq/paq-nvim.git '..paq_install_path)
+end
+
+require('paq') {
   'nvim-lua/plenary.nvim';
   {'slugbyte/unruly-worker', branch = 'stage-3'};
   'cespare/vim-toml';
@@ -8,13 +21,16 @@ require "paq" {
   'tpope/vim-eunuch';
   'tpope/vim-commentary';
   {'neoclide/coc.nvim', branch = 'release'};
+  'junegunn/fzf';
   'junegunn/fzf.vim';
-  'airblade/vim-gitgutter';
+  'airblade/vim-gitgutter'; -- REPLACE WITH gitsigns.nvim
   'nvim-lualine/lualine.nvim';
   'itchyny/vim-gitbranch';
   'slugbyte/yuejiu';
+  {'RRethy/vim-hexokinase', run = 'make hexokinase'};
 }
 
+-- lualine
 require('lualine').setup {
   options = {
     icons_enabled = false,
@@ -24,7 +40,16 @@ require('lualine').setup {
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'filename'},
+    lualine_b = {{
+      'filename',
+      path = 1,
+      file_status = true,
+      symbols = {
+        modified = ' [+]',
+        readonly = ' [readonly]',
+        unnamed = '[no name]',
+      },
+    }},
     lualine_c = {},
     lualine_x = { 'branch', 'filetype' },
     lualine_y = { 'progress' },
@@ -32,92 +57,115 @@ require('lualine').setup {
   }
 }
 
-HOME = os.getenv("HOME")
-XDG_CACHE_HOME = os.getenv("XDG_CACHE_HOME")
+-- settings
+HOME = os.getenv('HOME')
+XDG_CACHE_HOME = os.getenv('XDG_CACHE_HOME')
 
-vim.o.encoding = "utf-8"
-vim.o.backspace = "indent,eol,start"
-vim.o.swapfile = false
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.incsearch = true
-vim.o.tabstop = 2
-vim.o.expandtab = true
-vim.o.shiftwidth = 2
-vim.o.ignorecase = true
-vim.o.cursorline = true
-vim.o.scrolloff = 5
-vim.o.foldenable = false
-vim.o.laststatus = 2
-vim.o.foldnestmax = 4
-vim.o.encoding = "utf8"
-vim.o.showbreak = "+++ "
-vim.o.foldmethod = "indent"
-vim.o.completeopt = "menu"
-vim.o.wildmode = "list:longest"
-vim.o.wildmenu = true
-vim.o.colorcolumn = "80"
-vim.o.clipboard = "unnamedplus"
-vim.o.wrap = false
-vim.o.undofile = true
-vim.o.undodir = XDG_CACHE_HOME .. "/nvim_undo"
-vim.o.hlsearch = false
-vim.g.is_bash = true
+o.encoding = 'utf-8'
+o.backspace = 'indent,eol,start'
+o.swapfile = false
+o.number = true
+o.relativenumber = true
+o.incsearch = true
+o.tabstop = 2
+o.expandtab = true
+o.shiftwidth = 2
+o.ignorecase = true
+o.cursorline = true
+o.scrolloff = 5
+o.foldenable = false
+o.laststatus = 2
+o.foldnestmax = 4
+o.encoding = 'utf8'
+o.showbreak = '+++ '
+o.foldmethod = 'indent'
+o.completeopt = 'menu'
+o.wildmode = 'list:longest'
+o.wildmenu = true
+o.colorcolumn = '80'
+o.clipboard = 'unnamedplus'
+o.wrap = false
+o.undofile = true
+o.undodir = XDG_CACHE_HOME .. '/nvim_undo'
+o.hlsearch = false
+g.is_bash = true
 vim.wo.signcolumn = 'yes'
 
-vim.highlight.ExtraWhitespace = {
-  ctermbg = 197
-}
+cmd('colorscheme yuejiu')
+cmd('source ~/.config/nvim/config/coc.vim')
 
-vim.cmd('colorscheme yuejiu')
-vim.cmd('highlight ExtraWhitespace ctermbg=240')
-vim.cmd('match ExtraWhitespace /\\s\\+$/')
-  -- use 'cespare/vim-toml'
-  -- use 'leafgarland/typescript-vim'
+-- highlight
+cmd('highlight ExtraWhitespace ctermbg=240')
+cmd('match ExtraWhitespace /\\s\\+$/')
 
-  -- use 'christoomey/vim-tmux-navigator'
+-- new commands
+cmd('command! F Files')
+cmd('command! S Rg')
+cmd('command! Reload :source ~/.config/nvim/init.lua')
+cmd('command! EditConfig :e ~/.config/nvim/init.lua')
 
-  -- use 'tpope/vim-eunuch'
+function highlight_toggle()
+  if vim.o.hlsearch then
+    print("highlight off")
+    vim.o.hlsearch = false
+  else
+    print("highlight on")
+    vim.o.hlsearch = true
+  end
+end
 
-  -- use 'tpope/vim-commentary'
+cmd('command! HighlightToggle :lua highlight_toggle()')
 
-  -- use {
-  --   'neoclide/coc.nvim', 
-  --   branch = 'release'
-  -- }
+function ignorecase_toggle ()
+  if vim.o.ignorecase then
+    print("ignorecase off")
+    vim.o.ignorecase = false
+  else
+    print("ignorecase on")
+    vim.o.ignorecase = true
+  end
+end
 
-  -- use 'junegunn/fzf.vim'
+cmd('command! IgnorecaseToggle :lua ignorecase_toggle()')
 
+function pastemode_toggle()
+  if vim.o.paste then
+    print("pastemode off")
+    vim.o.paste = false
+    vim.o.ruler = false
+  else
+    vim.o.paste = true
+    vim.o.ruler = true
+    print("pastemode on")
+  end
+end
 
--- set ruler                  "  show the cursor position in the status bar
--- set noswapfile             "  no more swap files
--- set nobackup               "  don't create backups before overwrite
--- set number relativenumber  "  hybrid relative number
--- set mouse=a                "  allow the mouse to interact with vim
--- set autoread               "  when you run checktime it will refresh the file
--- set incsearch              "  vim starts searching while typing search string
--- set tabstop=2              "  make \t appear to be two spaces wide
--- set expandtab              "  convert tab to spaces (unless a filetype plugin changes that)
--- set ignorecase             "  non-case sensitive search 
--- set smartcase              " ignorecase unless the search uses uppercase
--- set cursorline             "  highlight the line current cursor line
--- set shiftwidth=2           "  make vim indent functions apply or remove two spaces
--- set backspace=2            "  make backspace 
--- set scrolloff=5            "  when scrolling up keep 5 lines of code at the top of the screen
--- set nofoldenable           "  stop vim from folding indent levels when opening a file
--- set laststatus=2           "  show the status line
--- set foldnestmax=4          "  don't fold more than four levels deep
--- set encoding=utf8          "  treat all text as utf-8
--- set showbreak="+++ "       "  mark the lines that overflow screen width using +++
--- set foldmethod=indent      "  fold and unfold text based on indent level
--- set completeopt-=preview   "  stop plugins from adding a docs window on tab completion
--- set wildmode=list:longest  "  configure tab completion to list all matches when there is more than one
--- set wildmenu               "  enable tab completion in the command bar
--- set colorcolumn=80         "  enable a visible column on the 80th char -(see)->
--- set clipboard=unnamedplus  "  use tes system clipboard for copy and paste
--- set nowrap                 "  don't wrap lines around
--- set undofile               "  always keep an undo histroy
--- set undodir=~/.local/slugbyte/nvim_undo
--- let g:is_bash=1            "  treat .sh files as bash scripts
--- set nohlsearch
+cmd('command! PastemodeToggle :lua pastemode_toggle()')
 
+-- keymap
+vim.g.mapleader = ' '
+
+-- shift lines up and down
+map('n', '<C-Down>', ':m .+1<CR>==', {noremap = true})
+map('n', '<C-Up>', ':m .-2<CR>==', {noremap = true})
+map('i', '<C-Down>', ':m .+1<CR>==', {noremap = true})
+map('i', '<C-Up>', ':m .-2<CR>==', {noremap = true})
+map('v', '<C-Down>', ":m '>+1<CR>gv=gv", {noremap = true})
+map('v', '<C-Up>', ":m '<-2<CR>gv=gv", {noremap = true})
+
+-- always g move
+cmd('map n gn')
+cmd('map e ge')
+cmd('map y gy')
+cmd('map o go')
+
+-- spellcheck
+map('n', '<leader>s', '<Plug>(coc-codeaction-selected)aw', {})
+map('n', '<leader>S', "'CocCommand cSpell.addWordToUserDictionnary<cr>", {})
+
+-- shorthand
+map('n', '<leader>c', 'gcc<esc>', {})
+map('n', '<leader>w', "'w<CR>", {})
+map('n', '<leader>q', "'q<CR>", {})
+map('n', '<leader>f', "'F<CR>", {})
+map('n', '<leader>F', "'S<CR>", {})
