@@ -28,6 +28,7 @@ require('paq') {
   'itchyny/vim-gitbranch';
   'slugbyte/yuejiu';
   {'RRethy/vim-hexokinase', run = 'make hexokinase'};
+  'rust-lang/rust.vim';
 }
 
 -- lualine
@@ -158,6 +159,11 @@ cmd('map n gn')
 cmd('map e ge')
 cmd('map y gy')
 cmd('map o go')
+cmd('autocmd FileType markdown setlocal wrap')
+cmd('autocmd FileType markdown setlocal textwidth=80')
+cmd('autocmd FileType markdown setlocal linebreak')
+cmd('autocmd FileType markdown setlocal spell')
+
 
 -- spellcheck
 map('n', '<leader>s', '<Plug>(coc-codeaction-selected)aw', {})
