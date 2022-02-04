@@ -22,9 +22,14 @@ A list of some of my favorite command line tools for enhancing programming workf
 * [figlet](http://www.figlet.org/) - A program for makin large letters out of text
 * [fzf](https://github.com/junegunn/fzf) - A command-line fuzzy finder
 * [git aware prompt](https://github.com/jimeh/git-aware-prompt) - Display git branch name in your terminal prompt
-* [goto](https://github.com/iridakos/goto) - A shell utility to quickly navigate to aliased directories supporting auto-completion
+* [gkill](https://github.com/heppu/gkill) - an interactive process killer
 * [gpg](https://www.gnupg.org/) - allows you to encrypt and sign your data and communications
+* [htop](https://github.com/htop-dev/htop) - an interactive process viewer
 * [httpie](https://httpie.org/) - a command line HTTP client with an intuitive UI, JSON support, and syntax highlighting
+* [lazydocker](https://github.com/jesseduffield/lazydocker) - a terminal UI for docker
+* [lazygit](https://github.com/jesseduffield/lazygit) - a terminal UI for git
+* [leiningen](https://leiningen.org/) - a clojure build tool
+* [nushell](https://www.nushell.sh/) - a new type of shell
 * [nvim](https://neovim.io/) - the future of vim (the text editor) 
 * [sops](https://github.com/mozilla/sops) - encrypt and decrypt the keys of config files with PGP or a cloud KMS providers keys
 * [the\_silver\_searcher](https://github.com/ggreer) - A code-searching tool similar to ack, but faster

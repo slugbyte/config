@@ -26,37 +26,51 @@ require('paq') {
   'airblade/vim-gitgutter'; -- REPLACE WITH gitsigns.nvim
   'nvim-lualine/lualine.nvim';
   'itchyny/vim-gitbranch';
-  'slugbyte/yuejiu';
   {'RRethy/vim-hexokinase', run = 'make hexokinase'};
   'rust-lang/rust.vim';
+  'gelguy/wilder.nvim';
+  'RRethy/vim-hexokinase';
+  'Olical/conjure';
+  'bakpakin/fennel.vim';
+  'tpope/vim-surround';
+  'Olical/aniseed';
+  'supercollider/scvim';
+  'slugbyte/yuejiu';
+  'slugbyte/wet-vim';
+  'morhetz/gruvbox';
 }
 
+cmd('let g:conjure#mapping#prefix = ","')
+
+
 -- lualine
-require('lualine').setup {
-  options = {
-    icons_enabled = false,
-    theme = 'everforest',
-    section_separators = { left = '', right = '' },
-    component_separators = { left = '', right = '' },
-  },
-  sections = {
-    lualine_a = {'mode'},
-    lualine_b = {{
-      'filename',
-      path = 1,
-      file_status = true,
-      symbols = {
-        modified = ' [+]',
-        readonly = ' [readonly]',
-        unnamed = '[no name]',
-      },
-    }},
-    lualine_c = {},
-    lualine_x = { 'branch', 'filetype' },
-    lualine_y = { 'progress' },
-    lualine_z = { 'location' },
-  }
-}
+-- local wet_lualine = require ('wet').lualine
+-- require('lualine').setup {
+--   options = {
+--     icons_enabled = false,
+--     theme = wet_lualine,
+--     -- theme = 'everforest',
+--     section_separators = { left = '', right = '' },
+--     component_separators = { left = '', right = '' },
+--   },
+--   sections = {
+--     lualine_a = {'mode'},
+--     lualine_b = {{
+--       'filename',
+--       path = 1,
+--       file_status = true,
+--       symbols = {
+--         modified = ' [+]',
+--         readonly = ' [readonly]',
+--         unnamed = '[no name]',
+--       },
+--     }},
+--     lualine_c = {},
+--     lualine_x = { 'branch', 'filetype' },
+--     lualine_y = { 'progress' },
+--     lualine_z = { 'location' },
+--   }
+-- }
 
 -- settings
 HOME = os.getenv('HOME')
@@ -89,10 +103,15 @@ o.wrap = false
 o.undofile = true
 o.undodir = XDG_CACHE_HOME .. '/nvim_undo'
 o.hlsearch = false
+o.mouse = 'a'
 g.is_bash = true
+o.termguicolors = true
 vim.wo.signcolumn = 'yes'
 
-cmd('colorscheme yuejiu')
+cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
+
+
+cmd('colorscheme wet')
 cmd('source ~/.config/nvim/config/coc.vim')
 
 -- highlight
@@ -164,6 +183,8 @@ cmd('autocmd FileType markdown setlocal textwidth=80')
 cmd('autocmd FileType markdown setlocal linebreak')
 cmd('autocmd FileType markdown setlocal spell')
 
+-- wilder menu
+cmd("call wilder#setup({'modes': [':', '/', '?']})")
 
 -- spellcheck
 map('n', '<leader>s', '<Plug>(coc-codeaction-selected)aw', {})
