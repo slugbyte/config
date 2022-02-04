@@ -42,35 +42,34 @@ require('paq') {
 
 cmd('let g:conjure#mapping#prefix = ","')
 
-
 -- lualine
--- local wet_lualine = require ('wet').lualine
--- require('lualine').setup {
---   options = {
---     icons_enabled = false,
---     theme = wet_lualine,
---     -- theme = 'everforest',
---     section_separators = { left = '', right = '' },
---     component_separators = { left = '', right = '' },
---   },
---   sections = {
---     lualine_a = {'mode'},
---     lualine_b = {{
---       'filename',
---       path = 1,
---       file_status = true,
---       symbols = {
---         modified = ' [+]',
---         readonly = ' [readonly]',
---         unnamed = '[no name]',
---       },
---     }},
---     lualine_c = {},
---     lualine_x = { 'branch', 'filetype' },
---     lualine_y = { 'progress' },
---     lualine_z = { 'location' },
---   }
--- }
+local wet_lualine = require ('wet').lualine
+require('lualine').setup {
+  options = {
+    icons_enabled = false,
+    theme = wet_lualine,
+    -- theme = 'everforest',
+    section_separators = { left = '', right = '' },
+    component_separators = { left = '', right = '' },
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {{
+      'filename',
+      path = 1,
+      file_status = true,
+      symbols = {
+        modified = ' [+]',
+        readonly = ' [readonly]',
+        unnamed = '[no name]',
+      },
+    }},
+    lualine_c = {},
+    lualine_x = { 'branch', 'filetype' },
+    lualine_y = { 'progress' },
+    lualine_z = { 'location' },
+  }
+}
 
 -- settings
 HOME = os.getenv('HOME')
@@ -112,7 +111,7 @@ cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
 
 
 cmd('colorscheme wet')
-cmd('source ~/.config/nvim/config/coc.vim')
+cmd('source ~/.config/nvim/coc.vim')
 
 -- highlight
 cmd('highlight ExtraWhitespace ctermbg=240')
@@ -173,11 +172,6 @@ map('i', '<C-Up>', ':m .-2<CR>==', {noremap = true})
 map('v', '<C-Down>', ":m '>+1<CR>gv=gv", {noremap = true})
 map('v', '<C-Up>', ":m '<-2<CR>gv=gv", {noremap = true})
 
--- always g move
-cmd('map n gn')
-cmd('map e ge')
-cmd('map y gy')
-cmd('map o go')
 cmd('autocmd FileType markdown setlocal wrap')
 cmd('autocmd FileType markdown setlocal textwidth=80')
 cmd('autocmd FileType markdown setlocal linebreak')
