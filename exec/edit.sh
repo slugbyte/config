@@ -5,11 +5,13 @@ argv_length=${#@}
 flag=${1:-}
 
 get_file_path(){
-  local file_path=$(fzf || echo '')
-  local file_path_length=${#file_path}
+  local file_path
+  local file_path_length
+  file_path=$(fzf || echo '')
+  file_path_length=${#file_path}
 
   (( file_path_length > 0 )) && { 
-    echo $file_path
+    echo "$file_path"
     return 0
   }
 
@@ -44,16 +46,16 @@ get_file_path(){
   # edit an executable script on $PATH
   [[ $flag = '-w' ]] && {
     file_path=$2
-    $EDITOR "$(which $file_path)"
+    "$EDITOR" "$(which "$file_path")"
 
     echo 'byebye'
     exit 0
   }
-  
+
   $EDITOR "$@"
   exit 0
 }
 
-$EDITOR 
+$EDITOR
 exit 0
 
