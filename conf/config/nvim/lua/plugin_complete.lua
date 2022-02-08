@@ -1,5 +1,11 @@
 local cmp = require'cmp'
+
 cmp.setup({
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end
+  },
   mapping = {
     ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
     ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
@@ -24,10 +30,11 @@ cmp.setup({
     end, { "i", "s" }),
   },
   sources = cmp.config.sources(
-    { { name = 'buffer' }, },
     { { name = 'nvim_lsp' }, },
+    { { name = 'path' }, },
+    { { name = 'buffer' }, },
     { { name = 'nvim_lua' }, },
-    { { name = 'path' }, }
+    { { name = 'luasnip' }, }
   ),
 })
 
@@ -47,8 +54,8 @@ cmp.setup.cmdline(':', {
   })
 })
 
--- cmp Setup lspconfig.
-require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- cmp Setup lspconfig. (this breaks the ability to keep suggestions while typing?)
+-- require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- cmp If you want insert `(` after select function or method item
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')

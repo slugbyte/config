@@ -12,7 +12,8 @@ require('paq') {
   'rktjmp/lush.nvim';
 
   -- slugbyte
-  'slugbyte/unruly-worker';
+  -- {'slugbyte/unruly-worker', branch = 'main'}
+  {'slugbyte/unruly-worker'};
   'slugbyte/wet-vim';
 
   -- general util
@@ -26,6 +27,8 @@ require('paq') {
   "blackCauldron7/surround.nvim";
 
   -- completion
+  'L3MON4D3/LuaSnip';
+  'saadparwaiz1/cmp_luasnip';
   'hrsh7th/nvim-cmp';
   'hrsh7th/cmp-nvim-lsp';
   'hrsh7th/cmp-nvim-lua';
