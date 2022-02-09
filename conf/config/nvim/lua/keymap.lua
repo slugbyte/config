@@ -18,6 +18,12 @@ vim.g.mapleader = ' '
 map('n', '<leader>w', "'w<CR>", {})
 map('n', '<leader>q', "'q<CR>", {})
 
+-- tmux
+map('n', '<C-n>', ":TmuxNavigateDown<CR>", {silent = true})
+map('n', '<C-e>', ":TmuxNavigateUp<CR>", {silent = true})
+map('n', '<C-o>', ":TmuxNavigateRight<CR>", {silent = true})
+map('n', '<C-y>', ":TmuxNavigateLeft<CR>", {silent = true})
+
 -- surround
 map("n", '<leader>r', "<Plug>SurroundReplace", {})
 map("n", '<leader>d', "<Plug>SurroundDelete", {})

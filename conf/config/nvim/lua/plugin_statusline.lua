@@ -7,7 +7,7 @@ require('lualine').setup {
     component_separators = { left = '', right = '' },
   },
   sections = {
-    lualine_a = {'mode'},
+    lualine_a = {'mode' },
     lualine_b = {{
       'filename',
       path = 1,
@@ -21,7 +21,7 @@ require('lualine').setup {
     lualine_c = {},
     lualine_x = { 'branch', 'filetype' },
     lualine_y = { 'progress' },
-    lualine_z = { 'location' },
+    lualine_z = { 'location', 'diagnostics' },
   }
 }
 

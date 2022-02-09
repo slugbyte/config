@@ -5,6 +5,9 @@ if vim.fn.empty(vim.fn.glob(paq_install_path)) > 0 then
     vim.cmd('!git clone --depth 1 https://github.com/savq/paq-nvim.git '..paq_install_path)
 end
 
+-- set disable globals
+vim.g.tmux_navigator_no_mappings = 1
+
 -- plugin list
 require('paq') {
   -- dependency
