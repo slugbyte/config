@@ -15,6 +15,3 @@ function Edit_Config()
 end
 
 vim.cmd('command! EditConfig :lua Edit_Config()')
-
-vim.cmd('command! F :Files')
-vim.cmd('command! S :Rg')

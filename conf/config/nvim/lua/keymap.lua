@@ -24,8 +24,8 @@ map("n", '<leader>d', "<Plug>SurroundDelete", {})
 map("v", 's', "<Plug>SurroundAddVisual", {})
 
 -- fzf
-map('', 'j', ":F<CR>", {noremap = true})
-map('', 'J', ":S<CR>", {noremap = true})
+map('', 'j', ":Files<CR>", {noremap = true})
+map('', 'J', ":Rg<CR>", {noremap = true})
 
 -- conjure
 vim.cmd('let g:conjure#mapping#prefix = ","')

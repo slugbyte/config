@@ -1,4 +1,4 @@
-#
+#!/usr/bin/env bash
 alias a="git add"
 alias A="git add ."
 alias b="git_branch"
@@ -12,10 +12,9 @@ alias d="sudo docker"
 alias e="edit.sh"
 alias E="nvim -u $HOME/.vimrc"
 alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
-alias F="e -c ':F'"
+alias F="e -c ':Files'"
 alias f="git fetch -pv"
 alias g="echo naw"
-alias G="e -c ':G'"
 # h is allready used by commacd.sh
 alias i="ip_address"
 alias j="echo naw"
@@ -35,7 +34,7 @@ alias r="git_rebase"
 alias ri="git_rebase -i"
 alias R="source ~/.config/zsh/.zshrc"
 alias s="git status"
-alias S="e -c ':S'"
+alias S="e -c ':Rg'"
 alias t="git_tag"
 alias u="git_update"
 alias v="echo naw"
