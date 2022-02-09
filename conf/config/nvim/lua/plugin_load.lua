@@ -14,7 +14,7 @@ require('paq') {
   -- slugbyte
   -- {'slugbyte/unruly-worker', branch = 'main'}
   {'slugbyte/unruly-worker'};
-  'slugbyte/wet-vim';
+  'slugbyte/wet-nvim';
 
   -- general util
   'christoomey/vim-tmux-navigator';
