@@ -30,9 +30,9 @@ cmp.setup({
     end, { "i", "s" }),
   },
   sources = cmp.config.sources(
+    { { name = 'buffer' }, },
     { { name = 'nvim_lsp' }, },
     { { name = 'path' }, },
-    { { name = 'buffer' }, },
     { { name = 'nvim_lua' }, },
     { { name = 'luasnip' }, }
   ),
@@ -58,5 +58,5 @@ cmp.setup.cmdline(':', {
 -- require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- cmp If you want insert `(` after select function or method item
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = '' } }))
+-- local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+-- cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = '' } }))
