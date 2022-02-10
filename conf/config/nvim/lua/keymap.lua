@@ -14,9 +14,15 @@ unruly_worker.setup({
 
 vim.g.mapleader = ' '
 
+
+function Save()
+  vim.cmd("silent! wall")
+  print("[files saved]", string.sub(math.random() .. "", -4, -1))
+end
+
 -- window
-map('n', '<leader>w', "'w<CR>", {})
-map('n', '<leader>q', "'q<CR>", {})
+map('n', '<leader>w', "'lua Save()<CR>", {})
+map('n', '<leader>q', "'qall<CR>", {})
 
 -- tmux
 map('n', '<C-n>', ":TmuxNavigateDown<CR>", {silent = true})
@@ -30,8 +36,16 @@ map("n", '<leader>d', "<Plug>SurroundDelete", {})
 map("v", 's', "<Plug>SurroundAddVisual", {})
 
 -- fzf
-map('', 'j', ":Files<CR>", {noremap = true})
-map('', 'J', ":Rg<CR>", {noremap = true})
+map('', 'j', ":Telescope find_files<CR>", {noremap = true})
+map('', 'J', ":Telescope live_grep<CR>", {noremap = true})
+
+-- jump scroll
+map('', '@', "zt", {noremap = true})
+map('', '$', "zz", {noremap = true})
+map('', '#', "zb", {noremap = true})
+
+-- lsp
+map('', '&', ':lua vim.diagnostic.open_float()<CR>', {noremap = true})
 
 -- conjure
 vim.cmd('let g:conjure#mapping#prefix = ","')

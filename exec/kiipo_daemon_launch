@@ -1,28 +1,33 @@
 #!/usr/bin/env bash
-#pm2 kill
+
+pm2 kill --force || true
 
 LOG_DIR="$HOME/workspace/tail"
-mkdir -p $LOG_DIR
+mkdir -p "$LOG_DIR"
 
-cd $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend
+cd "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend" || exit 1
 
-pm2 start $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend/bin/www \
+pm2 start "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend/bin/www" \
   --name labfront_admin_portal_backend \
-  -o $LOG_DIR/labfront_admin_portal_backend.stdout.txt \
-  -e $LOG_DIR/labfront_admin_portal_backend.stderr.txt
+  -o "$LOG_DIR/labfront_admin_portal_backend.stdout.txt" \
+  -e "$LOG_DIR/labfront_admin_portal_backend.stderr.txt"
 
-
-cd $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend
-pm2 start $HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend/bin/serve.js \
+cd "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend" || exit 1
+pm2 start "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend/bin/serve.js" \
   --name labfront_admin_portal_frontend \
-  -o $LOG_DIR/labfront_admin_portal_frontend.stdout.txt \
-  -e $LOG_DIR/labfront_admin_portal_frontend.stderr.txt
+  -o "$LOG_DIR/labfront_admin_portal_frontend.stdout.txt" \
+  -e "$LOG_DIR/labfront_admin_portal_frontend.stderr.txt"
 
-# cd $HOME/workspace/code/kiipo/pomelo/backend
-# NODE_ENV=develop pm2 start $HOME/workspace/code/kiipo/pomelo/backend/src/api/bin/run.js \
-#   --name pomelo_backend_develop \
-#   -o $LOG_DIR/pomelo_backend_develop.stdout.txt \
-#   -e $LOG_DIR/pomelo_backend_develop.stderr.txt
+cd "$HOME/workspace/code/kiipo/pomelo/backend" || exit 1
+
+NODE_ENV=develop PORT=9000 pm2 start src/api/bin/run.js \
+  --name pomelo_backend_develop_http \
+  -o "$LOG_DIR/pomelo_backend_develop_http.stdout.txt" \
+  -e "$LOG_DIR/pomelo_backend_develop_http.stderr.txt"
+
+NODE_ENV=develop HTTPS_ENABLE=true PORT=9001 pm2 start src/api/bin/run.js \
+  --name pomelo_backend_develop_https \
+  -o "$LOG_DIR/pomelo_backend_develop_https.stdout.txt" \
+  -e "$LOG_DIR/pomelo_backend_develop_https.stderr.txt"
 
 pm2 save --force
-

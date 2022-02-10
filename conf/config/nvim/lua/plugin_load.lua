@@ -24,8 +24,9 @@ require('paq') {
   'norcalli/nvim-colorizer.lua';
   'numToStr/Comment.nvim';
   'tpope/vim-eunuch';
-  'junegunn/fzf.vim';
-  'junegunn/fzf';
+  -- 'junegunn/fzf.vim';
+  -- 'junegunn/fzf';
+  'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
   "blackCauldron7/surround.nvim";
 
