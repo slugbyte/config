@@ -30,7 +30,15 @@ cmp.setup({
     end, { "i", "s" }),
   },
   sources = cmp.config.sources(
-    { { name = 'buffer' }, },
+    { {
+        name = 'buffer',
+        option =  {
+          -- use all loaded buffers
+          get_bufnrs = function()
+            return vim.api.nvim_list_bufs()
+          end
+        }
+      }, },
     { { name = 'nvim_lsp' }, },
     { { name = 'path' }, },
     { { name = 'nvim_lua' }, },
@@ -38,8 +46,8 @@ cmp.setup({
   ),
 })
 
--- cmp Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
+  -- cmp Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   sources = {
     { name = 'buffer' }
   }

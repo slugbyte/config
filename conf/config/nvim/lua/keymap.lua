@@ -17,7 +17,7 @@ vim.g.mapleader = ' '
 
 function Save()
   vim.cmd("silent! wall")
-  print("[files saved]", string.sub(math.random() .. "", -4, -1))
+  print("[write all]", string.sub(math.random() .. "", -4, -1))
 end
 
 -- window
@@ -45,7 +45,7 @@ map('', '$', "zz", {noremap = true})
 map('', '#', "zb", {noremap = true})
 
 -- lsp
-map('', '&', ':lua vim.diagnostic.open_float()<CR>', {noremap = true})
+map('', '&', ':lua vim.diagnostic.open_float()<CR>', {noremap = true, silent = true})
 
 -- conjure
 vim.cmd('let g:conjure#mapping#prefix = ","')
