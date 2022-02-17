@@ -1,33 +1,82 @@
 #!/usr/bin/env bash
 
-pm2 kill --force || true
-
+## SETUP ENV
 LOG_DIR="$HOME/workspace/tail"
 mkdir -p "$LOG_DIR"
 
-cd "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend" || exit 1
+## HELPER FUNCTIONS
+log(){
+  echo
+  echo "$(tput setaf 141)[$1]$(tput setaf 105) $2$(tput sgr 0)"
+}
 
-pm2 start "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend/bin/www" \
+err(){
+  echo
+  echo "$(tput setaf 1)[$1]$(tput setaf 209) $2$(tput sgr 0)"
+}
+
+update_project(){
+  log "GIT PULL" "$1"
+  git pull || {
+    err "ERROR" "failled to git pull ($1)"
+    exit 1
+  }
+
+  log "NPM INSTALL" "$1"
+  npm i  || {
+    err "ERROR" "failled to npm install ($1)"
+    exit 1
+  }
+}
+
+goto() {
+  cd "$1" || {
+    err "GOTO ERROR" "unable to cd to $1"
+    exit 1
+  }
+}
+
+## MAIN
+log "START" "launching and restarting all kiipo demons"
+
+## KILLALL KIIPOO DAEMONS
+log "RESET" "stoping all running kiipo daemons"
+pm2 kill --force || true
+
+## ADMIN PORTAL BACKEND
+goto "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend" 
+update_project "ADMIN PORTAL BACKEND"
+log "LAUNCHING" "ADMIN PORTAL BACKEND"
+pm2 start "bin/www" \
   --name labfront_admin_portal_backend \
   -o "$LOG_DIR/labfront_admin_portal_backend.stdout.txt" \
   -e "$LOG_DIR/labfront_admin_portal_backend.stderr.txt"
 
-cd "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend" || exit 1
-pm2 start "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend/bin/serve.js" \
+## ADMIN PORTAL FRONTEND
+goto "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend"
+update_project "ADMIN PORTAL FRONTEND"
+log "LAUNCHING" "ADMIN PORTAL FRONTEND"
+pm2 start "bin/serve.js" \
   --name labfront_admin_portal_frontend \
   -o "$LOG_DIR/labfront_admin_portal_frontend.stdout.txt" \
   -e "$LOG_DIR/labfront_admin_portal_frontend.stderr.txt"
 
-cd "$HOME/workspace/code/kiipo/pomelo/backend" || exit 1
-
+## POMELO BACKEND HTTP
+goto "$HOME/workspace/code/kiipo/pomelo/backend"
+log "LAUNCHING" "POMELO BACKEND HTTP"
 NODE_ENV=develop API_URL=http://192.168.50.106:9000 PORT=9000 pm2 start src/api/bin/run.js \
   --name pomelo_backend_develop_http \
   -o "$LOG_DIR/pomelo_backend_develop_http.stdout.txt" \
   -e "$LOG_DIR/pomelo_backend_develop_http.stderr.txt"
 
+## POMELO BACKEND HTTPS
+goto "$HOME/workspace/code/kiipo/pomelo/backend"
+log "LAUNCHING" "POMELO BACKEND HTTPS"
 NODE_ENV=develop HTTPS_ENABLE=true API_URL=https://192.168.50.106:9001 PORT=9001 pm2 start src/api/bin/run.js \
   --name pomelo_backend_develop_https \
   -o "$LOG_DIR/pomelo_backend_develop_https.stdout.txt" \
   -e "$LOG_DIR/pomelo_backend_develop_https.stderr.txt"
 
+log "SAVE" "storing pm2 state"
 pm2 save --force
+log "DONE" "kiipo daemons have been restarted"
