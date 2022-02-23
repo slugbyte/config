@@ -51,6 +51,8 @@ autoload -U add-zsh-hook
 add-zsh-hook precmd reset_prompt_vars
 
 PROMPT=''
+PROMPT+='%{$color_git_branch%}$PWD'
+PROMPT+=$'\n'
 PROMPT+='%{$color_dir%}$(basename $PWD) '
 PROMPT+='%{$color_git_branch%}${GIT_BRANCH}'
 PROMPT+='%{$color_git_detached%}${GIT_DETACHED}${GIT_DIRTY}'
