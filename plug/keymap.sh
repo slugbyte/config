@@ -22,7 +22,7 @@ alias k="echo naw"
 alias l="git_pull"
 alias L="git_log"
 alias lu="git_pull_upstream"
-alias m="echo naw"
+alias m="make"
 alias md="mkdir -p"
 # n is allready used in n.sh
 alias nd='echo naw'
