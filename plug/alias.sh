@@ -3,6 +3,7 @@
 # alias vim='echo dude, use e!'
 #alias cd='echo dude, use j!'
 
+alias www='xmodmap ~/.Xmodmap'
 # ------ NAV AND FS
 alias ls="exa -F --group-directories-first $ls_flag"
 alias ll="ls -lah"

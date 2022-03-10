@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+xrandr --output $WM_STYLE_MONITOR_MAIN --brightness $1

@@ -10,7 +10,7 @@ alias e="edit.sh"
 alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
 alias F="e -c ':F'"
 alias f="git fetch -pv"
-alias g="echo naw"
+alias g="rg"
 alias G="e -c ':G'"
 # h is allready used by commacd.sh
 alias i="ip_address"

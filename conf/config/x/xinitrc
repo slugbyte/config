@@ -3,3 +3,5 @@
 for init_script in $MOLD_ROOT/init/x/start/*;do
   . $init_script
 done
+
+[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap

@@ -7,13 +7,13 @@ RESULT=$(xdotool getactivewindow getwindowname)
 CHECK=$(echo $RESULT |cut -d ':' -f 1)
 WORKDIR=$(echo $RESULT |cut -d ':' -f 2)
 
-if [[ $CHECK = '__XOXO__' ]]; then 
+if [[ $CHECK = '__XOXO__' ]]; then
   if [ -e $WORKDIR ]; then
     alacritty --working-directory $WORKDIR
-  else 
+  else
     alacritty
   fi
-else 
+else
   alacritty
 fi
 

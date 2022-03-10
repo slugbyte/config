@@ -64,11 +64,11 @@ super + t; {y,n,o}
   bspc node $(bspc query -N -n @parent) -r {0.65,0.5,0.35}
 
 # -- tiled vs floating (u for up)
-super + t; {t,u}
+super + t; {u,i}
   bspc node -t {tiled,\~floating}
 
 # -- fullscreen
-super + t; f
+super + t; u
   wm_toggle_fullscreen
 
 # -- sticky
@@ -76,7 +76,7 @@ super + t; s
   bspc node -g sticky
 
 # -- bar visibility
-super + t; b
+super + t; t
   wm_toggle_polybar
 
 # DANGER (HYPER, SAC)
