@@ -7,6 +7,6 @@
 [pull]
   rebase = false
 [gpg]
-  program = gpg2
+  program = gpg
 [init]
   defaultBranch = develop

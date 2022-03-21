@@ -1,7 +1,9 @@
+font:
+  size: 14
 colors:
   primary:
     background: '#000000'
 window:
   padding:
-    x: 6
-    y: 6
+    x: 10
+    y: 10

@@ -28,7 +28,7 @@ export FULLNAME='Duncan Marsh'
 # GENERAL
 export SHELL=$(which zsh)
 export PAGER=$(which less)
-export EDITOR=$(which vim)
+export EDITOR=$(which nvim)
 export LC_ALL='en_US.UTF-8'
 
 # LOAD SHELL PLUGIN
@@ -50,3 +50,6 @@ done
 if [[ -x "$(command -v clean_path)" ]];then
   export PATH=$(clean_path)
 fi
+
+alias xi="sudo apt-get install -y"
+alias xs="sudo apt-cache search"
