@@ -1,6 +1,6 @@
 # LAUNCHER
-super + space 
-  terminal
+super + space
+  rofi -m 1 -show combi -combi-modi "run,window,calc,emoji" -modi combi
 
 alt + space
   firefox
