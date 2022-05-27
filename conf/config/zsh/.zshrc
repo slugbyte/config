@@ -28,7 +28,7 @@ export FULLNAME='Duncan Marsh'
 # GENERAL
 export SHELL=$(which zsh)
 export PAGER=$(which less)
-export EDITOR=$(which vim)
+export EDITOR=$(which nvim)
 export LC_ALL='en_US.UTF-8'
 
 # LOAD SHELL PLUGIN
