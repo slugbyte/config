@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-temp=$(echo 'example' | gpg --sign --default-key slugbyte@slugbyte.com --armor) 
-
-nohup proton-bridge </dev/null &>/dev/null &

@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-for stop_script in $MOLD_ROOT/init/x/stop/*; do 
-  source $stop_script
-done
-
-pkill -15 Xorg
