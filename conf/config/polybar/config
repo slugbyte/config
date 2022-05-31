@@ -1,26 +1,18 @@
-[colors]
-  backbround = #ffae00
-
 [section/base]
   top = true
-  width = 100%
-  height = ${env:WM_STYLE_BAR_HEIGHT:}
   offset-x = 0
   offset-y = 0
   enable-ipc = true
   override-redirect = true
-  
-[bar/right]
-  inherit = section/base
-  monitor = ${env:WM_STYLE_MONITOR_RIGHT:}
-  modules-left = monitor_focus_right bspwm
-  modules-right = cpu filesystem memory pulseaudio date 
+  width = 30%
+  height = 25px
+  padding = 2
+  border-top-size = 6
+  background = #211f1f
 
-[bar/left]
+[bar/main]
   inherit = section/base
-  monitor = ${env:WM_STYLE_MONITOR_LEFT:}
-  modules-right = cpu filesystem memory pulseaudio date
-  modules-left = wat monitor_focus_left bspwm
+  modules-left= cpu filesystem memory pulseaudio date
 
 [module/date]
   type = internal/date
@@ -35,16 +27,8 @@
 
 [module/cpu]
   type = internal/cpu
-  label = [CPU %percentage%]
+  label = [CPU %percentage%%]
   interval = 2
-
-[module/bspwm]
-  type = internal/bspwm
-  label-dimmed-foreground = #555
-  label-focused = " 0"
-  label-occupied= " ~"
-  label-empty = " *"
-  label-urgent = " !"
 
 [module/memory]
   type = internal/memory
@@ -55,7 +39,7 @@
   type = internal/pulseaudio
   sink = alsa_output.pci-0000_0d_00.4.analog-surround-21
   label-muted = [VOL X]
-  label-volume = [VOL %percentage%]
+  label-volume = [VOL %percentage%%]
   interval = 1
 
 [module/filesystem]
@@ -63,14 +47,3 @@
   mount-0 = /
   label-mounted = [DISK %percentage_used%%]
   internal = 20
-
-
-[module/monitor_focus_left]
-  type = custom/ipc
-  hook-0 = wm_check_monitor_focus $WM_STYLE_MONITOR_LEFT
-  initial = 1
-
-[module/monitor_focus_right]
-  type = custom/ipc
-  hook-0 = wm_check_monitor_focus $WM_STYLE_MONITOR_RIGHT
-  initial = 1

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-bspc $@
-polybar-msg hook monitor_focus_left 1
-polybar-msg hook monitor_focus_right 1

@@ -1,1 +1,0 @@
-dbus-run-session bspwm

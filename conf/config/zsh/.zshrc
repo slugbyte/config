@@ -30,6 +30,7 @@ export SHELL=$(which zsh)
 export PAGER=$(which less)
 export EDITOR=$(which nvim)
 export LC_ALL='en_US.UTF-8'
+export TERM='xterm-256color'
 
 # LOAD SHELL PLUGIN
 for plug in $MOLD_ROOT/plug/* ;do
