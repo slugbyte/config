@@ -23,6 +23,7 @@ end
 -- window
 map('n', '<leader>w', "'lua Save()<CR>", {})
 map('n', '<leader>q', "'qall<CR>", {})
+map('', '<C-g>', ':on<CR>', {})
 
 -- tmux
 map('n', '<C-n>', ":TmuxNavigateDown<CR>", {silent = true})

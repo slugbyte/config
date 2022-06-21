@@ -5,8 +5,10 @@ load_env(){
   else
     file=".env"
   fi
-  if [[ -f $file ]];then 
+  if [[ -f $file ]];then
+    echo "loading: $file"
     export $(cat $file | xargs) 2> /dev/null
+  else
+    echo "file not found: $file"
   fi
-  echo "loaded $file"
 }
