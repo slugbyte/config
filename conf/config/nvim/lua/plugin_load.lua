@@ -29,7 +29,6 @@ require('paq') {
   'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
   -- "blackCauldron7/surround.nvim";
-
   -- completion
   'L3MON4D3/LuaSnip';
   'saadparwaiz1/cmp_luasnip';
