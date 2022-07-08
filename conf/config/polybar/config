@@ -1,6 +1,6 @@
 [section/base]
   top = true
-  offset-x = 0
+  offset-x = 70
   offset-y = 0
   enable-ipc = true
   override-redirect = true

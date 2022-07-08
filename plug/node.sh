@@ -12,3 +12,4 @@ export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
 alias nr='npm run'
 alias ns='npm i -S'
 alias nd='npm i -D'
+alias tp='npm run pompom:test --'
