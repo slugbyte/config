@@ -7,7 +7,10 @@ load_env(){
   fi
   if [[ -f $file ]];then
     echo "loading: $file"
-    export $(cat $file | xargs) 2> /dev/null
+    for line in $(cat $file | rg -v '^#.*' ); do
+      echo $line
+      export $line 2> /dev/null
+    done
   else
     echo "file not found: $file"
   fi

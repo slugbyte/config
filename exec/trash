@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
 
-if [[ -d $HOME/.trash ]]; then
+TRASH_DIR=$HOME/.local/share/Trash/files
+
+# TODO make this way better
+# https://github.com/jrobinson52/command-line-trash/blob/master/trash
+if [[ -d $TRASH_DIR ]]; then
   for f in "$@"; do
     name=$(basename "$f")
     if [[ -d "$f" ]];then
+      source_path=$(readlink -f $f)
       date=$(date +'%Y-%m-%d_%H-%M')
-      output_path="$HOME/.trash/${date}_${RANDOM}_${name}"
+      output_path="$TRASH_DIR/${date}_${RANDOM}_${name}"
       mv "$f" "$output_path" --force
       touch "$output_path"
     else
       checksum=$(shasum "$f" | cut -d ' ' -f 1 | sed -e 's/[[:space:]]*$//')
-      output_path="$HOME/.trash/${checksum}_${name}"
+      output_path="$TRASH_DIR/${checksum}_${name}"
       mv "$f" "$output_path" --force
       touch "$output_path"
     fi

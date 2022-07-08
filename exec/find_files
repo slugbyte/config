@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# this is uses by nvim telescope plugin as the find_files_command
+rg --files --follow --hidden --no-ignore \
+| rg -v node_modules \
+| rg -v target \
+| rg -v '\.git'

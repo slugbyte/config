@@ -22,7 +22,16 @@ alias k="echo naw"
 alias l="git_pull"
 alias L="git_log"
 alias lu="git_pull_upstream"
-alias m="make"
+
+task_runner(){
+  if [[ -f "./package.json" ]];then
+    npm run $@
+  else
+    make $@
+  fi
+}
+
+alias m="task_runner"
 alias md="mkdir -p"
 # n is allready used in n.sh
 alias nd='echo naw'
