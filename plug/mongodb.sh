@@ -11,7 +11,7 @@ mongo(){
   local name
   name="mongo_$RANDOM"
   sudo docker run --name $name -it mongo /usr/bin/mongo \
-    --host 192.168.50.106 \
+    --host 192.168.50.107 \
     -u $MONGO_INITDB_ROOT_USERNAME \
     -p $MONGO_INITDB_ROOT_PASSWORD
   sudo docker rm $name
