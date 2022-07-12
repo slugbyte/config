@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 TRASH_DIR=$HOME/.local/share/Trash/files
+mkdir -p $TRASH_DIR 
 
 # TODO make this way better
 # https://github.com/jrobinson52/command-line-trash/blob/master/trash

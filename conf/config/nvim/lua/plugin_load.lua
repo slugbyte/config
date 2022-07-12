@@ -1,10 +1,10 @@
 -- bootstrap paq
-local paq_install_path = vim.fn.stdpath('data')..'/site/pack/paqs/opt/paq-nvim'
-
-if vim.fn.empty(vim.fn.glob(paq_install_path)) > 0 then
-    vim.cmd('!git clone --depth 1 https://github.com/savq/paq-nvim.git '..paq_install_path)
-end
-
+-- local paq_install_path = vim.fn.stdpath('data')..'/site/pack/paqs/opt/paq-nvim'
+-- 
+-- if vim.fn.empty(vim.fn.glob(paq_install_path)) > 0 then
+--     vim.cmd('!git clone --depth 1 https://github.com/savq/paq-nvim.git '..paq_install_path)
+-- end
+-- 
 -- set disable globals
 vim.g.tmux_navigator_no_mappings = 1
 
@@ -26,7 +26,7 @@ require('paq') {
   'tpope/vim-eunuch';
   -- 'junegunn/fzf.vim';
   -- 'junegunn/fzf';
-  'nvim-telescope/telescope.nvim';
+--  'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
   -- "blackCauldron7/surround.nvim";
   -- completion
