@@ -4,6 +4,8 @@
 LOG_DIR="$HOME/workspace/tail"
 mkdir -p "$LOG_DIR"
 
+alias pm2='/home/slugbyte/.config/nvm/versions/node/v16.16.0/bin/pm2'
+
 ## HELPER FUNCTIONS
 log(){
   echo
@@ -44,7 +46,7 @@ log "RESET" "stoping all running kiipo daemons"
 pm2 kill --force || true
 
 ## ADMIN PORTAL BACKEND
-goto "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_backend" 
+goto "/opt/legacy/labfront_admin_portal_backend"
 update_project "ADMIN PORTAL BACKEND"
 log "LAUNCHING" "ADMIN PORTAL BACKEND"
 pm2 start "bin/www" \
@@ -53,7 +55,7 @@ pm2 start "bin/www" \
   -e "$LOG_DIR/labfront_admin_portal_backend.stderr.txt"
 
 ## ADMIN PORTAL FRONTEND
-goto "$HOME/workspace/code/kiipo/legacy/labfront_admin_portal_frontend"
+goto "/opt/legacy/labfront_admin_portal_frontend"
 update_project "ADMIN PORTAL FRONTEND"
 log "LAUNCHING" "ADMIN PORTAL FRONTEND"
 pm2 start "bin/serve.js" \

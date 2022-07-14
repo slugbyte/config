@@ -31,6 +31,11 @@ vim.o.termguicolors = true
 vim.wo.signcolumn = 'yes'
 vim.cmd('colorscheme wet')
 
+vim.g.blamer_delay = 500
+vim.g.blamer_date_format = '%y-%m-%d'
+vim.g.blamer_enabled = 1
+vim.g.blamer_relative_time = 1
+
 vim.cmd('autocmd FileType markdown setlocal wrap')
 vim.cmd('autocmd FileType markdown setlocal textwidth=80')
 vim.cmd('autocmd FileType markdown setlocal linebreak')

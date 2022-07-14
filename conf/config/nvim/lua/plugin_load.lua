@@ -13,6 +13,7 @@ require('paq') {
   -- dependency
   'nvim-lua/plenary.nvim';
   'rktjmp/lush.nvim';
+  'APZelos/blamer.nvim';
 
   -- slugbyte
   -- {'slugbyte/unruly-worker', branch = 'main'}
