@@ -12,12 +12,12 @@
 
 [bar/main]
   inherit = section/base
-  modules-left= cpu filesystem memory pulseaudio date
+  modules-left = date cpu memory filesystem pulseaudio
 
 [module/date]
   type = internal/date
   interval = 1
-  date = " %Y-%m-%d %H:%M:%S "
+  date = " %H:%M:%S %Y-%m-%d "
 
 [module/hostname]
   type = custom/script
@@ -27,23 +27,23 @@
 
 [module/cpu]
   type = internal/cpu
-  label = [CPU %percentage%%]
+  label = [CPU %percentage%]
   interval = 2
 
 [module/memory]
   type = internal/memory
-  label = [MEM %percentage_used%%]
+  label = [MEM %percentage_used%]
   internal = 3
 
 [module/pulseaudio]
   type = internal/pulseaudio
   sink = alsa_output.pci-0000_0d_00.4.analog-surround-21
-  label-muted = [VOL X]
-  label-volume = [VOL %percentage%%]
+  label-muted = [VOL M]
+  label-volume = [VOL %percentage%]
   interval = 1
 
 [module/filesystem]
   type = internal/fs
   mount-0 = /
-  label-mounted = [DISK %percentage_used%%]
+  label-mounted = [DISK %percentage_used%]
   internal = 20
