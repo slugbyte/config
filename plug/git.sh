@@ -58,9 +58,9 @@ git_push() {
     if [[ "$branch" == "HEAD" ]]; then
       echo "Error: Cannot push from detached state."
       return 1
-    fi 
-    echo "Pushing to $branch $@" 
-    git push origin $branch $@ -v --follow-tags
+    fi
+    echo "Pushing to $branch $@"
+    git push origin $branch $@ -v --tags
     return 0
   else
     echo "Error: Not a git repository"
@@ -127,7 +127,7 @@ git_push_upstream() {
       return 1
     fi 
     echo "Pushing to $branch $@" 
-    git push upstream $branch $@ -v
+    git push upstream $branch $@ -v --tags
     return 0
   else
     echo "Error: Not a git repository"
