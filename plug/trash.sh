@@ -1,4 +1,4 @@
-alias rm='echo oops you shoul use trash or wipe'
+alias rm='cowsay -f turtle use trash or wipe dude'
 alias wipe='/usr/bin/rm'
 trashfire(){
   rm -rf $HOME/.trash/*
