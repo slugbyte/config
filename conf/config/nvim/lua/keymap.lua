@@ -23,6 +23,8 @@ end
 -- window
 map('n', '<leader>w', "'lua Save()<CR>", {})
 map('n', '<leader>q', "'qall<CR>", {})
+map('n', '<leader>n', "'n<CR>", {})
+map('n', '<leader>p', "'prev<CR>", {})
 map('', '<C-g>', ':on<CR>', {})
 
 -- tmux

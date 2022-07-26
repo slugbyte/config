@@ -27,7 +27,7 @@ require('paq') {
   'tpope/vim-eunuch';
   -- 'junegunn/fzf.vim';
   -- 'junegunn/fzf';
---  'nvim-telescope/telescope.nvim';
+ 'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
   -- "blackCauldron7/surround.nvim";
   -- completion
