@@ -25,9 +25,10 @@ require('paq') {
   'norcalli/nvim-colorizer.lua';
   'numToStr/Comment.nvim';
   'tpope/vim-eunuch';
+  'jpalardy/vim-slime';
   -- 'junegunn/fzf.vim';
   -- 'junegunn/fzf';
---  'nvim-telescope/telescope.nvim';
+  'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
   -- "blackCauldron7/surround.nvim";
   -- completion
@@ -60,6 +61,7 @@ require('paq') {
   'cespare/vim-toml';
 
   -- lisp util
-  'Olical/conjure';
-  'vim-scripts/paredit.vim';
+ 'Olical/conjure';
+  -- 'vim-scripts/paredit.vim';
+  'tpope/vim-fireplace';
 }

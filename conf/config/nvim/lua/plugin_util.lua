@@ -23,3 +23,5 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
   }
 }
+
+vim.g.slime_target = "tmux"

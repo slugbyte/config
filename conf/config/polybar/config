@@ -4,46 +4,55 @@
   offset-y = 0
   enable-ipc = true
   override-redirect = true
-  width = 30%
+  width = 55%
   height = 25px
   padding = 2
   border-top-size = 6
   background = #211f1f
+  format-foreground = #6f7377
 
 [bar/main]
   inherit = section/base
-  modules-left = date cpu memory filesystem pulseaudio
+  modules-left = time date utc cpu memory filesystem
+
+
+[module/time]
+  type = custom/script
+  interval = 1
+  exec = date +" %H:%M:%S "
+  tail = true
+  format-foreground = #6a7f93
 
 [module/date]
-  type = internal/date
-  interval = 1
-  date = " %H:%M:%S %Y-%m-%d "
-
-[module/hostname]
   type = custom/script
-  exec = uuidgen
-  interval = .1
+  interval = 1
+  exec = date +" %^b:%m_%d:%^a"
   tail = true
+  format-foreground = #6f7377
+
+[module/utc]
+  type = custom/script
+  interval = 1
+  exec = date --utc +" UTC(%H:%M:%S %m-%d) "
+  tail = true
+  format-foreground = #6f7377
 
 [module/cpu]
   type = internal/cpu
   label = [CPU %percentage%]
   interval = 2
-
-[module/memory]
-  type = internal/memory
-  label = [MEM %percentage_used%]
-  internal = 3
-
-[module/pulseaudio]
-  type = internal/pulseaudio
-  sink = alsa_output.pci-0000_0d_00.4.analog-surround-21
-  label-muted = [VOL M]
-  label-volume = [VOL %percentage%]
-  interval = 1
+  format-foreground = #6f7377
 
 [module/filesystem]
   type = internal/fs
   mount-0 = /
-  label-mounted = [DISK %percentage_used%]
-  internal = 20
+  label-mounted = [SSD %percentage_used%]
+  format-foreground = #ff0000
+  format-mounted-foreground = #6f7377
+
+[module/memory]
+  type = internal/memory
+  label = [MEM %percentage_used%]
+  interval = 3
+  format-foreground = #6f7377
+
