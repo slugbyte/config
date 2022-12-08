@@ -60,7 +60,7 @@ git_push() {
       return 1
     fi
     echo "Pushing to $branch $@"
-    git push origin $branch $@ -v --tags
+    git push origin $branch $@ --tags
     return 0
   else
     echo "Error: Not a git repository"
