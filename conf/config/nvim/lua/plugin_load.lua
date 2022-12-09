@@ -13,7 +13,7 @@ require('paq') {
   -- dependency
   'nvim-lua/plenary.nvim';
   'rktjmp/lush.nvim';
-  'APZelos/blamer.nvim';
+  -- 'APZelos/blamer.nvim';
 
   -- slugbyte
   -- {'slugbyte/unruly-worker', branch = 'main'}
@@ -43,8 +43,8 @@ require('paq') {
   -- lsp and syntax
   'neovim/nvim-lspconfig';
   'williamboman/nvim-lsp-installer';
-  'nvim-treesitter/nvim-treesitter';
   'jose-elias-alvarez/null-ls.nvim';
+  -- 'nvim-treesitter/nvim-treesitter';
 
   -- status
   'nvim-lualine/lualine.nvim';
@@ -61,5 +61,5 @@ require('paq') {
 
   -- lisp util
   'Olical/conjure';
-  'vim-scripts/paredit.vim';
+  -- 'vim-scripts/paredit.vim';
 }

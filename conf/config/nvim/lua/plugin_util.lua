@@ -16,10 +16,10 @@ require'gitsigns'.setup{}
 --     linear = { q = { "'", "'" }, t = { "`", "`" }, d = { '"', '"' } }
 --   },
 -- }
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = 'all',
-  sync_install = false,
-  highlight = {
-    enable = true,
-  }
-}
+-- require'nvim-treesitter.configs'.setup {
+--   ensure_installed = 'all',
+--   sync_install = false,
+--   highlight = {
+--     enable = true,
+--   }
+-- }
