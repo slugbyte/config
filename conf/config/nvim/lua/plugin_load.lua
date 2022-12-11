@@ -1,10 +1,10 @@
 -- bootstrap paq
 -- local paq_install_path = vim.fn.stdpath('data')..'/site/pack/paqs/opt/paq-nvim'
--- 
+--
 -- if vim.fn.empty(vim.fn.glob(paq_install_path)) > 0 then
 --     vim.cmd('!git clone --depth 1 https://github.com/savq/paq-nvim.git '..paq_install_path)
 -- end
--- 
+--
 -- set disable globals
 vim.g.tmux_navigator_no_mappings = 1
 
@@ -13,7 +13,7 @@ require('paq') {
   -- dependency
   'nvim-lua/plenary.nvim';
   'rktjmp/lush.nvim';
-  'APZelos/blamer.nvim';
+  -- 'APZelos/blamer.nvim';
 
   -- slugbyte
   -- {'slugbyte/unruly-worker', branch = 'main'}
@@ -30,16 +30,16 @@ require('paq') {
   -- 'junegunn/fzf';
   'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
-  -- "blackCauldron7/surround.nvim";
+  'ur4ltz/surround.nvim';
   -- completion
-  'L3MON4D3/LuaSnip';
-  'saadparwaiz1/cmp_luasnip';
-  'hrsh7th/nvim-cmp';
+  -- 'L3MON4D3/LuaSnip';
+  -- 'saadparwaiz1/cmp_luasnip';
   'hrsh7th/cmp-nvim-lsp';
   'hrsh7th/cmp-nvim-lua';
   'hrsh7th/cmp-cmdline';
   'hrsh7th/cmp-buffer';
   'hrsh7th/cmp-path';
+  'hrsh7th/nvim-cmp';
 
   -- lsp and syntax
   'neovim/nvim-lspconfig';
@@ -61,7 +61,7 @@ require('paq') {
   'cespare/vim-toml';
 
   -- lisp util
- 'Olical/conjure';
-  -- 'vim-scripts/paredit.vim';
+   'Olical/conjure';
+  'vim-scripts/paredit.vim';
   'tpope/vim-fireplace';
 }
