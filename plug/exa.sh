@@ -20,3 +20,4 @@ special_files=$(exa_make_color_group 204 ".git*" .bashrc "*.test.js" .env .vimrc
 
 export EXA_COLORS="di=$(exa_fg 111):ln=$(exa_fg 167):so=32:pi=33:ex=$(exa_fg 36):bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:da=$(exa_fg 58):uu=$(exa_fg 59):sn=$(exa_fg 111):sb=$(exa_fg 96):${exa_permisions}${special_files}"
 
+alias tree='exa --tree --group-directories-first'

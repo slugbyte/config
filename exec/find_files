@@ -5,4 +5,5 @@ rg --files --follow --hidden --no-ignore \
 | rg -v target \
 | rg -v .shadow-cljs \
 | rg -v .clj-kondo \
-| rg -v '\.git'
+| rg -v '\.git' \
+| rg -v 'runtime'
