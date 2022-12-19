@@ -20,6 +20,12 @@ function Save()
   print("[write all]", string.sub(math.random() .. "", -4, -1))
 end
 
+
+-- search
+
+-- clear search
+map('n', '<leader>/', ':let @/ = ""<CR>', {})
+
 -- window
 map('n', '<leader>w', "'lua Save()<CR>", {})
 map('n', '<leader>q', "'qall<CR>", {})

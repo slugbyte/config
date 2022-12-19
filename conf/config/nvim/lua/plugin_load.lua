@@ -62,6 +62,6 @@ require('paq') {
 
   -- lisp util
    'Olical/conjure';
-  'vim-scripts/paredit.vim';
+  'slugbyte/paredit.vim';
   'tpope/vim-fireplace';
 }

@@ -27,3 +27,4 @@ require'surround'.setup {
 }
 
 vim.g.slime_target = "tmux"
+vim.g.paredit_smartjump = 1
