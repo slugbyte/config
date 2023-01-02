@@ -20,6 +20,9 @@ require('paq') {
   {'slugbyte/unruly-worker'};
   'slugbyte/wet-nvim';
 
+  -- colorscheme
+  'sainnhe/everforest';
+
   -- general util
   'christoomey/vim-tmux-navigator';
   'norcalli/nvim-colorizer.lua';
@@ -42,7 +45,9 @@ require('paq') {
   'hrsh7th/nvim-cmp';
 
   -- lsp and syntax
+  'folke/neodev.nvim';
   'neovim/nvim-lspconfig';
+  'j-hui/fidget.nvim';
   'williamboman/nvim-lsp-installer';
   'nvim-treesitter/nvim-treesitter';
   'jose-elias-alvarez/null-ls.nvim';
