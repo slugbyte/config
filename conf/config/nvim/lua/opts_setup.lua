@@ -41,3 +41,6 @@ vim.cmd('autocmd FileType markdown setlocal textwidth=80')
 vim.cmd('autocmd FileType markdown setlocal linebreak')
 vim.cmd('autocmd FileType markdown setlocal spell')
 vim.cmd('autocmd FileType text setlocal spell')
+
+-- auto remove trailing whitespace
+vim.cmd('autocmd BufWritePre * :%s/\\s\\+$//e|norm!`` ')

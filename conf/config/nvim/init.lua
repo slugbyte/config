@@ -5,6 +5,8 @@ require('plugin_util')
 require('plugin_complete')
 require('plugin_statusline')
 require('plugin_search')
+require('plugin_neodev')
+require('plugin_fidget')
 require('plugin_lsp')
 require('keymap')
 
@@ -22,5 +24,3 @@ vim.cmd("command! Files :Telescope find_files")
 vim.cmd("command! Rg :Telescope live_grep")
 
 vim.cmd("imap <c-u> <esc>ddi")
--- 
--- 
