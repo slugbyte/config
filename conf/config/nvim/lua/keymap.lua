@@ -55,8 +55,11 @@ vim.keymap.set('n', '<leader>th', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>tw', require('telescope.builtin').grep_string, { desc = 'Search current Word' })
 vim.keymap.set('n', '<leader>tg', require('telescope.builtin').live_grep, { desc = 'Search by Grep' })
 vim.keymap.set('n', '<leader>td', require('telescope.builtin').diagnostics, { desc = 'Search Diagnostics' })
-vim.keymap.set('n', '<leader>tb', require('telescope.builtin').buffers, { desc = 'Search buffers' })
+vim.keymap.set('n', '<leader>tb', require('telescope.builtin').registers, { desc = 'Search registers' })
+vim.keymap.set('n', '<leader>tr', require('telescope.builtin').lsp_references, { desc = 'Search lsp lsp_references' })
+vim.keymap.set('n', '<leader>ti', require('telescope.builtin').lsp_implementations, { desc = 'Search lsp_implementations' })
 vim.keymap.set('n', '<leader>to', require('telescope.builtin').oldfiles, { desc = 'Search old files' })
+vim.keymap.set('n', '<leader>tk', require('telescope.builtin').keymaps, { desc = 'Search keymaps' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
