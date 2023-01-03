@@ -22,5 +22,4 @@ end
 vim.cmd('command! EditConfig :lua Edit_Config()')
 vim.cmd("command! Files :Telescope find_files")
 vim.cmd("command! Rg :Telescope live_grep")
-
 vim.cmd("imap <c-u> <esc>ddi")
