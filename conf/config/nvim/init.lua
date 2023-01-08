@@ -19,7 +19,10 @@ function Edit_Config()
   })
 end
 
+-- trim all the whitespace at the end of lines
+vim.cmd('command! TrimLines :%s/\\s\\+$//e|norm!`` ')
 vim.cmd('command! EditConfig :lua Edit_Config()')
-vim.cmd("command! Files :Telescope find_files")
-vim.cmd("command! Rg :Telescope live_grep")
+
+-- <c-u> will clear the line when in : mode or insert mode
 vim.cmd("imap <c-u> <esc>ddi")
+
