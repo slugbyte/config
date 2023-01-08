@@ -50,6 +50,8 @@ map('', 'J', ":Telescope live_grep<CR>", { noremap = true, desc = "t grep"})
 map('', 'J', ":Telescope live_grep<CR>", { noremap = true, desc = "t grep"})
 map('', 'J', ":Telescope live_grep<CR>", { noremap = true, desc = "t grep"})
 
+vim.keymap.set('n', '<leader>,', ":ConjureEvalRootForm<CR>", { desc = 'Eval Root Form' })
+
 vim.keymap.set('n', '<leader>tf', require('telescope.builtin').find_files, { desc = 'Search Files' })
 vim.keymap.set('n', '<leader>th', require('telescope.builtin').help_tags, { desc = 'Search Help' })
 vim.keymap.set('n', '<leader>tw', require('telescope.builtin').grep_string, { desc = 'Search current Word' })
