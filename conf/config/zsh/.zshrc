@@ -54,5 +54,3 @@ if [[ -x "$(command -v clean_path)" ]];then
   export PATH=$(clean_path)
 fi
 
-alias xi="sudo apt-get install -y"
-alias xs="sudo apt-cache search"
