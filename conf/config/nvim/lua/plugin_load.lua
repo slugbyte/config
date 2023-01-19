@@ -29,6 +29,7 @@ require('paq') {
   'numToStr/Comment.nvim';
   'tpope/vim-eunuch';
   'jpalardy/vim-slime';
+  'tpope/vim-fugitive';
   -- 'junegunn/fzf.vim';
   -- 'junegunn/fzf';
   'nvim-telescope/telescope.nvim';
@@ -64,6 +65,7 @@ require('paq') {
   'bakpakin/fennel.vim';
   'rust-lang/rust.vim';
   'cespare/vim-toml';
+  'mattn/emmet-vim';
 
   -- lisp util
    'Olical/conjure';
