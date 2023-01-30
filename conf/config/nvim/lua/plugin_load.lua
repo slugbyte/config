@@ -29,16 +29,17 @@ require('paq') {
   -- 'junegunn/fzf';
  'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
-  -- "blackCauldron7/surround.nvim";
+  'kylechui/nvim-surround';
+  --
   -- completion
-  'L3MON4D3/LuaSnip';
-  'saadparwaiz1/cmp_luasnip';
-  'hrsh7th/nvim-cmp';
+  -- 'L3MON4D3/LuaSnip';
+  -- 'saadparwaiz1/cmp_luasnip';
   'hrsh7th/cmp-nvim-lsp';
   'hrsh7th/cmp-nvim-lua';
   'hrsh7th/cmp-cmdline';
   'hrsh7th/cmp-buffer';
   'hrsh7th/cmp-path';
+  'hrsh7th/nvim-cmp';
 
   -- lsp and syntax
   'neovim/nvim-lspconfig';
@@ -58,8 +59,9 @@ require('paq') {
   'bakpakin/fennel.vim';
   'rust-lang/rust.vim';
   'cespare/vim-toml';
+  'ziglang/zig.vim';
 
   -- lisp util
   'Olical/conjure';
-  -- 'vim-scripts/paredit.vim';
+  'vim-scripts/paredit.vim';
 }

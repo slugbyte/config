@@ -4,3 +4,4 @@ rg --files --follow --hidden --no-ignore \
 | rg -v node_modules \
 | rg -v target \
 | rg -v '\.git'
+| rg -v 'kondo'
