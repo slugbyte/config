@@ -3,7 +3,7 @@ vim.cmd('au FileType fennel call PareditInitBuffer()')
 require'colorizer'.setup()
 require'Comment'.setup()
 require'gitsigns'.setup{}
-require("nvim-surround").setup()
+--require("nvim-surround").setup()
 
 -- require'surround'.setup {
 --   context_offset = 100,
