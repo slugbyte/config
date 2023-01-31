@@ -1,11 +1,11 @@
 # [Mold](https://github.com/slugbyte/mold) Root
-![Shreded green glitch with black moss](https://assets.slugbyte.com/github/github-header-00007.png)  
+![Shreded green glitch with black moss](https://assets.slugbyte.com/github/github-header-00007.png)
 
 ## About This Repository
 This repository holds my dotfiles in *conf/* , shell script "plugins" in *plug/*, executable scripts in *exec/*, file templates in *leaf/*, init scripts in *init*, and cron tasks *cron/*. I manage this repository it using a tool I created called [mold](https://github.com/slugbyte/mold), that enables me to both track and manage this repository's content and quickly sync its configuration on multiple machines.
 
 ## Great Shell Resources
-Here are a few great resources that I use for reseaching shell and sys-config related information!   
+Here are a few great resources that I use for reseaching shell and sys-config related information!
 * [Awesome Shell](https://github.com/alebcay/awesome-shell): A curated list of awesome command line tools and resources
 * [Bash Hackers Wiki](https://wiki.bash-hackers.org/): A great resource for everything bash scripting
 * [GitHub Dotfiles](https://dotfiles.github.io/): Your unofficial guide to dotfiles on github
@@ -14,64 +14,36 @@ Here are a few great resources that I use for reseaching shell and sys-config re
 ## My Favorite Open Source Tools
 A list of some of my favorite command line tools for enhancing programming workflow and enjoyment 😋
 * [aria2c](https://aria2.github.io/) - An ultra-fast download utility with support for HTTP(S), FTP, SFTP, BitTorrent, and Metalink
-* [bat](https://github.com/sharkdp/bat) - a cat clone with syntax highlighting 
+* [bat](https://github.com/sharkdp/bat) - a cat clone with syntax highlighting
 * [commacd](https://github.com/shyiko/commacd) - a faster way to move around in bash
-* [eureka](https://github.com/simeg/eureka) - an idea log with managed by git
 * [espanso](https://espanso.org/) - a cross plantform text expander written in rust
 * [exa](https://the.exa.website) - A modern ls with git awareness and color code files based on regex :)
 * [figlet](http://www.figlet.org/) - A program for makin large letters out of text
 * [fzf](https://github.com/junegunn/fzf) - A command-line fuzzy finder
-* [git aware prompt](https://github.com/jimeh/git-aware-prompt) - Display git branch name in your terminal prompt
-* [gkill](https://github.com/heppu/gkill) - an interactive process killer
 * [gpg](https://www.gnupg.org/) - allows you to encrypt and sign your data and communications
 * [htop](https://github.com/htop-dev/htop) - an interactive process viewer
 * [httpie](https://httpie.org/) - a command line HTTP client with an intuitive UI, JSON support, and syntax highlighting
-* [lazydocker](https://github.com/jesseduffield/lazydocker) - a terminal UI for docker
-* [lazygit](https://github.com/jesseduffield/lazygit) - a terminal UI for git
-* [leiningen](https://leiningen.org/) - a clojure build tool
 * [nushell](https://www.nushell.sh/) - a new type of shell
-* [nvim](https://neovim.io/) - the future of vim (the text editor) 
-* [sops](https://github.com/mozilla/sops) - encrypt and decrypt the keys of config files with PGP or a cloud KMS providers keys
-* [the\_silver\_searcher](https://github.com/ggreer) - A code-searching tool similar to ack, but faster
-* [rg](https://github.com/BurntSushi/ripgrep) - ripgrep a full text searching tool similar to grep or the\_silver\_searcher 
+* [nvim](https://neovim.io/) - the future of vim (the text editor)
+* [rg](https://github.com/BurntSushi/ripgrep) - ripgrep a full text searching tool similar to grep or the\_silver\_searcher
 * [task](https://taskwarrior.org/) - a flexible, fast, powerful, and unobtrusive todo list.
 * [tldr](https://tldr.sh/) - Simplified and community-driven man pages
 * [tmux](https://github.com/tmux/tmux) - tmux is a terminal multiplexer
-* [tree](http://mama.indstate.edu/users/ice/tree/) - list contents of directories in a tree-like-format
 * [zoxide](https://github.com/ajeetdsouza/zoxide) - a blazing fast alternative to cd, inspired by `z`, that remembers your directorys
 
 ## Config Highlights
-Below are some highlights of tools I created in this repository for enhancing my own coding workflow.  
-**NOTE:** I have developed the habbit of using a lot of single charicter alias shorthand and 
+Below are some highlights of tools I created in this repository for enhancing my own coding workflow.
+**NOTE:** I have developed the habbit of using a lot of single charicter alias shorthand and
 It's allways worked well for me. However, I have heard many strong arguments aginst the practice
 and would urge people to think twice before they create the habit. That said, Its allready been a part
-of my workflow for a long time and I have no intention to stop anytime soon. 
-
-## f for find
- `f` is a bash function that will use [fzf](https://github.com/junegunn/fzf) to select output from [the_silver_searcher](https://github.com/ggreer/the_silver_searcher) and then open the selected line in vim.
- 
-######  `Usage: f [search string]`  
-**Example:** `$ f todo`
-![f-util-example](https://assets.slugbyte.com/github/misc/f-util-example.png)  
-``` bash 
-f(){
-  local result=$( ag "$1" | fzf )
-  local path=$( echo "$result" | cut -d ':' -f 1 )
-  local linenum=$( echo "$result" | cut -d ':' -f 2 )
-  [[ ! $path ]] && {
-    echo "no match found"
-    return 1
-  }
-  vim "+${linenum}" "$path"
-}
-```
+of my workflow for a long time and I have no intention to stop anytime soon.
 
 ## fuzz and defuzz
-`fuzz` is a bash function that will use gpg to sign and encrypt a file or directory. If a directory is supplied fuzz will automaticly create a tarball from it and then encrypt the tarball. Once an encrypted file has been created fuzz will also delete the unencryped content.   
-`defuzz` is a bash function that will use gpg to decrypt a file or encrypted tarbal. If the encryped file was a tarbal it will automaticly be unpacked into a directory. Once the encrypted file has been decrypedted into a normal file or direcotry, the encrypted file will be deleted.  
+`fuzz` is a bash function that will use gpg to sign and encrypt a file or directory. If a directory is supplied fuzz will automaticly create a tarball from it and then encrypt the tarball. Once an encrypted file has been created fuzz will also delete the unencryped content.
+`defuzz` is a bash function that will use gpg to decrypt a file or encrypted tarbal. If the encryped file was a tarbal it will automaticly be unpacked into a directory. Once the encrypted file has been decrypedted into a normal file or direcotry, the encrypted file will be deleted.
 **Example**
-![fuzz and defuzz example](https://assets.slugbyte.com/github/misc/fuzz-defuzz-example.png)  
-``` bash 
+![fuzz and defuzz example](https://assets.slugbyte.com/github/misc/fuzz-defuzz-example.png)
+``` bash
 fuzz(){
   if [[ -z $1 ]]; then
     >2& echo "ERROR: no target supplied"
@@ -103,39 +75,39 @@ defuzz(){
 ```
 
 ## todo
-The simplest todo list slash general notes utily I could think of is an alias that allways opens the same file in a text editor.  
-`alias toto='vim $HOME/.todo.md`  
+The simplest todo list slash general notes utily I could think of is an alias that allways opens the same file in a text editor.
+`alias toto='vim $HOME/.todo.md`
 
 ## colors
-Show a table of all the ansi color codes.  
-**Example**  
+Show a table of all the ansi color codes.
+**Example**
 `$ colors`
 ![colors cli example](https://assets.slugbyte.com/github/misc/colors-example.png)
-``` bash 
+``` bash
 #!/usr/bin/env bash
 _colors(){
   figlet 'ansi color'
-  for x in {0..63};do 
+  for x in {0..63};do
     x=$(( x * 4 ))
-    for y in {0..3};do 
+    for y in {0..3};do
       color=$(( x + y ))
-      echo -n $(tput setab $(( $color ))) $(tput setaf 15) 
+      echo -n $(tput setab $(( $color ))) $(tput setaf 15)
       printf " %3g  " $color
-      echo -n $(tput setab 0) 
-    done; 
-    for y in {0..3};do 
+      echo -n $(tput setab 0)
+    done;
+    for y in {0..3};do
       color=$(( x + y ))
-      echo -n $(tput setaf $(( $color ))) $(tput setab 0) 
+      echo -n $(tput setaf $(( $color ))) $(tput setab 0)
       printf "%3g" $color
-      echo -n $(tput setab 0) 
-    done; 
+      echo -n $(tput setab 0)
+    done;
     echo ""
   done
 }
 _colors | less -r
 ```
 
-## Git Shorthand  
+## Git Shorthand
 ### `c [args]` - smart git commit
 * First run `git add -A` to add all the untracked changes
 * Then run `git commit` with the following flags
@@ -143,19 +115,19 @@ _colors | less -r
     * with `-v` to show the git-diff in vim when writing the commit message
     * also allows users to pass args. *e.g.* `-m 'message'`
 * Finnaly, run `git verify-commit HEAD`, to print a log that demonstrates if the commit was successfully signed
-**EXAMPLES**  
-Commit with vim: `$ c`  
-Commit with a message: `$ c -m 'Initial commit'`  
-``` bash 
+**EXAMPLES**
+Commit with vim: `$ c`
+Commit with a message: `$ c -m 'Initial commit'`
+``` bash
 c(){
   git add -A && git commit -v -S "$@" && git verify-commit HEAD
 }
-```  
+```
 ### `l [branch]` - smart git pull
-Pull from the current branch or a specific branch. `l` will also print errors for not a git repository, or trying to pull from a detached head.  
-**EXAMPLES**  
-Pull the current branch: `$ l`  
-Pull the foobar branch: `$ l foobar`  
+Pull from the current branch or a specific branch. `l` will also print errors for not a git repository, or trying to pull from a detached head.
+**EXAMPLES**
+Pull the current branch: `$ l`
+Pull the foobar branch: `$ l foobar`
 ```bash
 l() {
   local branch
@@ -179,11 +151,11 @@ l() {
 }
 ```
 ### `p [flags]` - smart git push
-Push to the current branch and allow flags to be passed.  
-**Example**  
-Push to the current branch `$ p`  
-Force push to the current branch `$ p --force`  
-Push to the current branch with tags `$ p --follow-tags`  
+Push to the current branch and allow flags to be passed.
+**Example**
+Push to the current branch `$ p`
+Force push to the current branch `$ p --force`
+Push to the current branch with tags `$ p --follow-tags`
 ``` bash
 p() {
   local branch
@@ -202,42 +174,43 @@ p() {
 }
 ```
 ### `t [args]` - smart git tag
-List tags, delete tags, and create/sign tags.  
-**Examples**  
-List tags with messages: `$ t`  
-Create and sign tag: `$ t v0.1.1`  
-Delete tag: `$ t v0.1.1` 
+List tags, delete tags, and create/sign tags.
+**Examples**
+List tags with messages: `$ t`
+Create and sign tag: `$ t v0.1.1`
+Delete tag: `$ t v0.1.1`
 ``` bash
 t(){
-  if (( $# < 1 ));then 
+  if (( $# < 1 ));then
     git tag -n99
     return 0
-  elif (( $# > 1 ));then 
+  elif (( $# > 1 ));then
     git tag "$@"
     return 0
   else
     git tag -s "$@" && git verify-tag $1
-  fi 
+  fi
 }
 ```
+
 ### `b [args]` - smart git branch
-List branches and delete branches.  
-**Examples**  
-Run `git branch -av`: `$ b`   
-Delete branch: `$ b -D branch-name`  
+List branches and delete branches.
+**Examples**
+Run `git branch -av`: `$ b`
+Delete branch: `$ b -D branch-name`
 ``` bash
 b(){
-  if (( $# < 1 ));then 
+  if (( $# < 1 ));then
     git branch -av
     return 0
   else
     git branch "$@"
-  fi 
+  fi
 }
 ```
 
 ### `fman` - fuzz search man pages
-``` bash 
+``` bash
 #!/usr/bin/env bash
 filename=$(ls /usr/share/man/man{1..8} /usr/local/share/man/man{1..8} | grep '[0-9]$' | fzf)
 man_number="${filename##*.}"
