@@ -50,8 +50,8 @@ require('paq') {
   'neovim/nvim-lspconfig';
   'j-hui/fidget.nvim';
   'williamboman/nvim-lsp-installer';
-  'nvim-treesitter/nvim-treesitter';
   'jose-elias-alvarez/null-ls.nvim';
+  -- 'nvim-treesitter/nvim-treesitter';
 
   -- status
   'nvim-lualine/lualine.nvim';
@@ -65,6 +65,7 @@ require('paq') {
   'bakpakin/fennel.vim';
   'rust-lang/rust.vim';
   'cespare/vim-toml';
+  'ziglang/zig.vim';
   'mattn/emmet-vim';
 
   -- lisp util
