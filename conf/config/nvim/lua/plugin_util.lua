@@ -5,7 +5,6 @@ require'Comment'.setup()
 require'gitsigns'.setup{}
 require("nvim-surround").setup()
 
-
 -- require'surround'.setup {
 --   context_offset = 100,
 --   load_autogroups = false,
@@ -26,3 +25,21 @@ require("nvim-surround").setup()
 --     enable = true,
 --   }
 -- }
+
+
+require'surround'.setup {
+  context_offset = 100,
+  load_autogroups = false,
+  space_on_closing_char = false,
+  load_keymaps = false,
+  map_insert_mode = false,
+  quotes = {"'", '"', '`'},
+  brackets = {"(", '{', '['},
+  pairs = {
+    nestable = { b = { "(", ")" }, s = { "[", "]" }, B = { "{", "}" }, a = { "<", ">" } },
+    linear = { q = { "'", "'" }, t = { "`", "`" }, d = { '"', '"' } }
+  },
+}
+
+vim.g.slime_target = "tmux"
+vim.g.paredit_smartjump = 1
