@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 alias a="git add"
 alias A="git add ."
-alias b="git_branch"
+alias b="git branch"
+alias ba="git_branch"
 alias bubye='sudo shutdown -h now'
 alias c="git_commit"
 alias C="git_commit --amend --no-edit"
