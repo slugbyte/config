@@ -25,9 +25,6 @@ vim.cmd('command! EditConfig :lua Edit_Config()')
 
 -- <c-u> will clear the line when in : mode or insert mode
 vim.cmd("imap <c-u> <esc>ddi")
-
-
 vim.cmd('hi DiagnosticWarn guifg=#2a2a2a')
 vim.cmd('hi DiagnosticSignWarn guifg=#2a2a2a')
 vim.cmd('hi DiagnosticSignWarn guibg=#555555')
-

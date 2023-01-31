@@ -13,6 +13,7 @@ local servers = {
   "sumneko_lua",
   "rome",
   "tsserver",
+  "zls",
 }
 
 for _, server_name in pairs(servers) do
@@ -56,4 +57,16 @@ null_ls.setup({
     },
 })
 
+
 -- treesitter
+local lspconfig = require('lspconfig')
+local manual_servers = {'zls'}
+local on_attach = function(_, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- require('completion').on_attach()
+end
+for _, lsp in ipairs(manual_servers) do
+    lspconfig[lsp].setup {
+        on_attach = on_attach,
+    }
+end
