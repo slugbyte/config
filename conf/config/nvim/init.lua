@@ -5,6 +5,8 @@ require('plugin_util')
 require('plugin_complete')
 require('plugin_statusline')
 require('plugin_search')
+require('plugin_neodev')
+require('plugin_fidget')
 require('plugin_lsp')
 require('keymap')
 
@@ -17,8 +19,12 @@ function Edit_Config()
   })
 end
 
+-- trim all the whitespace at the end of lines
+vim.cmd('command! TrimLines :%s/\\s\\+$//e|norm!`` ')
 vim.cmd('command! EditConfig :lua Edit_Config()')
-vim.cmd("command! Files :Telescope find_files")
-vim.cmd("command! Rg :Telescope live_grep")
 
+-- <c-u> will clear the line when in : mode or insert mode
 vim.cmd("imap <c-u> <esc>ddi")
+vim.cmd('hi DiagnosticWarn guifg=#2a2a2a')
+vim.cmd('hi DiagnosticSignWarn guifg=#2a2a2a')
+vim.cmd('hi DiagnosticSignWarn guibg=#555555')

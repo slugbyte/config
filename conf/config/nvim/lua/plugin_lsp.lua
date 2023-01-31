@@ -11,7 +11,7 @@ local servers = {
   "pyright",
   "rust_analyzer",
   "sumneko_lua",
-  -- "rome",
+  "rome",
   "tsserver",
   "zls",
 }

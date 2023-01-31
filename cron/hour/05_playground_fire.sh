@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# DELETE STUFF in $w/play thats more than an hour old
+
 get_file_list(){
   find $HOME/workspace/play/ ! -name README.md ! -name .gitignore ! -name play -mmin +60 
 }

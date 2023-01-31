@@ -1,10 +1,10 @@
 -- bootstrap paq
 -- local paq_install_path = vim.fn.stdpath('data')..'/site/pack/paqs/opt/paq-nvim'
--- 
+--
 -- if vim.fn.empty(vim.fn.glob(paq_install_path)) > 0 then
 --     vim.cmd('!git clone --depth 1 https://github.com/savq/paq-nvim.git '..paq_install_path)
 -- end
--- 
+--
 -- set disable globals
 vim.g.tmux_navigator_no_mappings = 1
 
@@ -20,17 +20,21 @@ require('paq') {
   {'slugbyte/unruly-worker'};
   'slugbyte/wet-nvim';
 
+  -- colorscheme
+  'sainnhe/everforest';
+
   -- general util
   'christoomey/vim-tmux-navigator';
   'norcalli/nvim-colorizer.lua';
   'numToStr/Comment.nvim';
   'tpope/vim-eunuch';
+  'jpalardy/vim-slime';
+  'tpope/vim-fugitive';
   -- 'junegunn/fzf.vim';
   -- 'junegunn/fzf';
- 'nvim-telescope/telescope.nvim';
+  'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
-  'kylechui/nvim-surround';
-  --
+  'ur4ltz/surround.nvim';
   -- completion
   -- 'L3MON4D3/LuaSnip';
   -- 'saadparwaiz1/cmp_luasnip';
@@ -42,7 +46,9 @@ require('paq') {
   'hrsh7th/nvim-cmp';
 
   -- lsp and syntax
+  'folke/neodev.nvim';
   'neovim/nvim-lspconfig';
+  'j-hui/fidget.nvim';
   'williamboman/nvim-lsp-installer';
   'jose-elias-alvarez/null-ls.nvim';
   -- 'nvim-treesitter/nvim-treesitter';
@@ -60,8 +66,10 @@ require('paq') {
   'rust-lang/rust.vim';
   'cespare/vim-toml';
   'ziglang/zig.vim';
+  'mattn/emmet-vim';
 
   -- lisp util
-  'Olical/conjure';
-  'vim-scripts/paredit.vim';
+   'Olical/conjure';
+  'slugbyte/paredit.vim';
+  'tpope/vim-fireplace';
 }

@@ -14,6 +14,8 @@ export ZDOTDIR="$HOME/.config/zsh"
 export MOLD_ROOT="$HOME/workspace"
 export w=$MOLD_ROOT
 export PATH="$MOLD_ROOT/exec:$MOLD_ROOT/exec/ignore:$PATH"
+export TRASH_DIR=$HOME/.local/share/Trash/files
+
 
 # XDG
 export XDG_CONFIG_HOME=$HOME/.config
@@ -52,5 +54,3 @@ if [[ -x "$(command -v clean_path)" ]];then
   export PATH=$(clean_path)
 fi
 
-alias xi="sudo apt-get install -y"
-alias xs="sudo apt-cache search"
