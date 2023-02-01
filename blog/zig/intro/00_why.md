@@ -1,16 +1,64 @@
+
 # why zig
 
-I have been developing with Javascript for about 10 years. I am super greatfull 
-to everything it has taught me. When I first wanted to learn programming, I
+> TLDR; ramblin about my backound and how it lead me to zig. goto
+> 01\_overview.md for zig explanation.
+
+I have been developing with Javascript as my goto for about 10 years. It was the
+language that unlocked a love for programming in me. 
+When I first started to learn programming, I
 tried Java, c, ObjectiveC, and swift before I tried JS. I learned some suuuper
-funtamentals from these languages, but I was deeply stuck. I had spent a few
+funtamentals from these languages, but I was deeply stuck. I had already spent a few
 years trying to learn programming, but I still had no idea how to turn an empty
-folder into an application. I was basicly slogging around tuttorial hell. I could
+folder into an application. I was basicly slogging around in tuttorial hell. I could
 easily follow instructions to achieve an outcome of someone elses design, but I didn't
 really understand things on my own. That all began to change when I stared
 learning Javascript.
 
-When I stated learning JS with Node.js, I had break
+I attribute a lot of the fast learning to the fact that JS/Node.js was the lowest 
+friction developer expierience I had encountered. 
+* JS was the first language that I used which had a REPL
+    * it was amazing to be able to spin up node and test out ideas.
+    * For one thing, I am a very dyslexic and learning by reading explantions
+      rarly translates to things sticking in my memory.
+      I often learn by brute force, try something -> fail -> tweek and repeat.
+    * The REPL was lowest friction environment i had encountered for this type
+      of learning. No insane IDE config tweeking, no compile times, vm bootings or
+      flashing phones, just type code and immedialy see what happens. It was
+      fucking awesome.
+* Contrary to all the JS memes out there, I loved the lack of static typing and all the automatic coersion. 
+At the time, I basicly didn't
+know how or when to use what `type`s to solve what probelms. It was super
+freeing at the time to expierament with data without having to care about static type syntax.
+* The event loop felt super easy to utalize. In fact it was so easy to use, i
+  didn't event know I was using it for a while, and once I understood it better
+  through expieramentaiton it unlocked a lot of ideas about async problems and
+  solutions for me.
+* node std library was simple and small enough that i could read all the docs in
+  a weekend.
+* finnaly using npm to find and manage packages was so convienent. I loved
+  finding librarys on npm and then reading through there package.json
+  dependecies to figure out what those librarys where using. I loved looking up
+  things on npm and then jumping into github, and seeing if i counld understand
+  the implamentation well enough that i could roll my own, 
+
+
+
+
+
+The language's lack of types allowed me to play 
+
+The
+lack of explicit types, 
+
+The
+standard library was small and had easy to read documentaion. The 
+
+
+My introduction to Javascript was through Node.js. Node was the first DX that I
+could wrap my mind around. I could easily find librarys and install them with
+npm. 
+
 through after break trough. In a matter of months I was able to break finnaly 
 break down real world problems into software and build clis, apis, and web frontends
 that. A huge part of that was learning how to model data into JS objects,
