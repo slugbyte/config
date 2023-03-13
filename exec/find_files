@@ -3,7 +3,7 @@
 rg --files --follow --hidden --no-ignore --max-filesize 30K  \
 | rg -v node_modules \
 | rg -v target \
-| rg -v 'kondo'
+| rg -v 'kondo' \
 | rg -v .shadow-cljs \
 | rg -v .clj-kondo \
 | rg -v '\.git' \
