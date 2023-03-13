@@ -13,11 +13,11 @@ require('paq') {
   -- dependency
   'nvim-lua/plenary.nvim';
   'rktjmp/lush.nvim';
+  'folke/neodev.nvim';
   -- 'APZelos/blamer.nvim';
 
   -- slugbyte
-  -- {'slugbyte/unruly-worker', branch = 'main'}
-  {'slugbyte/unruly-worker'};
+  'slugbyte/unruly-worker';
   'slugbyte/wet-nvim';
 
   -- colorscheme
@@ -30,11 +30,13 @@ require('paq') {
   'tpope/vim-eunuch';
   'jpalardy/vim-slime';
   'tpope/vim-fugitive';
+
   -- 'junegunn/fzf.vim';
   -- 'junegunn/fzf';
   'nvim-telescope/telescope.nvim';
   'windwp/nvim-autopairs';
   'ur4ltz/surround.nvim';
+
   -- completion
   -- 'L3MON4D3/LuaSnip';
   -- 'saadparwaiz1/cmp_luasnip';
@@ -46,7 +48,6 @@ require('paq') {
   'hrsh7th/nvim-cmp';
 
   -- lsp and syntax
-  'folke/neodev.nvim';
   'neovim/nvim-lspconfig';
   'williamboman/mason.nvim';
   'williamboman/mason-lspconfig.nvim';
@@ -58,7 +59,6 @@ require('paq') {
   -- status
   'nvim-lualine/lualine.nvim';
   'lewis6991/gitsigns.nvim';
-  -- 'airblade/vim-gitgutter'; -- REPLACE WITH gitsigns.nvim
 
   -- syntax
   'clojure-vim/clojure.vim';
@@ -73,4 +73,5 @@ require('paq') {
    'Olical/conjure';
   'slugbyte/paredit.vim';
   'tpope/vim-fireplace';
+  'github/copilot.vim';
 }

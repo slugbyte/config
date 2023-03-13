@@ -81,3 +81,11 @@ map('', '&', ':lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = 
 
 -- conjure
 vim.cmd('let g:conjure#mapping#prefix = ","')
+
+
+-- copilot
+-- vim.cmd("let g:copilot_filetypes = { '*' : false }")
+vim.cmd("let g:copilot_no_tab_map = v:true")
+vim.cmd("let g:copilot_enabled = v:false")
+vim.cmd('imap <silent><script><expr> <C-q> copilot#Accept("\\<CR>")')
+vim.cmd('imap <silent><script><expr> <C-d>s <Plug>(copilot-suggest)')
