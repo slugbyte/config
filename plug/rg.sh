@@ -1,3 +1,3 @@
-rg_with() {
-  rg $1 | cut -d : -f 1 | sort | uniq
+rgf() {
+  rg $@ |cat | cut -d ':' -f 1 |sort  |uniq
 }
