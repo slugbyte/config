@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TRASH_DIR=$HOME/.local/share/Trash/files
+export TRASH_DIR=$HOME/.local/share/Trash/files
 mkdir -p $TRASH_DIR 
 
 # TODO make this way better
