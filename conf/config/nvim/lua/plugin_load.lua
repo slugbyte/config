@@ -73,5 +73,5 @@ require('paq') {
    'Olical/conjure';
   'slugbyte/paredit.vim';
   'tpope/vim-fireplace';
-  'github/copilot.vim';
+  -- 'github/copilot.vim';
 }
