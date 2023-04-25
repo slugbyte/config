@@ -8,7 +8,6 @@ local lsp_server_list = {
   "html",
   "jsonls",
   "lua_ls",
-  "remark_ls",
   "rust_analyzer",
   "sqls",
   "tsserver",
