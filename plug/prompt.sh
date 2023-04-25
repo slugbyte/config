@@ -1,5 +1,4 @@
 # Prompt Colors
-
 color_user="$(tput setaf 130 2>/dev/null || echo '')"  
 color_dir="$(tput setaf 95 2>/dev/null || echo '')"  
 color_git_branch="$(tput setaf 102 2>/dev/null || echo '')"  
