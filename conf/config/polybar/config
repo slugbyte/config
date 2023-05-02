@@ -1,39 +1,40 @@
 [section/base]
   top = true
-  offset-x = 70
+  offset-x = 150
   offset-y = 0
   enable-ipc = true
   override-redirect = true
   width = 55%
-  height = 25px
+  height = 55px
   padding = 2
   border-top-size = 6
   background = #211f1f
+  font-0 = NotoMono-Regular:size=25:O
   format-foreground = #6f7377
 
 [bar/main]
   inherit = section/base
-  modules-left = time date utc cpu memory filesystem
+  modules-left = cpu memory filesystem date time 
 
 
 [module/time]
   type = custom/script
   interval = 1
-  exec = date +" %H:%M:%S "
+  exec = date +"%H:%M:%S "
   tail = true
   format-foreground = #6a7f93
 
 [module/date]
   type = custom/script
   interval = 1
-  exec = date +" %^b:%m_%d:%^a"
+  exec = date +" %^b:%^a %y-%m-%d "
   tail = true
   format-foreground = #6f7377
 
 [module/utc]
   type = custom/script
   interval = 1
-  exec = date --utc +" UTC(%H:%M:%S %m-%d) "
+  exec = date --utc +" UTC(%H:%M:%S %m-%d)"
   tail = true
   format-foreground = #6f7377
 
