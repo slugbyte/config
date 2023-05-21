@@ -52,3 +52,4 @@ alias x="git reset"
 alias y="echo naw"
 alias z="echo naw" 
 
+alias pom='npm run pompom'

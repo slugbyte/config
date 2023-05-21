@@ -49,8 +49,10 @@ require('paq') {
 
   -- lsp and syntax
   'neovim/nvim-lspconfig';
+  'williamboman/mason.nvim';
+  'williamboman/mason-lspconfig.nvim';
   'j-hui/fidget.nvim';
-  'williamboman/nvim-lsp-installer';
+  -- 'williamboman/nvim-lsp-installer';
   'jose-elias-alvarez/null-ls.nvim';
   -- 'nvim-treesitter/nvim-treesitter';
 
@@ -66,11 +68,10 @@ require('paq') {
   'rust-lang/rust.vim';
   'cespare/vim-toml';
   'ziglang/zig.vim';
-  -- 'mattn/emmet-vim';
 
   -- lisp util
    'Olical/conjure';
   'slugbyte/paredit.vim';
   'tpope/vim-fireplace';
-  'github/copilot.vim';
+  -- 'github/copilot.vim';
 }
