@@ -14,32 +14,25 @@ require('paq') {
   'nvim-lua/plenary.nvim';
   'rktjmp/lush.nvim';
   'folke/neodev.nvim';
-  -- 'APZelos/blamer.nvim';
 
   -- slugbyte
   'slugbyte/unruly-worker';
   'slugbyte/wet-nvim';
 
-  -- colorscheme
-  'sainnhe/everforest';
-
   -- general util
-  'christoomey/vim-tmux-navigator';
-  'norcalli/nvim-colorizer.lua';
-  'numToStr/Comment.nvim';
   'tpope/vim-eunuch';
-  'jpalardy/vim-slime';
   'tpope/vim-fugitive';
-
-  -- 'junegunn/fzf.vim';
-  -- 'junegunn/fzf';
-  'nvim-telescope/telescope.nvim';
+  'christoomey/vim-tmux-navigator';
+  'numToStr/Comment.nvim';
+  'jpalardy/vim-slime';
   'windwp/nvim-autopairs';
   'ur4ltz/surround.nvim';
+  'slugbyte/paredit.vim';
 
   -- completion
-  -- 'L3MON4D3/LuaSnip';
-  -- 'saadparwaiz1/cmp_luasnip';
+  'nvim-telescope/telescope.nvim';
+  'L3MON4D3/LuaSnip';
+  'saadparwaiz1/cmp_luasnip';
   'hrsh7th/cmp-nvim-lsp';
   'hrsh7th/cmp-nvim-lua';
   'hrsh7th/cmp-cmdline';
@@ -54,7 +47,9 @@ require('paq') {
   'j-hui/fidget.nvim';
   -- 'williamboman/nvim-lsp-installer';
   'jose-elias-alvarez/null-ls.nvim';
-  -- 'nvim-treesitter/nvim-treesitter';
+  'nvim-tree/nvim-web-devicons';
+  'nvim-treesitter/nvim-treesitter';
+  'nvimdev/lspsaga.nvim';
 
   -- status
   'nvim-lualine/lualine.nvim';
@@ -71,7 +66,6 @@ require('paq') {
 
   -- lisp util
    'Olical/conjure';
-  'slugbyte/paredit.vim';
-  'tpope/vim-fireplace';
+  -- 'tpope/vim-fireplace';
   -- 'github/copilot.vim';
 }

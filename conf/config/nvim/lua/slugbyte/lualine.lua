@@ -1,4 +1,5 @@
 local wet_lualine = require ('wet').lualine
+
 require('lualine').setup {
   options = {
     icons_enabled = false,

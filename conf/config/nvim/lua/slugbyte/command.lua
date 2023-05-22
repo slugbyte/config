@@ -1,3 +1,13 @@
+local telescope_builtin = require('telescope.builtin')
+function Edit_Config()
+  telescope_builtin.find_files({
+    cwd = '~/.config/nvim',
+    follow = true,
+    hidden = true,
+  })
+end
+vim.cmd('command! EditConfig :lua Edit_Config()')
+
 function Highlight_Toggle()
   if vim.o.hlsearch then
     print("[highlight off]")
@@ -32,3 +42,6 @@ function Pastemode_Toggle()
   end
 end
 vim.cmd('command! PastemodeToggle :lua Pastemode_Toggle()')
+
+vim.cmd('command! TrimLines :%s/\\s\\+$//e|norm!`` ')
+vim.cmd('command! Reload :luafile ~/.config/nvim/init.lua')
