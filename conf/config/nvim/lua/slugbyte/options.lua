@@ -30,17 +30,6 @@ vim.g.is_bash = true
 vim.o.termguicolors = true
 vim.wo.signcolumn = 'yes'
 vim.cmd('colorscheme wet')
-
--- vim.g.blamer_delay = 500
--- vim.g.blamer_date_format = '%y-%m-%d'
--- vim.g.blamer_enabled = 1
--- vim.g.blamer_relative_time = 1
-
-vim.cmd('autocmd FileType markdown setlocal wrap')
-vim.cmd('autocmd FileType markdown setlocal textwidth=80')
-vim.cmd('autocmd FileType markdown setlocal linebreak')
-vim.cmd('autocmd FileType markdown setlocal spell')
-vim.cmd('autocmd FileType text setlocal spell')
-
--- auto remove trailing whitespace
--- vim.cmd('autocmd BufWritePre * :%s/\\s\\+$//e|norm!`` ')
+vim.cmd('hi DiagnosticWarn guifg=#2a2a2a')
+vim.cmd('hi DiagnosticSignWarn guifg=#2a2a2a')
+vim.cmd('hi DiagnosticSignWarn guibg=#555555')

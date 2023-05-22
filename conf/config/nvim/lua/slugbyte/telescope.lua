@@ -1,4 +1,5 @@
-require('telescope').setup({
+local telescope = require('telescope')
+telescope.setup({
   pickers = {
     find_files = {
       find_command = {
@@ -16,3 +17,4 @@ require('telescope').setup({
     }
   },
 })
+

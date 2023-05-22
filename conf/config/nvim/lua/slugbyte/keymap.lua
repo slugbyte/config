@@ -1,5 +1,8 @@
 local map = vim.api.nvim_set_keymap
 
+-- clear line
+vim.cmd("imap <c-u> <esc>ddi")
+
 local unruly_worker = require('unruly-worker')
 unruly_worker.setup({
   enable_lsp_map = true,
@@ -15,19 +18,14 @@ unruly_worker.setup({
 vim.g.mapleader = ' '
 vim.g.local_leader = ' '
 
-
+-- save all files
 function Save()
   vim.cmd("silent! wall")
   print("[write all]", string.sub(math.random() .. "", -4, -1))
 end
-
--- search
-
--- clear search
-map('n', '<leader>/', ':let @/ = ""<CR>', {})
+map('n', '<leader>w', "'lua Save()<CR>", {desc = "save all"})
 
 -- window
-map('n', '<leader>w', "'lua Save()<CR>", {desc = "save all"})
 map('n', '<leader>q', "'qall<CR>", { desc = "quit all"})
 map('n', '<leader>n', "'n<CR>", {desc = "next buffer"})
 map('n', '<leader>p', "'prev<CR>", {desc = "prev buffer"})
@@ -44,14 +42,9 @@ map("n", '<leader>r', "<Plug>SurroundReplace", {})
 map("n", '<leader>d', "<Plug>SurroundDelete", {})
 map("v", 's', "<Plug>SurroundAddVisual", {})
 
--- fzf
+-- telescope
 map('', 'j', ":Telescope find_files<CR>", { noremap = true, desc = "t find files"})
 map('', 'J', ":Telescope live_grep<CR>", { noremap = true, desc = "t grep"})
-map('', 'J', ":Telescope live_grep<CR>", { noremap = true, desc = "t grep"})
-map('', 'J', ":Telescope live_grep<CR>", { noremap = true, desc = "t grep"})
-
-vim.keymap.set('n', '<leader>,', ":ConjureEvalRootForm<CR>", { desc = 'Eval Root Form' })
-
 vim.keymap.set('n', '<leader>tf', require('telescope.builtin').find_files, { desc = 'Search Files' })
 vim.keymap.set('n', '<leader>th', require('telescope.builtin').help_tags, { desc = 'Search Help' })
 vim.keymap.set('n', '<leader>tw', require('telescope.builtin').grep_string, { desc = 'Search current Word' })
@@ -63,13 +56,14 @@ vim.keymap.set('n', '<leader>ti', require('telescope.builtin').lsp_implementatio
 vim.keymap.set('n', '<leader>to', require('telescope.builtin').oldfiles, { desc = 'Search old files' })
 vim.keymap.set('n', '<leader>tk', require('telescope.builtin').keymaps, { desc = 'Search keymaps' })
 vim.keymap.set('n', '<leader>/', function()
-  -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
+-- conjure
+vim.keymap.set('n', '<leader>,', ":ConjureEvalRootForm<CR>", { desc = 'Eval Root Form' })
 
 -- jump scroll
 map('', '@', "zt", { noremap = true })
@@ -82,10 +76,6 @@ map('', '&', ':lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = 
 -- conjure
 vim.cmd('let g:conjure#mapping#prefix = ","')
 
-
 -- copilot
--- vim.cmd("let g:copilot_filetypes = { '*' : false }")
-vim.cmd("let g:copilot_no_tab_map = v:true")
-vim.cmd("let g:copilot_enabled = v:false")
 vim.cmd('imap <silent><script><expr> <C-q> copilot#Accept("\\<CR>")')
 vim.cmd('imap <silent><script><expr> <C-d>s <Plug>(copilot-suggest)')

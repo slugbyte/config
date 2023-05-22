@@ -1,3 +1,23 @@
+require("lspsaga").setup({})
+require'Comment'.setup()
+require"fidget".setup{}
+require('nvim-autopairs').setup{}
+require'gitsigns'.setup{}
+require'surround'.setup {
+  context_offset = 100,
+  load_autogroups = false,
+  space_on_closing_char = false,
+  load_keymaps = false,
+  map_insert_mode = false,
+  quotes = {"'", '"', '`'},
+  brackets = {"(", '{', '['},
+  pairs = {
+    nestable = { b = { "(", ")" }, s = { "[", "]" }, B = { "{", "}" }, a = { "<", ">" } },
+    linear = { q = { "'", "'" }, t = { "`", "`" }, d = { '"', '"' } }
+  },
+}
+
+-- neodev
 require("neodev").setup({
   library = {
     enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
@@ -18,3 +38,13 @@ require("neodev").setup({
   -- in your lsp start options
   lspconfig = true,
 })
+
+-- paredit
+vim.g.slime_target = "tmux"
+vim.g.paredit_smartjump = 1
+vim.cmd('au FileType fennel call PareditInitBuffer()')
+
+-- copilot
+--vim.cmd("let g:copilot_filetypes = { '*' : false }")
+vim.cmd("let g:copilot_no_tab_map = v:true")
+vim.cmd("let g:copilot_enabled = v:false")
