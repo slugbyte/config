@@ -1,0 +1,18 @@
+{
+  "type": "module",
+  "dependencies": {
+    "pretty-bytes": "^6.1.0",
+    "ts-node": "^10.9.1"
+  },
+  "name": "generator-collect",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
