@@ -47,9 +47,9 @@ require('paq') {
   'j-hui/fidget.nvim';
   -- 'williamboman/nvim-lsp-installer';
   'jose-elias-alvarez/null-ls.nvim';
-  'nvim-tree/nvim-web-devicons';
   'nvim-treesitter/nvim-treesitter';
-  'nvimdev/lspsaga.nvim';
+  -- 'nvim-tree/nvim-web-devicons';
+  -- 'nvimdev/lspsaga.nvim';
 
   -- status
   'nvim-lualine/lualine.nvim';

@@ -1,4 +1,3 @@
-require("lspsaga").setup({})
 require'Comment'.setup()
 require"fidget".setup{}
 require('nvim-autopairs').setup{}
