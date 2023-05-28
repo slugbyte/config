@@ -1,0 +1,1180 @@
+ls
+cd /opt/pomelo_backend/
+pwd
+help
+cd
+cd ba
+n backend
+zoxide ba
+zoxide --help
+ls
+cd workspace/
+ls
+open .
+ls
+pwd
+ls | <\n>select type
+ls | <\n>select type | filt di
+ls | <\n>select type | filter 
+ls
+cd /opt/pomelo_backend/hide/
+ls
+cat firebase.json
+ls
+ls firebase.json 
+cat firebase.json
+cat firebase.json |select type
+open firebase.json
+open firebase.json |select type
+open firebase.json |select type | save cool.txt
+open firebase.json |select type | append cool.txt
+e cool.txt
+nvim cool.txt
+open firebase.json |select type | save cool.txt
+open firebase.json |select type | save acool.txt
+ls
+trash acool.txt cool.txt
+ls
+ls ~
+ls -lah ~
+ls -a ~
+ls -a ~/.config/nvim/
+ls
+ls $PWD/
+ls $pwd
+ls $(pwd)
+echo 
+which echo
+help
+help save
+open firebase.json |select type | save --append cool.txt
+help save
+open firebase.json |select type | str | save --append cool.txt
+e cool.txt
+nvim cool.txt
+open firebase.json |select type | str 
+open firebase.json |select type | str camel-case 
+open firebase.json |select type  
+trash cool.txt
+ls
+zsh
+alacritty nu
+alacritty --help
+ls
+alacritty --command nu
+alacritty --command zsh
+clear
+help
+alacritty --command nu
+which cd
+cd --help
+ls
+exa
+ls
+ls -lah 
+help
+ls
+nu --version
+30day
+30day / 2sec
+ls -l
+ls
+which n
+n
+n --help
+n
+prev
+p
+which p
+p help
+p --help
+$nu.scope.aliases
+for x in (ls)
+for x in $(ls)
+for --help
+fo x in [`ls`] { echo $x }
+for x in [`ls`] { echo $x }
+for x in [exec ls] { echo $x }
+for x in ls] { echo $x }
+for x in ls { echo $x }
+for x in `ls` { echo $x }
+for x in $(ls) { echo $x }
+for x in [$(ls)] { echo $x }
+for x in ls { echo $x }
+wat=$(ls)
+help exa
+help ls
+stat (ls)
+(ls)
+for x in (ls).name {<\n>echo $x is cool <\n>}
+for x in (ls).name {<\n>print( $x is cool ) <\n>}
+for x in (ls).name {<\n>print( "$x is cool" ) <\n>}
+for x in (ls).name {<\n>print( "$x is cool" ) <\n>} clear
+clear
+echo $ls
+clear
+$env
+help
+cd ~/workspace/code/cat-zig/
+clear
+ls
+zig build run
+cd ~/workspace/play
+mkdir -p wat/{cool, beans}
+mkdir wat/{cool, beans}
+tree wat
+rm `wat/{cool, beans}/`
+ls wat/
+md wat/{cool,beans}
+mkdir wat/{cool,beans}
+ls wat/
+trash wat/*
+which trash
+ls
+n
+p
+n
+which n
+helpn
+help n
+alias n=zoxide
+alias n='zoxide'
+alias n 'zoxide'
+zoxide 
+zoxide init nu
+zoxide init nushell
+eval (zoxide init nushell)
+zoxide init nushell > ~/.zoxide.nu
+cd /opt/pomelo_backend/
+l
+ls
+clear
+git checkout develop
+l
+ls
+help aliias
+help alias
+alias l = exa
+l
+clear
+l
+echo $PROMP
+help prompt
+net
+register net
+register nu_plugin_net
+cargo install nu_plugin_net
+rustup
+rustup update
+rustup 
+rustup update
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+which cargo
+rustup doc/
+rustup 
+rustup show
+source ~/.zoxide.nu
+cargo install nu_plugin_net
+ls
+l
+cargo install zoxide
+zoxide init nushell
+t
+zoxide init nushell
+zoxide init nushell | save -f ~/.zoxide.nu
+source ~/.zoxide.nu
+z
+z backend
+alias n = z
+n temp
+n home
+n w
+claer
+ls
+l
+alias l = exa
+ls
+l
+ls
+alias ls = exa
+ls
+help alias
+unalias ls
+delete ls
+help
+help alias
+config --set [propmpt "> "]
+config --set [prompt "> "]
+config set [prompt "> "]
+help config
+config nu
+env.PROMPT_COMMAND = {|| "> "}
+env.PROMPT_COMMAND = {|| (echo "> ")}
+$env.PROMPT_COMMAND = echo "> "
+$env.PROMPT_COMMAND {|| "> "}
+$env.PROMPT_COMMAND {|| (echo "> ")}
+$env.PROMPT_COMMAND {|| (put "> ")}
+$env.PROMPT_COMMAND {|| (ansi {fg '#ff7a7a' attr: 'n'}) + '> '}<\n>
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD }
+ls
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + "> " }
+ls
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD + "\n" }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD + '\n' }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD + "\n" }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD + ">" }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD + \n }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD + \\n }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD + "\n" }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + $env.PWD + $env.DISPLAY }
+ls
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) "%" }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) + '*' }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#ffa' attr: 'n'}) + '*' }
+$env.PROMPT_COMMAND_RIGHT = {|| (ansi { fg: '#ffa' attr: 'n'}) + 'pwd' }
+$env.PROMPT_COMMAND_RIGHT = {|| (ansi { fg: '#ffa' attr: 'n'}) + $env.PWD }
+ls
+clear
+$env.PROMPT_COMMAND_RIGHT = {|| (ansi { fg: '#ffa' attr: 'n'}) + (echo)  }
+$env.PROMPT_COMMAND_RIGHT = {|| (ansi { fg: '#ffa' attr: 'n'}) + (echo "\n")  }
+$env.PROMPT_COMMAND_RIGHT = {|| (ansi { fg: '#ffa' attr: 'n'}) + (echo -e "\n")  }
+$env.PROMPT_COMMAND_RIGHT = {|| (ansi { fg: '#ffa' attr: 'n'}) + (printf "\n")  }
+clear
+$env.PROMPT_COMMAND_RIGHT = {|| (ansi { fg: '#ffa' attr: 'n'}) + (printf '\n')  }
+$env
+let-env PROMPT_INDICATOR = "\n >"
+let-env PROMPT_INDICATOR = "\n > "
+ls
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) $env.PWD }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) ($env.PWD) }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'})+  ($env.PWD) }
+$env.PROMPT_COMMAND = {|| (ansi { fg: '#fafafa' attr: 'n'}) +  ($env.PWD) }
+ls
+let-env PROMPT_INDICATOR = '\n > '
+let-env PROMPT_INDICATOR = "\n > "
+let-env PROMPT_INDICATOR = "\n%"
+let-env PROMPT_INDICATOR = "\n"
+let-env PROMPT_INDICATOR = "\n "
+ls
+cler
+let-env PROMPT_INDICATOR = "\n> "
+let-env PROMPT_INDICATOR = "> "
+let-env PROMPT_INDICATOR = ">\n "
+let-env PROMPT_INDICATOR = "\n>> "
+let-env PROMPT_INDICATOR = "\n > "
+let-env PROMPT_INDICATOR = "\n\n> "
+let-env PROMPT_INDICATOR = '\n> '
+let-env PROMPT_INDICATOR = `\n> `
+let-env PROMPT_INDICATOR = "\n> '"
+cargo install starship --locked
+starship init nu | save -f ~/.cache/starship/init.nu
+source ~/.cache/starship/init.nu
+clear
+n backend
+ls -lah
+ls
+help
+unset ls
+edit.sh ~/.config/starship.toml
+ls
+docker --version
+npm --version
+ls
+l
+ls
+exa
+clear
+exa
+echo $env.PATH
+echo $env.PATH |tr
+echo $env.PATH |tr ":" "\n"
+echo $env.PATH 
+$env.CMD_DURATION_MS
+sleep 1
+sleep 1s
+help sleep
+sleep 1sec
+$env.CMD_DURATION_MS
+clear
+e package.json
+cat package.json
+cat package.json |less
+ls
+ls -lah
+z code
+ls
+which n
+ls
+n cat-zig/
+ls
+s
+ls -lah
+ls
+n /code
+ls
+alias md = mkdir
+md wat/cool,beans
+tree
+trash wat/*
+ls
+ls -lah
+ll
+ls
+ls -lah
+n wat
+zig init-exe
+ls
+zvm install master
+n wat
+z
+ls -lah
+ls
+ls -lah
+ll
+ls -lah
+ls **.sh
+n wor
+ls **.sh
+ls **/*.sh
+echo **/*.sh
+print **/*.sh
+ **/*.sh
+ls
+ps
+clear
+ps | where cpu > 5
+ps | where cpu > 2
+ps | where cpu > 1
+ps | where cpu > 5
+ps | where cpu > 1
+ps | where cpu > 0.5
+ps | where cpu > 12
+ps | where mem > 23MB
+ps | where mem < 23MB
+ps | where mem < 23MB |limit 5
+ps | where mem < 23MB | select name
+ps | where mem < 23MB | select status
+clear
+s
+git status
+A
+c
+A
+git add .
+git commit -a -m 'wat<\n>'
+s
+p
+git push origin main
+clear
+date now
+date to-table
+date now | date to-table
+date now | date to-table |select year
+date now | date to-table |select year | put
+date now | date to-table |select year | echo
+date now | date to-table |select year | echo $1
+date now | date to-table |select year | echo $in
+date now | date to-table |select year | echo $in.0
+date now | date to-table |select year | echo $in.0 |select year
+date now | date to-table |select year | echo $in.0 |select wat
+date now | date to-table |select year | echo $in.0
+date now | date to-table |select year | echo $in select 0
+date now | date to-table |select year | echo $in | select 0
+cool = date now | date to-table |select year | echo $in | select 0
+var cool = date now | date to-table |select year | echo $in | select 0
+sys
+sys | table
+sys | get host
+sys | get net
+sys
+sys get host
+sys | get host
+sys | get cup
+sys | get cpu
+clear
+sys 
+sys
+sys |table
+sys |get temp
+sys | get host
+sys | get host.long_os_version
+ls
+ls | 0
+ls | get 0
+ls | get 0.name
+ls **
+ls **/*.sh
+ls **/*.sh |where name includes "plug"
+ls **/*.sh |where name include "plug"
+ls **/*.sh |where name like "plug"
+ls
+ls |length
+ls |copy
+ls | get 0.name
+let wat = ls | get 0.name 
+let wat = (ls | get 0.name ) 
+echo $wat
+echo "cool" | save $"$wat.cool"
+ls
+echo "cool" | save $wat".cool"
+echo "cool" | save $wat + ".cool"
+echo "cool" | save $wat ".cool"
+echo "cool" | save $"$(wat).cool"
+echo "cool" | save $"(wat).cool"
+wat
+echo $wat
+echo "cool" | save $"($wat).cool"
+ls
+trash CODE_OF_CONDUCT.md
+ls **/plug/*.sh | enumerate | each {|f| <\n>echo $"wat ($f) is going on"<\n>} 
+ls **/plug/*.sh
+ls **/plug/*.sh | enumerate
+ls **/plug/*.sh | each
+ls **/plug/*.sh | each {|f| echo $"wat ($f)" }
+ls **/plug/*.sh | each {|f| echo $"wat ($f.name)" }
+ls **/plug/*.sh | each {|f| echo $"wat ($f.name)" } | save cool.beans
+edit cool.beans
+ls
+nvim cool.beans
+ls
+cat cool.beans
+cat cool.beans |table
+table cool.beans
+enumerate
+help
+help iterate
+help enumerate
+nu --version
+open cool.beans
+open cool.beans | lines
+open cool.beans | words
+open cool.beans | lines
+open cool.beans | format "{$name} {$wat}"
+open cool.beans | format "{$nit.name} {$it.wat}"
+ls
+trash ./$wat.cool
+ls
+ls | each
+ls | each\
+ls | each ^
+help save
+help str
+echo "12321" | str to-int
+echo "12321" | str 
+echo "12321" | str  title-case
+echo "1232-1" | str  title-case
+echo "ab12coo32-1" | str  title-case
+echo "ab12coo32-1" | str  snake-case
+echo "ab12coo32-1" | str  snake-case | str upper-case
+echo "ab12coo32-1" | str  snake-case | str uppercase
+help str
+echo "ab12coo32-1" | str  snake-case | str upcase
+echo "ab12coo32-1" | str  snake-case | str upcase | str lowcase
+echo "ab12coo32-1" | str  snake-case | str upcase | str lowercase
+echo "ab12coo32-1" | str  snake-case | str upcase | str locase
+help str
+help str |srt upcase
+help str |str upcase
+help str |str index-of lower
+help str |str index-of lowercase
+help str
+echp "WAT" | str lowercase
+help str | rg lower
+echo "ab12coo32-1" | str  snake-case | str upcase | str downcse
+echo "ab12coo32-1" | str  snake-case | str upcase | str downcase
+ls
+ls | select name
+ls | select name | xclip -selection c
+e
+nviim
+nvimi
+nvim
+ls
+ls |str
+ls |concat
+ls | into str
+ls | into string
+ls | into int
+help into
+ls | select name | into str
+ls | select name | into string
+ls | select name | join
+ls | select name | join '\n'
+help join
+ls | reduce {|c f| <\n>$"$($c)\n($f)"<\n>}
+ls | reduce {|c f| <\n>$"$($c)\n($f.name)"<\n>}
+ls | reduce {|c acc| <\n>$"$($c.name)\n($acc)"<\n>}
+ls | reduce {|c acc| <\n>$"($c.name)\n($acc)"<\n>}
+ls | reduce {|c acc| <\n>$"($c.name)\n($acc)"<\n>} |into str
+ls | reduce {|c acc| <\n>$"($c.name)\n($acc)"<\n>} |into string
+def my god[name] {<\n>echo $"fuuk you ($name)"<\n>}
+def my-god[name] {<\n>echo $"fuuk you ($name)"<\n>}
+def my-god[name] {<\n>$"fuuk you ($name)"<\n>}
+def my-god [name] {<\n>$"fuuk you ($name)"<\n>}
+def mygod [name] {<\n>$"fuuk you ($name)"<\n>}
+def my god [name] {<\n>$"fuuk you ($name)"<\n>}
+def "my god" [name] {<\n>$"fuuk you ($name)"<\n>}
+my god
+my god cool
+config nu
+ls
+sys | save wat
+e wat
+nvim wat
+help save
+sys
+sys | save wat.nuon
+e wat.nuon
+nvim wat.nuon
+open wat.nuon
+open wat.nuon | mem
+open wat.nuon | select mem
+open wat.nuon | table mem
+open wat.nuon | table 
+sys
+open wat.nuon |get mem
+help
+help |bat
+help commands
+config nu
+nu
+eixt
+nu
+help commands | select name
+cal
+cal | collumns
+cal | columns
+help commands | collumns
+help commands | columns
+help commands | select name,category
+help commands | select name category
+help commands | select name category | sort-by category
+help commands | select name | bat
+nu
+nu
+nu
+help commands | select name category | sort-by category | bat
+date | date humanize 
+"5 pm" | date humanize  
+node
+"2023-05-22T15:49:43.784Z" | date humanize 
+nark
+snark
+ 
+          exit
+42 | describe
+42day describe
+42days describe
+42d describe
+42ms describe
+42ms | describe
+42days | describe
+42day | describe
+42day | into ms
+42day / 1ms
+1day / 1s
+1day / 1sec
+5min / 1sec
+claer
+clear
+0..4
+0..4 | each {|i| <\n>echo $i<\n>}
+0..4 | each {|i| <\n>echo $i booger<\n>}
+0..4 | each {|i| <\n>echo $"($i) booger"<\n>}
+clear
+"5min" | into duration 
+("5min" | into duration ) / 1sec
+"5 minute" | into duration
+"5 min" | into duration
+"5min" | into duration
+clear
+echo 'cool\nbeans'
+echo "cool\nbeans"
+21mb / 1b
+24mb / 1b
+24kb / 1b
+1Gib/ 1b
+1Gib / 1b
+1mib / 1b
+1mb / 1b
+1mib / 1b
+1kib / 1b
+ls | take 2
+clear
+{name: "hi where" age: 10} 
+{name: "hi where" age: 10}  |get age
+claer
+{name: "hi where" age: 10}  | transpose x y
+{name: "hi where" age: 10}  | transpose x y z
+{name: "hi where" age: 10 goo: beans}  | transpose x y z
+{name: "hi where" age: 10} | transpose
+{name: "hi where" age: 10} | transpose x y
+{name: "hi where" age: 10} | transpose x y |\
+{name: "hi where" age: 10} | transpose x y | <\n>each {|it| <\n>echo $"key is ($it.x) val is ($it.y)"<\n>}
+{name: "hi where" age: 10} | transpose x y | <\n>each {|it| <\n>echo $"key is ($it.x) val is ($it.y)"<\n>} | vals
+{name: "hi where" age: 10} | transpose x y | <\n>each {|it| <\n>echo $"key is ($it.x) val is ($it.y)"<\n>} | values
+{name: "hi where" age: 10} | transpose x y | <\n>each {|it| <\n>echo $"key is ($it.x) val is ($it.y)"<\n>} | rows
+{name: "hi where" age: 10} | transpose x y | <\n>each {|it| <\n>echo $"key is ($it.x) val is ($it.y)"<\n>} | columns
+{name: "hi where" age: 10} | transpose x y | <\n>each {|it| <\n>echo $"key is ($it.x) val is ($it.y)"<\n>} | get 1
+clear
+[a b c d e]
+[a b c d e] | rage 0..1
+[a b c d e] | range 0..1
+[a b c d e] | range 1..1
+[a b c d e] | range 1..3
+[a b c d e] | range -1..3
+[a b c d e] | range 1..-3
+[a b c d e] | range 0..-3
+[a b c d e] | range 0..3
+[a b c d e] | range 0..<3
+[a b c d e] | range 0..3
+claer
+[{foo: 123}, {}].foo
+[{foo: 123}, {}].foo?
+[{foo: 123}, {foo: null}].foo?
+[{foo: 123}, {foo: null}]
+[{foo: 123}, {foo: null}].foo
+[{foo: 123}, {foo: null}].foo 
+[{foo: 123}, {foo: null}].wat 
+clear
+open .
+rg 'todo' | lines | split column ':'
+rg 'todo' | lines | split column ':' | get column 1t
+rg 'todo' | lines | split column ':' | get column1
+rg 'todo' | lines | split column ':' | get column1 |uniq
+edit.sh (rg 'todo' | lines | split column ':' | get column1 |uniq )
+rg 'todo' | lines | split wat ':' | get column1 |uniq
+rg 'todo' | lines | split wat ':' | get wat1 |uniq
+rg 'todo' | lines | split wat ':' 
+rg 'todo' | lines | split cloumn ':' 
+rg 'todo' | lines | split cloumn':' 
+rg 'todo' | lines | split cloumn ':'
+rg 'todo' | lines 
+rg 'todo' | lines | split ':' 
+rg 'todo' | lines | split cloumn ':' 
+rg 'todo' | lines | split cloumn ":"
+rg 'todo' | lines | split column ":"
+rg 'todo' | lines | split row ":"
+rg 'todo' | lines | split row ":" |clomuns
+rg 'todo' | lines | split row ":" | columns
+rg 'todo' | lines | split columns ":" | columns
+rg 'todo' | lines | split column ":" | columns
+rg 'todo' | lines | split column ":" 
+help split
+rg 'todo' | lines | split list 
+rg 'todo' | lines | split list ":"
+rg 'todo' | lines | split list ":" |get 0
+rg 'todo' | lines | split list ":" |get 0.0
+rg 'todo' | lines | split words
+rg 'todo' | lines | split words | histogram 
+help open
+cd /
+cd /o
+cd /opt/pomelo_backend/
+ls
+open compose.yml
+open compose.yml |table
+open compose.yml |get services
+open compose.yml |get services.archiver
+open compose.yml |get services.archiver.volumes
+open package.json
+open package.json | get scripts
+open package.json | get scripts | keys
+open package.json | get scripts | columns
+clear
+neofetch
+clear
+ping example.com
+help e
+alias e = edit.sh
+e ~/.cool
+n
+help n
+n
+cd /opt/pomelo_backend/
+n
+cd ~/workspace/
+n
+enter wat
+ls
+enter ..
+n
+p
+help n
+n
+help shells
+shells
+exit
+shells
+alias n = z
+n
+source ~/.zoxide.nu
+n ba
+clear
+shells
+n
+enter .
+e
+nvim .
+exit
+^ls
+^grep
+rg
+ls | get name | to text 
+ls | get name | to text |rg hide
+ls | get name | to text |rg no
+ls | get name | to text |rg no |lines
+ls | get name | to text |rg no |lines | get 1
+ls | get name | to text |rg no |lines | get 1 | nvim
+man nvim
+ls | get name | to text |rg no |lines | get 1 | nvim -
+ls | get name | to text |rg no |lines | get 1 | nvim $in
+nvim (ls | get name | to text |rg no |lines | get 1 )
+clear
+echo $env.path
+echo $env.PATH
+echo $env.PATH | to text
+echo $env.PATH | to text |tr '\n' ':'
+echo $env.PATH | to text | uniq
+echo $env.PATH | to text | sort
+echo $env.PATH | to text | sort-by length
+echo $env.PATH | to text | sort-by 
+help sort-by
+echo $env.PATH | to text | lines
+echo $env.PATH | to text | lines | count
+echo $env.PATH | to text | byets length
+echo $env.PATH | to text | bytes length
+echo $env.PATH | to text | lines| bytes length
+echo $env.PATH |to text| lines | bytes length
+echo $env.PATH | lines
+echo $env.PATH
+echo $env.PATH | each {|in| <\n>[$in (count $in)]<\n>}
+echo $env.PATH | each {|in| <\n>[$in (bytes length $in)]<\n>}
+echo $env.PATH | each {|in| <\n>[$in (bytes length $in)]<\n>} | table
+echo $env.PATH | each {|in| <\n>[$in (bytes length $in)]<\n>} | get 0
+"sohetns6" | length
+echo $env.PATH | each {|in| <\n>[$in (lenth $in)]<\n>}
+echo $env.PATH | each {|in| <\n>[$in (length $in)]<\n>}
+echo $env.PATH | each {|in| <\n>[$in.0 (length $in.0)]<\n>}
+echo $env.PATH | each {|in| <\n>[$in (length $in)]<\n>}
+echo $env.PATH | each {|in| <\n>[$in length]<\n>}
+echo $env.PATH | each {|in| <\n>$in<\n>}
+echo $env.PATH | each {|in| <\n>length in<\n>}
+echo $env.PATH | each {|in| <\n>(length $in)<\n>}
+echo $env.PATH | each {|in| <\n>[$in ($in | length)]<\n>}
+echo $env.PATH | each {|in| <\n>[$in ($in | length)]<\n>} | get 0
+echo $env.PATH | each {|in| <\n>[$in ($in | length)]<\n>} | get 2
+echo $env.PATH | each {|in| <\n>[$in ($in | to-text | length)]<\n>} | get 2
+echo $env.PATH | each {|in| <\n>[$in ($in | to text | length)]<\n>} | get 2
+"shotnshton" length
+"shotnshton" | length
+"shotnshton" | bytes length
+"shotnshton" | to bytes | bytes length
+"shotnshton" | to byte | bytes length
+"shotnshton" | str length
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>}
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | get 0
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | table
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | columns
+echo $env.PATH | each {|in| <\n>$in ($in | str length)<\n>}
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | table 
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | 6 text
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text ':'
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | split ", "
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split ","
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split 
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split cloumns ", "
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split columns ", "
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", "
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | split column ", "
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", "
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", " | sort by cloumn2
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", " | sort by column2
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", " | sort column2
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", " | sort-by column2
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", " | sort-by  column1
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", " | sort-by  column2
+echo 'cool''beans'
+clear
+'sohe4<\n><\n>soetnsht'
+clear
+"sho54 sh6<\n>oshe4os<\n><\n><\n>osehtnosehtn<\n>stshoe4<\n><\n>'<\n>"
+help echo
+echo print
+help print
+help echo
+echo 123
+echo 1 2 3 | table 
+print 1 2 3 | table 
+clear
+ls | get name | echo | print $"wat ($in)"
+ls | get name | echo $in | print $"wat ($in)"
+ls | get name | echo $in | print $"wat ($in.0)"
+ls | get name | echo $in | print $"wat ($in.100)"
+ls | get name | echo $in | print $"wat ($in.4)"
+clear
+help enumerate
+enumerate
+clear
+enumerate
+nu --version
+cargo install nu
+version
+enumerate 
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", " | sort-by  column2
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | to text | lines | split column ", " 
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} 
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>}  | flatten
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>}  | columns
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>}  | table 
+help table
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>}  | table  --collapse
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} 
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | wrap
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | warp
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | flatten | wrap a b
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | flatten | wrap a 
+echo $env.PATH | each {|in| <\n>[$in ($in | str length)]<\n>} | flatten | wrap a | odd
+help reduce
+help map
+help table
+help update
+clear
+ping example.com
+n work
+cd ~/workspace/
+cloc plug/
+which cat
+clear
+ls
+ls -lah
+clear
+ls
+claer
+clear
+set
+clear
+clear
+ls
+ls -lah
+ls  rl
+ls  -l
+ls  -a
+ls  -l | columns
+ls  -l | select name mode
+def "ls -m" [] {<\n>ls -l | select name mode<\n>}
+ls -m
+ls -a -m
+ls -am
+clear
+ls -m
+ls -m | select 10
+ls -m | select 10 | open | table
+ls -m | select 10 | open $in | table
+ls -m | select 10.name | open 
+ls -m | select 10
+ls -m | select 10.0.name
+ls -m | select 10.name
+ls -m | select 10 | select 0.name
+ls -m | select 10 | select name
+ls -m | select 10 | select name.0
+ls -m | select 10 | get name
+ls -m | select 10 | get name | open
+ls -m | select 10 | get name.0 | open
+ls -m | select 10 | get name.0 | open | table
+ls -m | select 10 | get name.0 | open | from json 
+ls
+ls -m | select 15 | get name.0 | open | from json 
+ls -m | select 15 | get name.0 
+ls -m | select 15 | get name.0 | from json
+ls -m | select 15 | get name.0 | open
+ls -m | select 15 | get name.0 | open | get version
+ls -m | select 15 | get name.0 | open | get version | inc patch
+ls -m | select 15 | get name.0 | open | get version | spilt "."
+ls -m | select 15 | get name.0 | open | get version | spilt list "."
+ls -m | select 15 | get name.0 | open | get version | spilt columns "."
+ls -m | select 15 | get name.0 | open | get version | spilt column "."
+ls -m | select 15 | get name.0 | open | get version 
+ls -m | select 15 | get name.0 | open | get version | split column '.'
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 {|x| x | into int | + 1 }
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| $x | into int | + 1 }
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| $x | into integer | + 1 }
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| $ | + 1 }
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| $x | + 1 }
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| $x | math sum 1 }
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| $x | math sum }
+1 + 1}
+1 + 1
+"2" + 1
+("2" | into integer) + 1
+into int 
+("2" | into int) + 1
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| ($x |into int) + 1 }
+help update
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| ($x.column2 |into int) + 1 }
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| ($x.column2 |into int) + 10 }
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| ($x.column2 |into int) + 10 | str}
+ls -m | select 15 | get name.0 | open | get version | split column '.'| update column3 { |x| ($x.column2 |into int) + 10 | into string}
+clear
+ls
+cd wor
+z wor
+clear
+tmux
+e ~/.config/tmux/tmux.conf
+nvim ~/.config/tmux/tmux.conf
+tmux
+tmux source ~/.config/tmux/tmux.conf
+claer
+ls
+tmux
+clear
+cler
+clear
+which t
+t
+alias t = tmux
+alias e = edit.sh
+ls
+e
+which e
+unalias e
+t
+echo $env.config-path
+echo $nu.config-path
+edit.sh $nu.config-path
+nvim $nu.config-path
+which nvim
+nvim
+zsh
+nvim $nu.config-path
+n
+n ~
+n workspace/
+clear
+e
+which nvim
+env.PATH
+$env.PATH
+$env.PATH |append .
+$env.PATH |prepend .
+echo $PATH
+clear
+$env.PATH = $env.PATH | prepend "/home/slugbyte/workspace/root/bin/"
+echo $PATH
+echo $env.PATH
+let-env PATH = $env.PATH | prepend "/home/slugbyte/workspace/root/bin/"
+$env.PATH
+$env.PATH | prepend .
+$env.PATH | prepend "/home/slugbyte/workspace/root/bin/"
+let-env PATH = $env.PATH | prepend "/home/slugbyte/workspace/root/bin/"
+let-env PATH = ($env.PATH | prepend "/home/slugbyte/workspace/root/bin/")
+echo $env.PATH
+e
+which nvim
+let-env PATH = ($env.PATH | prepend "/home/slugbyte/workspace/root/bin/")
+e
+which nvim
+nvim
+e
+which nvim
+tmfx
+which nvim
+/home/slugbyte/workspace/root/bin/nvim 
+nvim
+echo $nu.env-path
+nvim $nu.env-path
+n
+e
+echo $env.PATH
+which nvim
+e
+nvim
+tmux
+e
+tmux
+e
+n 
+n workspace/
+n code
+n wo/code
+n
+n wo/co
+n code
+n -
+cler
+e $nu.env
+clear
+ls 
+e
+edit.sh
+t
+tmux
+e $nu.env
+e $nu.env-path
+ls
+nu
+ls
+nvim
+/usr/bin/nvim
+which nvim
+which nvim | get path
+which nvim | get path.I
+which nvim | get path.0
+ls -lah
+t
+t
+e $nu.env-path
+t
+clear
+nu
+nvim
+which nvim
+echo $env.PATH
+$env.PATH
+ls
+e
+nvim
+e
+$env.PATH
+$env.PATH |split row ':'
+e $nu.env-path
+e
+echo $env.PATH
+e
+which nvim
+t
+e
+echo $"(esep)"
+e
+echo $"(esep)"
+e
+echo $"(esep)"
+e $nu.env-path
+e $nu.config-path
+ls
+e
+ls
+t
+tmux source ~/.config/tmux/tmux.conf
+tmux
+e ~/.config/alacritty/alacritty.yml
+ls
+e
+tmux
+e
+~/run_nu
+e
+t
+e $nu.env-path
+e $nu.config-path
+e ~/.config/tmux/tmux.conf
+zsh
+e $nu.env-path
+clear
+e
+nu
+ls
+clear
+tmux
+eixt
+e $nu.env-path
+claer
+clear
+ls
+clear
+1day / 24sec
+1day / 23.22sec
+1day / 1ns
+1day / 1us
+1day / 1ns
+1day / 1ms
+clear
+1s / 1ns
+1sec / 1ns
+claer
+clear
+ls
+ls -la dump/
+ls -m dump/
+ls -oshe4 osehnt
+ls -m json
+ls -m
+ls 
+ls -m
+ls
+ls -m
+help ls
+ls
+ls -m
+n sup
+n /opt/pomelo_supervisor/
+ls
+ls -m public/
+e $nu.config-path
+ls
+file::/opt
+^open file::/opt
+^open /opt
+clear
+ls
+t
+clear
+clear
+e
+which nu
+echo $EDITOR
+echo $env.EDITOR
+which pico
+set-env EDITOR = (which pico)
+which pico
+set-env EDITOR = (which pico | get path)
+let-env EDITOR = (which pico | get path)
+$EDITOR
+$env.EDITOR
+bash
+echo $env.EDITOR
+export-env { let-env EDITOR = (which pico | get path) }
+bash
+sh
+tcsh
+apt get install tcsh
+sudo apt get install tcsh
+sudo apt-get install tcsh
+tcsh 
+clear
+with-env { WAT : "hii" }
+with-env { WAT : "hii" } {<\n><\n>sh -c "echo $WAT"<\n>}
+let-env WATT = "hii"
+sh -c 'echo $WATT'
+echo $env.EDITOR
+sh -c 'echo $EDITOR'
+which sh
+with-env { EDITOR : (which pico| get path) } {<\n>sh -c 'echo $EDITOR'<\n>}
+with-env { EDITOR : (which pico| get path) } {<\n>tcsh -c 'echo $EDITOR'<\n>}
+e $nu.env-path
+nu --version
+echo '$env.EDITOR'
+clear
+source-env 
+help let-env
+cd /opt/
+cd pomelo_backend/ls
+cd pomelo_backend
+ls
+claer
+clear
+ls
+24hr / 1ms
+5min / 1sec
+5min / 1ms
+10min / 1ms
+15min / 1ms
+15min / 1s
+15min / 1sec
+24hr / 15min
+node
+1hr / 1ms
+.exit
+1hr / 1ms
