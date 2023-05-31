@@ -1,5 +1,5 @@
-require('slugbyte.options')
 require('slugbyte.packer')
+require('slugbyte.options')
 require('slugbyte.command')
 require('slugbyte.lsp')
 require('slugbyte.nvim_cmp')

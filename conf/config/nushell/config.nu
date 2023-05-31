@@ -304,7 +304,7 @@ let-env config = {
     clickable_links: true # enable or disable clickable links. Your terminal has to support links.
   }
   rm: {
-    always_trash: false # always act as if -t was given. Can be overridden with -p
+    always_trash: true # always act as if -t was given. Can be overridden with -p
   }
   cd: {
     abbreviations: false # allows `cd s/o/f` to expand to `cd some/other/folder`
@@ -646,7 +646,75 @@ let-env config = {
   ]
 }
 
+source  ~/.config/nushell/zoxide.nu
+alias n = z
 alias e = nvim
 alias t = tmux
 alias c = git commit
-alias n = cd
+alias l = exa
+alias w = cd ~/workspace
+alias tree = exa --tree
+alias copy = xclip -selection c
+alias j = e -c ':Telescope find_files'
+alias J = e -c ':Telescope live_grep'
+alias md = mkdir
+
+def "ls -lah" [] {
+  ls -lam
+}
+
+alias bubye = sudo shutdown -h now
+alias reboot = sudo reboot
+
+alias xi = sudo apt-get install -y
+alias xs = sudo apt-cache search
+alias xr = sudo apt-cache search
+def xu [] {
+  sudo apt update
+  sudo apt upgrade
+  sudo apt autoremove
+}
+
+alias a = git add .
+alias s = git status
+def p [] {
+  let branch = (git rev-parse --abbrev-ref HEAD err> /dev/null)
+  if $branch == "HEAD" {
+    echo "ERROR: you need to commit first!"
+    return
+  }
+
+  if ($branch | is-empty) == true {
+    echo "ERROR: this might not be a git directory"
+    return
+  }
+
+  git push origin $branch
+}
+
+def c [] {
+  git commit -S 
+  git verify-commit HEAD
+}
+
+def nn [] {
+  let root_dir = (git rev-parse --show-toplevel err> /dev/null)
+
+}
+
+def C [message: string] {
+  git commit -S -m $message
+  git verify-commit HEAD
+}
+
+def pull [] {
+  let branch = (bash -c 'git rev-parse --abbrev-ref HEAD 2> /dev/null')
+  if $branch == "HEAD" {
+    echo "ERROR: you need to commit first!"
+    return
+  }
+
+  git pull origin $branch
+}
+
+let w = $env.HOME + '/workspace'

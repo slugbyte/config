@@ -25,10 +25,10 @@ git_rebase(){
 git_update(){
   # update from arg or current branch
   local branch
-  if (( $# > 0 ));then 
+  if (( $# > 0 ));then
     echo "update from from origin/$@"
     git fetch -v
-    git_rebase origin/$@ 
+    git_rebase origin/$@
     return 0
   fi 
   if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then

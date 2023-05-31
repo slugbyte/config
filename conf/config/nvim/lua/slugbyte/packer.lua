@@ -63,6 +63,7 @@ require('paq') {
   'rust-lang/rust.vim';
   'cespare/vim-toml';
   'ziglang/zig.vim';
+  'LhKipp/nvim-nu';
 
   -- lisp util
    'Olical/conjure';

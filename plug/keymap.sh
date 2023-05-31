@@ -34,6 +34,7 @@ task_runner(){
 
 alias m="task_runner"
 alias md="mkdir -p"
+
 # n is allready used in n.sh
 alias nd='echo naw'
 alias o="lfcd"
@@ -51,5 +52,4 @@ alias w="cd $w"
 alias x="git reset"
 alias y="echo naw"
 alias z="echo naw" 
-
 alias pom='npm run pompom'
