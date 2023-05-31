@@ -34,7 +34,6 @@ task_runner(){
 
 alias m="task_runner"
 alias md="mkdir -p"
-
 # n is allready used in n.sh
 alias nd='echo naw'
 alias o="lfcd"

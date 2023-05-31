@@ -1,7 +1,6 @@
 shell:
   program: /home/slugbyte/workspace/root/lang/rust/cargo/bin/nu
 
-
 font:
   size: 15
 colors:

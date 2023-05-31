@@ -304,7 +304,11 @@ let-env config = {
     clickable_links: true # enable or disable clickable links. Your terminal has to support links.
   }
   rm: {
+<<<<<<< HEAD
     always_trash: true # always act as if -t was given. Can be overridden with -p
+=======
+    always_trash: false # always act as if -t was given. Can be overridden with -p
+>>>>>>> e2742a6b0b3561e009557f69d01bab4a26b7c8ba
   }
   cd: {
     abbreviations: false # allows `cd s/o/f` to expand to `cd some/other/folder`

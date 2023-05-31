@@ -28,14 +28,12 @@ if (xdg_cache_home)
 then
   vim.o.undodir = xdg_cache_home .. '/nvim_undo'
 end
-
 vim.o.hlsearch = false
 vim.o.mouse = 'a'
 vim.g.is_bash = true
 vim.o.termguicolors = true
 vim.wo.signcolumn = 'yes'
 vim.cmd('colorscheme wet')
-
 vim.cmd('hi DiagnosticWarn guifg=#2a2a2a')
 vim.cmd('hi DiagnosticSignWarn guifg=#2a2a2a')
 vim.cmd('hi DiagnosticSignWarn guibg=#555555')
