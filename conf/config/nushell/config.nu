@@ -647,16 +647,11 @@ let-env config = {
 }
 
 source  ~/.config/nushell/zoxide.nu
-alias n = z
-alias e = nvim
-alias t = tmux
-alias c = git commit
-alias l = exa
-alias w = cd ~/workspace
+source ~/.config/nushell/git.nu
+
+let w = $env.HOME + '/workspace'
 alias tree = exa --tree
 alias copy = xclip -selection c
-alias j = e -c ':Telescope find_files'
-alias J = e -c ':Telescope live_grep'
 alias md = mkdir
 
 def "ls -lah" [] {
@@ -675,46 +670,19 @@ def xu [] {
   sudo apt autoremove
 }
 
-alias a = git add .
+alias a = git add
+alias A = git add .
+alias c = git_commit
+alias C = git_commit_message
+alias e = nvim
+alias j = e -c ':Telescope find_files'
+alias J = e -c ':Telescope live_grep'
+alias l = exa
+alias L = git_log
+alias n = z
+alias p = git_push
+alias P = git_pull
 alias s = git status
-def p [] {
-  let branch = (git rev-parse --abbrev-ref HEAD err> /dev/null)
-  if $branch == "HEAD" {
-    echo "ERROR: you need to commit first!"
-    return
-  }
+alias t = tmux
+alias w = cd ~/workspace
 
-  if ($branch | is-empty) == true {
-    echo "ERROR: this might not be a git directory"
-    return
-  }
-
-  git push origin $branch
-}
-
-def c [] {
-  git commit -S 
-  git verify-commit HEAD
-}
-
-def nn [] {
-  let root_dir = (git rev-parse --show-toplevel err> /dev/null)
-
-}
-
-def C [message: string] {
-  git commit -S -m $message
-  git verify-commit HEAD
-}
-
-def pull [] {
-  let branch = (bash -c 'git rev-parse --abbrev-ref HEAD 2> /dev/null')
-  if $branch == "HEAD" {
-    echo "ERROR: you need to commit first!"
-    return
-  }
-
-  git pull origin $branch
-}
-
-let w = $env.HOME + '/workspace'
