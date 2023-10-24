@@ -1,1 +1,2 @@
-. .config/zsh/.zshrc
+eval "$(/opt/homebrew/bin/brew shellenv)"
+source ~/.config/zsh/.zshrc

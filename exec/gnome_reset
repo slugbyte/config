@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-gnome-extensions disable simply.workspaces@andyrichardson.dev
-sleep 1
-gnome-extensions enable  simply.workspaces@andyrichardson.dev

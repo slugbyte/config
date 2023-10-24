@@ -1,5 +1,0 @@
-vim.cmd('autocmd FileType markdown setlocal wrap')
-vim.cmd('autocmd FileType markdown setlocal textwidth=80')
-vim.cmd('autocmd FileType markdown setlocal linebreak')
-vim.cmd('autocmd FileType markdown setlocal spell')
-vim.cmd('autocmd FileType text setlocal spell')

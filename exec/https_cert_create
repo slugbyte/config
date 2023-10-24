@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-openssl req -x509 -newkey rsa:2048 -keyout key.temp.pem -out cert.pem -days 365
-openssl rsa -in key.temp.pem -out key.pem
