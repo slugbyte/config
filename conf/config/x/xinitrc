@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-for init_script in $MOLD_ROOT/init/x/start/*;do
-  . $init_script
-done
