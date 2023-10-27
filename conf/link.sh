@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-if [[ -z "$MOLD_ROOT" ]];then
-  echo "ERROR: \$MOLD_ROOT not set" 1>&2
-  exit 1
-fi
+WORKSPACE_DIR="$HOME/workspace"
+TRASH_DIR="$HOME/.trash"
 
-config_root="$MOLD_ROOT/conf/config/"
+trash(){
+  mv $1 $TRASH_DIR/
+}
+
+config_root="$WORKSPACE_DIR/conf/config/"
 config_path_tree=$(ls "$config_root")
 
 for path in $config_path_tree; do
@@ -14,14 +16,14 @@ for path in $config_path_tree; do
   ln -sf "${config_root}${path}" "$HOME/.config/${path#"$config_root"}"
 done
 
-home_root="$MOLD_ROOT/conf/home/"
-home_path_tree=$(find "$home_root" -name '*')
+HOME_ROOT="$WORKSPACE_DIR/conf/home/"
+HOME_DOTFILE_LIST=$(find "$HOME_ROOT" -name '*')
 
-for path in $home_path_tree; do
+for path in $HOME_DOTFILE_LIST; do
   if [[ -d $path ]];then
-    mkdir -p "$HOME/${path#"$home_root"}" &> /dev/null
+    mkdir -p "$HOME/${path#"$HOME_ROOT"}" &> /dev/null
   else
-    echo "linking: ~/${path#"$home_root"}"
-    ln -f "$path" "$HOME/${path#"$home_root"}"
+    echo "linking: ~/${path#"$HOME_ROOT"}"
+    ln -f "$path" "$HOME/${path#"$HOME_ROOT"}"
   fi
 done
