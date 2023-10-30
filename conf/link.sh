@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WORKSPACE_DIR="$HOME/workspace"
+WORKSPACE_DIR="$HOME/_workspace"
 TRASH_DIR="$HOME/.Trash"
 ARG="$1"
 

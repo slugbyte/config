@@ -38,10 +38,12 @@ export PATH="$ZIG_DIR:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 #-ENV personal dirs dirs
-export PATH="$HOME/workspace/exec:$PATH"
+export PATH="$HOME/_workspace/exec:$PATH"
 export TRASH_DIR="$HOME/.Trash"
-export w="$HOME/workspace"
-export c="$w/code"
+export CATALOG="$HOME/_catalog"
+export SHARE="$HOME/_share"
+export w="$HOME/_workspace"
+export c="$w/c"
 export t="$TRASH_DIR"
 
 #-ENV ZSH
@@ -440,6 +442,12 @@ alias wipe='/bin/rm'
 path(){
   echo $PATH | tr ':' '\n'
 }
+
+alias edit_alacritty="nvim ~/.config/alacritty/alacritty.yml"
+alias edit_git="nvim ~/.config/git/git.yml"
+alias edit_nvim="nvim ~/.config/nvim/init.lua"
+alias edit_tmux="nvim ~/.config/tmux/tmux.conf"
+alias edit_zsh="nvim ~/.config/zsh/.zshrc"
 
 alias a="git add"
 alias A="git add ."
