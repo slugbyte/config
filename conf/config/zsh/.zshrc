@@ -148,7 +148,7 @@ trash(){
       name=$(basename "$f")
       if [[ -d "$f" ]];then
         source_path=$(readlink -f $f)
-        date=$(date +'%Y-%m-%d_%H-%M')
+        date=$(date +'%Y%m%d%H%M%S')
         output_path="$TRASH_DIR/${date}_${RANDOM}_${name}"
         mv "$f" "$output_path"
         touch "$output_path"
