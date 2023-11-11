@@ -43,7 +43,11 @@ export TRASH_DIR="$HOME/.Trash"
 export CATALOG="$HOME/_catalog"
 export SHARE="$HOME/_share"
 export w="$HOME/_workspace"
-export c="$w/c"
+export i="$HOME/_data/_inbox"
+export d="$HOME/_data"
+export p="$HOME/_project"
+export c="$HOME/_catalog"
+
 export t="$TRASH_DIR"
 
 #-ENV ZSH
@@ -51,6 +55,24 @@ export ZDOTDIR="$HOME/.config/zsh"
 
 #-ENV FZF / RG
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
+
+
+echo_red(){
+  echo "$(tput setaf 1)$@$(tput sgr 0)"
+}
+
+echo_yellow (){
+  echo "$(tput setaf 3)$@$(tput sgr 0)"
+}
+
+echo_green (){
+  echo "$(tput setaf 2)$@$(tput sgr 0)"
+}
+
+echo_blue(){
+  echo "$(tput setaf 4)$@$(tput sgr 0)"
+}
+
 
 #---- EXA ---- ##############################################
 exa_fg(){
@@ -433,6 +455,131 @@ bindkey '\C-t\C-t' edit-command-line
 if [[ "${terminfo[kcbt]}" != "" ]]; then
 	bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
 fi
+#---- SCREEN CAPTURE, SC ---- ##############################################
+# defaults write com.apple.screencapture location $HOME/_data/_inbox
+# sc all screen
+
+sc_test(){
+  if [[ -z $1 ]]; then
+    echo_red "ERROR: name required"
+    echo "    $ sc <name>"
+    return 1
+  fi
+}
+
+sc_name(){
+  SC_DATE=$(date +"%Y-%m-%d-%H%M%S")
+  SC_NAME="$1"
+  SC_EXT="$2"
+  echo "$HOME/_data/_inbox/$SC_DATE-$SC_NAME.$SC_EXT"
+}
+
+sca(){
+  if sc_test "$1"; then
+    SC_NAME=$(sc_name "$1" "png")
+    screencapture -t png "$SC_NAME"
+    echo_blue "[SCREEN CAPTURE] $SC_NAME"
+  fi
+}
+
+# sc select
+scs(){
+  if sc_test "$1"; then
+    SC_NAME=$(sc_name "$1" "png")
+    screencapture -t png -i -J selection "$SC_NAME"
+    if [[ -e $SC_NAME ]];then
+      echo_blue "[SCREEN CAPTURE] $SC_NAME"
+    else
+      echo_red "ABORTED"
+    fi
+  fi
+}
+
+# sc window
+scw(){
+  if sc_test "$1"; then
+    SC_NAME=$(sc_name "$1" "png")
+    screencapture -t png -i -W "$SC_NAME"
+    if [[ -e $SC_NAME ]];then
+      echo_blue "[SCREEN CAPTURE] $SC_NAME"
+    else
+      echo_red "ABORTED"
+    fi
+  fi
+}
+
+# sc select to clipboard
+scc(){
+  screencapture -c -t png -i -J selection
+  echo_blue "[SCREEN CAPTURE] copied to clipboard"
+}
+
+#---- GO3 IMPORT ---- ##############################################
+GOGOGO_SOURCE="/Volumes/gogogo/DCIM/Camera01"
+GOGOGO_FLAG_COMPLETE_PATH="$GOGOGO_SOURCE/boing-ding.txt"
+
+cam_gogogo_import(){
+  GOGOGO_DATE=$(date +"%Y-%m-%d")
+  GOGOGO_DEST="$HOME/_catalog/catalog_image/$GOGOGO_DATE-$1"
+
+  if [[ -e $GOGOGO_FLAG_COMPLETE_PATH ]];then
+    echo_red "ERROR: import is allready complete"
+    echo "    if you really want to import again,"
+    echo "    remove $GOGOGO_FLAG_COMPLETE_PATH"
+    echo "    and then try again"
+    return 1
+  fi
+
+  if [[ -z $1 ]]; then
+    echo_red "ERROR: name required"
+    echo "    $ cam_gogogo_import <folder-name>"
+    return 1
+  fi
+
+  if [[ ! -e "$GOGOGO_SOURCE" ]];then
+    echo_red "ERROR: gogogo camera data not found"
+    return 1
+  fi
+
+  GOGOGO_FILEPATH_LIST=$(rg --files "$GOGOGO_SOURCE" | rg -v "Thumb")
+  GOGOGO_FILE_COUNT=$(rg --files "$GOGOGO_SOURCE" | rg -v "Thumb" | wc -l | xargs)
+  GOGOGO_COPY_COUNT=1
+
+  # TODO print each file sizz
+  # TODO find a way to make it faster (parrallel?)
+  # TODO elapsed time
+  # TODO capture elapsed time and time per file in a file so in the future estimations
+  # can be given
+  # TODO find a way to test the USB connection :)
+  echo "[CAM GOGOGO IMPORT] START"
+  echo "[CAM GOGOGO IMPORT] FETCHING METDATA"
+  echo "[CAM GOGOGO IMPORT] SIZE: $(du -d 0 -h  $GOGOGO_SOURCE | cut -d "/" -f 1)"
+  echo "[CAM GOGOGO IMPORT] FILE COUNT: $GOGOGO_FILE_COUNT"
+
+  mkdir -p $GOGOGO_DEST
+  for SOURCE_FILE_PATH in $(rg --files "$GOGOGO_SOURCE" | rg -v "Thumb"); do
+    FILE_NAME=$(basename $SOURCE_FILE_PATH)
+    FILE_SIZE=$(du -h -d 0 $SOURCE_FILE_PATH | xargs)
+    DEST_FILE_PATH="$GOGOGO_DEST/$FILE_NAME"
+
+    echo "$GOGOGO_COPY_COUNT/$GOGOGO_FILE_COUNT $FILE_SIZE $FILE_NAME"
+    cp "$SOURCE_FILE_PATH" "$DEST_FILE_PATH"
+    GOGOGO_COPY_COUNT=$(( $GOGOGO_COPY_COUNT+1 ))
+  done
+  echo "$GOGOGO_DEST\nLUCKY_NUMBER: $RANDOM" > "$GOGOGO_FLAG_COMPLETE_PATH"
+
+  echo_blue "[CAM GOGOGO IMPORT COMPLETE] $GOGOGO_DEST"
+}
+
+cam_gogogo_clean(){
+  if [[ ! -e $GOGOGO_FLAG_COMPLETE_PATH ]];then
+    echo_red "ABORT: gogogo has not yet been imported!"
+    echo_red "    import first, or use finder to manual clean."
+    return 1
+  fi
+
+  echo boooyeee
+}
 
 #---- SHORTHAND ---- ##############################################
 alias bubye='sudo shutdown -h now'
@@ -448,6 +595,8 @@ alias edit_git="nvim ~/.config/git/git.yml"
 alias edit_nvim="nvim ~/.config/nvim/init.lua"
 alias edit_tmux="nvim ~/.config/tmux/tmux.conf"
 alias edit_zsh="nvim ~/.config/zsh/.zshrc"
+
+alias copy=pbcopy
 
 alias a="git add"
 alias A="git add ."
