@@ -38,17 +38,21 @@ export PATH="$ZIG_DIR:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 #-ENV personal dirs dirs
-export PATH="$HOME/_workspace/exec:$PATH"
+export PATH="$HOME/workspace/exec:$PATH"
 export TRASH_DIR="$HOME/.Trash"
 export CATALOG="$HOME/_catalog"
 export SHARE="$HOME/_share"
-export w="$HOME/_workspace"
-export i="$HOME/_data/_inbox"
-export d="$HOME/_data"
-export p="$HOME/_project"
-export c="$HOME/_catalog"
-
-export t="$TRASH_DIR"
+export trash="$TRASH_DIR"
+export w="$HOME/workspace"  # workspace
+export catalog="$w/catalog"       # catolog
+export code="$w/code"          # data
+export conf="$w/conf"          # data
+export data="$w/data"          # data
+export exec="$w/exec"          # data
+export hide="$w/hide"          # hide
+export play="$w/play"          # play
+export temp="$HOME/Downloads"  # temp
+export work="$w/work"         # work
 
 #-ENV ZSH
 export ZDOTDIR="$HOME/.config/zsh"
