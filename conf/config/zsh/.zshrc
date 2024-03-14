@@ -32,6 +32,9 @@ export FULLNAME='Duncan Marsh'
 
 #-ENV RUST
 export PATH="$HOME/.cargo/bin:$PATH"
+#
+#-ENV GO
+export PATH="$HOME/go/bin:$PATH"
 
 #-ENV personal dirs dirs
 export PATH="$HOME/workspace/exec:$PATH"

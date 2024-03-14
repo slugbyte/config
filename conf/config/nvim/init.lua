@@ -85,6 +85,7 @@ require('paq') {
   'jose-elias-alvarez/null-ls.nvim';
   'nvim-treesitter/nvim-treesitter';
   'nvim-treesitter/nvim-treesitter-textobjects';
+  'nvim-treesitter/nvim-treesitter-context';
 
   -- status
   'nvim-lualine/lualine.nvim';
@@ -99,6 +100,8 @@ require('paq') {
   'cespare/vim-toml';
   'ziglang/zig.vim';
   'LhKipp/nvim-nu';
+  -- 'fatih/vim-go';
+  'olexsmir/gopher.nvim';
 
   -- lisp
   'jpalardy/vim-slime';
@@ -195,6 +198,18 @@ for _, server_name in ipairs(lsp_server_list) do
     on_attach = on_attach,
   }
 end
+
+require("gopher").setup {
+  commands = {
+    go = "go",
+    gomodifytags = "gomodifytags",
+    impl = "impl",
+    iferr = "iferr",
+    gotests = "",
+    dlv = "",
+  },
+}
+
 
 -- lspconfig.gopls.setup {
 --   on_attach = on_attach,
@@ -429,10 +444,25 @@ require'nvim-treesitter.configs'.setup ({
           ["(l"] = { query = "@loop.outer", desc = "Prev loop start" },
         },
       },
-
-
   },
 })
+
+require'treesitter-context'.setup{
+  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+  max_lines = 4, -- How many lines the window should span. Values <= 0 mean no limit.
+  min_window_height = 10, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+  line_numbers = true,
+  multiline_threshold = 5, -- Maximum number of lines to show for a single context
+  trim_scope = 'inner', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+  mode = 'cursor',  -- Line used to calculate context. Choices: 'cursor', 'topline'
+  -- Separator between context and content. Should be a single character string, like '-'.
+  -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+  separator = nil,
+  zindex = 20, -- The Z-index of the context window
+  on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+}
+vim.cmd("hi TreesitterContext gui=underline guibg=#123312")
+vim.cmd("hi TreesitterContextLineNumber gui=underline guibg=#123312")
 
 local telescope = require('telescope')
 telescope.setup({
@@ -514,6 +544,10 @@ map('n', '<leader>q', "'qall<CR>", { desc = "quit all"})
 map('n', '<leader>n', "'n<CR>", {desc = "next buffer"})
 map('n', '<leader>p', "'prev<CR>", {desc = "prev buffer"})
 map('', '<C-g>', ':on<CR>', { desc = "hide all other panes"})
+
+map('n', '<leader>gj', ":GoTagAdd json<CR>", {desc = "add json tags to go struct"})
+map('n', '<leader>gi', ":GoImpl ", {desc = "add impl"})
+map('n', '<leader>ge', ":GoIfErr<CR>", {desc = "add if err return err"})
 
 -- tmux
 map('n', '<C-n>', ":TmuxNavigateDown<CR>", { silent = true , desc = "tmux down"})
