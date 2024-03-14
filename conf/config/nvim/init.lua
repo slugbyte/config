@@ -34,7 +34,8 @@ vim.cmd('colorscheme wet')
 vim.cmd('hi DiagnosticWarn guifg=#2a2a2a')
 vim.cmd('hi DiagnosticSignWarn guifg=#2a2a2a')
 vim.cmd('hi DiagnosticSignWarn guibg=#555555')
-local xdg_cache_home = os.getenv('XDG_CACHE_HOME') 
+
+local xdg_cache_home = os.getenv('XDG_CACHE_HOME')
 if (xdg_cache_home)
 then
   vim.o.undodir = xdg_cache_home .. '/nvim_undo'
@@ -51,7 +52,7 @@ require('paq') {
   -- dependency
   'nvim-lua/plenary.nvim';
   'rktjmp/lush.nvim';
-  'folke/neodev.nvim';
+  -- 'folke/neodev.nvim';
 
   -- slugbyte
   'slugbyte/unruly-worker';
@@ -62,7 +63,6 @@ require('paq') {
   'tpope/vim-fugitive';
   'christoomey/vim-tmux-navigator';
   'numToStr/Comment.nvim';
-
 
   -- completion
   'L3MON4D3/LuaSnip';
@@ -75,12 +75,16 @@ require('paq') {
   'hrsh7th/cmp-path';
   'hrsh7th/nvim-cmp';
 
+  -- ap
+  'github/copilot.vim';
+
   -- lsp and syntax
   'neovim/nvim-lspconfig';
   'williamboman/mason.nvim';
   'williamboman/mason-lspconfig.nvim';
   'jose-elias-alvarez/null-ls.nvim';
   'nvim-treesitter/nvim-treesitter';
+  'nvim-treesitter/nvim-treesitter-textobjects';
 
   -- status
   'nvim-lualine/lualine.nvim';
@@ -112,15 +116,16 @@ require('paq') {
 }
 
 -- COMMANDS
-local telescope_builtin = require('telescope.builtin')
-function Edit_Config()
-  telescope_builtin.find_files({
-    cwd = '~/.config/nvim',
-    follow = true,
-    hidden = true,
-  })
-end
-vim.cmd('command! EditConfig :lua Edit_Config()')
+-- local telescope_builtin = require('telescope.builtin')
+-- function Edit_Config()
+--   telescope_builtin.find_files({
+--     cwd = '~/.config/nvim',
+--     follow = true,
+--     hidden = true,
+--   })
+-- end
+-- vim.cmd('command! EditConfig :lua Edit_Config()')
+vim.cmd('command! EditConfig :e ~/.config/nvim/init.lua')
 
 function Highlight_Toggle()
   if vim.o.hlsearch then
@@ -169,7 +174,6 @@ local lsp_server_list = {
   "gopls",
   "html",
   "jsonls",
-  "lua_ls",
   "rust_analyzer",
   "tsserver",
   "zls",
@@ -185,12 +189,24 @@ local on_attach = function(_, bufnr)
 end
 
 local lspconfig = require("lspconfig")
-lsp_server_list["lua_ls"] = nil
+lsp_server_list["gopls"] = nil
 for _, server_name in ipairs(lsp_server_list) do
   lspconfig[server_name].setup {
     on_attach = on_attach,
   }
 end
+
+-- lspconfig.gopls.setup {
+--   on_attach = on_attach,
+--   cmd = {"gopls"},
+--   filetype = {"go", "gomod", "gowork", "gotmpl"},
+--   settings = {
+--     gopls = {
+--       completeUnimported = true,
+--       usePlaceholders = true,
+--     }
+--   }
+-- }
 
 lspconfig.lua_ls.setup {
   settings = {
@@ -311,26 +327,26 @@ require'surround'.setup {
 }
 
 -- neodev
-require("neodev").setup({
-  library = {
-    enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
-    -- these settings will be used for your Neovim config directory
-    runtime = true, -- runtime path
-    types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
-    plugins = true, -- installed opt or start plugins in packpath
-    -- you can also specify the list of plugins to make available as a workspace library
-    -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
-  },
-  setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
-  -- for your Neovim config directory, the config.library settings will be used as is
-  -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
-  -- for any other directory, config.library.enabled will be set to false
-  override = function(root_dir, options) end,
-  -- With lspconfig, Neodev will automatically setup your lua-language-server
-  -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
-  -- in your lsp start options
-  lspconfig = true,
-})
+-- require("neodev").setup({
+--   library = {
+--     enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
+--     -- these settings will be used for your Neovim config directory
+--     runtime = true, -- runtime path
+--     types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
+--     plugins = true, -- installed opt or start plugins in packpath
+--     -- you can also specify the list of plugins to make available as a workspace library
+--     -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+--   },
+--   setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
+--   -- for your Neovim config directory, the config.library settings will be used as is
+--   -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
+--   -- for any other directory, config.library.enabled will be set to false
+--   override = function(root_dir, options) end,
+--   -- With lspconfig, Neodev will automatically setup your lua-language-server
+--   -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
+--   -- in your lsp start options
+--   lspconfig = true,
+-- })
 
 -- paredit
 vim.g.slime_target = "tmux"
@@ -344,45 +360,79 @@ vim.cmd("let g:copilot_enabled = v:false")
 
 require'nu'.setup{}
 
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { "c", "lua", "vim", "vimdoc", "query",
-  "zig", 
-  "sql", "typescript", "glsl", "http", "clojure"},
-
-  -- Install parsers synchronously (only applied to `ensure_installed`)
+require'nvim-treesitter.configs'.setup ({
+  modules = {},
+  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "zig", "sql", "typescript", "glsl", "http", "clojure"},
+  ignore_install = {},
   sync_install = false,
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
   auto_install = true,
-
-  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<C-space>",
+      node_incremental = "<C-space>",
+      scope_incremental = false,
+      node_decremental = "<bs>",
+    },
+  },
   highlight = {
     enable = true,
-
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-    disable = function(lang, buf)
+    disable = function(_, buf)
         local max_filesize = 100 * 1024 -- 100 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
         if ok and stats and stats.size > max_filesize then
             return true
         end
     end,
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
-}
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["af"] = { query = "@function.outer", desc = "Select outer part of a loop" },
+        ["if"] = { query = "@function.inner", desc = "Select inner part of a loop" },
+        ["al"] = { query = "@loop.outer", desc = "Select outer part of a loop" },
+        ["il"] = { query = "@loop.inner", desc = "Select inner part of a loop" },
+        ["ap"] = { query = "@parameter.outer", desc = "Select outer part of a parameter/argument" },
+        ["ip"] = { query = "@parameter.inner", desc = "Select inner part of a parameter/argument" },
+        ["as"] = { query = "@class.outer", desc = "Select the outr part of a class region"},
+        ["is"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+        ["aa"] = { query = "@assignment.outer", desc = "Select outer part of an assignment" },
+        ["ia"] = { query = "@assignment.inner", desc = "Select inner part of an assignment" },
+        ["ac"] = { query = "@call.outer", desc = "Select outer part of a function call" },
+        ["ic"] = { query = "@call.inner", desc = "Select inner part of a function call" },
+      },
+      selection_modes = {
+        ['@parameter.outer'] = 'v', -- charwise
+        ['@function.outer'] = 'V', -- linewise
+        ['@class.outer'] = '<c-v>', -- blockwise
+      },
+      include_surrounding_whitespace = false,
+    },
+     move = {
+        enable = true,
+        set_jumps = true, -- whether to set jumps in the jumplist
+        goto_next_start = {
+          [")c"] = { query = "@call.outer", desc = "Next function call start" },
+          [")f"] = { query = "@function.outer", desc = "Next method/function def start" },
+          [")s"] = { query = "@class.outer", desc = "Next class start" },
+          [")i"] = { query = "@conditional.outer", desc = "Next conditional start" },
+          [")l"] = { query = "@loop.outer", desc = "Next loop start" },
+        },
+        goto_previous_start = {
+          ["(c"] = { query = "@call.outer", desc = "Prev function call start" },
+          ["(f"] = { query = "@function.outer", desc = "Prev method/function def start" },
+          ["(s"] = { query = "@class.outer", desc = "Prev class start" },
+          ["(i"] = { query = "@conditional.outer", desc = "Prev conditional start" },
+          ["(l"] = { query = "@loop.outer", desc = "Prev loop start" },
+        },
+      },
+
+
+  },
+})
 
 local telescope = require('telescope')
 telescope.setup({
@@ -512,4 +562,14 @@ vim.cmd('let g:conjure#mapping#prefix = ","')
 
 -- copilot
 vim.cmd('imap <silent><script><expr> <C-q> copilot#Accept("\\<CR>")')
-vim.cmd('imap <silent><script><expr> <C-d>s <Plug>(copilot-suggest)')
+
+-- inc/dec number
+vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
+vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
+
+local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+
+-- vim way: ; goes to the direction you were moving.
+vim.keymap.set({ "n", "x", "o" }, "&", ts_repeat_move.repeat_last_move)
+vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_opposite)
+
