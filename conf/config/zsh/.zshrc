@@ -30,10 +30,6 @@ export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
 
 
-#-ENV ZIG
-export ZIG_DIR="$SLASH/lang/zig"
-export PATH="$ZIG_DIR:$PATH"
-
 #-ENV RUST
 export PATH="$HOME/.cargo/bin:$PATH"
 
@@ -53,6 +49,10 @@ export hide="$w/hide"          # hide
 export play="$w/play"          # play
 export temp="$HOME/Downloads"  # temp
 export work="$w/work"         # work
+
+#-ENV ZIG
+export ZIG_DIR="$w/root/zig"
+export PATH="$ZIG_DIR:$PATH"
 
 #-ENV ZSH
 export ZDOTDIR="$HOME/.config/zsh"
@@ -636,7 +636,6 @@ alias r="git_rebase"
 alias ri="git_rebase -i"
 alias R="source ~/.config/zsh/.zshrc"
 alias s="git status"
-alias T="cd $SLASH"
 alias t="test_runner"
 alias T="cd $TRASH_DIR"
 alias u="echo naw"

@@ -101,7 +101,7 @@ require('paq') {
   'windwp/nvim-autopairs';
   'ur4ltz/surround.nvim';
   'slugbyte/paredit.vim';
-   'Olical/conjure';
+   -- 'Olical/conjure';
   -- on pause
   -- 'j-hui/fidget.nvim'; TODO use legacy tag
   -- 'williamboman/nvim-lsp-installer';
@@ -172,6 +172,7 @@ local lsp_server_list = {
   "lua_ls",
   "rust_analyzer",
   "tsserver",
+  "zls",
 }
 
 require("mason").setup()
@@ -346,7 +347,8 @@ require'nu'.setup{}
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
   ensure_installed = { "c", "lua", "vim", "vimdoc", "query",
-  "zig", "sql", "typescript", "glsl", "http", "clojure"},
+  "zig", 
+  "sql", "typescript", "glsl", "http", "clojure"},
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
