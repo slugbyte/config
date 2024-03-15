@@ -11,7 +11,5 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({ { import = "slubyte/plugin" }}, {
-})
-
+require("lazy").setup({  import = "slugbyte/plugin" })
 print("lazyloaded")
