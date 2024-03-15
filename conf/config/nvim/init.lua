@@ -49,20 +49,20 @@ vim.cmd('autocmd FileType text setlocal spell')
 
 -- PACKAGE IMPORTS
 require('paq') {
-  -- dependency
+  -- dependency and neovim config help
   'nvim-lua/plenary.nvim';
   'rktjmp/lush.nvim';
-  -- 'folke/neodev.nvim';
+  'folke/neodev.nvim';
 
   -- slugbyte
   'slugbyte/unruly-worker';
   'slugbyte/wet-nvim';
 
   -- general util
+  'numToStr/Comment.nvim';
+  'christoomey/vim-tmux-navigator';
   'tpope/vim-eunuch';
   'tpope/vim-fugitive';
-  'christoomey/vim-tmux-navigator';
-  'numToStr/Comment.nvim';
 
   -- completion
   'L3MON4D3/LuaSnip';
@@ -75,17 +75,17 @@ require('paq') {
   'hrsh7th/cmp-path';
   'hrsh7th/nvim-cmp';
 
-  -- ap
-  -- 'github/copilot.vim';
+  -- AI
+  "zbirenbaum/copilot.lua";
 
   -- lsp and syntax
   'neovim/nvim-lspconfig';
   'williamboman/mason.nvim';
   'williamboman/mason-lspconfig.nvim';
-  'jose-elias-alvarez/null-ls.nvim';
   'nvim-treesitter/nvim-treesitter';
   'nvim-treesitter/nvim-treesitter-textobjects';
   'nvim-treesitter/nvim-treesitter-context';
+  'jose-elias-alvarez/null-ls.nvim';
 
   -- status
   'nvim-lualine/lualine.nvim';
@@ -100,7 +100,6 @@ require('paq') {
   'cespare/vim-toml';
   'ziglang/zig.vim';
   'LhKipp/nvim-nu';
-  -- 'fatih/vim-go';
   'olexsmir/gopher.nvim';
 
   -- lisp
@@ -108,15 +107,10 @@ require('paq') {
   'windwp/nvim-autopairs';
   'ur4ltz/surround.nvim';
   'slugbyte/paredit.vim';
-   -- 'Olical/conjure';
+
   -- on pause
+  -- 'Olical/conjure';
   -- 'j-hui/fidget.nvim'; TODO use legacy tag
-  -- 'williamboman/nvim-lsp-installer';
-  -- 'nvim-tree/nvim-web-devicons';
-  -- 'nvimdev/lspsaga.nvim';
-  -- 'tpope/vim-fireplace';
-  -- 'github/copilot.vim';
-  "zbirenbaum/copilot.lua";
 }
 
 -- COMMANDS
@@ -168,96 +162,10 @@ vim.cmd('command! PastemodeToggle :lua Pastemode_Toggle()')
 vim.cmd('command! TrimLines :%s/\\s\\+$//e|norm!`` ')
 vim.cmd('command! Reload :luafile ~/.config/nvim/init.lua')
 
----- LSP
-local lsp_server_list = {
-  "bashls",
-  "clangd",
-  "clojure_lsp",
-  "cssls",
-  "dockerls",
-  "gopls",
-  "html",
-  "jsonls",
-  "rust_analyzer",
-  "tsserver",
-  "zls",
-  "lua_ls",
-}
+-- neodev
+require("neodev").setup({})
 
-require("mason").setup()
-require("mason-lspconfig").setup {
-  ensure_installed = lsp_server_list
-}
-
-local on_attach = function(_, bufnr)
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-end
-
-local lspconfig = require("lspconfig")
-lsp_server_list["gopls"] = nil
-for _, server_name in ipairs(lsp_server_list) do
-  lspconfig[server_name].setup {
-    on_attach = on_attach,
-  }
-end
-
-require("gopher").setup {
-  commands = {
-    go = "go",
-    gomodifytags = "gomodifytags",
-    impl = "impl",
-    iferr = "iferr",
-    gotests = "",
-    dlv = "",
-  },
-}
-
-
--- lspconfig.gopls.setup {
---   on_attach = on_attach,
---   cmd = {"gopls"},
---   filetype = {"go", "gomod", "gowork", "gotmpl"},
---   settings = {
---     gopls = {
---       completeUnimported = true,
---       usePlaceholders = true,
---     }
---   }
--- }
-
-lspconfig.lua_ls.setup {
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using
-        -- (most likely LuaJIT in the case of Neovim)
-        -- version = 'LuaJIT',
-        version = "LuaJIT"
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {
-          'vim',
-          'require'
-        },
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = {
-          vim.api.nvim_get_runtime_file("", true),
-          '/opt/homebrew/share/lua/5.4',
-          '/opt/homebrew/share/luajit-2.1',
-        },
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-}
-
----- COMPLETION
+-- COMPLETION
 local cmp = require'cmp'
 cmp.setup({
   -- snippet = {
@@ -323,17 +231,105 @@ cmp.setup.cmdline(':', {
   })
 })
 
--- cmp Setup lspconfig. (this breaks the ability to keep suggestions while typing?)
--- require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-
 -- cmp If you want insert `(` after select function or method item
 -- local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 -- cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = '' } }))
 
+---- LSP
+local lsp_server_list = {
+  "bashls",
+  "clangd",
+  "clojure_lsp",
+  "cssls",
+  "dockerls",
+  "gopls",
+  "html",
+  "jsonls",
+  "rust_analyzer",
+  "tsserver",
+  "zls",
+  "lua_ls",
+}
+
+require("mason").setup()
+require("mason-lspconfig").setup {
+  ensure_installed = lsp_server_list
+}
+
+local on_attach = function(_, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+end
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lspconfig = require("lspconfig")
+lsp_server_list["gopls"] = nil
+lsp_server_list["lua_ls"] = nil
+
+for _, server_name in ipairs(lsp_server_list) do
+  lspconfig[server_name].setup {
+    capabilities,
+    on_attach = on_attach,
+  }
+end
+
+lspconfig.gopls.setup {
+  on_attach = on_attach,
+  cmd = {"gopls"},
+  filetype = {"go", "gomod", "gowork", "gotmpl"},
+  settings = {
+    gopls = {
+      completeUnimported = true,
+      usePlaceholders = true,
+    }
+  }
+}
+
+lspconfig.lua_ls.setup {
+  settings = {
+    Lua = {
+      runtime = {
+        version = "LuaJIT"
+      },
+      diagnostics = {
+        globals = {
+          'vim',
+          'require'
+        },
+      },
+      workspace = {
+        library = {
+          vim.api.nvim_get_runtime_file("", true),
+          '/opt/homebrew/share/lua/5.4',
+          '/opt/homebrew/share/luajit-2.1',
+        },
+      },
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+}
+
+-- GOLANG
+require("gopher").setup {
+  commands = {
+    go = "go",
+    gomodifytags = "gomodifytags",
+    impl = "impl",
+    iferr = "iferr",
+    gotests = "",
+    dlv = "",
+  },
+}
+
+---- COMPLETION
+
 require'Comment'.setup()
+
 -- require"fidget".setup{}
 require('nvim-autopairs').setup{}
+
 -- require'gitsigns'.setup{}
+
 require'surround'.setup {
   context_offset = 100,
   load_autogroups = false,
@@ -348,38 +344,14 @@ require'surround'.setup {
   },
 }
 
--- neodev
--- require("neodev").setup({
---   library = {
---     enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
---     -- these settings will be used for your Neovim config directory
---     runtime = true, -- runtime path
---     types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
---     plugins = true, -- installed opt or start plugins in packpath
---     -- you can also specify the list of plugins to make available as a workspace library
---     -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
---   },
---   setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
---   -- for your Neovim config directory, the config.library settings will be used as is
---   -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
---   -- for any other directory, config.library.enabled will be set to false
---   override = function(root_dir, options) end,
---   -- With lspconfig, Neodev will automatically setup your lua-language-server
---   -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
---   -- in your lsp start options
---   lspconfig = true,
--- })
-
--- paredit
+-- LISP
 vim.g.slime_target = "tmux"
 vim.g.paredit_smartjump = 1
 vim.cmd('au FileType fennel call PareditInitBuffer()')
+vim.cmd('au FileType clojure call PareditInitBuffer()')
+vim.cmd('au FileType clojurescript call PareditInitBuffer()')
 
--- copilot
---vim.cmd("let g:copilot_filetypes = { '*' : false }")
--- vim.cmd("let g:copilot_no_tab_map = v:true")
--- vim.cmd("let g:copilot_enabled = v:false")
-
+-- NU
 require'nu'.setup{}
 
 require'nvim-treesitter.configs'.setup ({
@@ -469,6 +441,7 @@ require'treesitter-context'.setup{
   zindex = 20, -- The Z-index of the context window
   on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
 }
+
 vim.cmd("hi TreesitterContext gui=underline guibg=#123312")
 vim.cmd("hi TreesitterContextLineNumber gui=underline guibg=#123312")
 
@@ -559,9 +532,6 @@ require('lualine').setup {
 
 local map = vim.api.nvim_set_keymap
 
--- clear line
-vim.cmd("imap <c-u> <esc>ddi")
-
 local unruly_worker = require('unruly-worker')
 unruly_worker.setup({
   enable_lsp_map = true,
@@ -573,6 +543,7 @@ unruly_worker.setup({
   enable_quote_command = true,
   enable_alt_jump_scroll = true,
 })
+
 
 vim.g.mapleader = ' '
 vim.g.local_leader = ' '
@@ -602,24 +573,24 @@ map('n', '<C-o>', ":TmuxNavigateRight<CR>", { silent = true, desc = "tmux right"
 map('n', '<C-y>', ":TmuxNavigateLeft<CR>", { silent = true , desc = "tmux left"})
 
 -- surround
-map("n", '<leader>r', "<Plug>SurroundReplace", {})
-map("n", '<leader>d', "<Plug>SurroundDelete", {})
-map("v", 's', "<Plug>SurroundAddVisual", {})
+map("n", '<leader>sr', "<Plug>SurroundReplace", {})
+map("n", '<leader>sd', "<Plug>SurroundDelete", {})
+map("v", '<leader>s', "<Plug>SurroundAddVisual", {})
 
 -- telescope
 map('', 'j', ":Telescope find_files<CR>", { noremap = true, desc = "t find files"})
 map('', 'J', ":Telescope live_grep<CR>", { noremap = true, desc = "t grep"})
-vim.keymap.set('n', '<leader>tf', require('telescope.builtin').find_files, { desc = 'Search Files' })
-vim.keymap.set('n', '<leader>th', require('telescope.builtin').help_tags, { desc = 'Search Help' })
-vim.keymap.set('n', '<leader>tw', require('telescope.builtin').grep_string, { desc = 'Search current Word' })
-vim.keymap.set('n', '<leader>tg', require('telescope.builtin').live_grep, { desc = 'Search by Grep' })
-vim.keymap.set('n', '<leader>td', require('telescope.builtin').diagnostics, { desc = 'Search Diagnostics' })
-vim.keymap.set('n', '<leader>tb', require('telescope.builtin').registers, { desc = 'Search registers' })
-vim.keymap.set('n', '<leader>tr', require('telescope.builtin').lsp_references, { desc = 'Search lsp lsp_references' })
-vim.keymap.set('n', '<leader>ti', require('telescope.builtin').lsp_implementations, { desc = 'Search lsp_implementations' })
-vim.keymap.set('n', '<leader>to', require('telescope.builtin').oldfiles, { desc = 'Search old files' })
-vim.keymap.set('n', '<leader>tk', require('telescope.builtin').keymaps, { desc = 'Search keymaps' })
-vim.keymap.set('n', '<leader>/', function()
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { desc = 'Search Files' })
+vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, { desc = 'Search Help' })
+vim.keymap.set('n', '<leader>fw', require('telescope.builtin').grep_string, { desc = 'Search current Word' })
+vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, { desc = 'Search by Grep' })
+vim.keymap.set('n', '<leader>fd', require('telescope.builtin').diagnostics, { desc = 'Search Diagnostics' })
+vim.keymap.set('n', '<leader>fb', require('telescope.builtin').registers, { desc = 'Search registers' })
+vim.keymap.set('n', '<leader>fr', require('telescope.builtin').lsp_references, { desc = 'Search lsp lsp_references' })
+vim.keymap.set('n', '<leader>fi', require('telescope.builtin').lsp_implementations, { desc = 'Search lsp_implementations' })
+vim.keymap.set('n', '<leader>fo', require('telescope.builtin').oldfiles, { desc = 'Search old files' })
+vim.keymap.set('n', '<leader>fk', require('telescope.builtin').keymaps, { desc = 'Search keymaps' })
+vim.keymap.set('n', '<leader>f/', function()
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
     previewer = false,
@@ -628,6 +599,7 @@ end, { desc = '[/] Fuzzily search in current buffer]' })
 
 -- conjure
 vim.keymap.set('n', '<leader>,', ":ConjureEvalRootForm<CR>", { desc = 'Eval Root Form' })
+vim.cmd('let g:conjure#mapping#prefix = ","')
 
 -- jump scroll
 map('', '@', "zt", { noremap = true })
@@ -637,19 +609,20 @@ map('', '#', "zb", { noremap = true })
 -- lsp
 map('', '&', ':lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
 
--- conjure
-vim.cmd('let g:conjure#mapping#prefix = ","')
-
--- copilot
--- vim.cmd('imap <silent><script><expr> <C-q> copilot#Accept("\\<CR>")')
-
 -- inc/dec number
 vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
+-- tree sitter
 local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+vim.keymap.set({ "n", "x", "o" }, "}", ts_repeat_move.repeat_last_move)
+vim.keymap.set({ "n", "x", "o" }, "{", ts_repeat_move.repeat_last_move_opposite)
 
--- vim way: ; goes to the direction you were moving.
-vim.keymap.set({ "n", "x", "o" }, "&", ts_repeat_move.repeat_last_move)
-vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_opposite)
+-- clear line
+vim.cmd("imap <c-u> <esc>ddi")
 
+-- copilot
+--vim.cmd("let g:copilot_filetypes = { '*' : false }")
+-- vim.cmd("let g:copilot_no_tab_map = v:true")
+-- vim.cmd("let g:copilot_enabled = v:false")
+-- vim.cmd('imap <silent><script><expr> <C-q> copilot#Accept("\\<CR>")')

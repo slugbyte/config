@@ -14,7 +14,7 @@
 ## WINDOW & PANE
 * `(C-t n)` _____ new window
 * `(C-t x)` _____ close pane
-* `(C-t v)` _____ split vertical
+* `(C-t s)` _____ split vertical
 * `(C-t h)` _____ split horizontal
 * `(C-t f)` _____ full screen current pane
 * `(C-t r)` _____ rename pane
