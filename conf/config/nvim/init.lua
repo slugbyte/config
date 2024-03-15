@@ -387,7 +387,7 @@ require'nvim-treesitter.configs'.setup ({
   ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "zig", "sql", "typescript", "glsl", "http", "clojure"},
   ignore_install = {},
   sync_install = false,
-  auto_install = true,
+  auto_install = false,
   incremental_selection = {
     enable = true,
     keymaps = {
@@ -402,6 +402,7 @@ require'nvim-treesitter.configs'.setup ({
     disable = function(_, buf)
         local max_filesize = 100 * 1024 -- 100 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+
         if ok and stats and stats.size > max_filesize then
             return true
         end
