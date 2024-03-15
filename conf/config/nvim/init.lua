@@ -76,7 +76,7 @@ require('paq') {
   'hrsh7th/nvim-cmp';
 
   -- ap
-  'github/copilot.vim';
+  -- 'github/copilot.vim';
 
   -- lsp and syntax
   'neovim/nvim-lspconfig';
@@ -116,6 +116,7 @@ require('paq') {
   -- 'nvimdev/lspsaga.nvim';
   -- 'tpope/vim-fireplace';
   -- 'github/copilot.vim';
+  "zbirenbaum/copilot.lua";
 }
 
 -- COMMANDS
@@ -180,6 +181,7 @@ local lsp_server_list = {
   "rust_analyzer",
   "tsserver",
   "zls",
+  "lua_ls",
 }
 
 require("mason").setup()
@@ -229,7 +231,8 @@ lspconfig.lua_ls.setup {
       runtime = {
         -- Tell the language server which version of Lua you're using
         -- (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
+        -- version = 'LuaJIT',
+        version = "LuaJIT"
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
@@ -240,7 +243,11 @@ lspconfig.lua_ls.setup {
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
+        library = {
+          vim.api.nvim_get_runtime_file("", true),
+          '/opt/homebrew/share/lua/5.4',
+          '/opt/homebrew/share/luajit-2.1',
+        },
       },
       -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
@@ -370,8 +377,8 @@ vim.cmd('au FileType fennel call PareditInitBuffer()')
 
 -- copilot
 --vim.cmd("let g:copilot_filetypes = { '*' : false }")
-vim.cmd("let g:copilot_no_tab_map = v:true")
-vim.cmd("let g:copilot_enabled = v:false")
+-- vim.cmd("let g:copilot_no_tab_map = v:true")
+-- vim.cmd("let g:copilot_enabled = v:false")
 
 require'nu'.setup{}
 
@@ -463,6 +470,44 @@ require'treesitter-context'.setup{
 }
 vim.cmd("hi TreesitterContext gui=underline guibg=#123312")
 vim.cmd("hi TreesitterContextLineNumber gui=underline guibg=#123312")
+
+require('copilot').setup({
+  panel = {
+    enabled = true,
+    auto_refresh = false,
+    keymap = {
+      jump_prev = "[[",
+      jump_next = "]]",
+      accept = "<CR>",
+      refresh = "gr",
+      open = "<M-CR>"
+    },
+    layout = {
+      position = "bottom", -- | top | left | right
+      ratio = 0.4
+    },
+  },
+  suggestion = {
+    enabled = true,
+    auto_trigger = true,
+    debounce = 75,
+    keymap = {
+      accept = "<C-q>",
+      accept_word = false,
+      accept_line = false,
+      next = "<leader>cn",
+      prev = "<leader>cp",
+      dismiss = "<esc>",
+    },
+  },
+  filetypes = {
+    go = true,
+    c = true,
+    ["*"] = false,
+  },
+  copilot_node_command = 'node', -- Node.js version must be > 18.x
+  server_opts_overrides = {},
+})
 
 local telescope = require('telescope')
 telescope.setup({
@@ -595,7 +640,7 @@ map('', '&', ':lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = 
 vim.cmd('let g:conjure#mapping#prefix = ","')
 
 -- copilot
-vim.cmd('imap <silent><script><expr> <C-q> copilot#Accept("\\<CR>")')
+-- vim.cmd('imap <silent><script><expr> <C-q> copilot#Accept("\\<CR>")')
 
 -- inc/dec number
 vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
