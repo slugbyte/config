@@ -2,14 +2,17 @@
 -- https://github.com/numToStr/Comment.nvim
 
 return {
-  'numToStr/Comment.nvim',
-  event = 'VimEnter',
-  dependencies = {
-    {
-      'folke/todo-comments.nvim',
-      event = 'VimEnter',
-      dependencies = { 'nvim-lua/plenary.nvim' },
-      opts = { signs = false }
-    },
-  },
+	"numToStr/Comment.nvim",
+	event = "VimEnter",
+	dependencies = {
+		{
+			"folke/todo-comments.nvim",
+			event = "VimEnter",
+			dependencies = { "nvim-lua/plenary.nvim" },
+			opts = { signs = false },
+		},
+	},
+	config = function()
+		require("Comment").setup()
+	end,
 }
