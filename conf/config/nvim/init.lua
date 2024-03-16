@@ -24,3 +24,15 @@ require("slugbyte")
 -- https://github.com/rafamadriz/friendly-snippets
 
 
+  -- "zbirenbaum/copilot.lua";
+  -- 'nvim-lualine/lualine.nvim';
+  -- 'clojure-vim/clojure.vim';
+  -- 'leafgarland/typescript-vim';
+  -- 'MaxMEllon/vim-jsx-pretty';
+  -- 'bakpakin/fennel.vim';
+  -- 'rust-lang/rust.vim';
+  -- 'cespare/vim-toml';
+  -- 'ziglang/zig.vim';
+  -- 'LhKipp/nvim-nu';
+  -- 'olexsmir/gopher.nvim';
+  -- https://github.com/julienvincent/nvim-paredit

@@ -12,4 +12,3 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({  import = "slugbyte/plugin" })
-print("loaded plugins")
