@@ -19,10 +19,10 @@ keymap.set('n', '<leader>n', "'n<CR>",        { desc = "next buffer" })
 keymap.set('n', '<leader>p', "'prev<CR>",     { desc = "prev buffer" })
 
 -- SPLIT SCREEN
-keymap.set('', '<leader>sf', ':on<CR>',       { desc = "split fullscreen" })
-keymap.set('', '<leader>sx', ':close<CR>',    { desc = "split close" })
-keymap.set('', '<leader>sh', ':vs<CR>',       { desc = "split horizontal" })
-keymap.set('', '<leader>sv', ':sp<CR>',       { desc = "split verticle" })
+-- keymap.set('', '<leader>sf', ':on<CR>',       { desc = "split fullscreen" })
+-- keymap.set('', '<leader>sx', ':close<CR>',    { desc = "split close" })
+-- keymap.set('', '<leader>sh', ':vs<CR>',       { desc = "split horizontal" })
+-- keymap.set('', '<leader>sv', ':sp<CR>',       { desc = "split verticle" })
 
 -- ALIGN CURRENT LINE
 keymap.set('', '@', "zt", { noremap = true, desc = "move current line to top of window"})
@@ -33,5 +33,3 @@ keymap.set('', '#', "zb", { noremap = true, desc = "move current line to bottom 
 vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 vim.keymap.set("i", "<c-u>", "<esc>ddi",  { desc = "Delete current line" }) -- decrement
-
-print("keymaps loaded")

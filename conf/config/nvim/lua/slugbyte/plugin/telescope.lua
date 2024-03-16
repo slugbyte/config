@@ -5,7 +5,9 @@
 return {
   'nvim-telescope/telescope.nvim',
   tag = "0.1.6",
-  event = 'VimEnter',
+  enabled = true,
+  lazy = false,
+  -- event = 'VimEnter',
   dependencies = {
     'nvim-lua/plenary.nvim',
     {
@@ -18,6 +20,7 @@ return {
     { 'nvim-telescope/telescope-ui-select.nvim' },
   },
   config = function()
+    print("loading telescope")
     require('telescope').setup {
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
@@ -38,6 +41,7 @@ return {
     -- Enable telescope extensions, if they are installed
     pcall(require('telescope').load_extension, 'fzf')
     pcall(require('telescope').load_extension, 'ui-select')
+
 
     -- See `:help telescope.builtin`
     local builtin = require 'telescope.builtin'

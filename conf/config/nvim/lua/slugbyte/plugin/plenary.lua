@@ -2,7 +2,6 @@
 -- https://github.com/nvim-lua/plenary.nvim
 return {
   "nvim-lua/plenary.nvim",
-  enabled = true,
   lazy = false,
 }
 

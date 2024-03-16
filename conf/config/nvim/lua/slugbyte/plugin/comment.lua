@@ -3,6 +3,13 @@
 
 return {
   'numToStr/Comment.nvim',
-  enable = true,
-  lazy = false,
+  event = 'VimEnter',
+  dependencies = {
+    {
+      'folke/todo-comments.nvim',
+      event = 'VimEnter',
+      dependencies = { 'nvim-lua/plenary.nvim' },
+      opts = { signs = false }
+    },
+  },
 }
