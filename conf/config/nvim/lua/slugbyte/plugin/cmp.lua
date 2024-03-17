@@ -123,7 +123,6 @@ return { -- Autocompletion
 			["<C-k>"] = { c = action_abort },
 			["<C-j>"] = { c = action_confirm_continue },
 			["<C-Tab>"] = { c = action_confirm_continue },
-			["<CR>"] = { c = action_confirm_continue },
 
 			["<Tab>"] = { c = action_cmdline_next },
 			["<Down>"] = { c = action_cmdline_next },

@@ -31,6 +31,4 @@ keymap.set("", "#", "zb", { noremap = true, desc = "move current line to bottom 
 -- OTHER
 vim.keymap.set("n", "<leader>ni", "<C-a>", { desc = "[N]umber [I]nc" }) -- increment
 vim.keymap.set("n", "<leader>nd", "<C-x>", { desc = "[N]umber [D]ec" }) -- decrement
--- vim.keymap.set("i", "<c-u>", "<esc>ddi", { desc = "Delete current line" }) -- decrement
---
---
+vim.keymap.set("i", "<c-u>", "<esc>ddi", { desc = "Delete current line" }) -- decrement

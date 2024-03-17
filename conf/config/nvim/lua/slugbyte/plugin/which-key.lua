@@ -1,6 +1,5 @@
 -- displays a popup with possible key bindings
 -- https://github.com/folke/which-key.nvim
-
 return {
 	"folke/which-key.nvim",
 	event = "VimEnter",
@@ -25,22 +24,21 @@ return {
 			telescope_builtin.live_grep({ cwd = vim.fn.stdpath("config") })
 		end
 
-		local function window_write_all()
+		local function write_all()
 			vim.cmd("silent! wall")
-			print("[write all]", string.sub(math.random() .. "", -4, -1))
+			print("[write]", string.sub(math.random() .. "", -4, -1))
 		end
 
 		require("which-key").setup()
 		require("which-key").register({
-			["<leader>w"] = {
-				name = "[W]indow",
-				f = { ":only<CR>", "[W]indow [F]ullscreen" },
-				h = { ":vs<CR>", "[W]indow [H]orizontal split" },
-				n = { ":n<CR>", "[W]indow [N]ext" },
-				p = { ":prev<CR>", "[W]indow [P]rev" },
-				q = { ":wqall<CR>", "[W]indow [Q]uit all" },
-				s = { window_write_all, "[W]indow [S]ave all" },
-				v = { ":sp<CR>", "[W]indow [V]ertical split" },
+			["<leader>b"] = {
+				name = "[B]uffer",
+				f = { ":only<CR>", "[B]uffer [F]ullscreen" },
+				h = { ":vs<CR>", "[B]uffer [H]orizontal split" },
+				n = { ":n<CR>", "[B]uffer [N]ext" },
+				p = { ":prev<CR>", "[B]uffer [P]rev" },
+				v = { ":sp<CR>", "[B]uffer [V]ertical split" },
+				s = { telescope_builtin.buffers, "[B]uffer [S]earch " },
 			},
 			["<leader>s"] = {
 				name = "[S]earch",
@@ -48,7 +46,7 @@ return {
 				f = { telescope_builtin.find_files, "[S]earch [F]ile" },
 				b = { telescope_builtin.buffers, "[S]earch [B]uffer" },
 				w = { telescope_builtin.grep_string, "[S]earch current [W]ord" },
-				k = { TelescopeGlobalState.keymaps, "[S]earch [K]eymaps" },
+				k = { telescope_builtin.keymaps, "[S]earch [K]eymaps" },
 				g = { telescope_builtin.live_grep, "[S]earch [G]rep" },
 				d = { telescope_builtin.diagnostics, "[S]earch [D]iagnostics" },
 				a = { telescope_builtin.resume, "[S]earch [A]gain" },
@@ -73,9 +71,11 @@ return {
 			},
 			["<leader>/"] = { search_fuzzy, "[/] Fuzzy Search" },
 			["<leader>q"] = { ":qall<CR>", "[Q]uit" },
+			["<leader>w"] = { write_all, "[W]rite" },
 			["<leader>x"] = { ":close<CR>", "[X]out" },
+			["<leader>k"] = { ":WhichKey<CR>", "[K]eys" },
 			-- ["<leader>s"] = { name = "[S]earch", _ = "which_key_ignore" },
-			-- ["<leader>w"] = { name = "[W]indow", _ = "which_key_ignore" },
+			-- ["<leader>w"] = { name = "[B]uffer", _ = "which_key_ignore" },
 			-- ["<leader>n"] = { name = "[N]umber", _ = "which_key_ignore" },
 			-- ["<leader>l"] = { name = "[L]sp", _ = "which_key_ignore" },
 			-- ["<leader>ls"] = { name = "[S]ymbols", _ = "which_key_ignore" },
