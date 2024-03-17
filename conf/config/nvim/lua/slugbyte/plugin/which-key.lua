@@ -31,6 +31,7 @@ return {
 
 		require("which-key").setup()
 		require("which-key").register({
+			["<C-d"] = { telescope_builtin.lsp_definitions, "[D]efinition" },
 			["<leader>b"] = {
 				name = "[B]uffer",
 				f = { ":only<CR>", "[B]uffer [F]ullscreen" },
@@ -68,17 +69,13 @@ return {
 				a = { vim.lsp.buf.code_action, "[L]sp code [A]ction" },
 				i = { telescope_builtin.lsp_implementations, "[G]oto [I]mplementation" },
 				h = { vim.lsp.buf.hover, "[L]sp [H]over Documentation" },
+				f = { vim.lsp.buf.format(), "[L]sp [F]ormat" },
 			},
 			["<leader>/"] = { search_fuzzy, "[/] Fuzzy Search" },
 			["<leader>q"] = { ":qall<CR>", "[Q]uit" },
 			["<leader>w"] = { write_all, "[W]rite" },
 			["<leader>x"] = { ":close<CR>", "[X]out" },
 			["<leader>k"] = { ":WhichKey<CR>", "[K]eys" },
-			-- ["<leader>s"] = { name = "[S]earch", _ = "which_key_ignore" },
-			-- ["<leader>w"] = { name = "[B]uffer", _ = "which_key_ignore" },
-			-- ["<leader>n"] = { name = "[N]umber", _ = "which_key_ignore" },
-			-- ["<leader>l"] = { name = "[L]sp", _ = "which_key_ignore" },
-			-- ["<leader>ls"] = { name = "[S]ymbols", _ = "which_key_ignore" },
 		})
 	end,
 }
