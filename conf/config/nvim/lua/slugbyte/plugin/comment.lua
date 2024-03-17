@@ -1,5 +1,6 @@
 -- Smart and powerful comment plugin for neovim. Supports treesitter, dot repeat, left-right/up-down motions, hooks, and more
--- https://github.com/numToStr/Comment.nvim
+-- https://github.com/numToStr/Comment.nvim10
+-- https://github.com/folke/todo-comments.nvim
 
 return {
 	"numToStr/Comment.nvim",

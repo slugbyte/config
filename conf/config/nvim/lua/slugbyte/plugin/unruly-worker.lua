@@ -7,7 +7,7 @@ return {
 		local unruly_worker = require("unruly-worker")
 		unruly_worker.setup({
 			enable_lsp_map = true,
-			enable_select_map = true,
+			enable_select_map = false,
 			enable_comment_map = true,
 			enable_wrap_navigate = false,
 			enable_visual_navigate = true,

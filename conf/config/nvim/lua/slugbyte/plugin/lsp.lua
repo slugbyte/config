@@ -29,54 +29,51 @@ return {
 				--
 				-- In this case, we create a function that lets us more easily define mappings specific
 				-- for LSP related items. It sets the mode, buffer and description for us each time.
-				local map = function(keys, func, desc)
-					vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
-				end
 
 				-- Jump to the definition of the word under your cursor.
 				--  This is where a variable was first declared, or where a function is defined, etc.
 				--  To jump back, press <C-t>.
-				map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+				-- map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 
 				-- WARN: This is not Goto Definition, this is Goto Declaration.
 				--  For example, in C this would take you to the header
-				map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+				-- map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
 				-- Find references for the word under your cursor.
-				map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+				-- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 
 				-- Jump to the implementation of the word under your cursor.
 				--  Useful when your language has ways of declaring types without an actual implementation.
-				map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+				-- map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 
 				-- Jump to the type of the word under your cursor.
 				--  Useful when you're not sure what type a variable is and you want to see
 				--  the definition of its *type*, not where it was *defined*.
-				map("<leader>ld", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+				-- map("<leader>ld", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
 
 				-- Fuzzy find all the symbols in your current document.
-				--  Symbols are things like variables, functions, types, etc.
-				map("<leader>lsd", require("telescope.builtin").lsp_document_symbols, "[L]sp [S]ymbols in [D]ocuments")
+				-- Symbols are things like variables, functions, types, etc.
+				-- map("<leader>lsd", require("telescope.builtin").lsp_document_symbols, "[L]sp [S]ymbols in [D]ocuments")
 
 				-- Fuzzy find all the symbols in your current workspace
 				--  Similar to document symbols, except searches over your whole project.
-				map(
-					"<leader>lsw",
-					require("telescope.builtin").lsp_dynamic_workspace_symbols,
-					"[Lsp] [S]ymbols in [W]orkspace "
-				)
+				-- map(
+				-- 	"<leader>lsw",
+				-- 	require("telescope.builtin").lsp_dynamic_workspace_symbols,
+				-- 	"[Lsp] [S]ymbols in [W]orkspace "
+				-- )
 
 				-- Rename the variable under your cursor
 				--  Most Language Servers support renaming across files, etc.
-				map("<leader>lr", vim.lsp.buf.rename, "[L]sp [R]ename")
+				-- map("<leader>lr", vim.lsp.buf.rename, "[L]sp [R]ename")
 
 				-- Execute a code action, usually your cursor needs to be on top of an error
 				-- or a suggestion from your LSP for this to activate.
-				map("<leader>la", vim.lsp.buf.code_action, "[L]sp code [A]ction")
+				-- map("<leader>la", vim.lsp.buf.code_action, "[L]sp code [A]ction")
 
 				-- Opens a popup that displays documentation about the word under your cursor
 				--  See `:help K` for why this keymap
-				map("<leader>lh", vim.lsp.buf.hover, "[L]sp [H]over Documentation")
+				-- map("<leader>lh", vim.lsp.buf.hover, "[L]sp [H]over Documentation")
 
 				-- The following two autocommands are used to highlight references of the
 				-- word under your cursor when your cursor rests there for a little while.
@@ -164,23 +161,3 @@ return {
 		})
 	end,
 }
-
--- { -- Autoformat
---   'stevearc/conform.nvim',
---   opts = {
---     notify_on_error = false,
---     format_on_save = {
---       timeout_ms = 500,
---       lsp_fallback = true,
---     },
---     formatters_by_ft = {
---       lua = { 'stylua' },
---       -- Conform can also run multiple formatters sequentially
---       -- python = { "isort", "black" },
---       --
---       -- You can use a sub-list to tell conform to run *until* a formatter
---       -- is found.
---       -- javascript = { { "prettierd", "prettier" } },
---     },
---   },
--- }

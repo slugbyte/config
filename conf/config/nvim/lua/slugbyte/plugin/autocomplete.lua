@@ -41,8 +41,39 @@ return { -- Autocompletion
 	config = function()
 		-- See `:help cmp`
 		local cmp = require("cmp")
+		local types = require("cmp.types")
 		local luasnip = require("luasnip")
 		luasnip.config.setup({})
+
+		local action_abort = cmp.mapping.abort()
+		local action_confirm_select = cmp.mapping.confirm({ select = true })
+		local action_confirm_continue = cmp.mapping.confirm({ select = false })
+		local action_insert_next = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select })
+		local action_insert_prev = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select })
+		local function action_cmdline_next()
+			if cmp.visible() then
+				cmp.select_next_item()
+			else
+				cmp.complete()
+			end
+		end
+		local function action_cmdline_prev()
+			if cmp.visible() then
+				cmp.select_prev_item()
+			else
+				cmp.complete()
+			end
+		end
+		local action_luasnip_next = cmp.mapping(function()
+			if luasnip.expand_or_locally_jumpable() then
+				luasnip.expand_or_jump()
+			end
+		end)
+		local action_luasnip_prev = cmp.mapping(function()
+			if luasnip.locally_jumpable(-1) then
+				luasnip.jump(-1)
+			end
+		end)
 
 		cmp.setup({
 			snippet = {
@@ -52,49 +83,21 @@ return { -- Autocompletion
 			},
 			completion = { completeopt = "menu,menuone,noinsert" },
 
-			mapping = cmp.mapping.preset.insert({
-				["<C-j>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<Tab>"] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
-					else
-						fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-					end
-				end, { "i", "s" }),
-				["<S-Tab>"] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
-					else
-						fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-					end
-				end, { "i", "s" }),
-				-- Select the [n]ext item
-				-- Accept ([y]es) the completion.
-				--  This will auto-import if your LSP supports it.
-				--  This will expand snippets if the LSP sent a snippet.
-				-- Manually trigger a completion from nvim-cmp.
-				--  Generally you don't need this, because nvim-cmp will display
-				--  completions whenever it has completion options available.
-				-- Think of <c-l> as moving to the right of your snippet expansion.
-				--  So if you have a snippet that's like:
-				--  function $name($args)
-				--    $body
-				--  end
-				--
-				-- <c-l> will move you to the right of each of the expansion locations.
-				-- <c-h> is similar, except moving you backwards.
-				-- ['<C-l>'] = cmp.mapping(function()
-				--   if luasnip.expand_or_locally_jumpable() then
-				--     luasnip.expand_or_jump()
-				--   end
-				-- end, { 'i', 's' }),
-				-- ['<C-h>'] = cmp.mapping(function()
-				--   if luasnip.locally_jumpable(-1) then
-				--     luasnip.jump(-1)
-				--   end
-				-- end, { 'i', 's' }),
-			}),
+			mapping = {
+				["<C-k>"] = { i = action_abort },
+				["<C-j>"] = { i = action_confirm_select },
+				["<C-Tab>"] = { i = action_confirm_select },
+				["<CR>"] = { i = action_confirm_select },
+
+				["<Tab>"] = { i = action_insert_next },
+				["<Down>"] = { i = action_insert_next },
+
+				["<S-Tab>"] = { i = action_insert_prev },
+				["<Up>"] = { i = action_insert_prev },
+
+				["<c-,>"] = { i = action_luasnip_next },
+				["<c-."] = { i = action_luasnip_prev },
+			},
 			sources = {
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
@@ -106,42 +109,31 @@ return { -- Autocompletion
 
 		cmp.setup.filetype("gitcommit", {
 			sources = cmp.config.sources({
-				{ name = "git" }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-			}, {
-				{ name = "buffer" },
-			}),
-		})
-
-		cmp.setup.filetype("markdown", {
-			sources = cmp.config.sources({
-				{ name = "emoji" }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+				{ name = "git" },
 			}, {
 				{ name = "buffer" },
 			}, {
 				{ name = "path" },
+			}, {
+				{ name = "emoji" },
 			}),
 		})
 
-		-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+		local mapping_cmdline = {
+			["<C-k>"] = { c = action_abort },
+			["<C-j>"] = { c = action_confirm_continue },
+			["<C-Tab>"] = { c = action_confirm_continue },
+			["<CR>"] = { c = action_confirm_continue },
+
+			["<Tab>"] = { c = action_cmdline_next },
+			["<Down>"] = { c = action_cmdline_next },
+
+			["<S-Tab>"] = { c = action_cmdline_prev },
+			["<Up>"] = { c = action_cmdline_prev },
+		}
+
 		cmp.setup.cmdline({ "/", "?" }, {
-			mapping = cmp.mapping.preset.cmdline({
-				["<C-j>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<Tab>"] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
-					else
-						fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-					end
-				end, { "i", "s" }),
-				["<S-Tab>"] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
-					else
-						fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-					end
-				end, { "i", "s" }),
-			}),
+			mapping = mapping_cmdline,
 			sources = {
 				{ name = "buffer" },
 			},
@@ -149,24 +141,7 @@ return { -- Autocompletion
 
 		-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 		cmp.setup.cmdline(":", {
-			mapping = cmp.mapping.preset.cmdline({
-				["<C-j>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<Tab>"] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
-					else
-						fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-					end
-				end, { "i", "s" }),
-				["<S-Tab>"] = cmp.mapping(function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
-					else
-						fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-					end
-				end, { "i", "s" }),
-			}),
+			mapping = mapping_cmdline,
 			sources = cmp.config.sources({
 				{ name = "path" },
 			}, {
