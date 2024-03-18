@@ -1,6 +1,5 @@
 vim.g.tmux_navigator_no_mappings = 1
 vim.g.is_bash = true
-
 vim.opt.encoding = "utf-8"
 vim.opt.backspace = "indent,eol,start"
 vim.opt.swapfile = false
@@ -40,7 +39,6 @@ vim.opt.list = true
 vim.opt.listchars = { tab = "  ", trail = "·", nbsp = " " }
 vim.opt.inccommand = "split"
 vim.opt.hlsearch = true
-vim.opt.winblend = 100
 
 -- TODO move to keymaps
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")

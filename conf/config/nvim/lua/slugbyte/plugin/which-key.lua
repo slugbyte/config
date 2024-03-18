@@ -24,21 +24,16 @@ return {
 			telescope_builtin.live_grep({ cwd = vim.fn.stdpath("config") })
 		end
 
-		local function write_all()
-			vim.cmd("silent! wall")
-			print("[write]", string.sub(math.random() .. "", -4, -1))
-		end
-
 		require("which-key").setup()
 		require("which-key").register({
 			["<C-d"] = { telescope_builtin.lsp_definitions, "[D]efinition" },
 			["<leader>b"] = {
 				name = "[B]uffer",
 				f = { ":only<CR>", "[B]uffer [F]ullscreen" },
-				h = { ":vs<CR>", "[B]uffer [H]orizontal split" },
+				v = { ":vs<CR>", "[B]uffer [V]erticle split" },
 				n = { ":n<CR>", "[B]uffer [N]ext" },
 				p = { ":prev<CR>", "[B]uffer [P]rev" },
-				v = { ":sp<CR>", "[B]uffer [V]ertical split" },
+				h = { ":sp<CR>", "[B]uffer [H]orizontal split" },
 				s = { telescope_builtin.buffers, "[B]uffer [S]earch " },
 			},
 			["<leader>s"] = {
@@ -69,12 +64,9 @@ return {
 				a = { vim.lsp.buf.code_action, "[L]sp code [A]ction" },
 				i = { telescope_builtin.lsp_implementations, "[G]oto [I]mplementation" },
 				h = { vim.lsp.buf.hover, "[L]sp [H]over Documentation" },
-				f = { vim.lsp.buf.format(), "[L]sp [F]ormat" },
+				f = { vim.lsp.buf.format, "[L]sp [F]ormat" },
 			},
 			["<leader>/"] = { search_fuzzy, "[/] Fuzzy Search" },
-			["<leader>q"] = { ":qall<CR>", "[Q]uit" },
-			["<leader>w"] = { write_all, "[W]rite" },
-			["<leader>x"] = { ":close<CR>", "[X]out" },
 			["<leader>k"] = { ":WhichKey<CR>", "[K]eys" },
 		})
 	end,

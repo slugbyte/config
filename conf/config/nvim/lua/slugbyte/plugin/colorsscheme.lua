@@ -1,11 +1,11 @@
 -- https://github.com/AlexvZyl/nordic.nvim
 -- savq/melange-nvim
 return {
-	"savq/melange-nvim",
+	"slugbyte/wet-nvim",
 	lazy = false,
 	priority = 1000, -- make sure to load this before all the other start plugins
 	init = function()
-		vim.cmd.colorscheme("melange")
+		vim.cmd.colorscheme("wet")
 		vim.cmd("hi DiagnosticWarn guifg=#2a2a2a")
 		vim.cmd("hi DiagnosticSignWarn guifg=#2a2a2a")
 		vim.cmd("hi DiagnosticSignWarn guibg=#555555")

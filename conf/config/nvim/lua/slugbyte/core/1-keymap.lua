@@ -1,5 +1,4 @@
 local keymap = vim.keymap
-
 vim.g.mapleader = " "
 vim.g.local_leader = " "
 
@@ -29,6 +28,6 @@ keymap.set("", "$", "zz", { noremap = true, desc = "move current line to middle 
 keymap.set("", "#", "zb", { noremap = true, desc = "move current line to bottom of window" })
 
 -- OTHER
-vim.keymap.set("n", "<leader>ni", "<C-a>", { desc = "[N]umber [I]nc" }) -- increment
-vim.keymap.set("n", "<leader>nd", "<C-x>", { desc = "[N]umber [D]ec" }) -- decrement
+vim.keymap.set("n", "<leader>ni", "<C-a>", { desc = "[N]umber [I]nc" })    -- increment
+vim.keymap.set("n", "<leader>nd", "<C-x>", { desc = "[N]umber [D]ec" })    -- decrement
 vim.keymap.set("i", "<c-u>", "<esc>ddi", { desc = "Delete current line" }) -- decrement

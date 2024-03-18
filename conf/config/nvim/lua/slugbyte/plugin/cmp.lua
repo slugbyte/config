@@ -36,7 +36,10 @@ return { -- Autocompletion
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-emoji",
 		"hrsh7th/cmp-path",
-		"hrsh7th/cmp-git",
+		{
+			"petertriho/cmp-git",
+			dependencies = { "nvim-lua/plenary.nvim" },
+		},
 	},
 	config = function()
 		-- See `:help cmp`
@@ -50,6 +53,7 @@ return { -- Autocompletion
 		local action_confirm_continue = cmp.mapping.confirm({ select = false })
 		local action_insert_next = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select })
 		local action_insert_prev = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select })
+
 		local function action_cmdline_next()
 			if cmp.visible() then
 				cmp.select_next_item()
@@ -64,16 +68,18 @@ return { -- Autocompletion
 				cmp.complete()
 			end
 		end
-		local action_luasnip_next = cmp.mapping(function()
-			if luasnip.expand_or_locally_jumpable() then
-				luasnip.expand_or_jump()
-			end
-		end)
-		local action_luasnip_prev = cmp.mapping(function()
-			if luasnip.locally_jumpable(-1) then
-				luasnip.jump(-1)
-			end
-		end)
+		--
+		-- local action_luasnip_next = cmp.mapping(function()
+		-- 	if luasnip.expand_or_locally_jumpable() then
+		-- 		luasnip.jump(1)
+		-- 	end
+		-- end)
+		--
+		-- local action_luasnip_prev = cmp.mapping(function()
+		-- 	if luasnip.locally_jumpable(-1) then
+		-- 		luasnip.jump(-1)
+		-- 	end
+		-- end)
 
 		cmp.setup({
 			snippet = {
@@ -84,9 +90,9 @@ return { -- Autocompletion
 			completion = { completeopt = "menu,menuone,noinsert" },
 
 			mapping = {
-				["<C-k>"] = { i = action_abort },
-				["<C-j>"] = { i = action_confirm_select },
-				["<C-Tab>"] = { i = action_confirm_select },
+				-- 	["<c-k>"] = { i = action_abort },
+				["<c-f>"] = { i = action_confirm_select },
+				["<c-j>"] = { i = action_confirm_continue },
 				["<CR>"] = { i = action_confirm_select },
 
 				["<Tab>"] = { i = action_insert_next },
@@ -95,8 +101,14 @@ return { -- Autocompletion
 				["<S-Tab>"] = { i = action_insert_prev },
 				["<Up>"] = { i = action_insert_prev },
 
-				["<c-,>"] = { i = action_luasnip_next },
-				["<c-."] = { i = action_luasnip_prev },
+				-- ["<c-l>"] = {
+				-- 	i = action_luasnip_next,
+				-- 	s = action_luasnip_next,
+				-- },
+				-- ["<c-k"] = {
+				-- 	i = action_luasnip_prev,
+				-- 	s = action_luasnip_next,
+				-- },
 			},
 			sources = {
 				{ name = "nvim_lsp" },
@@ -110,42 +122,37 @@ return { -- Autocompletion
 		cmp.setup.filetype("gitcommit", {
 			sources = cmp.config.sources({
 				{ name = "git" },
-			}, {
 				{ name = "buffer" },
-			}, {
 				{ name = "path" },
-			}, {
 				{ name = "emoji" },
 			}),
 		})
 
 		local mapping_cmdline = {
-			["<C-k>"] = { c = action_abort },
-			["<C-j>"] = { c = action_confirm_continue },
-			["<C-Tab>"] = { c = action_confirm_continue },
-
+			-- ["<c-k>"] = { c = action_abort },
+			["<c-f>"] = { c = action_confirm_select },
+			["<c-j>"] = { c = action_confirm_continue },
 			["<Tab>"] = { c = action_cmdline_next },
-			["<Down>"] = { c = action_cmdline_next },
-
 			["<S-Tab>"] = { c = action_cmdline_prev },
-			["<Up>"] = { c = action_cmdline_prev },
 		}
 
 		cmp.setup.cmdline({ "/", "?" }, {
 			mapping = mapping_cmdline,
-			sources = {
+			sources = cmp.config.sources({
 				{ name = "buffer" },
-			},
+				{ name = "nvim_lsp" },
+			}),
 		})
 
 		-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 		cmp.setup.cmdline(":", {
 			mapping = mapping_cmdline,
 			sources = cmp.config.sources({
-				{ name = "path" },
-			}, {
 				{ name = "cmdline" },
+				{ name = "path" },
 			}),
 		})
+
+		require("cmp_git").setup()
 	end,
 }
