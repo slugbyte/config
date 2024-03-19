@@ -8,8 +8,8 @@ return {
 				height = 1,  -- height of the Zen window
 			},
 			plugins = {
-				gitsigns = { enabled = true }, -- disables git signs
-				tmux = { enabled = true }, -- disables the tmux statusline
+				gitsigns = { enabled = false }, -- disables git signs
+				tmux = { enabled = false }, -- disables the tmux statusline
 			},
 		})
 	end,

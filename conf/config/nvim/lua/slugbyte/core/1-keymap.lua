@@ -22,12 +22,14 @@ vim.g.local_leader = " "
 -- keymap.set("", "<leader>wh", ":vs<CR>", { desc = "[W]indow [H]orizontal split" })
 -- keymap.set("", "<leader>wv", ":sp<CR>", { desc = "[W]indow [V]erticle split" })
 
--- ALIGN CURRENT LINE
-keymap.set("", "@", "zt", { noremap = true, desc = "move current line to top of window" })
-keymap.set("", "$", "zz", { noremap = true, desc = "move current line to middle of window" })
-keymap.set("", "#", "zb", { noremap = true, desc = "move current line to bottom of window" })
+-- -- ALIGN CURRENT LINE
+-- keymap.set("", "@", "zt", { noremap = true, desc = "move current line to top of window" })
+-- keymap.set("", "$", "zz", { noremap = true, desc = "move current line to middle of window" })
+-- keymap.set("", "#", "zb", { noremap = true, desc = "move current line to bottom of window" })
 
--- OTHER
-vim.keymap.set("n", "<leader>ni", "<C-a>", { desc = "[N]umber [I]nc" })    -- increment
-vim.keymap.set("n", "<leader>nd", "<C-x>", { desc = "[N]umber [D]ec" })    -- decrement
+-- -- OTHER
+-- vim.keymap.set("n", "<leader>ni", "<C-a>", { desc = "[N]umber [I]nc" })    -- increment
+-- vim.keymap.set("n", "<leader>nd", "<C-x>", { desc = "[N]umber [D]ec" })    -- decrement
+
+-- c-u should delete line (mostly for command mode)
 vim.keymap.set("i", "<c-u>", "<esc>ddi", { desc = "Delete current line" }) -- decrement

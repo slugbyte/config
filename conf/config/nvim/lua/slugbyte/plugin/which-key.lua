@@ -55,6 +55,7 @@ return {
 				d = { telescope_builtin.diagnostics, "[S]earch [D]iagnostics" },
 				a = { telescope_builtin.resume, "[S]earch [A]gain" },
 				r = { telescope_builtin.oldfiles, "[S]earch [R]ecent" },
+				q = { telescope_builtin.quickfix, "[S]earch [Q]uickfix" },
 				c = {
 					name = "[C]onfig",
 					f = { search_nvim_config_files, "[S]earch [C]onfig [F]ile" },
