@@ -55,9 +55,18 @@ vim.cmd("autocmd FileType markdown setlocal spell")
 vim.cmd("autocmd FileType text setlocal spell")
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank()
-	end,
+  desc = "Highlight when yanking (copying) text",
+  group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
 })
+
+vim.api.nvim_create_user_command("PluginAdd",
+  function(opt)
+    -- local name = vim.fn.input("name: ")
+    local name = opt.args
+    vim.cmd(string.format(":e ~/.config/nvim/lua/slugbyte/plugin/%s.lua", name))
+  end,
+  { nargs = 1 }
+)

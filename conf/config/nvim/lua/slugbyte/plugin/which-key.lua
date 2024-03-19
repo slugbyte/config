@@ -16,12 +16,20 @@ return {
 			}))
 		end
 
-		local function search_config_files()
+		local function search_nvim_config_files()
 			telescope_builtin.find_files({ cwd = vim.fn.stdpath("config") })
 		end
 
-		local function search_config_grep()
+		local function search_nvim_config_grep()
 			telescope_builtin.live_grep({ cwd = vim.fn.stdpath("config") })
+		end
+
+		local function search_conf_grep()
+			telescope_builtin.live_grep({ cwd = "~/workspace/conf" })
+		end
+
+		local function search_conf_files()
+			telescope_builtin.find_files({ cwd = "~/workspace/conf" })
 		end
 
 		require("which-key").setup()
@@ -49,8 +57,14 @@ return {
 				r = { telescope_builtin.oldfiles, "[S]earch [R]ecent" },
 				c = {
 					name = "[C]onfig",
-					f = { search_config_files, "[S]earch [C]onfig [F]ile" },
-					g = { search_config_grep, "[S]earch [C]onfi [G]rep" },
+					f = { search_nvim_config_files, "[S]earch [C]onfig [F]ile" },
+					g = { search_nvim_config_grep, "[S]earch [C]onfi [G]rep" },
+					c = {
+						name = "[C]onf",
+						f = { search_conf_files, "[S]earch [C]onf [F]ile" },
+						g = { search_conf_grep, "[S]earch [C]onf [G]rep" },
+					},
+
 				},
 			},
 			["<leader>l"] = {
