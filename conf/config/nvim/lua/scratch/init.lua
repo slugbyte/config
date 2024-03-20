@@ -107,10 +107,6 @@
 -- })
 --
 --
-if vim.g.wat == nil then
-  vim.g.wat = {}
-  print("new wat")
-end
 
 -- local wat = vim.g.wat
 -- table.insert(wat, win)
@@ -118,12 +114,47 @@ end
 -- table.insert(wat, "goo")
 
 local wat = {}
-table.insert(wat, "wa")
-table.insert(wat, "goo")
+-- table.insert(wat, "wa")
+-- table.insert(wat, "goo")
 
+
+print("wat len", #wat)
 for i, value in ipairs(wat) do
   print("wat", i, value)
 end
+
+local key_equal = function(a, b)
+  local len_a = #a
+  local len_b = #b
+  if len_a ~= len_b then
+    return false
+  end
+
+  if len_a == 1 then
+    return a == b
+  end
+
+  -- would be better to replace specifc bad things line <C- <c-
+  return string.lower(a) == string.lower(b)
+end
+
+local should_map = function(key, skip_list)
+  if skip_list == nil then
+    skip_list = {}
+  end
+
+  local skip = false
+  for _, skip_key in ipairs(skip_list) do
+    skip = skip or key_equal(key, skip_key)
+  end
+
+  if skip then
+    print("skiping map", key)
+  end
+  return not skip
+end
+
+print(should_map("a", { "'", "a", "c" }))
 
 -- vim.keymap.set("n", '<leader>z', function()
 --   for _, value in pairs(vim.g.rand_buf) do

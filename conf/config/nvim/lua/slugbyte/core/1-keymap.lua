@@ -32,4 +32,4 @@ vim.g.local_leader = " "
 -- vim.keymap.set("n", "<leader>nd", "<C-x>", { desc = "[N]umber [D]ec" })    -- decrement
 
 -- c-u should delete line (mostly for command mode)
-vim.keymap.set("i", "<c-u>", "<esc>ddi", { desc = "Delete current line" }) -- decrement
+-- vim.keymap.set("i", "<c-u>", "<esc>ddi", { desc = "Delete current line" }) -- decrement

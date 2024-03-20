@@ -48,6 +48,7 @@ return { -- Autocompletion
 		local luasnip = require("luasnip")
 		luasnip.config.setup({})
 
+
 		local action_abort = cmp.mapping.abort()
 		local action_confirm_select = cmp.mapping.confirm({ select = true })
 		local action_confirm_continue = cmp.mapping.confirm({ select = false })

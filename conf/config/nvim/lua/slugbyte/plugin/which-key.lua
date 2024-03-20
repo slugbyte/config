@@ -35,6 +35,9 @@ return {
 		require("which-key").setup()
 		require("which-key").register({
 			["<C-d"] = { telescope_builtin.lsp_definitions, "[D]efinition" },
+			["<leader>m"] = {
+				name = "[M]ark Maintnence"
+			},
 			["<leader>b"] = {
 				name = "[B]uffer",
 				f = { ":only<CR>", "[B]uffer [F]ullscreen" },

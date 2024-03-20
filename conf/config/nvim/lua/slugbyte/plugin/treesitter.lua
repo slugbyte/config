@@ -45,7 +45,6 @@ return {
 			auto_install = false,
 			indent = {
 				enable = true,
-				-- disable = { 'ruby' }
 			},
 			incremental_selection = {
 				enable = true,
@@ -93,11 +92,6 @@ return {
 						["iS"] = { query = "@class.inner", desc = "select inner struct" },
 						["iI"] = { query = "@conditional.inner", desc = "select inner conditional" },
 
-					},
-					selection_modes = {
-						["@parameter.outer"] = "v", -- charwise
-						["@function.outer"] = "V", -- linewise
-						["@class.outer"] = "<c-v>", -- blockwise
 					},
 					include_surrounding_whitespace = false,
 				},
@@ -180,8 +174,8 @@ return {
 
 		-- Repeat movement with ; and ,
 		-- ensure ; goes forward and , goes backward regardless of the last direction
-		vim.keymap.set({ "n", "x", "o" }, "]]", ts_repeat_move.repeat_last_move_next, { desc = "next textobject" })
-		vim.keymap.set({ "n", "x", "o" }, "[[", ts_repeat_move.repeat_last_move_previous, { desc = "prev textobject" })
+		-- vim.keymap.set({ "n", "x", "o" }, "s", ts_repeat_move.repeat_last_move_next, { desc = "next textobject" })
+		-- vim.keymap.set({ "n", "x", "o" }, "S", ts_repeat_move.repeat_last_move_previous, { desc = "prev textobject" })
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
 		---@diagnostic disable-next-line: missing-fields
