@@ -1,2 +1,2 @@
 # CODE
-> work and personal projects
+> personal programming projects
