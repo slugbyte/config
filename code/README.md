@@ -1,2 +1,2 @@
 # CODE
-> personal programming projects
+> PERSONAL PROGRAMMING PROJECTS
