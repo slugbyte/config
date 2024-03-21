@@ -16,21 +16,38 @@ return {
 			}))
 		end
 
-		local function search_nvim_config_files()
-			telescope_builtin.find_files({ cwd = vim.fn.stdpath("config") })
+		local function new_rg_source(builtin_name, cwd)
+			if cwd ~= nil then
+				return function()
+					telescope_builtin[builtin_name]({
+						command = "rg",
+						hidden = true,
+					})
+				end
+			else
+				return function()
+					telescope_builtin[builtin_name]({
+						command = "rg",
+						hidden = true,
+						cwd = cwd,
+					})
+				end
+			end
 		end
 
-		local function search_nvim_config_grep()
-			telescope_builtin.live_grep({ cwd = vim.fn.stdpath("config") })
-		end
+		local nvim_config_path = vim.fn.stdpath("config")
+		local search_nvim_config_files = new_rg_source("find_files", nvim_config_path)
+		local search_nvim_config_grep = new_rg_source("live_grep", nvim_config_path)
 
-		local function search_conf_grep()
-			telescope_builtin.live_grep({ cwd = "~/workspace/conf" })
-		end
 
-		local function search_conf_files()
-			telescope_builtin.find_files({ cwd = "~/workspace/conf" })
-		end
+		local conf_path = vim.env.HOME .. "/workspace/conf"
+		local search_conf_files = new_rg_source("find_files", conf_path)
+		local search_conf_grep = new_rg_source("live_grep", conf_path)
+
+		local search_files = new_rg_source("find_files")
+		local search_grep = new_rg_source("live_grep")
+		local search_grep_word = new_rg_source("grep_string")
+
 
 		require("which-key").setup()
 		require("which-key").register({
@@ -50,11 +67,11 @@ return {
 			["<leader>s"] = {
 				name = "[S]earch",
 				h = { telescope_builtin.help_tags, "[S]earch [H]elp" },
-				f = { telescope_builtin.find_files, "[S]earch [F]ile" },
+				f = { search_files, "[S]earch [F]ile" },
 				b = { telescope_builtin.buffers, "[S]earch [B]uffer" },
-				w = { telescope_builtin.grep_string, "[S]earch current [W]ord" },
+				w = { search_grep_word, "[S]earch current [W]ord" },
 				k = { telescope_builtin.keymaps, "[S]earch [K]eymaps" },
-				g = { telescope_builtin.live_grep, "[S]earch [G]rep" },
+				g = { search_grep, "[S]earch [G]rep" },
 				d = { telescope_builtin.diagnostics, "[S]earch [D]iagnostics" },
 				a = { telescope_builtin.resume, "[S]earch [A]gain" },
 				r = { telescope_builtin.oldfiles, "[S]earch [R]ecent" },
@@ -89,3 +106,4 @@ return {
 		})
 	end,
 }
+
