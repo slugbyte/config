@@ -1,2 +1,2 @@
 # PLAY
-> fun projects that are on going
+> FUN ONGOING PROJECTS
