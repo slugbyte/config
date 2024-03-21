@@ -9,11 +9,12 @@ zstyle ':completion:*' menu select # better zsh completion
 #---- ENVIRON ---- ##############################################
 #-ENV GENERAL
 export SHELL=$(which zsh)
-export PAGER=$(which less)
+export PAGER=$(which bat)
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export EDITOR=$(which nvim)
+export COPYER=$(which pbcopy)
 export LC_ALL='en_US.UTF-8'
 export TERM='screen-256color'
-
 
 #-ENV XDG
 export XDG_CONFIG_HOME=$HOME/.config
@@ -28,7 +29,6 @@ export LESSHISTFILE=-
 #-ENV WHOAMI
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
-
 
 #-ENV RUST
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -614,7 +614,7 @@ alias C="git_commit --amend --no-edit"
 alias ch="git checkout"
 alias cn="git_commit --no-verify"
 alias cp='cp -r'
-alias d="docker"
+alias d="git diff"
 alias e="nvim"
 alias E="nvim -u $HOME/.vimrc"
 alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
@@ -648,3 +648,13 @@ alias x="git reset"
 alias y="echo naw"
 # z is set by zoxide
 alias Z="nvim $HOME/.config/zsh/.zshrc"
+
+# man() {
+#   LESS_TERMCAP_md=$'\e[01;31m' \
+#   LESS_TERMCAP_me=$'\e[0m' \
+#   LESS_TERMCAP_us=$'\e[01;32m' \
+#   LESS_TERMCAP_ue=$'\e[0m' \
+#   LESS_TERMCAP_so=$'\e[45;93m' \
+#   LESS_TERMCAP_se=$'\e[0m' \
+#   command man "$@"
+# }

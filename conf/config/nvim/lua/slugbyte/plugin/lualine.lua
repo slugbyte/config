@@ -2,6 +2,12 @@ return {
 	'nvim-lualine/lualine.nvim',
 	config = function()
 		local wet_lualine = require('wet').lualine
+		local hop = require('unruly-worker.hop')
+
+		local function hop_mode()
+			return string.format("[%s]", hop.HopModeGet())
+		end
+
 		require('lualine').setup {
 			options = {
 				icons_enabled = false,
@@ -23,7 +29,7 @@ return {
 				} },
 				lualine_c = {},
 				lualine_x = { 'branch', 'filetype' },
-				lualine_y = { 'progress' },
+				lualine_y = { hop_mode, },
 				lualine_z = { 'location', 'diagnostics' },
 			}
 		}
