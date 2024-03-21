@@ -39,22 +39,21 @@ export PATH="$HOME/go/bin:$PATH"
 #-ENV personal dirs dirs
 export PATH="$HOME/workspace/exec:$PATH"
 export TRASH_DIR="$HOME/.Trash"
-export CATALOG="$HOME/_catalog"
-export SHARE="$HOME/_share"
 export trash="$TRASH_DIR"
-export w="$HOME/workspace"  # workspace
-export catalog="$w/catalog"       # catolog
-export code="$w/code"          # data
-export conf="$w/conf"          # data
-export data="$w/data"          # data
-export exec="$w/exec"          # data
-export hide="$w/hide"          # hide
-export play="$w/play"          # play
-export temp="$HOME/Downloads"  # temp
-export work="$w/work"         # work
+export w="$HOME/workspace"
+export hist="$w/hist"
+export code="$w/code"
+export conf="$w/conf"
+export data="$w/data"
+export exec="$w/exec"
+export hide="$w/hide"
+export play="$w/play"
+export lang="$w/lang"
+export temp="$HOME/Downloads"
+export work="$w/work"
 
 #-ENV ZIG
-export ZIG_DIR="$w/root/zig"
+export ZIG_DIR="$w/lang/zig"
 export PATH="$ZIG_DIR:$PATH"
 
 #-ENV ZSH

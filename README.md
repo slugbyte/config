@@ -13,7 +13,7 @@ home dir.
 * code - all my personal programming projects
 * data - assets like images, documents, videos, etc.
 * play - in progress personal projects (non code related)
-* root - i use this to compile and maintain language runtime/compilers (zig, go,
+* lang - i use this to compile and maintain language runtime/compilers (zig, go,
   rust, java)
 * temp - temp place to put things util I find a real home for them (screenshots/downloads/etc)
 * work - job related stuff
