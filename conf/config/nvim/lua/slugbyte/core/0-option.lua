@@ -62,6 +62,19 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+vim.api.nvim_create_user_command("UnrulyUpdate",
+  function()
+    vim.cmd(":Lazy update unruly-worker")
+  end,
+  {})
+
+-- vim.api.nvim_create_user_command("UnrulyUpdate", {
+--   desc = "UnrulyUpdate",
+--   group = vim.api.nvim_create_augroup("unruly-update", { clear = true }),
+--   callback = function()
+--   end,
+-- })
+
 vim.api.nvim_create_user_command("PluginAdd",
   function(opt)
     -- local name = vim.fn.input("name: ")

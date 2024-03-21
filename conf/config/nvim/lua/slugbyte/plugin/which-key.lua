@@ -17,17 +17,15 @@ return {
 		end
 
 		local function new_rg_source(builtin_name, cwd)
-			if cwd ~= nil then
+			if cwd == nil then
 				return function()
 					telescope_builtin[builtin_name]({
-						command = "rg",
 						hidden = true,
 					})
 				end
 			else
 				return function()
 					telescope_builtin[builtin_name]({
-						command = "rg",
 						hidden = true,
 						cwd = cwd,
 					})
@@ -106,4 +104,3 @@ return {
 		})
 	end,
 }
-
