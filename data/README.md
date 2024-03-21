@@ -1,2 +1,2 @@
 # DATA
-> docs,imiages,videos,yadaya
+> DOCS,IMAGES,VIDEOS,YADAYA
