@@ -116,6 +116,7 @@ alias tname='tmux rename-session -t'
 alias tjoin='tmux attach-session -t'
 alias tswap='tmux switch-client -t'
 alias tkill='tmux kill-session -t'
+alias tkillall='killall tmux'
 alias tsync="tmux source ~/.config/tmux/tmux.conf"
 
 #---- GPG ---- ##############################################

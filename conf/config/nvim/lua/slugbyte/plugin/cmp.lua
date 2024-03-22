@@ -46,9 +46,9 @@ return { -- Autocompletion
 		local cmp = require("cmp")
 		local types = require("cmp.types")
 		local luasnip = require("luasnip")
-		-- local status, unruly = pcall(require, "unruly-worker")
-		-- vim.print(status, unruly)
 
+		local unruly = require('unruly-worker')
+		local unruly_cmp = unruly.external.nvim_cmp_setup()
 		luasnip.config.setup({})
 
 
@@ -82,18 +82,19 @@ return { -- Autocompletion
 			completion = { completeopt = "menu,menuone,noinsert" },
 
 			-- mapping = unruly.exnernal.cmp.insert_mapping,
-			mapping = {
-				["<c-f>"] = { i = action_confirm_select },
-				["<c-j>"] = { i = action_confirm_continue },
-				["<CR>"] = { i = action_confirm_select },
-
-				["<Tab>"] = { i = action_insert_next },
-				["<Down>"] = { i = action_insert_next },
-
-				["<S-Tab>"] = { i = action_insert_prev },
-				["<Up>"] = { i = action_insert_prev },
-
-			},
+			unruly_cmp.insert_mapping,
+			-- mapping = {
+			-- 	["<c-f>"] = { i = action_confirm_select },
+			-- 	["<c-j>"] = { i = action_confirm_continue },
+			-- 	["<CR>"] = { i = action_confirm_select },
+			--
+			-- 	["<Tab>"] = { i = action_insert_next },
+			-- 	["<Down>"] = { i = action_insert_next },
+			--
+			-- 	["<S-Tab>"] = { i = action_insert_prev },
+			-- 	["<Up>"] = { i = action_insert_prev },
+			--
+			-- },
 			sources = {
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
@@ -123,7 +124,8 @@ return { -- Autocompletion
 		}
 
 		cmp.setup.cmdline({ "/", "?" }, {
-			mapping = mapping_cmdline,
+			unruly_cmp.cmdline_mapping,
+			-- mapping = mapping_cmdline,
 			sources = cmp.config.sources({
 				{ name = "buffer" },
 				{ name = "nvim_lsp" },
