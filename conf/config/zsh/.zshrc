@@ -9,7 +9,7 @@ zstyle ':completion:*' menu select # better zsh completion
 #---- ENVIRON ---- ##############################################
 #-ENV GENERAL
 export SHELL=$(which zsh)
-export PAGER=$(which bat)
+export PAGER=$(which less)
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export EDITOR=$(which nvim)
 export COPYER=$(which pbcopy)
