@@ -46,6 +46,9 @@ return { -- Autocompletion
 		local cmp = require("cmp")
 		local types = require("cmp.types")
 		local luasnip = require("luasnip")
+		-- local status, unruly = pcall(require, "unruly-worker")
+		-- vim.print(status, unruly)
+
 		luasnip.config.setup({})
 
 
@@ -69,18 +72,6 @@ return { -- Autocompletion
 				cmp.complete()
 			end
 		end
-		--
-		-- local action_luasnip_next = cmp.mapping(function()
-		-- 	if luasnip.expand_or_locally_jumpable() then
-		-- 		luasnip.jump(1)
-		-- 	end
-		-- end)
-		--
-		-- local action_luasnip_prev = cmp.mapping(function()
-		-- 	if luasnip.locally_jumpable(-1) then
-		-- 		luasnip.jump(-1)
-		-- 	end
-		-- end)
 
 		cmp.setup({
 			snippet = {
@@ -90,8 +81,8 @@ return { -- Autocompletion
 			},
 			completion = { completeopt = "menu,menuone,noinsert" },
 
+			-- mapping = unruly.exnernal.cmp.insert_mapping,
 			mapping = {
-				-- 	["<c-k>"] = { i = action_abort },
 				["<c-f>"] = { i = action_confirm_select },
 				["<c-j>"] = { i = action_confirm_continue },
 				["<CR>"] = { i = action_confirm_select },
@@ -102,14 +93,6 @@ return { -- Autocompletion
 				["<S-Tab>"] = { i = action_insert_prev },
 				["<Up>"] = { i = action_insert_prev },
 
-				-- ["<c-l>"] = {
-				-- 	i = action_luasnip_next,
-				-- 	s = action_luasnip_next,
-				-- },
-				-- ["<c-k"] = {
-				-- 	i = action_luasnip_prev,
-				-- 	s = action_luasnip_next,
-				-- },
 			},
 			sources = {
 				{ name = "nvim_lsp" },
@@ -133,6 +116,8 @@ return { -- Autocompletion
 			-- ["<c-k>"] = { c = action_abort },
 			["<c-f>"] = { c = action_confirm_select },
 			["<c-j>"] = { c = action_confirm_continue },
+			["<Right>"] = { c = action_confirm_continue },
+			["<C-Tab>"] = { c = action_cmdline_next },
 			["<Tab>"] = { c = action_cmdline_next },
 			["<S-Tab>"] = { c = action_cmdline_prev },
 		}
