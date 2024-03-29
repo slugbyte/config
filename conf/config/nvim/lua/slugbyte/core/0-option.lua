@@ -39,14 +39,16 @@ vim.opt.list = true
 vim.opt.listchars = { tab = "  ", trail = "·", nbsp = " " }
 vim.opt.inccommand = "split"
 vim.opt.hlsearch = true
+-- vim.g.loaded_matchit = true
+-- vim.g.loaded_netrwPlugin = true
 
 -- TODO move to keymaps
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+-- vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+pcall(vim.colorscheme, 'wet')
 
--- vim.cmd('colorscheme wet')
-vim.cmd("hi DiagnosticWarn guifg=#2a2a2a")
-vim.cmd("hi DiagnosticSignWarn guifg=#2a2a2a")
-vim.cmd("hi DiagnosticSignWarn guibg=#555555")
+-- vim.cmd("hi DiagnosticWarn guifg=#2a2a2a")
+-- vim.cmd("hi DiagnosticSignWarn guifg=#2a2a2a")
+-- vim.cmd("hi DiagnosticSignWarn guibg=#555555")
 
 vim.cmd("autocmd FileType markdown setlocal wrap")
 vim.cmd("autocmd FileType markdown setlocal textwidth=80")
@@ -67,13 +69,6 @@ vim.api.nvim_create_user_command("UnrulyUpdate",
     vim.cmd(":Lazy update unruly-worker")
   end,
   {})
-
--- vim.api.nvim_create_user_command("UnrulyUpdate", {
---   desc = "UnrulyUpdate",
---   group = vim.api.nvim_create_augroup("unruly-update", { clear = true }),
---   callback = function()
---   end,
--- })
 
 vim.api.nvim_create_user_command("PluginAdd",
   function(opt)

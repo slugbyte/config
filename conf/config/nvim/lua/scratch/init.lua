@@ -1,29 +1,29 @@
-local api = require('Comment.api')
-
-local function get_region(opmode)
-  if not opmode then
-    local row = unpack(vim.api.nvim_win_get_cursor(0))
-    return { srow = row, scol = 0, erow = row, ecol = 0 }
-  end
-
-  local marks = string.match(opmode, '[vV]') and { '<', '>' } or { '[', ']' }
-  vim.print("marks", marks)
-  local sln, eln = vim.api.nvim_buf_get_mark(0, marks[1]), vim.api.nvim_buf_get_mark(0, marks[2])
-
-  return { start_row = sln[1], start_col = sln[2], end_row = eln[1], end_col = eln[2] }
-end
-
-local esc = vim.api.nvim_replace_termcodes(
-  '<ESC>', true, false, true
-)
-vim.keymap.set("x", "c", function()
-  print("fookkkk")
-  vim.api.nvim_feedkeys(esc, 'nx', false)
-  -- api.toggle.linewise(vim.fn.visualmode())
-  vim.print(get_region("v"))
-end, { desc = "wat" })
-
-print("booyee")
+--
+-- local api = require('Comment.api')
+--
+--   if not opmode then
+--     local row = unpack(vim.api.nvim_win_get_cursor(0))
+--     return { srow = row, scol = 0, erow = row, ecol = 0 }
+--   end
+--
+--   local marks = string.match(opmode, '[vV]') and { '<', '>' } or { '[', ']' }
+--   vim.print("marks", marks)
+--   local sln, eln = vim.api.nvim_buf_get_mark(0, marks[1]), vim.api.nvim_buf_get_mark(0, marks[2])
+--
+--   return { start_row = sln[1], start_col = sln[2], end_row = eln[1], end_col = eln[2] }
+-- end
+--
+-- local esc = vim.api.nvim_replace_termcodes(
+--   '<ESC>', true, false, true
+-- )
+-- vim.keymap.set("x", "c", function()
+--   print("fookkkk")
+--   vim.api.nvim_feedkeys(esc, 'nx', false)
+--   -- api.toggle.linewise(vim.fn.visualmode())
+--   vim.print(get_region("v"))
+-- end, { desc = "wat" })
+--
+-- print("booyee")
 --
 -- if jit then
 --   print("luajit", _VERSION)

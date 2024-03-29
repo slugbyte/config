@@ -1,12 +1,17 @@
 return {
 	'nvim-lualine/lualine.nvim',
+	dependencies = {
+		"unruly-worker",
+	},
 	config = function()
 		local wet_lualine = require('wet').lualine
-		local hop = require('unruly-worker.hop')
+		local macro = require('unruly-worker.action.macro')
+		local kopy = require('unruly-worker.action.kopy')
+		local seek = require('unruly-worker.action.seek')
+		local mark = require('unruly-worker.action.mark')
 
-		local function hop_mode()
-			return string.format("[%s]", hop.HopModeGet())
-		end
+		-- vim.print({ yank = yank })
+
 
 		require('lualine').setup {
 			options = {
@@ -28,9 +33,9 @@ return {
 					},
 				} },
 				lualine_c = {},
-				lualine_x = { 'branch', 'filetype' },
-				lualine_y = { hop_mode, },
-				lualine_z = { 'location', 'diagnostics' },
+				lualine_x = { 'branch', },
+				lualine_y = { mark.get_status_text, macro.get_status_text, kopy.get_status_text, seek.get_status_text },
+				lualine_z = { "searchcount", "selectioncount", 'diagnostics' },
 			}
 		}
 	end

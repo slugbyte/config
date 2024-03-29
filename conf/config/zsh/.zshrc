@@ -11,7 +11,7 @@ zstyle ':completion:*' menu select # better zsh completion
 export SHELL=$(which zsh)
 export PAGER=$(which less)
 export TOPER=$(which htop)
-export SCRATCHPAD_PATH="~/scratchpad.md"
+export SCRATCHPAD_PATH="$HOME/scratchpad.md"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export EDITOR=$(which nvim)
 export COPYER=$(which pbcopy)

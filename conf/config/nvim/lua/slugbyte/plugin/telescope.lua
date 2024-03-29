@@ -20,7 +20,7 @@ return {
 				return vim.fn.executable("make") == 1
 			end,
 		},
-		{ "nvim-telescope/telescope-ui-select.nvim" },
+		-- { "nvim-telescope/telescope-ui-select.nvim" },
 	},
 	config = function()
 		local actions = require("telescope.actions")
@@ -45,7 +45,6 @@ return {
 				["r"] = actions.remove_selection,
 				["s"] = actions.add_selection,
 
-
 				["n"] = actions.move_selection_next,
 				["e"] = actions.move_selection_previous,
 				["<Down>"] = actions.move_selection_next,
@@ -57,7 +56,7 @@ return {
 				["<esc>"] = actions.close,
 				["<CR>"] = actions.select_default,
 				["<C-h>"] = actions.select_horizontal,
-				["<C-v>"] = actions.select_vertical,
+				["<C-s>"] = actions.select_vertical,
 
 				["<C-e>"] = actions.preview_scrolling_up,
 				["<C-n>"] = actions.preview_scrolling_down,
@@ -73,9 +72,9 @@ return {
 				["<c-r>"] = actions.remove_selection,
 				["<c-s>"] = actions.add_selection,
 
-				["<CR>"] = actions.file_edit,
+				["<CR>"] = actions.select_default,
 				["<C-h>"] = actions.select_horizontal,
-				["<C-v>"] = actions.select_vertical,
+				["<C-s>"] = actions.select_vertical,
 				["<c-x>"] = actions.close,
 
 				["<Down>"] = actions.move_selection_next,
@@ -101,7 +100,7 @@ return {
 		end
 
 
-		mappings = vim.tbl_deep_extend("force", default_noop, mappings)
+		-- mappings = vim.tbl_deep_extend("force", default_noop, mappings)
 
 		require("telescope").setup({
 			-- You can put your default mappings / updates / etc. in here
