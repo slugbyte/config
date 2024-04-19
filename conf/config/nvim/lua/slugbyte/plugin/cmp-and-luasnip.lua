@@ -40,11 +40,7 @@ return {
 	config = function()
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
-		local unruly = require('unruly-worker.external.nvim-cmp')
-
-		local unruly_cmp = unruly({
-			cmp = cmp,
-		})
+		local unruly_cmp = require('unruly-worker.external.nvim-cmp')
 
 		luasnip.config.setup({})
 
@@ -55,8 +51,7 @@ return {
 				end,
 			},
 			completion = { completeopt = "menu,menuone,noinsert" },
-
-			mapping = unruly_cmp.insert_mapping,
+			mapping = unruly_cmp.create_insert_mapping(),
 			sources = {
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
@@ -77,7 +72,7 @@ return {
 
 
 		cmp.setup.cmdline({ "/", "?" }, {
-			mapping = unruly_cmp.cmdline_mapping,
+			mapping = unruly_cmp.create_cmdline_mapping(),
 			sources = cmp.config.sources({
 				{ name = "buffer" },
 				{ name = "nvim_lsp" },
@@ -86,7 +81,7 @@ return {
 
 		-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 		cmp.setup.cmdline(":", {
-			mapping = unruly_cmp.cmdline_mapping,
+			mapping = unruly_cmp.create_cmdline_mapping(),
 			sources = cmp.config.sources({
 				{ name = "cmdline" },
 				{ name = "path" },

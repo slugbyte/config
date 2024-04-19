@@ -20,94 +20,17 @@ return {
 				return vim.fn.executable("make") == 1
 			end,
 		},
-		-- { "nvim-telescope/telescope-ui-select.nvim" },
+		{ "nvim-telescope/telescope-ui-select.nvim" },
 	},
 	config = function()
-		local actions = require("telescope.actions")
-
-		local mappings = {
-			n = {
-				["@"] = actions.move_to_top,
-				["$"] = actions.move_to_middle,
-				["#"] = actions.move_to_bottom,
-
-				["<c-a>"] = actions.select_all,
-				["<c-d>"] = actions.drop_all,
-				["<c-q>"] = actions.add_selected_to_qflist + actions.open_qflist,
-				["<c-l>"] = actions.add_selected_to_loclist + actions.open_loclist,
-				["<c-r>"] = actions.remove_selection,
-				["<c-s>"] = actions.add_selection,
-
-				["a"] = actions.select_all,
-				["d"] = actions.drop_all,
-				["q"] = actions.add_selected_to_qflist + actions.open_qflist,
-				["l"] = actions.add_selected_to_loclist + actions.open_loclist,
-				["r"] = actions.remove_selection,
-				["s"] = actions.add_selection,
-
-				["n"] = actions.move_selection_next,
-				["e"] = actions.move_selection_previous,
-				["<Down>"] = actions.move_selection_next,
-				["<Up>"] = actions.move_selection_previous,
-				["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-				["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-
-				["<c-x>"] = actions.close,
-				["<esc>"] = actions.close,
-				["<CR>"] = actions.select_default,
-				["<C-h>"] = actions.select_horizontal,
-				["<C-s>"] = actions.select_vertical,
-
-				["<C-e>"] = actions.preview_scrolling_up,
-				["<C-n>"] = actions.preview_scrolling_down,
-				["<C-Up>"] = actions.preview_scrolling_up,
-				["<C-Down>"] = actions.preview_scrolling_down,
-				["<c-k>"] = actions.which_key,
-			},
-			i = {
-				["<c-a>"] = actions.select_all,
-				["<c-d>"] = actions.drop_all,
-				["<c-q>"] = actions.add_selected_to_qflist + actions.open_qflist,
-				["<c-l>"] = actions.add_selected_to_loclist + actions.open_loclist,
-				["<c-r>"] = actions.remove_selection,
-				["<c-s>"] = actions.add_selection,
-
-				["<CR>"] = actions.select_default,
-				["<C-h>"] = actions.select_horizontal,
-				["<C-s>"] = actions.select_vertical,
-				["<c-x>"] = actions.close,
-
-				["<Down>"] = actions.move_selection_next,
-				["<Up>"] = actions.move_selection_previous,
-				["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-				["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-
-				["<C-e>"] = actions.preview_scrolling_up,
-				["<C-n>"] = actions.preview_scrolling_down,
-				["<C-Up>"] = actions.preview_scrolling_up,
-				["<C-Down>"] = actions.preview_scrolling_down,
-				["<c-k>"] = actions.which_key,
-			},
-		}
-
-		local default_noop = require("telescope.mappings").default_mappings
-
-		for key in pairs(default_noop.i) do
-			default_noop.i[key] = actions.nop
-		end
-		for key in pairs(default_noop.n) do
-			default_noop.n[key] = actions.nop
-		end
-
-
-		-- mappings = vim.tbl_deep_extend("force", default_noop, mappings)
+		local unruly_telescope = require("unruly-worker.external.telescope")
 
 		require("telescope").setup({
 			-- You can put your default mappings / updates / etc. in here
 			--  All the info you're looking for is in `:help telescope.setup()`
 			--
 			defaults = {
-				mappings = mappings,
+				mappings = unruly_telescope.create_mappings(),
 			},
 			-- pickers = {}
 			extensions = {

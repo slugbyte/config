@@ -51,7 +51,11 @@ return {
 			-- key_labels = {
 			-- 	["<leader>t"] = "[T]elescope",
 			-- },
-			triggers = { "<leader>", "<leader>t" },
+			popup_mappings = {
+				scroll_down = "<PageDown>", -- binding to scroll down inside the popup
+				scroll_up = "<PageUp>", -- binding to scroll up inside the popup
+			},
+			triggers = { "<leader>" },
 		})
 		require("which-key").register({
 			["<leader>c"] = {
@@ -61,6 +65,9 @@ return {
 			},
 			["<leader>t"] = {
 				name = "[T]elescope"
+			},
+			["<leader>l"] = {
+				name = "[L]sp+"
 			},
 			-- ["<leader>t"] = {
 			-- 	name = "[T]ele",
@@ -75,21 +82,21 @@ return {
 			-- 	r = { telescope_builtin.oldfiles, "[T]ele [R]ecent" },
 			-- 	q = { telescope_builtin.quickfix, "[T]ele [Q]uickfix" },
 			-- },
-			["<leader>l"] = {
-				name = "[L]sp",
-				D = { vim.lsp.buf.declaration, "[L]sp goto [D]eclaration" },
-				R = { vim.lsp.buf.rename, "[L]sp [R]ename" },
-				a = { vim.lsp.buf.code_action, "[L]sp code [A]ction" },
-				d = { telescope_builtin.lsp_definitions, "[L]sp goto [D]efinitions" },
-				f = { vim.lsp.buf.format, "[L]sp [F]ormat" },
-				h = { vim.lsp.buf.hover, "[L]sp [H]over Documentation" },
-				i = { telescope_builtin.lsp_implementations, "[G]oto [I]mplementation" },
-				r = { telescope_builtin.lsp_references, "[L]sp [R]eferences" },
-				s = { telescope_builtin.lsp_dynamic_workspace_symbols, "[L]sp [S]ymbols" },
-				t = { telescope_builtin.lsp_type_definitions, "[L]sp [T]ypes" },
-			},
+			-- ["<leader>l"] = {
+			-- 	name = "[L]sp",
+			-- 	D = { vim.lsp.buf.declaration, "[L]sp goto [D]eclaration" },
+			-- 	R = { vim.lsp.buf.rename, "[L]sp [R]ename" },
+			-- 	a = { vim.lsp.buf.code_action, "[L]sp code [A]ction" },
+			-- 	d = { telescope_builtin.lsp_definitions, "[L]sp goto [D]efinitions" },
+			-- 	f = { vim.lsp.buf.format, "[L]sp [F]ormat" },
+			-- 	h = { vim.lsp.buf.hover, "[L]sp [H]over Documentation" },
+			-- 	i = { telescope_builtin.lsp_implementations, "[G]oto [I]mplementation" },
+			-- 	r = { telescope_builtin.lsp_references, "[L]sp [R]eferences" },
+			-- 	s = { telescope_builtin.lsp_workspace_symbols, "[L]sp [S]ymbols" },
+			-- 	t = { telescope_builtin.lsp_type_definitions, "[L]sp [T]ypes" },
+			-- },
 			-- ["<leader>/"] = { search_fuzzy, "[/] Fuzzy Search" },
-			["<leader>k"] = { ":WhichKey<CR>", "[K]eys" },
+			["<leader>?"] = { ":WhichKey<CR>", "[K]eys" },
 		})
 	end,
 }
