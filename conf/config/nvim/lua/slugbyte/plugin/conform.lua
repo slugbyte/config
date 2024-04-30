@@ -26,9 +26,9 @@ return {
 		formatters_by_ft = {
 			-- lua = { "stylua" },
 			go = { "goimports", "gofmt", "golines" },
-			zig = { " zigfmt" },
-			sh = { "shellcheck" },
 			templ = { "templ" },
+			-- zig = { " zigfmt" },
+			-- sh = { "shellcheck" },
 		},
 	},
 }

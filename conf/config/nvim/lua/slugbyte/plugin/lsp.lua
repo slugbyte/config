@@ -117,7 +117,7 @@ return {
 			clojure_lsp = {},
 			html = {},
 			tsserver = {},
-			zls = {},
+			-- zls = {},
 			gopls = {
 				settings = {
 					gopls = {
@@ -143,6 +143,7 @@ return {
 		vim.list_extend(ensure_installed, {
 			"stylua", -- Used to format lua code
 		})
+
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 		local on_attach = function(_, bufnr)
@@ -159,5 +160,10 @@ return {
 				end,
 			},
 		})
+
+		local zls_config = {}
+		zls_config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, zls_config.capabilities or {})
+		zls_config.on_attach = on_attach
+		require("lspconfig").zls.setup(zls_config)
 	end,
 }

@@ -21,7 +21,7 @@ vim.opt.foldmethod = "indent"
 vim.opt.completeopt = "menu"
 vim.opt.wildmode = "list:longest"
 vim.opt.wildmenu = true
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = "100"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.wrap = false
 vim.opt.undofile = true
@@ -42,9 +42,10 @@ vim.opt.hlsearch = true
 -- vim.g.loaded_matchit = true
 -- vim.g.loaded_netrwPlugin = true
 
--- TODO move to keymaps
+-- TODO: move to keymaps
 -- vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-pcall(vim.colorscheme, 'wet')
+-- vim.cmd("colorscheme wet")
+-- pcall(vim.colorscheme, 'wet')
 
 -- vim.cmd("hi DiagnosticWarn guifg=#2a2a2a")
 -- vim.cmd("hi DiagnosticSignWarn guifg=#2a2a2a")
@@ -75,6 +76,17 @@ vim.api.nvim_create_user_command("PluginAdd",
     -- local name = vim.fn.input("name: ")
     local name = opt.args
     vim.cmd(string.format(":e ~/.config/nvim/lua/slugbyte/plugin/%s.lua", name))
+  end,
+  { nargs = 1 }
+)
+
+
+-- vim.keymap.set("", "<leader>h", ":colorscheme wet<cr>")
+
+vim.api.nvim_create_user_command("Hi",
+  function(opt)
+    local name = opt.args
+    vim.cmd(string.format(":hi %s guifg=#ff0000", name))
   end,
   { nargs = 1 }
 )

@@ -5,13 +5,7 @@ return {
 	},
 	config = function()
 		local wet_lualine = require('wet').lualine
-		local macro = require('unruly-worker.action.macro')
-		local kopy = require('unruly-worker.action.kopy')
-		local seek = require('unruly-worker.action.seek')
-		local mark = require('unruly-worker.action.mark')
-
-		-- vim.print({ yank = yank })
-
+		local unruly_worker = require('unruly-worker')
 
 		require('lualine').setup {
 			options = {
@@ -33,9 +27,9 @@ return {
 					},
 				} },
 				lualine_c = {},
-				lualine_x = { 'branch', },
-				lualine_y = { mark.get_status_text, macro.get_status_text, kopy.get_status_text, seek.get_status_text },
-				lualine_z = { "searchcount", "selectioncount", 'diagnostics' },
+				lualine_x = {},
+				lualine_y = { "searchcount", "selectioncount", 'diagnostics', 'filetype', 'branch' },
+				lualine_z = { unruly_worker.hud.generate },
 			}
 		}
 	end

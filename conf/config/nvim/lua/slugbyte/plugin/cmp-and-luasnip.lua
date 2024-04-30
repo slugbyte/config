@@ -51,7 +51,12 @@ return {
 				end,
 			},
 			completion = { completeopt = "menu,menuone,noinsert" },
-			mapping = unruly_cmp.create_insert_mapping(),
+			mapping = unruly_cmp.create_insert_mapping({
+				-- skip_list = { "<Right>" },
+				-- mapping = {
+				-- 	["<Up>"] = cmp.mapping.confirm(),
+				-- },
+			}),
 			sources = {
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },

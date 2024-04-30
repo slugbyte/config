@@ -10,11 +10,14 @@ return {
 			},
 			virtual_text = {
 				enabled = true,
-				text = "A!",
+				text = "!",
 				hl = "LightBulbSign",
 			},
 			sign = {
 				enabled = false,
+				text = "!!",
+				hl = "LightBulbSign",
+				hl_mode = "combine",
 			},
 		})
 	end,

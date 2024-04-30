@@ -1,6 +1,13 @@
-local keymap = vim.keymap
 vim.g.mapleader = " "
 vim.g.local_leader = " "
+
+vim.keymap.set("n", "<C-g>",
+	function()
+		local result = vim.treesitter.get_captures_at_cursor(0)
+		print(vim.inspect(result))
+	end,
+	{ noremap = true, silent = false }
+)
 
 -- SAVE AND QUIT
 -- keymap.set("n", "<leader>ws", function()
@@ -32,4 +39,3 @@ vim.g.local_leader = " "
 -- vim.keymap.set("n", "<leader>nd", "<C-x>", { desc = "[N]umber [D]ec" })    -- decrement
 
 -- c-u should delete line (mostly for command mode)
--- vim.keymap.set("i", "<c-u>", "<esc>ddi", { desc = "Delete current line" }) -- decrement

@@ -58,17 +58,28 @@ return {
 			triggers = { "<leader>" },
 		})
 		require("which-key").register({
-			["<leader>c"] = {
-				name = "[C]onfig",
-				f = { search_conf_files, "[T]ele [C]onf [F]ile" },
-				g = { search_conf_grep, "[T]ele [C]onf [G]rep" },
-			},
+			["<leader>j"] = { search_conf_files, "[J]ump Config Files" },
+			["<leader>J"] = { search_conf_grep, "[J]ump Config Grep" },
+			["<leader>r"] = { function()
+				vim.cmd("colorscheme wet")
+				print("Wet Reloaded")
+			end, "[R]eload wet" },
 			["<leader>t"] = {
 				name = "[T]elescope"
 			},
 			["<leader>l"] = {
 				name = "[L]sp+"
 			},
+			["<leader>z"] = {
+				name = "[Z] Macro"
+			},
+			["<leader>s"] = {
+				name = "[S]eek"
+			},
+			["<leader>d"] = {
+				name = "[D]iagnostic"
+			},
+
 			-- ["<leader>t"] = {
 			-- 	name = "[T]ele",
 			-- 	h = { telescope_builtin.help_tags, "[T]ele [H]elp" },

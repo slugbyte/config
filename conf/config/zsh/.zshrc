@@ -57,6 +57,7 @@ export work="$w/work"
 #-ENV ZIG
 export ZIG_DIR="$w/lang/zig"
 export PATH="$ZIG_DIR:$PATH"
+export PATH="$w/lang/zls/zig-out/bin:$PATH"
 
 #-ENV ZSH
 export ZDOTDIR="$HOME/.config/zsh"
@@ -618,6 +619,7 @@ alias ch="git checkout"
 alias cn="git_commit --no-verify"
 alias cp='cp -r'
 alias d="git diff"
+alias D="git diff HEAD~1"
 alias e="nvim"
 alias E="nvim -u $HOME/.vimrc"
 alias ed='e $(find . -name "*.*" | grep "./" | grep -v node_modules)'
