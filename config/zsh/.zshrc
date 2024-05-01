@@ -39,7 +39,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 
 #-ENV personal dirs dirs
-export PATH="$HOME/workspace/exec:$PATH"
 export TRASH_DIR="$HOME/.Trash"
 export trash="$TRASH_DIR"
 export w="$HOME/workspace"
@@ -47,12 +46,13 @@ export hist="$w/hist"
 export code="$w/code"
 export conf="$w/conf"
 export data="$w/data"
-export exec="$w/exec"
+export exec="$w/conf/exec"
 export hide="$w/hide"
 export play="$w/play"
 export lang="$w/lang"
 export temp="$HOME/Downloads"
 export work="$w/work"
+export PATH="$exec:$PATH"
 
 #-ENV ZIG
 export ZIG_DIR="$w/lang/zig"

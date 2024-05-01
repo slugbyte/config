@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# this is uses by nvim telescope plugin as the find_files_command
+rg --files --follow --hidden --no-ignore --max-filesize 999K  \
+| rg -v node_modules \
+| rg -v target \
+| rg -v 'kondo' \
+| rg -v .shadow-cljs \
+| rg -v .clj-kondo \
+| rg -v zig-cache \
+| rg -v zig-out \
+| rg -v '\.git' \
+| rg -v '\.lsp' \
+| rg -v 'runtime'
