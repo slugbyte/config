@@ -1,4 +1,5 @@
 hide
+gang
 
 # Created by https://www.toptal.com/developers/gitignore/api/autotools
 # Edit at https://www.toptal.com/developers/gitignore?templates=autotools
@@ -13,6 +14,7 @@ Makefile.in
 /ylwrap
 .deps/
 .dirstamp
+
 
 # http://www.gnu.org/software/autoconf
 
