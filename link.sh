@@ -1,18 +1,30 @@
 #!/usr/bin/env bash
 
 WORKSPACE_DIR="$HOME/workspace"
+TEMP_DIR="$HOME/Downloads/"
 TRASH_DIR="$HOME/.Trash"
+CONF_DIR="$WORKSPACE_DIR/conf"
 ARG="$1"
+
+mkdir -p "$WORKSPACE_DIR/code" 
+mkdir -p "$WORKSPACE_DIR/data"
+mkdir -p "$WORKSPACE_DIR/exec"
+mkdir -p "$WORKSPACE_DIR/gang"
+mkdir -p "$WORKSPACE_DIR/hist"
+mkdir -p "$WORKSPACE_DIR/lang"
+mkdir -p "$WORKSPACE_DIR/play"
+mkdir -p "$WORKSPACE_DIR/play"
+mkdir -p "$WORKSPACE_DIR/work"
+ln -sf "$TEMP_DIR" "$WORKSPACE_DIR/temp"
+
+if [[ ! -d "$CONF_DIR" ]];then
+  git clone git@github.com:slugbyte/config.git "$WORKSPACE_DIR/conf"
+fi
 
 echo "[BLOINGO]"
 echo "   WORKSPACE_DIR=$WORKSPACE_DIR"
+echo "   TEMP_DIR=$TEMP_DIR"
 echo "   TRASH_DIR=$TRASH_DIR"
-
-if [[ ! -d "$WORKSPACE_DIR" ]];then
-  echo "ABORT: DOES NOT EXIST"
-  echo "    $WORKSPACE_DIR"
-  exit 1
-fi
 
 if [[ ! -d "$TRASH_DIR" ]];then
   echo "ABORT: TRASH_DIR DOES NOT EXIST"
@@ -24,25 +36,25 @@ exec_if_plz(){
   # place exec_if_plz before line to exec_if_plz it
   # example ```$ exec_if_plz mv $1  $TRASH_DEST_PATH```
   if [[ "$ARG" = "--plz" ]];then
-    $@
+    "$@"
   else
-    echo "    [MOCK]" $@
+    echo "    [MOCK]" "$@"
   fi
 }
 
 backup_if_exist(){
   if [[ -e "$1" ]]; then
     TRASH_DATE=$(date "+%Y%m%d%H%M%S")
-    TRASH_SOURCE_NAME=$(basename $1)
+    TRASH_SOURCE_NAME=$(basename "$1")
     TRASH_DEST_PATH="$TRASH_DIR/config-backup_if_exist-$TRASH_DATE.$TRASH_SOURCE_NAME"
-    exec_if_plz mv $1  $TRASH_DEST_PATH
+    exec_if_plz mv "$1"  "$TRASH_DEST_PATH"
     echo "    [BACKUP] $1 -> $TRASH_DEST_PATH"
   fi
 }
 
 link_config(){
   SOURCE_DIR="$1"
-  SOURCE_FILE_LIST=$(ls -a $SOURCE_DIR | grep -v "^\.*$" | grep -v .DS_Store)
+  SOURCE_FILE_LIST=$(ls -a "$SOURCE_DIR" | grep -v "^\.*$" | grep -v .DS_Store)
   DEST_DIR="$2"
   echo
   echo "[SOURCE_DIR] $SOURCE_DIR"
