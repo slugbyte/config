@@ -59,6 +59,24 @@ export ZIG_DIR="$w/lang/zig"
 export PATH="$ZIG_DIR:$PATH"
 export PATH="$w/lang/zls/zig-out/bin:$PATH"
 
+function zig-use-12(){
+  /bin/rm $lang/zig $lang/zls
+  ln -s "$lang/zig-0.12.0" "$lang/zig"
+  ln -s "$lang/zls-0.12.0" "$lang/zls"
+}
+
+function zig-use-mach(){
+  /bin/rm $lang/zig $lang/zls
+  ln -s "$lang/zig-mach" "$lang/zig"
+  ln -s "$lang/zls-mach" "$lang/zls"
+}
+
+function zig-use-master(){
+  /bin/rm $lang/zig $lang/zls
+  ln -s "$lang/zig-master" "$lang/zig"
+  ln -s "$lang/zls-master" "$lang/zls"
+}
+
 #-ENV ZSH
 export ZDOTDIR="$HOME/.config/zsh"
 
