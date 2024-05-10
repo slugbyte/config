@@ -11,7 +11,6 @@ zstyle ':completion:*' menu select # better zsh completion
 export SHELL=$(which zsh)
 export PAGER=$(which less)
 export TOPER=$(which htop)
-export SCRATCHPAD_PATH="$HOME/scratchpad.md"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export EDITOR=$(which nvim)
 export COPYER=$(which pbcopy)
@@ -34,7 +33,7 @@ export FULLNAME='Duncan Marsh'
 
 #-ENV RUST
 export PATH="$HOME/.cargo/bin:$PATH"
-#
+
 #-ENV GO
 export PATH="$HOME/go/bin:$PATH"
 
@@ -53,6 +52,7 @@ export lang="$w/lang"
 export temp="$HOME/Downloads"
 export work="$w/work"
 export PATH="$exec:$PATH"
+export SCRATCHPAD=$data/text/scratchpad.md
 
 #-ENV ZIG
 export ZIG_DIR="$w/lang/zig"
@@ -82,6 +82,11 @@ export ZDOTDIR="$HOME/.config/zsh"
 
 #-ENV FZF / RG
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
+
+#-ENV-SECRETS
+for file in $hide/env/*.sh;do
+  source $file
+done
 
 
 echo_red(){
@@ -666,7 +671,8 @@ alias t="test_runner"
 alias T="cd $TRASH_DIR"
 alias u="echo naw"
 alias v="echo naw"
-alias w="cd $w"
+alias w="e -c ':Sfind'"
+alias W="e -c ':Sgrep'"
 alias x="git reset"
 alias y="echo naw"
 # z is set by zoxide
