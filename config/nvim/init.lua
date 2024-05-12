@@ -2,6 +2,9 @@
 
 require("slugbyte")
 
+vim.opt.runtimepath:append(',~/workspace/code/learn/learn-lua/nvim')
+
+
 --[[
 -- neovim tips
 -- run `:checkhealth` to check if things are working

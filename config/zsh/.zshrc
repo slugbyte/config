@@ -52,7 +52,6 @@ export lang="$w/lang"
 export temp="$HOME/Downloads"
 export work="$w/work"
 export PATH="$exec:$PATH"
-export SCRATCHPAD=$data/text/scratchpad.md
 
 #-ENV ZIG
 export ZIG_DIR="$w/lang/zig"
@@ -671,12 +670,18 @@ alias t="test_runner"
 alias T="cd $TRASH_DIR"
 alias u="echo naw"
 alias v="echo naw"
-alias w="e -c ':Sfind'"
-alias W="e -c ':Sgrep'"
+alias w="e -c ':WhipOpen'"
+alias wf="e -c ':WhipFindFile'"
+alias wg="e -c ':WhipFindGrep'"
 alias x="git reset"
 alias y="echo naw"
 # z is set by zoxide
 alias Z="nvim $HOME/.config/zsh/.zshrc"
+
+CF(){
+    git add .
+    git_commit -m "$(fortune -s -n 50)"
+}
 
 # man() {
 #   LESS_TERMCAP_md=$'\e[01;31m' \
