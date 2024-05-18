@@ -17,7 +17,7 @@ return {
         vim.keymap.set("", "<leader>w", whip.open, { desc = "[W]hip [O]pen" })
         vim.keymap.set("", "<leader><leader>wm", whip.make, { desc = "[W]hip [M]ake" })
         vim.keymap.set("", "<leader><leader>wd", whip.drop, { desc = "[W]hip [D]rop" })
-        vim.keymap.set("", "<leader><leader>wf", whip.find_file, { desc = "[W]hip [F]ile Search" })
+        vim.keymap.set("", "<leader>W", whip.find_file, { desc = "[W]hip [F]ile Search" })
         vim.keymap.set("", "<leader><leader>wg", whip.find_grep, { desc = "[W]hip [G]rep Search" })
     end,
 }
