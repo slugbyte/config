@@ -1,3 +1,7 @@
+" I PUT THESE TOGETHER BY RIPPING STUFF FROM
+"---- https://github.com/lifepillar/pgsql.vim
+"---- https://github.com/JessicaKMcIntosh/Vim/blob/master/syntax/sql.vim
+
 syn keyword sqlSpecail contained false null true
 
 syn match   sqlVariable     "&\a\w\+"
