@@ -48,7 +48,7 @@ return {
                     end
                     return false
                 end,
-                additional_vim_regex_highlighting = { "tmux" },
+                additional_vim_regex_highlighting = true,
             },
             textobjects = {
                 select = {

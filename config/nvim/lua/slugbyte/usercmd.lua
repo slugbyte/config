@@ -46,10 +46,19 @@ util.usercmd("HiFg", {
     desc = "Set forground color of hi group to RED",
     action = function()
         local synname = nil
+
+        -- loop synnames
         local synstack = vim.fn.synstack(vim.fn.line("."), vim.fn.col("."))
         for _, syn_id in ipairs(synstack) do
             synname = vim.fn.synIDattr(vim.fn.synIDtrans(syn_id), "name")
         end
+
+        -- loop treesiter captures
+        local ts_list = vim.treesitter.get_captures_at_cursor(0)
+        for _, ts_item in ipairs(ts_list) do
+            synname = "@" .. ts_item
+        end
+
         if synname ~= nil then
             vim.cmd(string.format(":hi %s guifg=#ff0000", synname))
             print("synname: " .. synname)
@@ -64,8 +73,14 @@ util.usercmd("HiBg", {
     action = function()
         local synname = nil
         local synstack = vim.fn.synstack(vim.fn.line("."), vim.fn.col("."))
+        -- loop synnames
         for _, syn_id in ipairs(synstack) do
             synname = vim.fn.synIDattr(vim.fn.synIDtrans(syn_id), "name")
+        end
+        -- loop treesiter captures
+        local ts_list = vim.treesitter.get_captures_at_cursor(0)
+        for _, ts_item in ipairs(ts_list) do
+            synname = "@" .. ts_item
         end
         if synname ~= nil then
             vim.cmd(string.format(":hi %s guibg=#ff0000", synname))
