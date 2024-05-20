@@ -11,6 +11,7 @@ return {
     priority = 10,
     dependencies = {
         "nvim-lua/plenary.nvim",
+        "jvgrootveld/telescope-zoxide",
         {
             "nvim-telescope/telescope-fzf-native.nvim",
             build = "make",
@@ -41,10 +42,14 @@ return {
                 ["ui-select"] = {
                     require("telescope.themes").get_dropdown(),
                 },
+                ["zoxide"] = {
+                    prompt_title = "Zoxide",
+                },
             },
         })
 
         pcall(telescope.load_extension, "fzf")
         pcall(telescope.load_extension, "ui-select")
+        pcall(telescope.load_extension, "zoxide")
     end,
 }

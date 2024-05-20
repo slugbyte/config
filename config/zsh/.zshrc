@@ -26,6 +26,8 @@ export XDG_RUNTIME_DIR=$HOME/.runtime
 #-ENV LESS
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE=-
+export LESS_TERMCAP_so=$(tput setab 240)
+export LESS_TERMCAP_se=$(echo -e '\e[0m')
 
 #-ENV WHOAMI
 export EMAIL='slugbyte@slugbyte.com'
@@ -118,9 +120,9 @@ exa_make_color_group(){
   echo $result
 }
 
-exa_permisions=$(exa_make_color_group 137 ur uw ux ue gr gw gx tr tw tx)
-special_files=$(exa_make_color_group 204 ".git*" .bashrc "*.test.js" .env .vimrc Makefile README.md)
-export EXA_COLORS="di=$(exa_fg 111):ln=$(exa_fg 167):so=32:pi=33:ex=$(exa_fg 36):bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:da=$(exa_fg 58):uu=$(exa_fg 59):sn=$(exa_fg 111):sb=$(exa_fg 96):${exa_permisions}${special_files}"
+exa_permisions=$(exa_make_color_group 245 ur uw ux ue gr gw gx tr tw tx)
+special_files=$(exa_make_color_group 250 ".git*" .bashrc "*.test.js" .env .vimrc Makefile README.md)
+export EXA_COLORS="di=$(exa_fg 241):ln=$(exa_fg 248):so=32:pi=33:ex=$(exa_fg 240):bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:da=$(exa_fg 244):uu=$(exa_fg 250):sn=$(exa_fg 250):sb=$(exa_fg 240):${exa_permisions}${special_files}"
 
 alias ls="exa -F --group-directories-first $ls_flag"
 alias ll="ls -lah"
@@ -373,10 +375,10 @@ git_tag_delete(){
 
 
 #---- PROMPT ---- ##############################################
-PROMPT_COLOR_DIR="$(tput setaf 95 2>/dev/null || echo '')"  
-PROMPT_COLOR_GIT_BRANCH="$(tput setaf 102 2>/dev/null || echo '')"  
+PROMPT_COLOR_DIR="$(tput setaf 236 2>/dev/null || echo '')"  
+PROMPT_COLOR_GIT_BRANCH="$(tput setaf 236 2>/dev/null || echo '')"  
 PROMPT_COLOR_GIT_DETACHED="$(tput setaf 214 2>/dev/null || echo '')"  
-PROMPT_COLOR_GIT_DIRTY="$(tput setaf 111 2>/dev/null || echo '')"  
+PROMPT_COLOR_GIT_DIRTY="$(tput setaf 9 2>/dev/null || echo '')"  
 PROMPT_COLOR_RESET="$(tput sgr 0 2>/dev/null || echo '\e[0m')" 
 
 prompt_set_git_remote(){
@@ -402,9 +404,9 @@ prompt_set_git_branch() {
 prompt_set_get_dirty() {
   git_status_result=$(git status --porcelain 2> /dev/null)
   if [[ "$git_status_result" != "" ]]; then
-    GIT_DIRTY='x'
+    GIT_DIRTY=$PROMPT_COLOR_GIT_DIRTY
   else
-    GIT_DIRTY=''
+    GIT_DIRTY=$PROMPT_COLOR_GIT_BRANCH
   fi
   return 0
 }
@@ -421,17 +423,17 @@ autoload -U add-zsh-hook
 add-zsh-hook precmd reset_prompt_vars
 
 PROMPT=''
-PROMPT+='%{$PROMPT_COLOR_GIT_BRANCH%}$PWD'
-PROMPT+=$'\n'
-PROMPT+='%{$PROMPT_COLOR_DIR%}$(basename $PWD) '
-PROMPT+='%{$PROMPT_COLOR_GIT_BRANCH%}${PROMPT_GIT_BRANCH}'
-PROMPT+='%{$PROMPT_COLOR_GIT_DETACHED%}${PROMPT_GIT_DETACHED}${GIT_DIRTY}'
-PROMPT+='%{$PROMPT_COLOR_DIR%} ${PROMPT_GIT_REMOTE}'
+# PROMPT+='%{$PROMPT_COLOR_GIT_BRANCH%}${PWD/$HOME/}'
+# PROMPT+=$'\n'
+PROMPT+='%{$GIT_DIRTY%}${PROMPT_GIT_BRANCH} '
+PROMPT+='%{$PROMPT_COLOR_DIR%}${PWD/$HOME/}'
+PROMPT+='%{$GIT_DIRTY%}%{$PROMPT_GIT_DETACHED%}'
 PROMPT+='%{$PROMPT_COLOR_RESET%}'
-PROMPT+=$'\n'"✿ "
+PROMPT+=$'\n'"| "
+# PROMPT+=$'\n'"✿ "
 
 function zle-line-init zle-keymap-select {
-    RPS1="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
+    RPS1="${${KEYMAP/vicmd/N}/(main|viins)/ I}"
     RPS2=$RPS1
     zle reset-prompt
 }

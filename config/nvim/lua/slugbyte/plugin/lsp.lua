@@ -92,6 +92,10 @@ return {
                 function(server_name)
                     local server = mason_servers[server_name] or {}
                     server.capabilities = vim.tbl_deep_extend("force", {}, client_capabilities, server.capabilities or {})
+
+                    -- DISABLE highlighting
+                    -- server.capabilities.semanticTokensProvider = nil
+
                     server.on_attach = handle_on_attach
                     lsp_config[server_name].setup(server)
                 end,
@@ -102,5 +106,14 @@ return {
         zls_config.capabilities = client_capabilities
         zls_config.on_attach = handle_on_attach
         lsp_config.zls.setup(zls_config)
+
+        vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(args)
+                local client = vim.lsp.get_client_by_id(args.data.client_id)
+                if client ~= nil then
+                    client.server_capabilities.semanticTokensProvider = nil
+                end
+            end,
+        });
     end,
 }
