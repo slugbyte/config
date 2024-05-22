@@ -411,12 +411,21 @@ prompt_set_get_dirty() {
   return 0
 }
 
+prompt_set_prompt_pwd(){
+    PROMPT_PWD=${PWD/$HOME/}
+    if [[ $PROMPT_PWD = "" ]];then
+        PROMPT_PWD="~"
+    fi
+}
+
 reset_prompt_vars(){
   prompt_set_get_dirty
   prompt_set_git_branch
   prompt_set_git_remote
+  prompt_set_prompt_pwd
   CURRENT_DIR_NAME=$(basename $PWD)
 }
+
 
 setopt prompt_subst
 autoload -U add-zsh-hook 
@@ -426,7 +435,7 @@ PROMPT=''
 # PROMPT+='%{$PROMPT_COLOR_GIT_BRANCH%}${PWD/$HOME/}'
 # PROMPT+=$'\n'
 PROMPT+='%{$GIT_DIRTY%}${PROMPT_GIT_BRANCH} '
-PROMPT+='%{$PROMPT_COLOR_DIR%}${PWD/$HOME/}'
+PROMPT+='%{$PROMPT_COLOR_DIR%}${PROMPT_PWD}'
 PROMPT+='%{$GIT_DIRTY%}%{$PROMPT_GIT_DETACHED%}'
 PROMPT+='%{$PROMPT_COLOR_RESET%}'
 PROMPT+=$'\n'"| "
