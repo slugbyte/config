@@ -23,9 +23,7 @@ return {
                 -- mark_mode_is_global = true,
 
             },
-            -- you can use the skip_list = {} to stop unruly from creating certain mappings
-            -- skip_list = { "z", "Z", "<C-z>"},  skip z related mappings
-            skip_list = {},
+            skip_list = { "s", "S" }, -- using s for flaSh
             booster = {
                 default                     = true,
                 -- easy stuff are just additional opt in keymaps
@@ -38,7 +36,6 @@ return {
                 -- easy_scroll                 = true,
                 easy_hlsearch               = true,
                 easy_incrament              = true,
-                easy_spellcheck             = true,
                 easy_jumplist               = true,
                 easy_source                 = true,
                 easy_lsp                    = true,
@@ -55,14 +52,15 @@ return {
                 plugin_navigator            = true,
                 plugin_comment              = true,
                 plugin_luasnip              = true,
-                plugin_textobject           = true,
                 plugin_telescope_leader     = true,
                 plugin_telescope_lsp_leader = true,
                 plugin_telescope_easy_jump  = true,
-                -- plugin_telescope_diagnostic_leader = true,
+
+                -- nope
+                easy_spellcheck             = false,
+                plugin_textobject           = false,
             },
         })
-
 
         util.keymap("<HOME>", "2gk", "Scroll Up Fast")
         util.keymap("<PageUp>", "4gk", "Move Up Fast")

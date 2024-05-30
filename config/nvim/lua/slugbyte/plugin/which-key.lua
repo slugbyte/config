@@ -63,6 +63,9 @@ return {
                     name = "[W]hip"
                 },
             },
+            ["<leader>c"] = {
+                name = "[C]heck Spelling"
+            },
             ["<leader>t"] = {
                 name = "[T]elescope"
             },

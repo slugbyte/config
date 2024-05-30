@@ -29,8 +29,7 @@ return {
                 lualine_c = {},
                 lualine_x = {},
                 lualine_y = { "searchcount", "selectioncount", 'diagnostics', 'filetype', 'branch' },
-                -- lualine_z = { unruly_worker.hud.generate },
-                lualine_z = {},
+                lualine_z = { unruly_worker.hud.generate },
             }
         }
     end

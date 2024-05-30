@@ -2,11 +2,17 @@ vim.g.mapleader = " "
 vim.g.local_leader = " "
 vim.opt.runtimepath:append(',~/workspace/code/learn/learn-lua/nvim')
 
+vim.opt.scrolloff = 4
+vim.opt.shiftwidth = 4
+-- vim.opt.scrolloff = 0  -- 5
+-- vim.opt.shiftwidth = 0 -- 4
+vim.opt.colorcolumn = "100"
+-- vim.opt.colorcolumn = "85"
+
 vim.g.is_bash = true
 vim.g.tmux_navigator_no_mappings = 1
 vim.opt.backspace = "indent,eol,start"
 vim.opt.clipboard = "unnamedplus"
-vim.opt.colorcolumn = "100"
 vim.opt.completeopt = "menu,menuone,noselect,noinsert"
 vim.opt.cursorline = true
 vim.opt.encoding = "utf-8"
@@ -25,8 +31,6 @@ vim.opt.listchars = { tab = "  ", trail = "·", nbsp = " " }
 vim.opt.mouse = "a"
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.scrolloff = 5
-vim.opt.shiftwidth = 4
 vim.opt.showbreak = "**"
 vim.opt.showmode = false
 vim.opt.signcolumn = "yes"

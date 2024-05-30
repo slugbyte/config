@@ -1,4 +1,3 @@
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then
@@ -11,12 +10,40 @@ if not vim.loop.fs_stat(lazypath) then
         lazypath,
     })
 end
+
 vim.opt.rtp:prepend(lazypath)
+
 require("lazy").setup(
     {
         import = "slugbyte/plugin"
     },
     {
+        ui = {
+            icons = {
+                cmd = " ",
+                config = " ",
+                event = " ",
+                ft = " ",
+                init = " ",
+                import = " ",
+                keys = " ",
+                lazy = " ",
+                loaded = "●",
+                not_loaded = "○",
+                plugin = " ",
+                runtime = " ",
+                require = " ",
+                source = " ",
+                start = " ",
+                task = "✔ ",
+                list = {
+                    "●",
+                    "➜",
+                    "★",
+                    "‒",
+                },
+            },
+        },
         change_detection = {
             enabled = true,
             notify = false,

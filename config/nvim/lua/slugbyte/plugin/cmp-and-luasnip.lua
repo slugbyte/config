@@ -11,6 +11,9 @@
 -- luasnip is a powerful snippet engine
 -- * https://github.com/L3MON4D3/LuaSnip
 -- * https://github.com/saadparwaiz1/cmp_luasnip
+--
+-- HOW TO FORMAT LONG MENU ITEMS:
+-- https://github.com/hrsh7th/nvim-cmp/issues/1154
 
 return {
     "hrsh7th/nvim-cmp",
@@ -62,6 +65,15 @@ return {
                 { name = "luasnip" },
                 { name = "buffer" },
                 { name = "path" },
+            },
+        })
+
+        cmp.setup.filetype("zig", {
+            formatting = {
+                format = function(entry, vim_item)
+                    vim_item.menu = nil
+                    return vim_item
+                end,
             },
         })
 

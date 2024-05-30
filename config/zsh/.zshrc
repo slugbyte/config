@@ -375,8 +375,8 @@ git_tag_delete(){
 
 
 #---- PROMPT ---- ##############################################
-PROMPT_COLOR_DIR="$(tput setaf 236 2>/dev/null || echo '')"  
-PROMPT_COLOR_GIT_BRANCH="$(tput setaf 236 2>/dev/null || echo '')"  
+PROMPT_COLOR_DIR="$(tput setaf 239 2>/dev/null || echo '')"  
+PROMPT_COLOR_GIT_BRANCH="$(tput setaf 239 2>/dev/null || echo '')"  
 PROMPT_COLOR_GIT_DETACHED="$(tput setaf 214 2>/dev/null || echo '')"  
 PROMPT_COLOR_GIT_DIRTY="$(tput setaf 9 2>/dev/null || echo '')"  
 PROMPT_COLOR_RESET="$(tput sgr 0 2>/dev/null || echo '\e[0m')" 
@@ -425,7 +425,6 @@ reset_prompt_vars(){
   prompt_set_prompt_pwd
   CURRENT_DIR_NAME=$(basename $PWD)
 }
-
 
 setopt prompt_subst
 autoload -U add-zsh-hook 
@@ -682,8 +681,7 @@ alias T="cd $TRASH_DIR"
 alias u="echo naw"
 alias v="echo naw"
 alias w="e -c ':WhipOpen'"
-alias wf="e -c ':WhipFindFile'"
-alias wg="e -c ':WhipFindGrep'"
+alias W="e -c ':WhipFindFile'"
 alias x="git reset"
 alias y="echo naw"
 # z is set by zoxide
