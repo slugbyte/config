@@ -14,11 +14,14 @@ return {
         -- load colorscheme dev tools
         local lackluster_dev = require("lackluster.dev")
         lackluster_dev.create_usrcmds()
-        lackluster_dev.try_fg("@keyword.return.javascript", "blue")
-        lackluster_dev.try_fg("@keyword.return.typescript", "blue")
         lackluster_dev.try_fg("@function.builtin.javascript", "orange")
         lackluster_dev.try_fg("@function.builtin.typescript", "orange")
-        lackluster_dev.try_fg("@keyword.exception.javascript", "orange")
-        lackluster_dev.try_fg("@keyword.exception.typescript", "orange")
+        lackluster_dev.try_fg("@module.builtin.typescript", "orange")
+        lackluster_dev.try_fg("@module.builtin.javascript", "orange")
+        -- lackluster_dev.try_fg("@keyword.return.javascript", "blue")
+        -- lackluster_dev.try_fg("@keyword.return.typescript", "blue")
+        -- lackluster_dev.try_fg("@keyword.return", "blue")
+        -- lackluster_dev.try_fg("@keyword.exception", "orange")
+        -- lackluster_dev.try_fg("@keyword.exception.typescript", "orange")
     end,
 }

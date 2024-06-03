@@ -39,4 +39,22 @@ M.usercmd = function(name, config)
         force = config.is_overwrite or true,
     })
 end
+
+
+---@param value any check if string or nil
+M.is_empty = function(value)
+    return value == "" or value == nil
+end
+
+
+M.log_info = function(fmt, ...)
+    vim.notify(string.format(fmt, ...), vim.log.levels.INFO)
+end
+
+M.log_error = function(fmt, ...)
+    local err_msg = "ERROR: slugbyte config - " .. string.format(fmt, ...)
+    vim.notify(err_msg, vim.log.levels.ERROR)
+    return err_msg
+end
+
 return M

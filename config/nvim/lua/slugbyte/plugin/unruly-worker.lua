@@ -1,7 +1,7 @@
 -- this is my own keymap plugin for the workman keyboard layout
 -- https://github.com/slugbyte/unruly-worker
 return {
-    "slugbyte/unruly-worker",
+    "slugbyte/unruly-worker.nvim",
     -- dir = "/Users/slugbyte/workspace/code/unruly-worker",
     -- name = "unruly-worker",
     lazy = false,
