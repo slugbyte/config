@@ -44,6 +44,7 @@ return {
             tailwindcss = {},
             tsserver = {},
             yamlls = {},
+            rescriptls = {},
             jsonls = {
                 settings = {
                     json = {
@@ -75,7 +76,10 @@ return {
             },
         }
 
-        local handle_on_attach = function(_, bufnr)
+        local handle_on_attach = function(client, bufnr)
+            if client.server_capabilities.documentSymbolProvider then
+                require("nvim-navic").attach(client, bufnr)
+            end
             vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", {
                 buf = bufnr,
             })

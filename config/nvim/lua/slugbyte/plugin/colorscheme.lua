@@ -3,14 +3,35 @@ return {
     lazy = false,
     dev = true,
     priority = 1000, -- make sure to load this before all the other start plugins
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
     init = function()
         -- set colorscheme
+        local lackluster = require("lackluster")
+        lackluster.setup({
+            tweak_syntax = {
+                -- comment = lackluster.color.green,
+            },
+            tweak_background = {
+                -- normal = 'none',       -- main background
+                -- telescope = 'default', -- main background
+            },
+        })
+
+        require('nvim-web-devicons').setup({
+            color_icons = false,
+            override = {
+                ["default_icon"] = {
+                    color = lackluster.color.gray4,
+                    name = "Default",
+                }
+            }
+        })
         vim.cmd.colorscheme("lackluster-hack")
+
         vim.api.nvim_set_hl(0, 'spellcap', {
             link = 'normal',
             undercurl = false,
         })
-
         -- load colorscheme dev tools
         local lackluster_dev = require("lackluster.dev")
         lackluster_dev.create_usrcmds()
@@ -18,10 +39,6 @@ return {
         lackluster_dev.try_fg("@function.builtin.typescript", "orange")
         lackluster_dev.try_fg("@module.builtin.typescript", "orange")
         lackluster_dev.try_fg("@module.builtin.javascript", "orange")
-        -- lackluster_dev.try_fg("@keyword.return.javascript", "blue")
-        -- lackluster_dev.try_fg("@keyword.return.typescript", "blue")
-        -- lackluster_dev.try_fg("@keyword.return", "blue")
-        -- lackluster_dev.try_fg("@keyword.exception", "orange")
-        -- lackluster_dev.try_fg("@keyword.exception.typescript", "orange")
+        -- lackluster_dev.try_fg("headline", "blue")
     end,
 }

@@ -52,7 +52,7 @@ return {
                     luasnip.lsp_expand(args.body)
                 end,
             },
-            completion = { completeopt = "menu,menuone,noinsert,noselect" },
+            completion = { completeopt = "menu,menuone,noinsert" },
             -- completion = { completeopt = "menu,menuone,noselect" },
             mapping = unruly_cmp.create_insert_mapping({
                 -- skip_list = { "<Right>" },

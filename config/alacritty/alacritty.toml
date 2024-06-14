@@ -1,9 +1,21 @@
 [font]
-size = 18
+size = 17
+
+[font.normal]
+family = "Hack Nerd Font Mono"
+style = "Regular"
 
 [colors.primary]
 background = '#101010'
 # background = '#000000'
+# background = '#202022'
+
+[window]
+# opacity = 0.95
+
+[window.padding]
+x = 10
+y = 10
 
 # Normal colors
 [colors.normal]
@@ -13,12 +25,8 @@ green = '#789978'
 yellow = '#ffAA88'
 blue = '#7788AA'
 magenta = '#D7007D'
-cyan = '#5D6D6D'
-white = '#cfecf3'
-
-[window.padding]
-x = 10
-y = 10
+cyan = '#708090'
+white = '#deeeed'
 
 [[keyboard.bindings]]
 key = "F"

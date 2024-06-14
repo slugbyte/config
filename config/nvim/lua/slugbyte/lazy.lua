@@ -48,6 +48,7 @@ require("lazy").setup(
             enabled = true,
             notify = false,
         },
+        install = { colorscheme = { "lackluster-hack" } },
         dev = {
             path = "~/workspace/code/neovim"
         },

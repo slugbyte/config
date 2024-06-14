@@ -6,7 +6,9 @@ local ts_actions_state = require("telescope.actions.state")
 local ts_actions_set = require("telescope.actions.set")
 local telescope_themes = require("telescope.themes")
 
-util.keymap("<C-g>", ":Inspect<CR>", "Debug highlight under cursor")
+util.keymap("<C-g>", function()
+    vim.cmd("Inspect")
+end, "Debug highlight under cursor")
 util.keymap("<leader>tz", ":Telescope zoxide list<CR>", "[T]elescope [Z]oxide")
 
 local theme_list = { nil, "dark", "mint", "hack", "night" }

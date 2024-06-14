@@ -28,6 +28,7 @@ return {
 
         telescope.setup({
             defaults = {
+                disable_devicons = true, -- doen't work
                 mappings = unruly_telescope.create_mappings({
                     -- skip_list = { "<Up>" },
                     -- insert_mappings = {

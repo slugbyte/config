@@ -5,9 +5,9 @@ return {
     -- dir = "/Users/slugbyte/workspace/code/unruly-worker",
     -- name = "unruly-worker",
     lazy = false,
-    branch = "develop",
+    -- branch = "develop",
     dev = true,
-    priority = 0, -- make sure to load this before all the other start plugins
+    priority = 9000, -- make sure to load this before all the other start plugins
 
     -- event = "VimEnter",
     config = function()
