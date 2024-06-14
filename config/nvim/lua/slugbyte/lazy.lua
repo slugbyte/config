@@ -15,7 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(
     {
-        import = "slugbyte/plugin"
+        import = "slugbyte/plugin",
     },
     {
         ui = {
@@ -54,3 +54,5 @@ require("lazy").setup(
         },
     }
 )
+
+-- require("lazy").setup("slugbyte/lackluster")

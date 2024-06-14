@@ -3,7 +3,6 @@ return {
     lazy = false,
     dev = true,
     priority = 1000, -- make sure to load this before all the other start plugins
-    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
     init = function()
         -- set colorscheme
         local lackluster = require("lackluster")
@@ -17,15 +16,6 @@ return {
             },
         })
 
-        require('nvim-web-devicons').setup({
-            color_icons = false,
-            override = {
-                ["default_icon"] = {
-                    color = lackluster.color.gray4,
-                    name = "Default",
-                }
-            }
-        })
         vim.cmd.colorscheme("lackluster-hack")
 
         vim.api.nvim_set_hl(0, 'spellcap', {
