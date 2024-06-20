@@ -672,8 +672,8 @@ def xu [] {
 
 alias a = git add
 alias A = git add .
-alias c = git_commit
-alias C = git_commit_message
+# alias c = git_commit
+# alias C = git_commit_message
 alias e = nvim
 alias j = e -c ':Telescope find_files'
 alias J = e -c ':Telescope live_grep'

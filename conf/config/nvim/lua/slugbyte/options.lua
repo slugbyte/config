@@ -33,7 +33,7 @@ vim.o.mouse = 'a'
 vim.g.is_bash = true
 vim.o.termguicolors = true
 vim.wo.signcolumn = 'yes'
-vim.cmd('colorscheme wet')
+vim.cmd('colorscheme adwaita')
 vim.cmd('hi DiagnosticWarn guifg=#2a2a2a')
 vim.cmd('hi DiagnosticSignWarn guifg=#2a2a2a')
 vim.cmd('hi DiagnosticSignWarn guibg=#555555')

@@ -88,3 +88,30 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = false,
   },
 }
+
+
+require("one_monokai").setup({
+    transparent = true,  -- enable transparent window
+    colors = {
+        boom = "#ff0000",
+    },
+    themes = function(colors)
+        return {
+            PreProc = {fg = colors.boom},
+            Keyword = {fg = colors.boom},
+            Operator = {fg = colors.boom},
+            Identifier = {fg = "#777777"},
+            String = {fg = "#3b935b"},
+            Function = {fg = '#394f77'},
+            Type = {fg = '#989898'},
+            ["@variable"] = {fg = "#384a77"},
+            ["@boolean"] = {fg = "#00ffff"},
+            CursorLine = { bg = "#111111" },
+            Visual = { fg = "#000000", bg = "#557799" },
+            Pmenu = {bg = "#353544"},
+
+        }
+
+    end,
+    italics = false, -- disable italics
+})

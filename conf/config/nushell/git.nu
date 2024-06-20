@@ -51,9 +51,13 @@ def-env git_goto_root_dir [] {
    z $root_dir
 }
 
-def git_commit [] {
+def c [...flags] {
   git commit -S
   git verify-commit HEAD
+}
+
+def 'c --amend' [] {
+  git_commit '--amend'
 }
 
 def git_commit_message [message: string] {

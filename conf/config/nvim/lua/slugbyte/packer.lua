@@ -18,6 +18,9 @@ require('paq') {
   -- slugbyte
   'slugbyte/unruly-worker';
   'slugbyte/wet-nvim';
+  'cpea2506/one_monokai.nvim';
+  'rebelot/kanagawa.nvim';
+  'Mofiqul/adwaita.nvim';
 
   -- general util
   'tpope/vim-eunuch';
