@@ -1,9 +1,24 @@
 [font]
-size = 17
+size = 20
+
+[font.offset]
+y = -2
 
 [font.normal]
-family = "Hack Nerd Font Mono"
-style = "Regular"
+family = "JetBrainsMono Nerd Font"
+style = "Light"
+
+# screenshot
+# family = "Hack Nerd Font Mono"
+# style = "Regular"
+
+# retro hacker 
+# family = "BigBlueTerm437 Nerd Font"
+# style = "Regular"
+
+# semi retro hacker 
+# family = "MonaspiceKr Nerd Font"
+# style = "Regular"
 
 [colors.primary]
 background = '#101010'

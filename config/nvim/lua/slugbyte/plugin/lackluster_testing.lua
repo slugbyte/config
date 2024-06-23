@@ -1,5 +1,12 @@
 return {
     {
+        'https://github.com/echasnovski/mini.trailspace',
+        version = false,
+        config = function()
+            require("mini.trailspace").setup()
+        end
+    },
+    {
         "https://github.com/folke/noice.nvim",
         dependencies = {
             "MunifTanjim/nui.nvim",
