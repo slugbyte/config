@@ -1,0 +1,214 @@
+# User Guide:  https://i3wm.org/docs/userguide.html
+
+set $super Mod4
+set $meta Mod1
+
+# Start XDG autostart .desktop files using dex. See also
+# https://wiki.archlinux.org/index.php/XDG_Autostart
+exec --no-startup-id dex --autostart --environment i3
+#
+# The combination of xss-lock, nm-applet and pactl is a popular choice, so
+# they are included here as an example. Modify as you see fit.
+
+# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# screen before suspend. Use loginctl lock-session to lock your screen.
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+exec --no-startup-id nm-applet
+
+exec --no-startup-id xrandr --output HDMI-A-0 --mode 2560x2880 --pos 0x0 --rotate right --primary
+
+exec --no-startup-id xautolock -time 20 -locker '/home/slugbyte/workspace/conf/exec/naptime.sh' &
+
+# Use pactl to adjust volume in PulseAudio  .
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+workspace 1 output primary
+workspace 2 output primary
+workspace 3 output primary
+workspace 4 output primary
+
+# Use Mouse+$super to drag floating windows to their wanted position
+floating_modifier $super
+
+# start a terminal
+bindsym $super+Return exec alacritty
+bindsym $meta+Return exec firefox
+
+# kill focused window
+bindsym $super+w kill
+
+# rofi
+bindsym $super+space  exec "rofi -combi-modi window,drun,ssh -theme lackluster -show combi"
+
+# change focus
+bindsym $super+y focus left
+bindsym $super+n focus down
+bindsym $super+e focus up
+bindsym $super+o focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $super+Left focus left
+bindsym $super+Down focus down
+bindsym $super+Up focus up
+bindsym $super+Right focus right
+
+# move focused window
+bindsym $super+Shift+y move left
+bindsym $super+Shift+n move down
+bindsym $super+Shift+e move up
+bindsym $super+Shift+o move right
+
+# alternatively, you can use the cursor keys:
+bindsym $super+Shift+Left move left
+bindsym $super+Shift+Down move down
+bindsym $super+Shift+Up move up
+bindsym $super+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $super+h split h
+
+# split in vertical orientation
+bindsym $super+s split v
+
+# toggle fullscreen
+bindsym $super+f fullscreen toggle
+
+# toggle float
+bindsym $meta+f floating toggle
+
+# toggle layout
+bindsym $super+l layout toggle  stacking splith splitv
+
+# change focus between tiling / floating windows
+# bindsym $super+space focus mode_toggle
+
+# focus the parent container
+bindsym $super+a focus parent
+
+# focus the child container
+#bindsym $super+d focus child
+
+# speed switch workspace
+bindsym $meta+n workspace 1
+bindsym $meta+e workspace 2
+bindsym $meta+o workspace 3
+bindsym $meta+i workspace 4
+
+# speed move window to workspace
+bindsym $meta+l move container to workspace 1; workspace 1
+bindsym $meta+comma move container to workspace 2; workspace 2
+bindsym $meta+period move container to workspace 3; workspace 3
+bindsym $meta+slash move container to workspace 4; workspace 4
+
+# switch workspace
+bindsym $meta+1 workspace 1
+bindsym $meta+2 workspace 2
+bindsym $meta+3 workspace 3
+bindsym $meta+4 workspace 4
+bindsym $meta+5 workspace 5
+bindsym $meta+6 workspace 6
+bindsym $meta+7 workspace 7
+bindsym $meta+8 workspace 8
+bindsym $meta+9 workspace 9
+bindsym $meta+0 workspace 10
+
+# move window to workspace
+bindsym $meta+Shift+1 move container to workspace 1; workspace 1
+bindsym $meta+Shift+2 move container to workspace 2; workspace 2
+bindsym $meta+Shift+3 move container to workspace 3; workspace 3
+bindsym $meta+Shift+4 move container to workspace 4; workspace 4
+bindsym $meta+Shift+5 move container to workspace 5; workspace 5
+bindsym $meta+Shift+6 move container to workspace 6; workspace 6
+bindsym $meta+Shift+7 move container to workspace 7; workspace 7
+bindsym $meta+Shift+8 move container to workspace 8; workspace 8
+bindsym $meta+Shift+9 move container to workspace 9; workspace 9
+bindsym $meta+Shift+0 move container to workspace 10; workspace 10
+
+# reload the configuration file
+bindsym $super+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $super+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $super+Shift+l exec "i3-msg exit"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym y resize shrink width 50 px or 50 ppt
+        bindsym n resize grow height 50 px or 50 ppt
+        bindsym e resize shrink height 50 px or 50 ppt
+        bindsym o resize grow width 50 px or 50 ppt
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 50 px or 50 ppt
+        bindsym Down resize grow height 50 px or 50 ppt
+        bindsym Up resize shrink height 50 px or 50 ppt
+        bindsym Right resize grow width 50 px or 50 ppt
+
+        # back to normal: Enter or Escape or $super+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        # bindsym $super+r mode "default"
+}
+
+bindsym $super+r mode "resize"
+
+# THEME
+set $lack   #708090
+set $luster #deeeed
+set $orange #ffaa88
+set $green  #789978
+set $blue   #7788AA
+set $red    #D70000
+set $black  #000000
+set $gray1  #080808
+set $gray2  #191919
+set $gray3  #2a2a2a
+set $gray4  #444444
+set $gray5  #555555
+set $gray6  #7a7a7a
+set $gray7  #aaaaaa
+set $gray8  #cccccc
+set $gray9  #DDDDDD
+
+client.focused $gray5 $gray5 $black $gray9 $gray5
+client.focused_inactive $gray4 $gray4 $black $gray9 $gray6
+client.unfocused $gray3 $gray3 $black $gray9 $gray3
+client.urgent $orange $gray4 $gray4 $gray9 $gray6
+client.background $gray
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:JetBrainsMono Nerd Font Bold 10
+
+# disable window title bar
+for_window [class="^.*"] border pixel 3
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    font pango:JetBrainsMono Nerd Font Bold 14
+    workspace_buttons yes
+    position top
+    status_command i3status
+    tray_padding 10
+    colors {
+        background $gray2
+        statusline $gray6
+        separator $gray4
+        focused_workspace $gray2 $gray2 $gray9
+        inactive_workspace $gray2 $gray2 $gray5
+        urgent_workspace $gray2 $gray2 $orange
+    }
+}

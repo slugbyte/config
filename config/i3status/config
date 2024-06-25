@@ -1,0 +1,62 @@
+general {
+  colors = true
+  # gray 6
+  color_good = "#7A7A7A" 
+  # orange
+  color_degraded = "#FFAA88"
+  # red
+  color_bad = "#D70000"
+  interval = 1
+}
+
+order += "disk /"
+order += "cpu_usage"
+order += "memory"
+order += "load"
+order += "wireless _first_"
+order += "tztime local"
+
+disk "/" {
+    format = "[DISK %percentage_used]"
+    separator = false
+}
+
+cpu_usage {
+    format = "[CPU: %usage]"
+    separator = false
+}
+
+memory {
+    memory_used_method = classical
+    format="[MEM %used]"
+    separator = false
+}
+
+load {
+    format = "[LOAD %1min]"
+        separator = false
+}
+
+wireless _first_ {
+    format_up = "[%essid%quality]"
+    format_down = "W: down"
+    separator = false
+}
+
+tztime local {
+    format = "%Y-%m-%d %H:%M"
+        separator = false
+}
+
+# ethernet _first_ {
+#     format_up = "E: %ip (%speed)"
+#     format_down = "E: down"
+#     separator = false
+# }
+# 
+# battery all {
+#     format = "%status %percentage %remaining"
+#     separator = false
+# }
+
+
