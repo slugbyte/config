@@ -1,12 +1,23 @@
 [font]
 size = 13
 
+[font.offset]
+y = -3
+
 [font.normal]
 family = "HackerHacker"
 style = "Regular"
 
-[font.offset]
-y = -3
+# family = "JetBrainsMonoNL Nerd Font"
+# style = "Light"
+
+# screenshot
+# family = "Hack Nerd Font Mono"
+# style = "Regular"
+
+# retro hacker 
+# family = "MonaspiceKr Nerd Font"
+# style = "Regular"
 
 [colors.primary]
 background = '#101010'

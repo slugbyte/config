@@ -382,73 +382,59 @@ git_tag_delete(){
   git push origin :refs/tags/$1
 }
 
-
+export COLOR_RESET=$'\x1b[0m'
+export COLOR_LACK=$'\x1b[38;2;112;128;144m'
+export COLOR_LUSTER=$'\x1b[38;2;222;238;237m'
+export COLOR_ORANGE=$'\x1b[38;2;255;170;136m'
+export COLOR_GREEN=$'\x1b[38;2;120;153;120m'
+export COLOR_BLUE=$'\x1b[38;2;119;136;170m'
+export COLOR_RED=$'\x1b[38;2;215;0;0m'
+export COLOR_BLACK=$'\x1b[38;2;0;0;0m'
+export COLOR_GRAY1=$'\x1b[38;2;8;8;8m'
+export COLOR_GRAY2=$'\x1b[38;2;25;25;25m'
+export COLOR_GRAY3=$'\x1b[38;2;42;42;42m'
+export COLOR_GRAY4=$'\x1b[38;2;68;68;68m'
+export COLOR_GRAY5=$'\x1b[38;2;85;85;85m'
+export COLOR_GRAY6=$'\x1b[38;2;122;122;122m'
+export COLOR_GRAY7=$'\x1b[38;2;170;170;170m'
+export COLOR_GRAY8=$'\x1b[38;2;204;204;204m'
+export COLOR_GRAY9=$'\x1b[38;2;221;221;221m'
 
 #---- PROMPT ---- ##############################################
-PROMPT_COLOR_DIR="$(tput setaf 239 2>/dev/null || echo '')"  
-PROMPT_COLOR_GIT_BRANCH="$(tput setaf 239 2>/dev/null || echo '')"  
-PROMPT_COLOR_GIT_DETACHED="$(tput setaf 214 2>/dev/null || echo '')"  
-PROMPT_COLOR_GIT_DIRTY="$(tput setaf 9 2>/dev/null || echo '')"  
-PROMPT_COLOR_RESET="$(tput sgr 0 2>/dev/null || echo '\e[0m')" 
-
-prompt_set_git_remote(){
-  PROMPT_GIT_REMOTE=$(git remote -v 2> /dev/null |grep origin |cut -d : -f 2 | cut -d ' ' -f 1 | cut -d '.' -f 1 | uniq) 
-  return 0
-}
-
-prompt_set_git_branch() {
+reset_ll_prompt(){
   if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
-      PROMPT_GIT_DETACHED='(detached)'
-      PROMPT_GIT_BRANCH=''
+      LL_BRANCH_NAME='(detached)'
      else 
-      PROMPT_GIT_BRANCH="[$branch]"
-      PROMPT_GIT_DETACHED=''
+      LL_BRANCH_NAME="[$branch]"
     fi
-  else
-    PROMPT_GIT_BRANCH=''
+  else 
+    LL_BRANCH_NAME=''
   fi
-  return 0
-}
 
-prompt_set_get_dirty() {
   git_status_result=$(git status --porcelain 2> /dev/null)
   if [[ "$git_status_result" != "" ]]; then
-    GIT_DIRTY=$PROMPT_COLOR_GIT_DIRTY
+     # branch is dirty
+     LL_BRANCH_COLOR=$COLOR_ORANGE
   else
-    GIT_DIRTY=$PROMPT_COLOR_GIT_BRANCH
+     # branch is clean
+     LL_BRANCH_COLOR=$COLOR_GRAY6
   fi
+
+  LL_PWD=${PWD/$HOME/}
+  if [[ $LL_PWD = "" ]];then
+      LL_PWD="~"
+  fi
+
+  LL_PROMPT=$'\n'"| "
   return 0
-}
-
-prompt_set_prompt_pwd(){
-    PROMPT_PWD=${PWD/$HOME/}
-    if [[ $PROMPT_PWD = "" ]];then
-        PROMPT_PWD="~"
-    fi
-}
-
-reset_prompt_vars(){
-  prompt_set_get_dirty
-  prompt_set_git_branch
-  prompt_set_git_remote
-  prompt_set_prompt_pwd
-  CURRENT_DIR_NAME=$(basename $PWD)
 }
 
 setopt prompt_subst
 autoload -U add-zsh-hook 
-add-zsh-hook precmd reset_prompt_vars
+add-zsh-hook precmd reset_ll_prompt
 
-PROMPT=''
-# PROMPT+='%{$PROMPT_COLOR_GIT_BRANCH%}${PWD/$HOME/}'
-# PROMPT+=$'\n'
-PROMPT+='%{$GIT_DIRTY%}${PROMPT_GIT_BRANCH} '
-PROMPT+='%{$PROMPT_COLOR_DIR%}${PROMPT_PWD}'
-PROMPT+='%{$GIT_DIRTY%}%{$PROMPT_GIT_DETACHED%}'
-PROMPT+='%{$PROMPT_COLOR_RESET%}'
-PROMPT+=$'\n'"| "
-# PROMPT+=$'\n'"✿ "
+PROMPT='%{$LL_BRANCH_COLOR%}${LL_BRANCH_NAME} %{$COLOR_GRAY5%}${LL_PWD}%{$COLOR_RESET%}${LL_PROMPT}'
 
 function zle-line-init zle-keymap-select {
     RPS1="${${KEYMAP/vicmd/N}/(main|viins)/ I}"
@@ -648,3 +634,11 @@ CF(){
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+
+# pnpm
+export PNPM_HOME="/Users/slugbyte/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
