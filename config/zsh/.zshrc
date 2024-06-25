@@ -62,24 +62,23 @@ export XDG_RUNTIME_DIR=$HOME/.runtime
 #-ENV LESS
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE=-
-export LESS_TERMCAP_md=$COLOR_GRAY6 # bold
-export LESS_TERMCAP_mb=$COLOR_BLUE # blink
-export LESS_TERMCAP_us=$COLOR_GREEN # underline
-export LESS_TERMCAP_so=$COLOR_GRAY8 # standout
-export LESS_TERMCAP_me=$COLOR_RESET 
-export LESS_TERMCAP_ue=$'\e[0m'
-export LESS_TERMCAP_se=$'\e[0m'
-# termcap terminfo  
-# ks      smkx      make the keypad send commands
-# ke      rmkx      make the keypad send digits
-# vb      flash     emit visual bell
-# mb      blink     start blink
+
+# LESS_TERMCAP
 # md      bold      start bold
-# me      sgr0      turn off bold, blink and underline
-# so      smso      start standout (reverse video)
-# se      rmso      stop standout
+export LESS_TERMCAP_md=$COLOR_GRAY6 # bold
+# mb      blink     start blink
+export LESS_TERMCAP_mb=$COLOR_BLUE # blink
 # us      smul      start underline
+export LESS_TERMCAP_us=$COLOR_GREEN # underline
+# so      smso      start standout (reverse video)
+export LESS_TERMCAP_so=$COLOR_GRAY8 # standout
+# me      sgr0      turn off bold, blink and underline
+export LESS_TERMCAP_me=$COLOR_RESET
+# se      rmso      stop standout
+export LESS_TERMCAP_se=$COLOR_RESET
 # ue      rmul      stop underline
+export LESS_TERMCAP_ue=$COLOR_RESET
+
 
 #-ENV WHOAMI
 export EMAIL='slugbyte@slugbyte.com'
