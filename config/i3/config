@@ -131,12 +131,9 @@ bindsym $meta+Shift+8 move container to workspace 8; workspace 8
 bindsym $meta+Shift+9 move container to workspace 9; workspace 9
 bindsym $meta+Shift+0 move container to workspace 10; workspace 10
 
-# reload the configuration file
-bindsym $super+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $super+Shift+r restart
-# exit i3 (logs you out of your X session)
-bindsym $super+Shift+l exec "i3-msg exit"
+bindsym $super+Shift+q exec "i3-msg exit"
+bindsym $super+Shift+l exec "/home/slugbyte/workspace/conf/exec/naptime.sh"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -162,7 +159,7 @@ mode "resize" {
         # bindsym $super+r mode "default"
 }
 
-bindsym $super+r mode "resize"
+bindsym $meta+r mode "resize"
 
 # THEME
 set $lack   #708090
