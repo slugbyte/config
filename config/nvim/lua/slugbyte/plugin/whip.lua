@@ -12,7 +12,7 @@ return {
     config = function()
         local whip = require("whip")
         whip.setup({
-            dir = "/Users/slugbyte/workspace/data/text"
+            dir = "/home/slugbyte/workspace/data/text"
         })
         vim.keymap.set("", "<leader>w", whip.open, { desc = "[W]hip [O]pen" })
         vim.keymap.set("", "<leader><leader>wm", whip.make, { desc = "[W]hip [M]ake" })
