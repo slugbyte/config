@@ -1,3 +1,38 @@
+## COLORS
+export COLOR_RESET=$'\x1b[0m'
+export COLOR_LACK=$'\x1b[38;2;112;128;144m'
+export COLOR_LUSTER=$'\x1b[38;2;222;238;237m'
+export COLOR_ORANGE=$'\x1b[38;2;255;170;136m'
+export COLOR_GREEN=$'\x1b[38;2;120;153;120m'
+export COLOR_BLUE=$'\x1b[38;2;119;136;170m'
+export COLOR_RED=$'\x1b[38;2;215;0;0m'
+export COLOR_BLACK=$'\x1b[38;2;0;0;0m'
+export COLOR_GRAY1=$'\x1b[38;2;8;8;8m'
+export COLOR_GRAY2=$'\x1b[38;2;25;25;25m'
+export COLOR_GRAY3=$'\x1b[38;2;42;42;42m'
+export COLOR_GRAY4=$'\x1b[38;2;68;68;68m'
+export COLOR_GRAY5=$'\x1b[38;2;85;85;85m'
+export COLOR_GRAY6=$'\x1b[38;2;122;122;122m'
+export COLOR_GRAY7=$'\x1b[38;2;170;170;170m'
+export COLOR_GRAY8=$'\x1b[38;2;204;204;204m'
+export COLOR_GRAY9=$'\x1b[38;2;221;221;221m'
+
+log_red() { echo "${COLOR_RED}$@${COLOR_RESET}" }
+log_luster(){ echo "${COLOR_LUSTER}$@${COLOR_RESET}" }
+log_orange(){ echo "${COLOR_ORANGE}$@${COLOR_RESET}" }
+log_green() { echo "${COLOR_GREEN}$@${COLOR_RESET}" }
+log_blue() { echo "${COLOR_BLUE}$@${COLOR_RESET}" }
+log_black() { echo "${COLOR_BLACK}$@${COLOR_RESET}" }
+log_gray1() { echo "${COLOR_GRAY1}$@${COLOR_RESET}" }
+log_gray2() { echo "${COLOR_GRAY2}$@${COLOR_RESET}" }
+log_gray3() { echo "${COLOR_GRAY3}$@${COLOR_RESET}" }
+log_gray4() { echo "${COLOR_GRAY4}$@${COLOR_RESET}" }
+log_gray5() { echo "${COLOR_GRAY5}$@${COLOR_RESET}" }
+log_gray6() { echo "${COLOR_GRAY6}$@${COLOR_RESET}" }
+log_gray7() { echo "${COLOR_GRAY7}$@${COLOR_RESET}" }
+log_gray8() { echo "${COLOR_GRAY8}$@${COLOR_RESET}" }
+log_gray9() { echo "${COLOR_GRAY9}$@${COLOR_RESET}" }
+
 # Options
 setopt no_clobber # let me overwrite files
 setopt rm_star_silent # dont ask to delete
@@ -11,7 +46,8 @@ zstyle ':completion:*' menu select # better zsh completion
 export SHELL=$(which zsh)
 export PAGER=$(which less)
 export TOPER=$(which htop)
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANPAGER=$(which less)
+# export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export EDITOR=$(which nvim)
 # export COPYER=$(which pbcopy)
 export LC_ALL='en_US.UTF-8'
@@ -26,8 +62,24 @@ export XDG_RUNTIME_DIR=$HOME/.runtime
 #-ENV LESS
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE=-
-export LESS_TERMCAP_so=$(tput setab 240)
-export LESS_TERMCAP_se=$(echo -e '\e[0m')
+export LESS_TERMCAP_md=$COLOR_GRAY6 # bold
+export LESS_TERMCAP_mb=$COLOR_BLUE # blink
+export LESS_TERMCAP_us=$COLOR_GREEN # underline
+export LESS_TERMCAP_so=$COLOR_GRAY8 # standout
+export LESS_TERMCAP_me=$COLOR_RESET 
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+# termcap terminfo  
+# ks      smkx      make the keypad send commands
+# ke      rmkx      make the keypad send digits
+# vb      flash     emit visual bell
+# mb      blink     start blink
+# md      bold      start bold
+# me      sgr0      turn off bold, blink and underline
+# so      smso      start standout (reverse video)
+# se      rmso      stop standout
+# us      smul      start underline
+# ue      rmul      stop underline
 
 #-ENV WHOAMI
 export EMAIL='slugbyte@slugbyte.com'
@@ -82,32 +134,19 @@ function zig-use-master(){
   ln -s "$lang/zls-master" "$lang/zls"
 }
 
-#-ENV ZSH
+# ENV ZSH
 export ZDOTDIR="$HOME/.config/zsh"
 
-#-ENV FZF / RG
+# ENV FZF / RG
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 
-#-ENV-SECRETS
-# for file in $hide/env/*.sh;do
-#   source $file
-# done
+# ENV-SECRETS
+if [[ -d $hide ]]; then
+    for file in $hide/env/*.sh;do
+      source $file
+    done
+fi
 
-echo_red(){
-  echo "$(tput setaf 1)$@$(tput sgr 0)"
-}
-
-echo_yellow (){
-  echo "$(tput setaf 3)$@$(tput sgr 0)"
-}
-
-echo_green (){
-  echo "$(tput setaf 2)$@$(tput sgr 0)"
-}
-
-echo_blue(){
-  echo "$(tput setaf 4)$@$(tput sgr 0)"
-}
 
 #---- EZA ---- ##############################################
 export EZA_COLORS='ex=38;2;120;153;120:fi=38;2;204;204;204:di=38;2;85;85;85:b0=38;2;215;0;0:or=38;2;215;0;0:ln=38;2;112;128;144:lp=38;2;112;128;144:lc=38;2;112;128;144:lm=38;2;112;128;144:bd=38;2;119;136;170:cd=38;2;119;136;170:pi=38;2;119;136;170:so=38;2;119;136;170:ur=38;2;122;122;122:uw=38;2;122;122;122:ux=38;2;122;122;122:ue=38;2;122;122;122:gr=38;2;122;122;122:gw=38;2;122;122;122:gx=38;2;122;122;122:tr=38;2;122;122;122:tw=38;2;122;122;122:tx=38;2;122;122;122:su=38;2;122;122;122:sf=38;2;122;122;122:xa=38;2;122;122;122:hd=38;2;68;68;68:bl=38;2;122;122;122:cc=38;2;122;122;122:da=38;2;122;122;122:in=38;2;122;122;122:xx=38;2;122;122;122:ga=38;2;120;153;120:gd=38;2;255;170;136:gm=38;2;119;136;170:gv=38;2;119;136;170:gt=38;2;119;136;170:df=38;2;122;122;122:ds=38;2;122;122;122:sb=38;2;85;85;85:sn=38;2;170;170;170:uu=38;2;85;85;85:un=38;2;85;85;85:gu=38;2;85;85;85:gn=38;2;85;85;85:sc=38;2;204;204;204:bu=38;2;204;204;204:cm=38;2;122;122;122:tm=38;2;122;122;122:co=38;2;122;122;122:do=38;2;122;122;122:cr=38;2;255;170;136:im=38;2;122;122;122:lo=38;2;122;122;122:mu=38;2;122;122;122:vi=38;2;122;122;122:mp=38;2;122;122;122'
@@ -247,9 +286,7 @@ trash_help(){
   echo "TRASH_DIR is an env var that points to the trash directory"
   echo
   echo "DELETEING STUFF:"
-  echo "trash            - moves stuff into TRASH_DIR"
   echo "wipe             - actually delete file"
-  echo "del              - sudo actually delete file"
   echo
   echo "MANAGE TRASH_DIR:"
   echo "trash_clean      - delete files older than 20 days"
@@ -387,23 +424,6 @@ git_tag_delete(){
   git push origin :refs/tags/$1
 }
 
-export COLOR_RESET=$'\x1b[0m'
-export COLOR_LACK=$'\x1b[38;2;112;128;144m'
-export COLOR_LUSTER=$'\x1b[38;2;222;238;237m'
-export COLOR_ORANGE=$'\x1b[38;2;255;170;136m'
-export COLOR_GREEN=$'\x1b[38;2;120;153;120m'
-export COLOR_BLUE=$'\x1b[38;2;119;136;170m'
-export COLOR_RED=$'\x1b[38;2;215;0;0m'
-export COLOR_BLACK=$'\x1b[38;2;0;0;0m'
-export COLOR_GRAY1=$'\x1b[38;2;8;8;8m'
-export COLOR_GRAY2=$'\x1b[38;2;25;25;25m'
-export COLOR_GRAY3=$'\x1b[38;2;42;42;42m'
-export COLOR_GRAY4=$'\x1b[38;2;68;68;68m'
-export COLOR_GRAY5=$'\x1b[38;2;85;85;85m'
-export COLOR_GRAY6=$'\x1b[38;2;122;122;122m'
-export COLOR_GRAY7=$'\x1b[38;2;170;170;170m'
-export COLOR_GRAY8=$'\x1b[38;2;204;204;204m'
-export COLOR_GRAY9=$'\x1b[38;2;221;221;221m'
 
 #---- PROMPT ---- ##############################################
 reset_ll_prompt(){
@@ -505,7 +525,7 @@ fi
 
 sc_test(){
   if [[ -z $1 ]]; then
-    echo_red "ERROR: name required"
+    log_red "ERROR: name required"
     echo "    $ sc <name>"
     return 1
   fi
@@ -522,7 +542,7 @@ sca(){
   if sc_test "$1"; then
     SC_NAME=$(sc_name "$1" "png")
     screencapture -t png "$SC_NAME"
-    echo_blue "[SCREEN CAPTURE] $SC_NAME"
+    log_blue "[SCREEN CAPTURE] $SC_NAME"
   fi
 }
 
@@ -532,9 +552,9 @@ scs(){
     SC_NAME=$(sc_name "$1" "png")
     screencapture -t png -i -J selection "$SC_NAME"
     if [[ -e $SC_NAME ]];then
-      echo_blue "[SCREEN CAPTURE] $SC_NAME"
+      log_blue "[SCREEN CAPTURE] $SC_NAME"
     else
-      echo_red "ABORTED"
+      log_red "ABORTED"
     fi
   fi
 }
@@ -545,9 +565,9 @@ scw(){
     SC_NAME=$(sc_name "$1" "png")
     screencapture -t png -i -W "$SC_NAME"
     if [[ -e $SC_NAME ]];then
-      echo_blue "[SCREEN CAPTURE] $SC_NAME"
+      log_blue "[SCREEN CAPTURE] $SC_NAME"
     else
-      echo_red "ABORTED"
+      log_red "ABORTED"
     fi
   fi
 }
@@ -555,13 +575,10 @@ scw(){
 # sc select to clipboard
 scc(){
   screencapture -c -t png -i -J selection
-  echo_blue "[SCREEN CAPTURE] copied to clipboard"
+  log_blue "[SCREEN CAPTURE] copied to clipboard"
 }
 
 #---- SHORTHAND ---- ##############################################
-alias bubye='sudo shutdown -h now'
-alias reboot='sudo reboot'
-alias del='sudo rm'
 alias wipe='/bin/rm'
 path(){
   echo $PATH | tr ':' '\n'
@@ -626,15 +643,6 @@ CF(){
     git_commit -m "$(fortune -s -n 50)"
 }
 
-# man() {
-#   LESS_TERMCAP_md=$'\e[01;31m' \
-#   LESS_TERMCAP_me=$'\e[0m' \
-#   LESS_TERMCAP_us=$'\e[01;32m' \
-#   LESS_TERMCAP_ue=$'\e[0m' \
-#   LESS_TERMCAP_so=$'\e[45;93m' \
-#   LESS_TERMCAP_se=$'\e[0m' \
-#   command man "$@"
-# }
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
