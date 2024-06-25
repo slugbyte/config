@@ -4,6 +4,8 @@ WORKSPACE_DIR="$HOME/workspace"
 TEMP_DIR="$HOME/Downloads/"
 TRASH_DIR="$HOME/.Trash"
 CONF_DIR="$WORKSPACE_DIR/conf"
+DROPBOX_DIR="$HOME/Dropbox"
+
 ARG="$1"
 
 mkdir -p "$WORKSPACE_DIR/code" 
@@ -20,6 +22,8 @@ ln -sf "$TEMP_DIR" "$WORKSPACE_DIR/temp"
 if [[ ! -d "$CONF_DIR" ]];then
   git clone git@github.com:slugbyte/config.git "$WORKSPACE_DIR/conf"
 fi
+
+
 
 echo "[BLOINGO]"
 echo "   WORKSPACE_DIR=$WORKSPACE_DIR"
@@ -52,6 +56,17 @@ backup_if_exist(){
   fi
 }
 
+link_drobox_dirs(){
+    echo "[LINK DROPBOX]"
+    if [[ -d "$DROPBOX_DIR/data" ]];then
+        exec_if_plz ln -sf $DROPBOX_DIR/data $WORKSPACE_DIR/data
+    fi
+
+    if [[ -d "$DROPBOX_DIR/gang" ]];then
+        exec_if_plz ln -sf $DROPBOX_DIR/gang $WORKSPACE_DIR/gang
+    fi
+}
+
 link_config(){
   SOURCE_DIR="$1"
   SOURCE_FILE_LIST=$(ls -a "$SOURCE_DIR" | grep -v "^\.*$" | grep -v .DS_Store)
@@ -75,6 +90,7 @@ link_config(){
 
 link_config "$WORKSPACE_DIR/conf/config" "$HOME/.config"
 link_config "$WORKSPACE_DIR/conf/home" "$HOME"
+link_drobox_dirs
 
 if [[ $ARG = "--plz" ]];then
   echo
