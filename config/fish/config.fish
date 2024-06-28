@@ -1,4 +1,7 @@
 if status is-interactive
+    # extern
+    # zoxide 
+    zoxide init fish | source
 
     # colors
     set -gx COLOR_RESET \033'[0m'
@@ -133,8 +136,6 @@ if status is-interactive
     fish_add_path "$exec"
     fish_add_path $ZIG_DIR
 
-    # zoxide 
-    zoxide init fish | source
 
     # git
     function git_commit
@@ -341,7 +342,8 @@ if status is-interactive
     alias C="git_commit --amend --no-edit"
     alias copy=$COPYER
     alias ch="git checkout"
-    alias d="git diff HEAD~1"
+    alias d="git diff"
+    alias D="git diff HEAD~1"
     alias del=(which rm)
     alias e="nvim"
     alias f="git fetch -pv"
@@ -369,7 +371,7 @@ if status is-interactive
     alias p="git_push"
     alias pu="git_push_upstream"
     alias q="echo naw"
-    alias r="git_rebase -i"
+    alias r="git rebase -Si"
     alias R="source ~/.config/fish/config.fish"
     alias rm="trash_help"
     alias s="git status"
@@ -406,6 +408,30 @@ if status is-interactive
         alias xq="brew info"                   # R - query info 
         alias sc="_mac_sc"
         alias sca="_mac_sca"
+    end
+
+
+    function fish_prompt
+        set git_branch_color $COLOR_ORANGE
+        set git_branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
+        if test $status -ne 0
+            set  git_branch ""
+        end
+        if test -z ""(git status --porcelain 2> /dev/null)
+            set git_branch_color $COLOR_GRAY6
+        end
+        if test "$git_branch" = "HEAD" 
+            set git_branch $COLOR_RED"(detatched) "
+        end
+        if test -n "$git_branch"
+            set git_branch $git_branch_color"[$git_branch] "
+        end
+        set dir (echo $PWD | string replace $HOME "")
+        set dir $COLOR_GRAY5$dir
+        if test -z $dir 
+            set dir "~"
+        end
+        printf "$git_branch$dir$COLOR_RESET\n| "
     end
     # z is set by zoxide
 end
