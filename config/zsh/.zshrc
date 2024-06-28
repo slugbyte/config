@@ -71,7 +71,7 @@ export LESS_TERMCAP_mb=$COLOR_BLUE # blink
 # us      smul      start underline
 export LESS_TERMCAP_us=$COLOR_GREEN # underline
 # so      smso      start standout (reverse video)
-export LESS_TERMCAP_so=$COLOR_GRAY8 # standout
+export LESS_TERMCAP_so=$COLOR_ORANGE # standout
 # me      sgr0      turn off bold, blink and underline
 export LESS_TERMCAP_me=$COLOR_RESET
 # se      rmso      stop standout
@@ -83,6 +83,7 @@ export LESS_TERMCAP_ue=$COLOR_RESET
 #-ENV WHOAMI
 export EMAIL='slugbyte@slugbyte.com'
 export FULLNAME='Duncan Marsh'
+
 # NVIM
 export PATH="/opt/nvim-linux64/bin:$PATH"
 
@@ -109,6 +110,7 @@ export play="$w/play"
 export temp="$HOME/Downloads"
 export work="$w/work"
 export PATH="$exec:$PATH"
+
 
 #-ENV ZIG
 export ZIG_DIR="$w/lang/zig"
@@ -252,7 +254,7 @@ test_runner(){
 }
 
 #---- TRASH ---- ##############################################
-trash(){
+trash() {
   if [[ -d $TRASH_DIR ]]; then
     for f in "$@"; do
       name=$(basename "$f")
@@ -592,8 +594,7 @@ alias edit_zsh="nvim ~/.config/zsh/.zshrc"
 
 alias a="git add"
 alias A="git add ."
-alias b="git branch"
-alias ba="git_branch"
+alias b="echo naw"
 alias c="git_commit"
 alias C="git_commit --amend --no-edit"
 alias ch="git checkout"
@@ -641,7 +642,6 @@ CF(){
     git add .
     git_commit -m "$(fortune -s -n 50)"
 }
-
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm

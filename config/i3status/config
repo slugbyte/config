@@ -6,7 +6,7 @@ general {
   color_degraded = "#FFAA88"
   # red
   color_bad = "#D70000"
-  interval = 1
+  interval = 30
 }
 
 order += "disk /"
