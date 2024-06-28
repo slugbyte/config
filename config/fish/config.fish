@@ -207,7 +207,6 @@ if status is-interactive
       git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit 
     end
 
-
     # trash
     function trash 
         if not test -d $trash
@@ -417,7 +416,9 @@ if status is-interactive
         if test $status -ne 0
             set  git_branch ""
         end
-        if test -z ""(git status --porcelain 2> /dev/null)
+
+        set git_status (git status --porcelain 2> /dev/null)
+        if test -z "$git_status"
             set git_branch_color $COLOR_GRAY6
         end
         if test "$git_branch" = "HEAD" 
