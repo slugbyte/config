@@ -1,4 +1,8 @@
 if status is-interactive
+    set -U fish_greeting ""
+
+    # Syntax Highlighting Colors
+
     # extern
     # zoxide 
     zoxide init fish | source
@@ -22,6 +26,28 @@ if status is-interactive
     set -gx COLOR_GRAY8 \033'[38;2;204;204;204m'
     set -gx COLOR_GRAY9 \033'[38;2;221;221;221m'
 
+    set -gx fish_color_end 7a7a7a
+    set -gx fish_color_error ffaa88
+    set -gx fish_color_quote 708090
+    set -gx fish_color_param aaaaaa
+    set -gx fish_color_option aaaaaa
+    set -gx fish_color_normal CCCCCC
+    set -gx fish_color_escape 789978
+    set -gx fish_color_comment 555555
+    set -gx fish_color_command CCCCCC
+    set -gx fish_color_keyword 7a7a7a
+    set -gx fish_color_operator 7788aa
+    set -gx fish_color_redirection ffaa88
+    set -gx fish_color_autosuggestion 2a2a2a
+    set -gx fish_color_selection --background=555555
+    set -gx fish_color_search_match --background=555555
+    set -gx fish_pager_color_prefix 999999
+    set -gx fish_pager_color_progress 555555
+    set -gx fish_pager_color_completion cccccc
+    set -gx fish_pager_color_description 7a7a7a
+    set -gx fish_pager_color_selected_background --background=555555
+
+    # Completion Pager Colors
     function log_lack
         echo $COLOR_LACK$argv$COLOR_RESET
     end
@@ -81,7 +107,7 @@ if status is-interactive
     end
 
     # ENV
-    set -gx SHELL (which zsh)
+    set -gx SHELL (which fish)
     set -gx PAGER (which less)
     set -gx TOPER (which htop)
     set -gx MANPAGER (which less)
@@ -356,8 +382,8 @@ if status is-interactive
     alias L="git_pull"
     alias lu="git_pull_upstream"
     alias ls="eza -F --group-directories-first"
-    alias ll="ls -lah --git --no-user --no-time"
-    alias llt="ls -lah --total-size --git --no-user --time=created --time-style=long-iso"
+    alias ll="ls -la --git --no-user --no-time"
+    alias llt="ls -la --total-size --git --no-user --time=created --time-style=long-iso"
     alias la="ls -a"
     alias l1="ls -1a"
     alias tree='eza -F --tree --group-directories-first'
@@ -428,10 +454,10 @@ if status is-interactive
             set git_branch $git_branch_color"[$git_branch] "
         end
         set dir (echo $PWD | string replace $HOME "")
-        set dir $COLOR_GRAY5$dir
-        if test -z $dir 
+        if test -z $dir
             set dir "~"
         end
+        set dir $COLOR_GRAY5$dir
         printf "$git_branch$dir$COLOR_RESET\n| "
     end
     # z is set by zoxide
