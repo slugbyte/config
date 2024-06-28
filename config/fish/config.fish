@@ -186,7 +186,7 @@ if status is-interactive
 
     function git_push
         set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if $branch == "HEAD"
+        if test $branch = "HEAD"
             echo "ERROR: cannot push from detatched state."
             return -1
         end
@@ -195,7 +195,7 @@ if status is-interactive
 
     function git_push_upstream
         set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if $branch == "HEAD"
+        if test $branch = "HEAD"
             echo "ERROR: cannot push from detatched state."
             return -1
         end
