@@ -1,14 +1,17 @@
+[user]
+    name = Duncan Marsh
+    email = slugbyte@slugbyte.com
+    signingkey = 0A56A83BE20DC703
 [core]
     editor = nvim
 [commit]
     verbose = true
-[user]
-	name = Duncan Marsh
-	email = slugbyte@slugbyte.com
-    signingkey = 0A56A83BE20DC703
+    gpgSign = true
+[tag]
+    gpgSign = true
 [pull]
-    rebase = true 
+    rebase = true
 [gpg]
     program = gpg
 [init]
-  defaultBranch = main 
+  defaultBranch = main
