@@ -1,11 +1,17 @@
 if status is-interactive
     set -U fish_greeting ""
+    fish_add_path "$HOME/.cargo/bin"
+    fish_add_path "$HOME/go/bin"
+    fish_add_path "$HOME/workspace/lang/bin"
+    # fish_add_path "/opt/nvim-linux64/bin"
 
-    # Syntax Highlighting Colors
-
-    # extern
+    fish_add_path "$exec"
+    fish_add_path $ZIG_DIR
     # zoxide 
     zoxide init fish | source
+    # fas node manager
+    # fnm env --use-on-cd | source
+    fnm env | source
 
     # colors
     set -gx COLOR_RESET \033'[0m'
@@ -113,7 +119,7 @@ if status is-interactive
     set -gx MANPAGER (which less)
     set -gx EDITOR (which nvim)
     set -gx LC_ALL 'en_US.UTF-8'
-    set -gx TERM 'screen-256color'
+    set -gx TERM 'alacritty'
     set -gx EZA_COLORS 'ex=38;2;120;153;120:fi=38;2;204;204;204:di=38;2;85;85;85:b0=38;2;215;0;0:or=38;2;215;0;0:ln=38;2;112;128;144:lp=38;2;112;128;144:lc=38;2;112;128;144:lm=38;2;112;128;144:bd=38;2;119;136;170:cd=38;2;119;136;170:pi=38;2;119;136;170:so=38;2;119;136;170:ur=38;2;122;122;122:uw=38;2;122;122;122:ux=38;2;122;122;122:ue=38;2;122;122;122:gr=38;2;122;122;122:gw=38;2;122;122;122:gx=38;2;122;122;122:tr=38;2;122;122;122:tw=38;2;122;122;122:tx=38;2;122;122;122:su=38;2;122;122;122:sf=38;2;122;122;122:xa=38;2;122;122;122:hd=38;2;68;68;68:bl=38;2;122;122;122:cc=38;2;122;122;122:da=38;2;122;122;122:in=38;2;122;122;122:xx=38;2;122;122;122:ga=38;2;120;153;120:gd=38;2;255;170;136:gm=38;2;119;136;170:gv=38;2;119;136;170:gt=38;2;119;136;170:df=38;2;122;122;122:ds=38;2;122;122;122:sb=38;2;85;85;85:sn=38;2;170;170;170:uu=38;2;85;85;85:un=38;2;85;85;85:gu=38;2;85;85;85:gn=38;2;85;85;85:sc=38;2;204;204;204:bu=38;2;204;204;204:cm=38;2;122;122;122:tm=38;2;122;122;122:co=38;2;122;122;122:do=38;2;122;122;122:cr=38;2;255;170;136:im=38;2;122;122;122:lo=38;2;122;122;122:mu=38;2;122;122;122:vi=38;2;122;122;122:mp=38;2;122;122;122'
     set -gx XDG_CONFIG_HOME $HOME/.config
     set -gx XDG_CACHE_HOME $HOME/.cache
@@ -156,11 +162,6 @@ if status is-interactive
         set -gx trash "$HOME/.Trash"
     end
 
-    fish_add_path "$HOME/.cargo/bin"
-    fish_add_path "$HOME/go/bin"
-    fish_add_path "/opt/nvim-linux64/bin"
-    fish_add_path "$exec"
-    fish_add_path $ZIG_DIR
 
 
     # git
@@ -392,7 +393,8 @@ if status is-interactive
     alias md="mkdir -p"
     alias n="z"
     alias N="zi"
-    alias o="echo naw"
+    alias o="open"
+    alias O="gitopen"
     alias p="git_push"
     alias pu="git_push_upstream"
     alias q="echo naw"
@@ -410,8 +412,8 @@ if status is-interactive
     alias tsync="tmux source ~/.config/tmux/tmux.conf"
     alias u="echo naw"
     alias v="echo naw"
-    alias w="e -c ':WhipOpen'"
-    alias W="e -c ':WhipFindFile'"
+    alias w="e -c ':WhipFindFile'"
+    alias W="e -c ':WhipOpen'"
     alias x="git reset"
     alias y="echo naw"
 

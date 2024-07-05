@@ -591,7 +591,6 @@ alias edit_nvim="nvim ~/.config/nvim/init.lua"
 alias edit_tmux="nvim ~/.config/tmux/tmux.conf"
 alias edit_zsh="nvim ~/.config/zsh/.zshrc"
 
-
 alias a="git add"
 alias A="git add ."
 alias b="echo naw"

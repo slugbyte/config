@@ -36,7 +36,7 @@ return {
             highlight = {
                 enable = true,
                 disable = function(lang, buf)
-                    if lang == "tmux" or lang == "sql" then
+                    if lang == "tmux" or lang == "sql" or lang == "help" then
                         return true
                     end
 

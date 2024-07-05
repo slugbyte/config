@@ -15,12 +15,12 @@ return {
             -- require("slugbyte.lackluster.noice")
         end
     },
-    -- {
-    --     "https://github.com/nvim-tree/nvim-web-devicons",
-    --     config = function()
-    --         require("slugbyte.lackluster.devicons")
-    --     end
-    -- },
+    {
+        "https://github.com/nvim-tree/nvim-web-devicons",
+        config = function()
+            require("slugbyte.lackluster.devicons")
+        end
+    },
     {
         "https://github.com/HiPhish/rainbow-delimiters.nvim",
         config = function()

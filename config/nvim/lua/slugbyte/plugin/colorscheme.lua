@@ -7,6 +7,10 @@ return {
         -- set colorscheme
         local lackluster = require("lackluster")
         lackluster.setup({
+            tweak_ui = {
+                disable_undercurl = true,
+                enable_end_of_buffer = true,
+            },
             tweak_syntax = {
                 -- comment = lackluster.color.green,
             },
