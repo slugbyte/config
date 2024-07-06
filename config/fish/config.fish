@@ -463,5 +463,3 @@ if status is-interactive
     end
     # z is set by zoxide
 end
-
-# fish

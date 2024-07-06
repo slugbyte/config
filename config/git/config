@@ -16,7 +16,25 @@
 [init]
   defaultBranch = main
 [color]
-    branch = 
+    branch = true
+    status = true
+    push = true
+    interactive = true
+    pager = true
+    diff = true
+[color.diff]
+    meta = 255
+    context = 244
+    frag = 4
+    old = 1
+    new = 2
+[color.push]
+    error = 1
+[color.branch]
+    current = 2
+    local = 4
+    remote = 3
+    upstream = 1
 [color.status]
     changed = 4
     added = 2
