@@ -39,7 +39,10 @@ floating_modifier $super
 
 # start a terminal
 bindsym $super+Return exec alacritty
+# firefox
 bindsym $meta+Return exec firefox
+# [t]ake screenshot
+bindsym $super+t exec --no-startup-id maim --select "/home/$USER/Downloads/sc-$(date +'%Y-%m-%d-%H%M%S')-unknown.png"
 
 # kill focused window
 bindsym $super+w kill

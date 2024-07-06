@@ -356,7 +356,6 @@ if status is-interactive
         log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
     end
 
-
     # alias
     alias ..="cd .."
     alias ,,="cd -"
@@ -369,7 +368,7 @@ if status is-interactive
     alias copy=$COPYER
     alias ch="git checkout"
     alias d="git diff"
-    alias D="git diff HEAD~1"
+    alias D="git diff --cached"
     alias del=(which rm)
     alias e="nvim"
     alias f="git fetch -pv"
@@ -401,7 +400,7 @@ if status is-interactive
     alias r="git rebase -Si"
     alias R="source ~/.config/fish/config.fish"
     alias rm="trash_help"
-    alias s="git status"
+    alias s="git status --short"
     alias t="echo naw"
     alias tlist='tmux list-sessions'
     alias tname='tmux rename-session -t'
@@ -464,3 +463,5 @@ if status is-interactive
     end
     # z is set by zoxide
 end
+
+# fish

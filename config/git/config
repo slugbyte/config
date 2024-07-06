@@ -15,3 +15,13 @@
     program = gpg
 [init]
   defaultBranch = main
+[color]
+    branch = 
+[color.status]
+    changed = 4
+    added = 2
+    untracked = 3
+    unmerged = 3
+    header = 255
+    branch = 4
+    nobranch = 1
