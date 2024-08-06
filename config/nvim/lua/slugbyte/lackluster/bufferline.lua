@@ -1,7 +1,7 @@
 require("bufferline").setup({
     options = {
-        numbers = 'ordinal',
-        diagnostics = 'nvim_lsp',
+        numbers = "ordinal",
+        diagnostics = "nvim_lsp",
         groups = {
             -- options = {
             --     toggle_hidden_on_enter = false -- when you re-enter a hidden group this options re-opens that group so the buffer is visible
@@ -15,23 +15,23 @@ require("bufferline").setup({
                     matcher = function(buf) -- Mandatory
                         if buf.filename then
                             print("match lua")
-                            return buf.filename:match('%.lua')
+                            return buf.filename:match("%.lua")
                         end
                     end,
                 },
                 {
                     name = "doc",
-                    auto_close = false,         -- whether or not close this group if it doesn't contain the current buffer
+                    auto_close = false, -- whether or not close this group if it doesn't contain the current buffer
                     matcher = function(buf)
-                        if (buf.filename) then
+                        if buf.filename then
                             print("match doc")
-                            return buf.filename:match('%.md')
+                            return buf.filename:match("%.md")
                         else
                             print("nomatch doc")
                         end
                     end,
-                }
-            }
-        }
+                },
+            },
+        },
     },
 })

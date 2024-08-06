@@ -6,7 +6,7 @@ return {
         local oil = require("oil")
 
         local popoup_config = {
-            border  = "none",
+            border = "none",
             padding = 2,
         }
 
@@ -42,5 +42,5 @@ return {
             },
         })
         vim.keymap.set("n", "<leader><leader>o", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-    end
+    end,
 }

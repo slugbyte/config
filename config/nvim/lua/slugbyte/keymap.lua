@@ -32,11 +32,10 @@ util.keymap("<leader>cn", function()
     lackluster.lackluster_reload({ theme = theme_name })
 end, "[C]olorsheche [N]ext")
 
-
 local spellfunc = function(spell_cmd)
     return function()
         local reg_a_buf = vim.fn.getreg("a")
-        vim.cmd("silent! normal! viw\"ay")
+        vim.cmd('silent! normal! viw"ay')
         local word = vim.fn.getreg("a")
         vim.fn.setreg("a", reg_a_buf)
         if word == "" or word == nil then
@@ -55,20 +54,18 @@ util.keymap("<leader>cg", spellgood, "[C]heck Spell [G]ood")
 util.keymap("<leader>cw", spellwrong, "[C]heck Spell [B]ad")
 
 local symbol_search = function()
-    telescope_builtin.lsp_document_symbols(
-        telescope_themes.get_dropdown({
-            previewer = false,
-            attach_mappings = function(prompt_bufnr, _)
-                ts_actions.select_default:replace(function()
-                    vim.schedule(function()
-                        vim.cmd("normal! zt")
-                    end)
-                    ts_actions_set.select(prompt_bufnr, "default")
+    telescope_builtin.lsp_document_symbols(telescope_themes.get_dropdown({
+        previewer = false,
+        attach_mappings = function(prompt_bufnr, _)
+            ts_actions.select_default:replace(function()
+                vim.schedule(function()
+                    vim.cmd("normal! zt")
                 end)
-                return true
-            end
-        })
-    )
+                ts_actions_set.select(prompt_bufnr, "default")
+            end)
+            return true
+        end,
+    }))
 end
 
-util.keymap("s", symbol_search, "[S]ymbol search");
+util.keymap("s", symbol_search, "[S]ymbol search")

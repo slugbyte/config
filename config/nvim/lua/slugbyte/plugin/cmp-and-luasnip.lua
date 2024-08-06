@@ -42,7 +42,7 @@ return {
     config = function()
         local cmp = require("cmp")
         local luasnip = require("luasnip")
-        local unruly_cmp = require('unruly-worker.external.nvim-cmp')
+        local unruly_cmp = require("unruly-worker.external.nvim-cmp")
 
         luasnip.config.setup({})
 
@@ -84,7 +84,6 @@ return {
                 { name = "path" },
             }),
         })
-
 
         cmp.setup.cmdline({ "/", "?" }, {
             mapping = unruly_cmp.create_cmdline_mapping(),

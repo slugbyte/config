@@ -11,6 +11,6 @@ require("nvim-tree").setup({
                 diagnostics = false,
                 bookmarks = false,
             },
-        }
+        },
     },
 })

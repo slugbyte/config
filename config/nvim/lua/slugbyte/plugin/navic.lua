@@ -1,37 +1,37 @@
 return {
     "https://github.com/SmiteshP/nvim-navic",
     dependencies = {
-        "neovim/nvim-lspconfig"
+        "neovim/nvim-lspconfig",
     },
     config = function()
         local navic = require("nvim-navic")
-        navic.setup {
+        navic.setup({
             icons = {
-                File          = "f ",
-                Module        = "m ",
-                Namespace     = "N ",
-                Package       = "",
-                Class         = "C ",
-                Method        = "M ",
-                Property      = "P ",
-                Field         = "F ",
-                Constructor   = "C ",
-                Enum          = "E",
-                Interface     = "I",
-                Function      = "F ",
-                Variable      = "V ",
-                Constant      = "C ",
-                String        = "S ",
-                Number        = "N ",
-                Boolean       = "B ",
-                Array         = "A ",
-                Object        = "O ",
-                Key           = "K ",
-                Null          = "N ",
-                EnumMember    = "E ",
-                Struct        = "S ",
-                Event         = "E ",
-                Operator      = "O ",
+                File = "f ",
+                Module = "m ",
+                Namespace = "N ",
+                Package = "",
+                Class = "C ",
+                Method = "M ",
+                Property = "P ",
+                Field = "F ",
+                Constructor = "C ",
+                Enum = "E",
+                Interface = "I",
+                Function = "F ",
+                Variable = "V ",
+                Constant = "C ",
+                String = "S ",
+                Number = "N ",
+                Boolean = "B ",
+                Array = "A ",
+                Object = "O ",
+                Key = "K ",
+                Null = "N ",
+                EnumMember = "E ",
+                Struct = "S ",
+                Event = "E ",
+                Operator = "O ",
                 TypeParameter = "T ",
             },
             lsp = {
@@ -48,6 +48,6 @@ return {
             format_text = function(text)
                 return text
             end,
-        }
+        })
     end,
 }

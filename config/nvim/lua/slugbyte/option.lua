@@ -1,6 +1,6 @@
 vim.g.mapleader = " "
 vim.g.local_leader = " "
-vim.opt.runtimepath:append(',~/workspace/code/learn/learn-lua/nvim')
+vim.opt.runtimepath:append(",~/workspace/code/learn/learn-lua/nvim")
 
 vim.opt.scrolloff = 4
 vim.opt.shiftwidth = 4

@@ -3,17 +3,17 @@
 -- https://github.com/folke/todo-comments.nvim
 
 return {
-	"numToStr/Comment.nvim",
-	event = "VimEnter",
-	dependencies = {
-		{
-			"folke/todo-comments.nvim",
-			event = "VimEnter",
-			dependencies = { "nvim-lua/plenary.nvim" },
-			opts = { signs = false },
-		},
-	},
-	config = function()
-		require("Comment").setup()
-	end,
+    "numToStr/Comment.nvim",
+    event = "VimEnter",
+    dependencies = {
+        {
+            "folke/todo-comments.nvim",
+            event = "VimEnter",
+            dependencies = { "nvim-lua/plenary.nvim" },
+            opts = { signs = false },
+        },
+    },
+    config = function()
+        require("Comment").setup()
+    end,
 }

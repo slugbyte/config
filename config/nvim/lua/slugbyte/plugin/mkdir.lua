@@ -1,5 +1,5 @@
 --https://github.com/jghauser/mkdir.nvim
 
 return {
-    'jghauser/mkdir.nvim',
+    "jghauser/mkdir.nvim",
 }

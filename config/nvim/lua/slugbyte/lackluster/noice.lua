@@ -2,15 +2,15 @@ print("nocie")
 local noice = require("noice")
 noice.setup({
     notify = {
-        enabled = true,         -- enables the Noice messages UI
+        enabled = true, -- enables the Noice messages UI
     },
     commands = {
         last = {
-            view = "split"
+            view = "split",
         },
     },
     messages = {
-        enabled = true,         -- enables the Noice messages UI
+        enabled = true, -- enables the Noice messages UI
         --     view = "messages",           -- default view for messages
         --     view_error = "messages",     -- view for errors
         --     view_warn = "messages",      -- view for warnings
@@ -42,5 +42,4 @@ noice.setup({
             },
         },
     },
-
-});
+})

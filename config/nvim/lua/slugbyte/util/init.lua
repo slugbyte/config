@@ -18,7 +18,7 @@ M.keymap = function(key, action, desc, config)
         remap = config.is_remap or false,
         noremap = not config.is_remap or true,
         silent = config.is_silent or false,
-        expr = config.is_expr or false
+        expr = config.is_expr or false,
     })
 end
 
@@ -40,12 +40,10 @@ M.usercmd = function(name, config)
     })
 end
 
-
 ---@param value any check if string or nil
 M.is_empty = function(value)
     return value == "" or value == nil
 end
-
 
 M.log_info = function(fmt, ...)
     vim.notify(string.format(fmt, ...), vim.log.levels.INFO)

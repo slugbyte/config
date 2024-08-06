@@ -13,46 +13,43 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup(
-    {
-        import = "slugbyte/plugin",
-    },
-    {
-        ui = {
-            icons = {
-                cmd = " ",
-                config = " ",
-                event = " ",
-                ft = " ",
-                init = " ",
-                import = " ",
-                keys = " ",
-                lazy = " ",
-                loaded = "●",
-                not_loaded = "○",
-                plugin = " ",
-                runtime = " ",
-                require = " ",
-                source = " ",
-                start = " ",
-                task = "✔ ",
-                list = {
-                    "●",
-                    "➜",
-                    "★",
-                    "‒",
-                },
+require("lazy").setup({
+    import = "slugbyte/plugin",
+}, {
+    ui = {
+        icons = {
+            cmd = " ",
+            config = " ",
+            event = " ",
+            ft = " ",
+            init = " ",
+            import = " ",
+            keys = " ",
+            lazy = " ",
+            loaded = "●",
+            not_loaded = "○",
+            plugin = " ",
+            runtime = " ",
+            require = " ",
+            source = " ",
+            start = " ",
+            task = "✔ ",
+            list = {
+                "●",
+                "➜",
+                "★",
+                "‒",
             },
         },
-        change_detection = {
-            enabled = true,
-            notify = false,
-        },
-        install = { colorscheme = { "lackluster-hack" } },
-        dev = {
-            path = "~/workspace/code/neovim"
-        },
-    }
-)
+    },
+    change_detection = {
+        enabled = true,
+        notify = false,
+    },
+    install = { colorscheme = { "lackluster-hack" } },
+    dev = {
+        path = "~/workspace/code/neovim",
+    },
+})
 
 -- require("lazy").setup("slugbyte/lackluster")

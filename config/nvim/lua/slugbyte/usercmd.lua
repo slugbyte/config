@@ -33,7 +33,6 @@ util.usercmd("HiDebug", {
             hi_list_len = hi_list_len + 1
         end
 
-
         if hi_list_len > 0 then
             print(table.concat(hi_list, ", "))
         else

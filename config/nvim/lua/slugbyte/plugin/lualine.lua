@@ -1,26 +1,26 @@
 return {
-    'nvim-lualine/lualine.nvim',
+    "nvim-lualine/lualine.nvim",
     dependencies = {
         "unruly-worker",
     },
     config = function()
-        local unruly_worker = require('unruly-worker')
+        local unruly_worker = require("unruly-worker")
 
-        require('lualine').setup({
+        require("lualine").setup({
             options = {
                 icons_enabled = false,
                 theme = "lackluster",
-                section_separators = { left = '', right = '' },
-                component_separators = { left = '', right = '' },
+                section_separators = { left = "", right = "" },
+                component_separators = { left = "", right = "" },
             },
             sections = {
                 lualine_a = { "mode" },
                 lualine_b = {},
                 lualine_c = {},
                 lualine_x = { "navic" },
-                lualine_y = { "searchcount", "selectioncount", 'diagnostics', 'filetype', 'branch' },
+                lualine_y = { "searchcount", "selectioncount", "diagnostics", "filetype", "branch" },
                 lualine_z = { unruly_worker.hud.generate },
-            }
+            },
         })
-    end
+    end,
 }

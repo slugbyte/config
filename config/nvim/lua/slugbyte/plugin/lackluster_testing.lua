@@ -1,10 +1,10 @@
 return {
     {
-        'https://github.com/echasnovski/mini.trailspace',
+        "https://github.com/echasnovski/mini.trailspace",
         version = false,
         config = function()
             require("mini.trailspace").setup()
-        end
+        end,
     },
     {
         "https://github.com/folke/noice.nvim",
@@ -13,31 +13,31 @@ return {
         },
         config = function()
             -- require("slugbyte.lackluster.noice")
-        end
+        end,
     },
     {
         "https://github.com/nvim-tree/nvim-web-devicons",
         config = function()
             require("slugbyte.lackluster.devicons")
-        end
+        end,
     },
     {
         "https://github.com/HiPhish/rainbow-delimiters.nvim",
         config = function()
             -- require("slugbyte.lackluster.rainbow")
-        end
+        end,
     },
     {
         "https://github.com/nvim-tree/nvim-tree.lua",
         config = function()
             -- require("slugbyte.lackluster.nvim-tree")
-        end
+        end,
     },
     {
         "https://github.com/akinsho/bufferline.nvim",
         config = function()
             -- require("slugbyte.lackluster.bufferline")
-        end
+        end,
     },
     -- {
     --     "https://github.com/nvimdev/dashboard-nvim",
