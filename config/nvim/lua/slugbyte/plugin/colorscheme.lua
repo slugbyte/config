@@ -14,8 +14,11 @@ return {
             tweak_color = {
                 -- lack = "#aaaa77",
             },
-            tweak_syntax = {
-                -- comment = lackluster.color.green,
+            tweak_highlight = {
+                ["@keyword"] = {
+                    italic = true,
+                    -- bold = true,
+                },
             },
             tweak_background = {
                 -- normal = 'none',       -- main background
@@ -23,22 +26,6 @@ return {
             },
         })
         vim.cmd.colorscheme("lackluster-hack")
-
-        local make_bold = function(name)
-            -- local value = vim.api.nvim_get_hl(0, { name = name })
-            -- value.bold = true
-            -- vim.api.nvim_set_hl(0, name, value)
-        end
-
-        local make_italic = function(name)
-            local value = vim.api.nvim_get_hl(0, { name = name })
-            value.italic = true
-            vim.api.nvim_set_hl(0, name, value)
-        end
-
-        make_bold("@keyword")
-        make_italic("@keyword")
-
         -- vim.api.nvim_set_hl(0, "@function.call.lua", {
         -- 	bold = true,
         -- })

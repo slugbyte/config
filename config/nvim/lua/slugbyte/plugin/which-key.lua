@@ -45,42 +45,20 @@ return {
         local search_grep = new_rg_source("live_grep")
         local search_grep_word = new_rg_source("grep_string")
 
-        -- require("which-key").setup({
-        --     popup_mappings = {
-        --         scroll_down = "<PageDown>", -- binding to scroll down inside the popup
-        --         scroll_up = "<PageUp>",     -- binding to scroll up inside the popup
-        --     },
-        --     triggers = { "<leader>" },
-        -- })
+        local which_key = require("which-key")
 
-        -- require("which-key").register({
-        --     ["<leader>j"] = { search_conf_files, "[J]ump Config Files" },
-        --     ["<leader>J"] = { search_conf_grep, "[J]ump Config Grep" },
-        --     ["<leader><Leader>"] = {
-        --         name = "[S]pecial",
-        --         ["w"] = {
-        --             name = "[W]hip"
-        --         },
-        --     },
-        --     ["<leader>c"] = {
-        --         name = "[C]heck Spelling"
-        --     },
-        --     ["<leader>t"] = {
-        --         name = "[T]elescope"
-        --     },
-        --     ["<leader>l"] = {
-        --         name = "[L]sp+"
-        --     },
-        --     ["<leader>z"] = {
-        --         name = "[Z] Macro"
-        --     },
-        --     ["<leader>s"] = {
-        --         name = "[S]eek"
-        --     },
-        --     ["<leader>d"] = {
-        --         name = "[D]iagnostic"
-        --     },
-        --     ["<leader>?"] = { ":WhichKey<CR>", "[K]eys" },
-        -- })
+        which_key.add({
+            { "<leader>j", search_conf_files, desc = "[J]ump Config Files" },
+            { "<leader>J", search_conf_grep, desc = "[J]ump Config Grep" },
+            { "<leader><leader>", group = "[S]pecial" },
+            { "<leader><leader>w", group = "[W]hip" },
+            { "<leader>c", group = "[C]heck Spelling" },
+            { "<leader>t", group = "[T]elescope" },
+            { "<leader>l", group = "[L]sp" },
+            { "<leader>z", group = "[M]acro" },
+            { "<leader>s", group = "[S]eek" },
+            { "<leader>d", group = "[D]iagnostic" },
+            { "<leader>?", ":WhichKey<CR>", group = "[K]eys" },
+        })
     end,
 }
