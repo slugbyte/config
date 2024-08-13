@@ -20,7 +20,9 @@ exec --no-startup-id nm-applet
 
 exec --no-startup-id xrandr --output HDMI-A-0 --mode 2560x2880 --pos 0x0 --rotate right --primary
 
-exec --no-startup-id xautolock -time 20 -locker '/home/slugbyte/workspace/conf/exec/naptime.sh' &
+# autolock
+# exec --no-startup-id xautolock -time 20 -locker '/home/slugbyte/workspace/conf/exec/naptime.sh' &
+exec --no-startup-id xautolock -time 20 -locker 'i3-msg exit' &
 
 # Use pactl to adjust volume in PulseAudio  .
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -62,7 +64,7 @@ bindsym $super+Down focus down
 bindsym $super+Up focus up
 bindsym $super+Right focus right
 
-# move focused window
+# move/swap focused window
 bindsym $super+Shift+y move left
 bindsym $super+Shift+n move down
 bindsym $super+Shift+e move up
@@ -135,8 +137,8 @@ bindsym $meta+Shift+9 move container to workspace 9; workspace 9
 bindsym $meta+Shift+0 move container to workspace 10; workspace 10
 
 bindsym $super+Shift+r restart
-bindsym $super+Shift+q exec "i3-msg exit"
-bindsym $super+Shift+l exec "/home/slugbyte/workspace/conf/exec/naptime.sh"
+bindsym $super+Shift+l exec "i3-msg exit"
+# bindsym $super+Shift+l exec "/home/slugbyte/workspace/conf/exec/naptime.sh"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
