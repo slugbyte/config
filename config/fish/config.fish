@@ -362,6 +362,7 @@ if status is-interactive
     alias a="git add"
     alias A="git add ."
     alias b="git branch"
+    alias bye="sudo shutdown -h now"
     alias B="git branch -a"
     alias c="git_commit"
     alias C="git_commit --amend --no-edit"

@@ -11,36 +11,29 @@ return {
                 disable_undercurl = true,
                 enable_end_of_buffer = true,
             },
-            tweak_color = {
-                -- lack = "#aaaa77",
-            },
             tweak_highlight = {
                 ["@keyword"] = {
                     italic = true,
-                    -- bold = true,
                 },
-            },
-            tweak_background = {
-                -- normal = 'none',       -- main background
-                -- telescope = 'default', -- main background
+                ["spellcap"] = {
+                    overwrite = true,
+                    link = "normal",
+                    undercurl = false,
+                },
+                ["@function.builtin.javascript"] = {
+                    fg = lackluster.color.orange,
+                },
+                ["@function.builtin.typescript"] = {
+                    fg = lackluster.color.orange,
+                },
+                ["@module.builtin.javascript"] = {
+                    fg = lackluster.color.orange,
+                },
+                ["@module.builtin.typescript"] = {
+                    fg = lackluster.color.orange,
+                },
             },
         })
         vim.cmd.colorscheme("lackluster-hack")
-        -- vim.api.nvim_set_hl(0, "@function.call.lua", {
-        -- 	bold = true,
-        -- })
-
-        vim.api.nvim_set_hl(0, "spellcap", {
-            link = "normal",
-            undercurl = false,
-        })
-        -- load colorscheme dev tools
-        local lackluster_dev = require("lackluster.dev")
-        lackluster_dev.create_usrcmds()
-        lackluster_dev.try_fg("@function.builtin.javascript", "orange")
-        lackluster_dev.try_fg("@function.builtin.typescript", "orange")
-        lackluster_dev.try_fg("@module.builtin.typescript", "orange")
-        lackluster_dev.try_fg("@module.builtin.javascript", "orange")
-        -- lackluster_dev.try_fg("headline", "blue")
     end,
 }
