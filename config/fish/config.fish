@@ -2,14 +2,13 @@ if status is-interactive
     set -U fish_greeting ""
     fish_add_path "$HOME/.cargo/bin"
     fish_add_path "$HOME/go/bin"
-    fish_add_path "$HOME/workspace/lang/bin"
-    # fish_add_path "/opt/nvim-linux64/bin"
+    fish_add_path "/usr/local/go/bin"
+    fish_add_path "$HOME/workspace/conf/bin"
+    fish_add_path "$HOME/workspace/exec/bin"
 
-    fish_add_path "$exec"
-    fish_add_path $ZIG_DIR
     # zoxide 
     zoxide init fish | source
-    # fas node manager
+    # fast node manager
     # fnm env --use-on-cd | source
     fnm env | source
 
@@ -113,6 +112,15 @@ if status is-interactive
     end
 
     # ENV
+    set -gx w "$HOME/workspace"
+    set -gx code "$w/code"
+    set -gx conf "$w/conf"
+    set -gx data "$w/data"
+    set -gx gang "$w/gang"
+    set -gx hide "$w/hide"
+    set -gx exec "$w/exec"
+    set -gx temp "$HOME/Downloads"
+
     set -gx SHELL (which fish)
     set -gx PAGER (which less)
     set -gx TOPER (which htop)
@@ -136,21 +144,10 @@ if status is-interactive
     set -gx LESS_TERMCAP_ue $COLOR_RESET
     set -gx EMAIL 'slugbyte@slugbyte.com'
     set -gx FULLNAME 'Duncan Marsh'
-    set -gx ZIG_DIR "$w/lang/zig"
+    set -gx ZIG_DIR "$w/exec/share/current"
+    set -gx GO_DIR "$HOME/go"
     set -gx GNUPGHOME "$HOME/.config/gnupg"
     set -gx GPG_TTY (tty)
-    # set -gx PATH "$ZIG_DIR:$PATH"
-    # set -gx PATH "$w/lang/zls/zig-out/bin:$PATH"
-
-    set -gx w "$HOME/workspace"
-    set -gx code "$w/code"
-    set -gx conf "$w/conf"
-    set -gx data "$w/data"
-    set -gx exec "$w/conf/exec"
-    set -gx gang "$w/gang"
-    set -gx hide "$w/hide"
-    set -gx lang "$w/lang"
-    set -gx temp "$HOME/Downloads"
 
     # env by uname
     switch (uname)
@@ -161,8 +158,6 @@ if status is-interactive
         set -gx COPYER (which pbcopy)
         set -gx trash "$HOME/.Trash"
     end
-
-
 
     # git
     function git_commit
@@ -387,7 +382,8 @@ if status is-interactive
     alias llt="ls -la --total-size --git --no-user --time=created --time-style=long-iso"
     alias la="ls -a"
     alias l1="ls -1a"
-    alias tree='eza -F --tree --group-directories-first'
+    alias tree='eza -F --tree --group-directories-first -L 2'
+    alias treee='eza -F --tree --group-directories-first'
     alias log="git_log"
     alias m="make" 
     alias md="mkdir -p"
