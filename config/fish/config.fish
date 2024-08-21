@@ -149,6 +149,13 @@ if status is-interactive
     set -gx GNUPGHOME "$HOME/.config/gnupg"
     set -gx GPG_TTY (tty)
 
+    # SECRET ENV
+    if test -d $w/hide/env
+        for env_file in $w/hide/env/*.fish 
+            source $env_file
+        end
+    end
+
     # env by uname
     switch (uname)
     case Linux
@@ -413,6 +420,7 @@ if status is-interactive
     alias x="git reset"
     alias y="echo naw"
 
+
     # alias by uname
     switch (uname)
     case Linux
@@ -458,5 +466,5 @@ if status is-interactive
         set dir $COLOR_GRAY5$dir
         printf "$git_branch$dir$COLOR_RESET\n| "
     end
-    # z is set by zoxide
+
 end
