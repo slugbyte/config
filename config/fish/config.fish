@@ -358,6 +358,21 @@ if status is-interactive
         log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
     end
 
+    function checkf
+        set -gx CHECK_LAST (fzf)
+        log_blue check $CHECK_LAST
+        go test $CHECK_LAST
+    end
+
+    function check
+        log_blue check $CHECK_LAST
+        go test $CHECK_LAST
+    end
+    function checkv
+        log_blue check $CHECK_LAST
+        go test -v $CHECK_LAST
+    end
+
     # alias
     alias ..="cd .."
     alias ,,="cd -"
