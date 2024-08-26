@@ -34,6 +34,6 @@ return {
                 },
             },
         })
-        vim.cmd.colorscheme("lackluster-hack")
+        vim.cmd.colorscheme("lackluster")
     end,
 }

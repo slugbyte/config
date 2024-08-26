@@ -358,19 +358,31 @@ if status is-interactive
         log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
     end
 
-    function checkf
-        set -gx CHECK_LAST (fzf)
-        log_blue check $CHECK_LAST
-        go test $CHECK_LAST
-    end
 
     function check
         log_blue check $CHECK_LAST
         go test $CHECK_LAST
     end
-    function checkv
+
+    function fcheck
+        set -gx CHECK_LAST (fzf -f _test.go | fzf)
+        log_blue check $CHECK_LAST
+        go test $CHECK_LAST
+    end
+
+    function vcheck
         log_blue check $CHECK_LAST
         go test -v $CHECK_LAST
+    end
+
+    function acheck
+        log_blue check $CHECK_LAST
+        # g(fzf -f _test.go)
+        # TODO: keep track of failures and print
+        for d in (fzf -f _test.go)
+            log_blue check $d
+            go test ./$d
+        end
     end
 
     # alias
