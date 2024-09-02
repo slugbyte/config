@@ -15,7 +15,7 @@ return {
             },
             sections = {
                 lualine_a = { "mode" },
-                lualine_b = {},
+                lualine_b = { "filename" },
                 lualine_c = {},
                 lualine_x = { "navic" },
                 lualine_y = { "searchcount", "selectioncount", "diagnostics", "filetype", "branch" },

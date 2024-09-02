@@ -424,7 +424,7 @@ if status is-interactive
     alias n="z"
     alias N="zi"
     alias o="open"
-    alias O="gitopen"
+    alias O="git open"
     alias p="git_push"
     alias pu="git_push_upstream"
     alias q="echo naw"
