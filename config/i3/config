@@ -7,7 +7,7 @@ set $meta Mod1
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id flatpak run com.dropbox.Client &
-exec --no-startup-id ibus-daemon -rxRd &
+exec --no-startup-id ibus-daemon -rxRd
 #
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
@@ -187,11 +187,11 @@ set $gray7  #aaaaaa
 set $gray8  #cccccc
 set $gray9  #DDDDDD
 
-client.focused $gray5 $gray5 $black $gray9 $gray5
+client.focused $gray5 $gray5 $black $green $gray5
 client.focused_inactive $gray4 $gray4 $black $gray9 $gray6
 client.unfocused $gray3 $gray3 $black $gray9 $gray3
 client.urgent $orange $gray4 $gray4 $gray9 $gray6
-client.background $gray
+client.background $gray1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.

@@ -1,5 +1,11 @@
 return {
     {
+        "https://github.com/echasnovski/mini.starter",
+        config = function()
+            require("mini.starter").setup({})
+        end,
+    },
+    {
         "https://github.com/echasnovski/mini.trailspace",
         version = false,
         config = function()
