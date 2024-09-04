@@ -358,31 +358,38 @@ if status is-interactive
         log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
     end
 
-
     function check
         log_blue check $CHECK_LAST
-        go test $CHECK_LAST
+        gotestsum $CHECK_LAST
     end
 
     function fcheck
-        set -gx CHECK_LAST (fzf -f _test.go | fzf)
+        set -l query ""
+        if test (count $argv) -gt 0
+            set query $argv
+        end
+        set -l temp_check_last (fzf -f _test.go |fzf -q $query)
+        if test -z $temp_check_last
+            log_orange "check not updated"
+            return
+        end
+        set -gx CHECK_LAST $temp_check_last
         log_blue check $CHECK_LAST
-        go test $CHECK_LAST
+        gotestsum $CHECK_LAST
     end
 
-    function vcheck
-        log_blue check $CHECK_LAST
-        go test -v $CHECK_LAST
+    function mcheck
+        set -l query ""
+        if test (count $argv) -gt 0
+            set query $argv
+        end
+        set -l check_module (go list ./... | fzf --delimiter "/" --with-nth -1 -q $query) 
+        gotestsum --format testname $check_module
     end
 
     function acheck
-        log_blue check $CHECK_LAST
-        # g(fzf -f _test.go)
-        # TODO: keep track of failures and print
-        for d in (fzf -f _test.go)
-            log_blue check $d
-            go test ./$d
-        end
+        log_blue check all
+        gotestsum
     end
 
     # alias
