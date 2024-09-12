@@ -9,7 +9,7 @@ return {
         "https://github.com/echasnovski/mini.trailspace",
         version = false,
         config = function()
-            require("mini.trailspace").setup()
+            -- require("mini.trailspace").setup()
         end,
     },
     {

@@ -69,3 +69,10 @@ local symbol_search = function()
 end
 
 util.keymap("s", symbol_search, "[S]ymbol search")
+
+local unruly_worker = require("unruly-worker")
+util.keymap("<HOME>", "2gk", "Scroll Up Fast")
+util.keymap("<PageUp>", "4gk", "Move Up Fast")
+util.keymap("<END>", "2gj", "Scroll Down Fast")
+util.keymap("<PageDown>", "4gj", "Move Down Fast")
+util.keymap("<leader>d", unruly_worker.boost.telescope.diagnostics, "[D]iagnostic Search")
