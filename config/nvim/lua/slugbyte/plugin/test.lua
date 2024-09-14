@@ -1,0 +1,78 @@
+return {
+    -- {
+    --     "https://github.com/echasnovski/mini.starter",
+    --     config = function()
+    --         -- require("mini.starter").setup({})
+    --     end,
+    -- },
+    -- {
+    --     "https://github.com/echasnovski/mini.trailspace",
+    --     version = false,
+    --     config = function()
+    --         -- require("mini.trailspace").setup()
+    --     end,
+    -- },
+    -- {
+    --     "https://github.com/folke/noice.nvim",
+    --     dependencies = {
+    --         "MunifTanjim/nui.nvim",
+    --     },
+    --     config = function()
+    --         -- require("slugbyte.test.noice")
+    --     end,
+    -- },
+    -- {
+    --     "https://github.com/nvim-tree/nvim-web-devicons",
+    --     config = function()
+    --         require("slugbyte.test.devicons")
+    --     end,
+    -- },
+    -- {
+    --     "https://github.com/petertriho/nvim-scrollbar",
+    --     dependencies = {
+    --         "kevinhwang91/nvim-hlslens",
+    --         "lewis6991/gitsigns.nvim",
+    --     },
+    --     priority = 800,
+    --     config = function()
+    --         require("slugbyte.test.scrollbar")
+    --     end,
+    -- },
+    -- {
+    --     "https://github.com/HiPhish/rainbow-delimiters.nvim",
+    --     config = function()
+    --         -- require("slugbyte.test.rainbow")
+    --     end,
+    -- },
+    -- {
+    --     "https://github.com/nvim-tree/nvim-tree.lua",
+    --     config = function()
+    --         -- require("slugbyte.test.nvim-tree")
+    --     end,
+    -- },
+    -- {
+    --     "https://github.com/akinsho/bufferline.nvim",
+    --     config = function()
+    --         -- require("slugbyte.test.bufferline")
+    --     end,
+    -- },
+    -- {
+    --     "https://github.com/nvimdev/dashboard-nvim",
+    --     event = 'VimEnter',
+    --     dependencies = {
+    --         "https://github.com/nvim-tree/nvim-web-devicons",
+    --     },
+    --     config = function()
+    --         -- require("slugbyte.test.dashboard")
+    --     end
+    -- },
+    -- {
+    --     "https://github.com/SmiteshP/nvim-navic",
+    --     dependencies = {
+    --         "neovim/nvim-lspconfig",
+    --     },
+    --     config = function()
+    --         -- require("slugbyte.test.navic")
+    --     end,
+    -- },
+}

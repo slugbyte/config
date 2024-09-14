@@ -3,6 +3,9 @@ return {
     lazy = false,
     dev = true,
     priority = 1000, -- make sure to load this before all the other start plugins
+    dependencies = {
+        "https://github.com/norcalli/nvim-colorizer.lua",
+    },
     init = function()
         -- set colorscheme
         local lackluster = require("lackluster")
@@ -12,6 +15,10 @@ return {
                 enable_end_of_buffer = true,
             },
             tweak_highlight = {
+                FloatBorder = {
+                    fg = lackluster.color.gray5,
+                    bg = lackluster.color_special.main_background,
+                },
                 ["@keyword"] = {
                     italic = true,
                 },
@@ -32,6 +39,11 @@ return {
                 ["@module.builtin.typescript"] = {
                     fg = lackluster.color.orange,
                 },
+            },
+        })
+        require("colorizer").setup({
+            ["*"] = {
+                names = false,
             },
         })
         vim.cmd.colorscheme("lackluster-hack")
