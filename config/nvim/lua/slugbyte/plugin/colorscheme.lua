@@ -9,16 +9,18 @@ return {
     init = function()
         -- set colorscheme
         local lackluster = require("lackluster")
+        lackluster.dev.create_usrcmds()
+
         lackluster.setup({
             tweak_ui = {
                 disable_undercurl = true,
                 enable_end_of_buffer = true,
             },
             tweak_highlight = {
-                FloatBorder = {
-                    fg = lackluster.color.gray5,
-                    bg = lackluster.color_special.main_background,
-                },
+                -- FloatBorder = {
+                --     fg = lackluster.color.gray5,
+                --     bg = lackluster.color_special.main_background,
+                -- },
                 ["@keyword"] = {
                     italic = true,
                 },

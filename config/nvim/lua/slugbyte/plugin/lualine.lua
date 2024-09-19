@@ -16,7 +16,7 @@ return {
             },
             sections = {
                 lualine_a = { "mode" },
-                lualine_b = { { "filename", path = 4 } },
+                lualine_b = { { "filename", path = 1 } },
                 lualine_c = {},
                 lualine_x = {},
                 lualine_y = { "searchcount", "selectioncount", "diagnostics", { "branch", color = { fg = lackluster.color.gray6 } }, "diff" },
