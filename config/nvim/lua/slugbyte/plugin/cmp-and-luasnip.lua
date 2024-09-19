@@ -48,12 +48,12 @@ return {
 
         cmp.setup({
             window = {
-                completion = vim.tbl_extend("force", cmp.config.window.bordered(), {
-                    winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
-                }),
-                documentation = vim.tbl_extend("force", cmp.config.window.bordered(), {
-                    winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
-                }),
+                --     completion = vim.tbl_extend("force", cmp.config.window.bordered(), {
+                --         winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                --     }),
+                -- documentation = vim.tbl_extend("force", cmp.config.window.bordered(), {
+                --     winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                -- }),
             },
             snippet = {
                 expand = function(args)
