@@ -1,5 +1,11 @@
 return {
     -- {
+    --     "https://github.com/nvimdev/indentmini.nvim",
+    --     config = function()
+    --         require("indentmini").setup()
+    --     end,
+    -- },
+    -- {
     --     "https://github.com/echasnovski/mini.starter",
     --     config = function()
     --         -- require("mini.starter").setup({})

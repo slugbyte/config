@@ -42,7 +42,7 @@ return {
             html = {},
             stylua = {},
             tailwindcss = {},
-            tsserver = {},
+            -- tsserver = {},
             yamlls = {},
             rescriptls = {},
             jsonls = {
