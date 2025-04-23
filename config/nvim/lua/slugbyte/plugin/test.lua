@@ -59,7 +59,7 @@ return {
     -- {
     --     "https://github.com/akinsho/bufferline.nvim",
     --     config = function()
-    --         -- require("slugbyte.test.bufferline")
+    --         require("slugbyte.test.bufferline")
     --     end,
     -- },
     -- {

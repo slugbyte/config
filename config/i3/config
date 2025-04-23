@@ -20,6 +20,9 @@ exec --no-startup-id ibus-daemon -rxRd
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+# coding monitor
+# exec --no-startup-id xrandr --output HDMI-A-0 --mode 2560x2880 --pos 0x0 --rotate right --primary
+# drawing monitor
 exec --no-startup-id xrandr --output HDMI-A-0 --mode 2560x2880 --pos 0x0 --rotate right --primary
 
 # autolock
@@ -199,6 +202,9 @@ font pango:JetBrainsMono Nerd Font Bold 10
 
 # disable window title bar
 for_window [class="^.*"] border pixel 3
+
+# Float Window
+for_window [title="^DEMO$"] floating enable
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
