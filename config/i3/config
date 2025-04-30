@@ -3,11 +3,17 @@
 set $super Mod4
 set $meta Mod1
 
+
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
+exec --no-startup-id dropbox start
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id flatpak run com.dropbox.Client &
 exec --no-startup-id ibus-daemon -rxRd
+
+exec ~/.config/sway/startup-keyring.sh
+exec --no-startup-id eval "$(ssh-agent -s)"
+
 #
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
@@ -20,27 +26,21 @@ exec --no-startup-id ibus-daemon -rxRd
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
-# coding monitor
-# exec --no-startup-id xrandr --output HDMI-A-0 --mode 2560x2880 --pos 0x0 --rotate right --primary
-# drawing monitor
-exec --no-startup-id xrandr --output HDMI-A-0 --mode 2560x2880 --pos 0x0 --rotate right --primary
-
 # autolock
 # exec --no-startup-id xautolock -time 20 -locker '/home/slugbyte/workspace/conf/exec/naptime.sh' &
-exec --no-startup-id xautolock -time 20 -locker 'i3lock -c 1a1a1a' &
+# exec --no-startup-id xautolock -time 20 -locker 'i3lock -c 1a1a1a' &
 # exec --no-startup-id xautolock -time 20 -locker 'i3-msg exit' &
 
 # Use pactl to adjust volume in PulseAudio  .
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+# set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioMute exec pamixer -t
+bindsym XF86AudioLowerVolume exec pamixer -d 5
+bindsym XF86AudioRaiseVolume exec pamixer -i 5
+# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+# bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+# bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
-workspace 1 output primary
-workspace 2 output primary
-workspace 3 output primary
-workspace 4 output primary
 
 # Use Mouse+$super to drag floating windows to their wanted position
 floating_modifier $super
@@ -142,8 +142,8 @@ bindsym $meta+Shift+8 move container to workspace 8; workspace 8
 bindsym $meta+Shift+9 move container to workspace 9; workspace 9
 bindsym $meta+Shift+0 move container to workspace 10; workspace 10
 
-bindsym $super+Shift+r restart
-bindsym $super+Shift+l exec "i3-msg exit"
+bindsym $super+Shift+r reload 
+bindsym $super+Shift+l exec "swaymsg exit"
 # bindsym $super+Shift+l exec "/home/slugbyte/workspace/conf/exec/naptime.sh"
 
 # resize window (you can also use the mouse for that)
@@ -190,11 +190,13 @@ set $gray7  #aaaaaa
 set $gray8  #cccccc
 set $gray9  #DDDDDD
 
-client.focused $gray5 $gray5 $black $green $gray5
+# client.focused $gray5 $gray5 $black $green $gray5
+client.focused $red $red $black $green $red
 client.focused_inactive $gray4 $gray4 $black $gray9 $gray6
 client.unfocused $gray3 $gray3 $black $gray9 $gray3
 client.urgent $orange $gray4 $gray4 $gray9 $gray6
-client.background $gray1
+# client.background $gray1
+client.background $red
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -206,13 +208,23 @@ for_window [class="^.*"] border pixel 3
 # Float Window
 for_window [title="^DEMO$"] floating enable
 
+## houston monitors
+exec swaymsg output eDP-3 pos 0 0
+exec swaymsg output eDP-1 pos 2560 0
+
+exec workspace 1 output eDP-3 
+exec workspace 2 output eDP-3 
+exec workspace 3 output eDP-3 
+exec workspace 4 output eDP-3 
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-    font pango:JetBrainsMono Nerd Font Bold 14
+    output eDP-3
+    font HackerHacker Normal 10
     workspace_buttons yes
     position top
-    status_command i3status
+    status_command waybar
     tray_padding 10
     colors {
         background $gray2

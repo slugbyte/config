@@ -10,6 +10,7 @@
     blue:   #7788AA;
     red:    #D70000;
     black:  #000000;
+    gray0: #660000;
     gray1:  #080808;
     gray2:  #191919;
     gray3:  #2a2a2a;
@@ -23,7 +24,7 @@
 
 * {
     // font name <space> font style <space> font size
-    font: "HackerHacker Regular 16";
+    font: "HackerHacker Regular 12";
     background-color: transparent;
     text-color: @gray9;
     margin: 0px;

@@ -2,21 +2,21 @@
 
 WORKSPACE_DIR="$HOME/workspace"
 TEMP_DIR="$HOME/Downloads/"
-TRASH_DIR="$HOME/.Trash"
+TRASH_DIR="$HOME/.local/share/Trash"
 CONF_DIR="$WORKSPACE_DIR/conf"
 DROPBOX_DIR="$HOME/Dropbox"
 
 ARG="$1"
 
 mkdir -p "$WORKSPACE_DIR/code" 
-mkdir -p "$WORKSPACE_DIR/exec"
+# mkdir -p "$WORKSPACE_DIR/exec"
 # mkdir -p "$WORKSPACE_DIR/data"
 # mkdir -p "$WORKSPACE_DIR/gang"
-mkdir -p "$WORKSPACE_DIR/hist"
-mkdir -p "$WORKSPACE_DIR/lang"
-mkdir -p "$WORKSPACE_DIR/play"
-mkdir -p "$WORKSPACE_DIR/play"
-mkdir -p "$WORKSPACE_DIR/work"
+# mkdir -p "$WORKSPACE_DIR/hist"
+# mkdir -p "$WORKSPACE_DIR/lang"
+# mkdir -p "$WORKSPACE_DIR/play"
+# mkdir -p "$WORKSPACE_DIR/play"
+# mkdir -p "$WORKSPACE_DIR/work"
 ln -sf "$TEMP_DIR" "$WORKSPACE_DIR/temp"
 
 if [[ ! -d "$CONF_DIR" ]];then
