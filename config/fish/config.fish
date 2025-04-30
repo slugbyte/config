@@ -152,6 +152,13 @@ if status is-interactive
     set -gx WAYLAND_DISPLAY $WAYLAND_DISPLAY
     set -gx SWAYSOCK $SWAYSOCK
 
+    if not pgrep -u $USER ssh-agent > /dev/null
+        eval (ssh-agent -c)
+        set -Ux SSH_AUTH_SOCK $SSH_AUTH_SOCK
+        set -Ux SSH_AGENT_PID $SSH_AGENT_PID
+    end
+
+
     # SECRET ENV
     if test -d $w/hide/env
         for env_file in $w/hide/env/*.fish 
