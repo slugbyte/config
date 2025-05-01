@@ -9,27 +9,12 @@ exec --no-startup-id dropbox start
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id flatpak run com.dropbox.Client &
 exec --no-startup-id ibus-daemon -rxRd
-
-exec ~/.config/sway/startup-keyring.sh
-exec --no-startup-id eval "$(ssh-agent -s)"
-
-exec --no-startup-id waybar
-#
-# The combination of xss-lock, nm-applet and pactl is a popular choice, so
-# they are included here as an example. Modify as you see fit.
-
-# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-# screen before suspend. Use loginctl lock-session to lock your screen.
-# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-
-# NetworkManager is the most popular way to manage wireless networks on Linux,
-# and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
+exec --no-startup-id 'eval $(gnome-keyring-daemon --start --components=secrets,ssh)'
+exec --no-startup-id 'eval "$(ssh-agent -s)"'
 
-# autolock
-# exec --no-startup-id xautolock -time 20 -locker '/home/slugbyte/workspace/conf/exec/naptime.sh' &
-# exec --no-startup-id xautolock -time 20 -locker 'i3lock -c 1a1a1a' &
-# exec --no-startup-id xautolock -time 20 -locker 'i3-msg exit' &
+# reliad waybar
+exec_always 'killall waybar; waybar'
 
 # Use pactl to adjust volume in PulseAudio  .
 bindsym XF86AudioMute exec pamixer -t
@@ -185,7 +170,6 @@ set $gray8  #cccccc
 set $gray9  #DDDDDD
 
 client.focused $gray5 $gray5 $black $green $gray5
-# client.focused $red $red $black $green $red
 client.focused_inactive $gray4 $gray4 $black $gray9 $gray6
 client.unfocused $gray3 $gray3 $black $gray9 $gray3
 client.urgent $orange $gray4 $gray4 $gray9 $gray6
