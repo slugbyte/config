@@ -13,6 +13,12 @@ exec --no-startup-id nm-applet
 exec --no-startup-id 'eval $(gnome-keyring-daemon --start --components=secrets,ssh)'
 exec --no-startup-id 'eval "$(ssh-agent -s)"'
 
+exec swayidle -w \
+	timeout 300 'swaylock -f -c 444444' \
+	timeout 600 'swaymsg "output * power off"' \
+		resume 'swaymsg "output * power on"' \
+	before-sleep 'swaylock -f -c 444444'
+
 # reliad waybar
 exec_always 'killall waybar; waybar'
 
@@ -35,7 +41,7 @@ bindsym $super+t exec --no-startup-id maim --select "/home/$USER/Downloads/sc-$(
 bindsym $super+w kill
 
 # rofi
-bindsym $super+space  exec "rofi -combi-modi window,drun,ssh -theme lackluster -show combi"
+bindsym $super+space  exec "rofi -combi-modi window,drun,ssh -theme lackluster -show combi -monitor -0"
 
 # change focus
 bindsym $super+y focus left
@@ -56,16 +62,16 @@ bindsym $super+Shift+e move up
 bindsym $super+Shift+o move right
 
 # alternatively, you can use the cursor keys:
-bindsym $super+Shift+Left move left
-bindsym $super+Shift+Down move down
+bindsym $super+Shift+Left focus left; move left
+bindsym $super+Shift+Down focus down; move down
 bindsym $super+Shift+Up move up
 bindsym $super+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $super+h split h
+bindsym $super+s split h
 
 # split in vertical orientation
-bindsym $super+s split v
+bindsym $super+h split v
 
 # toggle fullscreen
 bindsym $super+f fullscreen toggle
@@ -74,22 +80,19 @@ bindsym $super+f fullscreen toggle
 bindsym $meta+f floating toggle
 
 # toggle layout
-bindsym $super+l layout toggle  stacking splith splitv
-
-# change focus between tiling / floating windows
-# bindsym $super+space focus mode_toggle
+bindsym $super+l layout toggle stacking splith splitv
 
 # focus the parent container
-bindsym $super+a focus parent
+# bindsym $super+a focus parent
 
 # focus the child container
 #bindsym $super+d focus child
 
 # speed switch workspace
-bindsym $meta+n workspace number 1
-bindsym $meta+e workspace number 2
-bindsym $meta+o workspace number 3
-bindsym $meta+i workspace number 4
+bindsym $meta+n workspace 1
+bindsym $meta+e workspace 2
+bindsym $meta+o workspace 3
+bindsym $meta+i workspace 4
 
 # speed move window to workspace
 bindsym $meta+l move container to workspace 1; workspace 1
@@ -123,7 +126,6 @@ bindsym $meta+Shift+0 move container to workspace 10; workspace 10
 
 bindsym $super+Shift+r reload 
 bindsym $super+Shift+l exec "swaymsg exit"
-# bindsym $super+Shift+l exec "/home/slugbyte/workspace/conf/exec/naptime.sh"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -148,6 +150,8 @@ mode "resize" {
         bindsym Escape mode "default"
         # bindsym $super+r mode "default"
 }
+
+font pango:HackerHacker 12
 
 bindsym $meta+r mode "resize"
 
@@ -184,13 +188,19 @@ client.background $red
 for_window [class="^.*"] border pixel 3
 
 # Float Window
-for_window [title="^DEMO$"] floating enable
+assign [title="^DEMO$"] 4
+# for_window [title="^DEMO$"] floating enable
+# for_window [title="^DEMO$"] floating enable
+# for_window [title="^DEMO$"] output DP-3
 
 ## houston monitors
-exec swaymsg output DP-1 pos 0 0
-exec swaymsg output DP-3 pos 2560 0
+output DP-1 pos 0 0
+output DP-3 pos 2560 0
+input "10429:2394:UGTABLET_Artist_Pro_14_(Gen2)" map_to_output DP-3
 
 workspace 1 output DP-1 
 workspace 2 output DP-1 
 workspace 3 output DP-1 
-workspace 4 output DP-1 
+workspace 4 output DP-3
+focus output DP-1
+

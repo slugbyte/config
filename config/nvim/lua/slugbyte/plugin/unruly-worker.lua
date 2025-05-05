@@ -38,7 +38,7 @@ return {
                 easy_window = true,
                 -- unruly stuff change neovim's normal behavior
                 unruly_seek = true,
-                unruly_mark = true,
+                unruly_mark = false,
                 unruly_macro = true,
                 unruly_kopy = true,
                 unruly_quit = true,
