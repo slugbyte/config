@@ -19,7 +19,7 @@ M.run = function()
     end
 
     vim.api.nvim_win_set_buf(output_win, output_buf)
-    vim.api.nvim_win_set_width(output_win, 70)
+    vim.api.nvim_win_set_width(output_win, 82)
 
     vim.api.nvim_buf_set_lines(output_buf, 0, -1, false, {})
     vim.api.nvim_buf_set_lines(output_buf, -1, -1, false, { "[exec] $ zig build run" })
