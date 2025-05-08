@@ -47,6 +47,9 @@ return {
             ["*"] = {
                 names = false,
             },
+            zig = {
+                names = false,
+            },
         })
         vim.cmd.colorscheme("lackluster-hack")
     end,

@@ -13,7 +13,7 @@ M.run = function()
 
     if output_win == nil or (not vim.api.nvim_win_is_valid(output_win)) then
         local current_win = vim.api.nvim_get_current_win()
-        vim.cmd("vsplit")
+        vim.cmd("botright vsplit")
         output_win = vim.api.nvim_get_current_win()
         vim.api.nvim_set_current_win(current_win)
     end
