@@ -183,6 +183,14 @@ if status is-interactive
        git commit -S $argv && git verify-commit HEAD
     end
 
+    function git_open 
+        if test -d .jj
+            git -C $(jj git root) open
+            return
+        end
+        git open
+    end
+
     function git_commit_amend
         if test -d .jj
             jj new
@@ -502,7 +510,7 @@ if status is-interactive
     alias md="mkdir -p"
     alias n="z"
     alias N="zi"
-    alias o='git -C $(jj git root) open'
+    alias o='git_open'
     alias O="xdg-open"
     alias p="git_push"
     alias pu="git_push_upstream"
