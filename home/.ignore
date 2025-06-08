@@ -1,2 +1,4 @@
+.zig-cache
+.jj
 .git
 node_modules

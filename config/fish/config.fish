@@ -176,7 +176,59 @@ if status is-interactive
 
     # git
     function git_commit
+        if test -d .jj
+            jj desc $argv
+            return
+        end
        git commit -S $argv && git verify-commit HEAD
+    end
+
+    function git_commit_amend
+        if test -d .jj
+            jj new
+            return
+        end
+        git_commit --amend $argv
+    end
+
+    function git_stat 
+        if test -d .jj
+            jj status --no-pager
+            return
+        end
+        git status
+    end
+
+    function git_diff
+        if test -d .jj
+            jj diff $argv
+            return 
+        end
+        git diff $argv
+    end
+
+    function git_branch 
+        if test -d .jj
+            jj bookmark $argv
+            return 
+        end
+        git branch $argv
+    end
+
+    function git_reset
+        if test -d .jj
+            jj abandon $argv
+            return
+        end
+        git reset
+    end
+
+    function git_fetch
+        if test -d .jj
+            jj git fetch
+            return
+        end
+        git fetch
     end
 
     function git_pull_rebase
@@ -194,6 +246,10 @@ if status is-interactive
     end
 
     function git_pull
+        if test -d ./.jj
+            jj git fetch
+            return
+        end
         if test (count $argv) -gt 0
             git pull origin $argv -v
             return -1
@@ -222,6 +278,11 @@ if status is-interactive
     end
 
     function git_push
+        if  test -d ./.jj
+            jj bookmark set develop -r @- --allow-backwards
+            jj git push -r develop --allow-new
+            return
+        end
         set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
         if test $branch = "HEAD"
             echo "ERROR: cannot push from detatched state."
@@ -241,6 +302,10 @@ if status is-interactive
 
 
     function git_log
+        if  test -d ./.jj
+            jj log
+            return
+        end
       git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit 
     end
 
@@ -405,15 +470,17 @@ if status is-interactive
     alias ,,="cd -"
     alias a="git add"
     alias A="git add ."
-    alias b="git branch"
+    alias b="git_branch"
     alias bye="sudo shutdown -h now"
+    alias zzz="sudo systemctl suspend"
     alias B="git branch -a"
+    # alias c="git_commit"
     alias c="git_commit"
-    alias C="git_commit --amend --no-edit"
+    alias C="git_commit_amend"
+    # alias C="git_commit --amend --no-edit"
     alias copy=$COPYER
     alias ch="git checkout"
-    alias d="git diff"
-    alias D="git diff --cached"
+    alias d="git_diff"
     alias del=(which rm)
     alias e="nvim"
     alias f="git fetch -pv"
@@ -423,9 +490,7 @@ if status is-interactive
     alias j="e -c ':lua require(\"unruly-worker\").boost.telescope.find_files()'"
     alias J="e -c ':lua require(\"unruly-worker\").boost.telescope.live_grep()'"
     alias k="echo naw"
-    alias l="git_pull_rebase"
-    alias L="git_pull"
-    alias lu="git_pull_upstream"
+    alias l="git_log"
     alias ls="eza -F --group-directories-first"
     alias ll="ls -la --git --no-user --no-time"
     alias llt="ls -la --total-size --git --no-user --time=created --time-style=long-iso"
@@ -433,20 +498,20 @@ if status is-interactive
     alias l1="ls -1a"
     alias tree='eza -F --tree --group-directories-first -L 2'
     alias treee='eza -F --tree --group-directories-first'
-    alias log="git_log"
     alias m="make" 
     alias md="mkdir -p"
     alias n="z"
     alias N="zi"
-    alias o="open"
-    alias O="git open"
+    alias o='git -C $(jj git root) open'
+    alias O="xdg-open"
     alias p="git_push"
     alias pu="git_push_upstream"
     alias q="echo naw"
     alias r="git rebase -Si"
     alias R="source ~/.config/fish/config.fish"
     alias rm="trash_help"
-    alias s="git status --short"
+    # alias s="git status --short"
+    alias s="git_stat"
     alias t="echo naw"
     alias tlist='tmux list-sessions'
     alias tname='tmux rename-session -t'
@@ -459,7 +524,7 @@ if status is-interactive
     alias v="echo naw"
     alias w="e -c ':WhipFindFile'"
     alias W="e -c ':WhipOpen'"
-    alias x="git reset"
+    alias x="git_reset"
     alias y="echo naw"
 
 
@@ -483,8 +548,20 @@ if status is-interactive
         alias sca="_mac_sca"
     end
 
+    function jj_prompt
+        if test -d ./.jj 
+            set jj_desc (jj log --no-graph --template 'description' -r @ | head -n 1)
+            if test -z $jj_desc
+                echo "$COLOR_BLUE (no desc)"
+                return
+            end
+            echo "$COLOR_BLUE ($jj_desc)"
+        end
+    end
+
 
     function fish_prompt
+        set jj_desc (jj_prompt)
         set git_branch_color $COLOR_ORANGE
         set git_branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
         if test $status -ne 0
@@ -506,10 +583,12 @@ if status is-interactive
             set dir "~"
         end
         set dir $COLOR_GRAY5$dir
-        printf "$git_branch$dir$COLOR_RESET\n| "
+        printf "$git_branch$dir$jj_desc$COLOR_RESET\n| "
     end
 
 end
+
+# jj util completion fish | source
 
 if not pgrep -u $USER ssh-agent > /dev/null
     eval (ssh-agent -c)

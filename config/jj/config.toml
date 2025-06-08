@@ -1,0 +1,17 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+name = "Duncan Marsh"
+email = "duncan@slugbyte.com"
+
+[aliases]
+e = ["edit"]
+s = ["status"]
+d = ["desc"]
+n = ["new"]
+x = ["abandon"]
+ll = ["log", "-r", "..@"]
+
+[ui]
+pager = ":builtin"
+

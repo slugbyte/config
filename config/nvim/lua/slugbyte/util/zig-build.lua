@@ -2,6 +2,7 @@ local job_id = nil
 local output_buf = vim.api.nvim_create_buf(false, true)
 local output_win = nil
 local should_rerun = false
+local define = require("slugbyte.define")
 
 local M = {}
 
@@ -24,7 +25,7 @@ M.run = function()
     vim.api.nvim_buf_set_lines(output_buf, 0, -1, false, {})
     vim.api.nvim_buf_set_lines(output_buf, -1, -1, false, { "[exec] $ zig build run" })
 
-    job_id = vim.fn.jobstart({ "zig", "build", "run" }, {
+    job_id = vim.fn.jobstart({ "zig", "build", define.util_zig_run_build_task }, {
         on_exit = function()
             job_id = nil
             if should_rerun then
@@ -54,7 +55,7 @@ M.kill = function()
         vim.fn.jobstop(job_id)
     end
 
-    if output_win then
+    if output_win ~= nil and (vim.api.nvim_win_is_valid(output_win)) then
         vim.api.nvim_win_close(output_win, true)
         output_win = nil
     end

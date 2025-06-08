@@ -107,7 +107,9 @@ return {
         })
 
         local zls_config = {}
-        zls_config.capabilities = client_capabilities
+        zls_config.capabilities = vim.tbl_deep_extend("force", client_capabilities, {
+            offsetEncoding = { "utf-16" },
+        })
         zls_config.on_attach = handle_on_attach
         lsp_config.zls.setup(zls_config)
 

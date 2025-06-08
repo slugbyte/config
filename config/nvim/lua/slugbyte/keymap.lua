@@ -5,7 +5,9 @@ local ts_actions = require("telescope.actions")
 local ts_actions_state = require("telescope.actions.state")
 local ts_actions_set = require("telescope.actions.set")
 local telescope_themes = require("telescope.themes")
-local zig = require("slugbyte.zig")
+local zig = require("slugbyte.util.zig-build")
+local dap = require("dap")
+local define = require("slugbyte.define")
 
 util.keymap("<C-g>", function()
     vim.cmd("Inspect")
@@ -78,6 +80,28 @@ util.keymap("<END>", "2gj", "Scroll Down Fast")
 util.keymap("<PageDown>", "4gj", "Move Down Fast")
 util.keymap("<leader>d", unruly_worker.boost.telescope.diagnostics, "[D]iagnostic Search")
 
-util.keymap("<C-b>", zig.reset, "reset zig build")
-util.keymap("<leader>zr", zig.run, "zig run build")
-util.keymap("<leader>zk", zig.kill, "zig kill")
+if define.should_keymap_dap then
+    vim.keymap.set("n", "<C-b>", function()
+        if dap.session() then
+            dap.terminate({
+                on_done = function()
+                    dap.run_last()
+                end,
+            })
+        else
+            vim.cmd("DapNew")
+        end
+    end)
+
+    vim.keymap.set("n", "<space>bt", dap.toggle_breakpoint)
+    vim.keymap.set("n", "<space>by", dap.continue)
+    vim.keymap.set("n", "<space>bn", dap.step_over)
+    vim.keymap.set("n", "<space>bi", dap.step_into)
+    vim.keymap.set("n", "<space>bo", dap.step_out)
+    vim.keymap.set("n", "<space>bb", dap.step_back)
+    vim.keymap.set("n", "<space>bx", dap.terminate)
+else
+    util.keymap("<C-b>", zig.reset, "reset zig build")
+    util.keymap("<leader>zr", zig.run, "zig run build")
+    util.keymap("<leader>zk", zig.kill, "zig kill")
+end

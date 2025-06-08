@@ -194,8 +194,8 @@ assign [title="^DEMO$"] 4
 # for_window [title="^DEMO$"] output DP-3
 
 ## houston monitors
-output DP-1 pos 0 0
-output DP-3 pos 2560 0
+output DP-1 transform 90 pos 0 0
+output DP-3 pos 2880 0
 input "10429:2394:UGTABLET_Artist_Pro_14_(Gen2)" map_to_output DP-3
 
 workspace 1 output DP-1 
