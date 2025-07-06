@@ -14,4 +14,7 @@ ll = ["log", "-r", "..@"]
 
 [ui]
 pager = ":builtin"
+conflict-marker-style = "snapshot"
+default-command = "log"
+
 

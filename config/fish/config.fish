@@ -236,7 +236,7 @@ if status is-interactive
             jj git fetch
             return
         end
-        git fetch
+        git fetch -pv
     end
 
     function git_pull_rebase
@@ -404,7 +404,9 @@ if status is-interactive
             printf "$OUTPUT_PATH"
             return $status
         end
-        scrot -s $OUTPUT_PATH
+        grim -g (slurp -d) $OUTPUT_PATH
+
+        # scrot -s $OUTPUT_PATH
         log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
     end
 
@@ -414,7 +416,8 @@ if status is-interactive
             printf "$OUTPUT_PATH"
             return $status
         end
-        scrot $OUTPUT_PATH
+        grim -o DP-3 $OUTPUT_PATH
+        # scrot $OUTPUT_PATH
         log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
     end
 
@@ -476,51 +479,49 @@ if status is-interactive
     # alias
     alias ..="cd .."
     alias ,,="cd -"
-    alias a="git add"
-    alias A="git add ."
-    alias b="git_branch"
+    # alias a="git add"
+    # alias A="git add ."
+    # alias b="git_branch"
     alias bye="sudo shutdown -h now"
     alias zzz="sudo systemctl suspend"
-    alias B="git branch -a"
+    # alias B="git branch -a"
     # alias c="git_commit"
-    alias c="git_commit"
-    alias C="git_commit_amend"
+    # alias c="git_commit"
+    # alias C="git_commit_amend"
     # alias C="git_commit --amend --no-edit"
     alias copy=$COPYER
-    alias ch="git checkout"
-    alias d="git_diff"
+    # alias ch="git checkout"
+    # alias d="git_diff"
     alias del=(which rm)
     alias e="nvim"
-    alias f="git fetch -pv"
-    alias g="echo naw"
-    alias h="echo nam"
-    alias i="echo naw"
+    # alias f="git_fetch"
+    # alias g="echo naw"
+    # alias h="echo nam"
+    # alias i="echo naw"
     alias j="e -c ':lua require(\"unruly-worker\").boost.telescope.find_files()'"
     alias J="e -c ':lua require(\"unruly-worker\").boost.telescope.live_grep()'"
-    alias k="echo naw"
-    alias l="git_log"
+    # alias k="echo naw"
+    # alias l="git_log"
     alias ls="eza -F --group-directories-first"
     alias ll="ls -la --git --no-user --no-time"
-    alias llt="ls -la --total-size --git --no-user --time=created --time-style=long-iso"
     alias la="ls -a"
     alias l1="ls -1a"
     alias tree='eza -F --tree --group-directories-first -L 2'
     alias treee='eza -F --tree --group-directories-first'
-    alias m="make" 
     alias md="mkdir -p"
     alias n="z"
     alias N="zi"
-    alias o='git_open'
-    alias O="xdg-open"
+    # alias o='git_open'
+    # alias O="xdg-open"
     alias p="git_push"
-    alias pu="git_push_upstream"
-    alias q="echo naw"
-    alias r="git rebase -Si"
+    # alias pu="git_push_upstream"
+    # alias q="echo naw"
+    # alias r="git rebase -Si"
     alias R="source ~/.config/fish/config.fish"
     alias rm="trash_help"
     # alias s="git status --short"
     alias s="git_stat"
-    alias t="echo naw"
+    # alias t="echo naw"
     alias tlist='tmux list-sessions'
     alias tname='tmux rename-session -t'
     alias tjoin='tmux attach-session -t'
@@ -528,12 +529,12 @@ if status is-interactive
     alias tkill='tmux kill-session -t'
     alias tkillall='killall tmux'
     alias tsync="tmux source ~/.config/tmux/tmux.conf"
-    alias u="echo naw"
-    alias v="echo naw"
-    alias w="e -c ':WhipFindFile'"
-    alias W="e -c ':WhipOpen'"
-    alias x="git_reset"
-    alias y="echo naw"
+    # alias u="echo naw"
+    # alias v="echo naw"
+    # alias w="e -c ':WhipFindFile'"
+    # alias W="e -c ':WhipOpen'"
+    # alias x="git_reset"
+    # alias y="echo naw"
 
 
     # alias by uname
@@ -566,7 +567,6 @@ if status is-interactive
             echo "$COLOR_BLUE ($jj_desc)"
         end
     end
-
 
     function fish_prompt
         set jj_desc (jj_prompt)
