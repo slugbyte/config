@@ -12,7 +12,7 @@ return {
         config = function()
             local dap = require("dap")
             local ui = require("dapui")
-            local define = require("slugbyte/define")
+            local slugbyte_define = require("slugbyte.define")
 
             dap.configurations.zig = {
                 {
@@ -29,7 +29,7 @@ return {
                             return nil
                         end
                         -- Return path to the debuggable program
-                        return define.zig_dap_exe
+                        return slugbyte_define.SLUGBYTE_ZIG_DAP_EXE_PATH
                     end,
                 },
             }

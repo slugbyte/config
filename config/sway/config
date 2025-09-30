@@ -31,7 +31,7 @@ bindsym XF86AudioRaiseVolume exec pamixer -i 5
 floating_modifier $super
 
 # start a terminal
-bindsym $super+Return exec alacritty
+bindsym $super+Return exec ghostty 
 # firefox
 bindsym $meta+Return exec firefox
 # [t]ake screenshot

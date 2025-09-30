@@ -23,21 +23,12 @@ return {
     },
     config = function()
         local telescope = require("telescope")
-        -- local telescope_actions = require("telescope.actions")
         local unruly_telescope = require("unruly-worker.external.telescope")
 
         telescope.setup({
             defaults = {
                 disable_devicons = true, -- doen't work
-                mappings = unruly_telescope.create_mappings({
-                    -- skip_list = { "<Up>" },
-                    -- insert_mappings = {
-                    -- 	["<Up>"] = telescope_actions.toggle_selection,
-                    -- },
-                    -- normal_mappings = {
-                    -- 	["<Up>"] = telescope_actions.toggle_selection,
-                    -- },
-                }),
+                mappings = unruly_telescope.create_mappings({}),
             },
             extensions = {
                 ["ui-select"] = {

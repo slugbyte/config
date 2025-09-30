@@ -22,29 +22,32 @@ return {
         "folke/neodev.nvim",
         "b0o/schemastore.nvim",
         "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
     config = function()
         local mason = require("mason")
-        local mason_installer = require("mason-tool-installer")
-        local mason_lsp_config = require("mason-lspconfig")
+        -- local mason_lsp_config = require("mason-lspconfig")
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
         local lsp_config = require("lspconfig")
+        local define = require("slugbyte.define")
+
+        local client_capabilities = vim.lsp.protocol.make_client_capabilities()
+        local cmp_nvim_capabilities = cmp_nvim_lsp.default_capabilities()
+        client_capabilities = vim.tbl_deep_extend("force", client_capabilities, cmp_nvim_capabilities)
 
         require("neodev").setup()
         require("fidget").setup({})
+        mason.setup()
 
-        local mason_servers = {
+        local handle_on_attach = function(client, bufnr)
+            vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", {
+                buf = bufnr,
+            })
+        end
+
+        local lsp_servers = {
             bashls = {},
             clangd = {},
-            clojure_lsp = {},
             html = {},
-            stylua = {},
-            tailwindcss = {},
-            -- tsserver = {},
-            yamlls = {},
-            rescriptls = {},
             jsonls = {
                 settings = {
                     json = {
@@ -67,51 +70,50 @@ return {
                         completion = {
                             callSnippet = "Replace",
                         },
+                        runtime = {
+                            version = "LuaJIT",
+                            path = define.runtime_path,
+                        },
+                        diagnostics = {
+                            disable = { "missing-fields" },
+                            globals = { "vim" }, -- Avoid 'undefined global vim'
+                        },
                         workspace = {
+                            library = vim.api.nvim_get_runtime_file("", true),
                             checkThirdParty = false,
                         },
-                        diagnostics = { disable = { "missing-fields" } },
+                        telemetry = { enable = false },
+                    },
+                },
+            },
+            zls = {
+                capabilities = {
+                    offsetEncoding = { "utf-8" },
+                },
+                settings = {
+                    zls = {
+                        enable_snippets = true,
+                        enable_autofix = false,
+                        inlay_hints_exclude_single_argument = true,
+                        inlay_hints_hide_redundant_param_names = false,
+                        inlay_hints_hide_redundant_param_names_last_token = false,
+                        inlay_hints_show_builtin = false,
+                        inlay_hints_show_parameter_name = false,
+                        inlay_hints_show_struct_literal_field_type = false,
+                        inlay_hints_show_variable_type_hints = false,
+                        warn_style = false,
                     },
                 },
             },
         }
 
-        local handle_on_attach = function(client, bufnr)
-            -- if client.server_capabilities.documentSymbolProvider then
-            --     require("nvim-navic").attach(client, bufnr)
-            -- end
-            vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", {
-                buf = bufnr,
-            })
+        for server_name, server_config in pairs(lsp_servers) do
+            local server_capabilities = server_config.capabilities or {}
+            lsp_config[server_name].setup(vim.tbl_deep_extend("force", server_config, {
+                capabilities = vim.tbl_deep_extend("force", client_capabilities, server_capabilities),
+                on_attach = handle_on_attach,
+            }))
         end
-
-        local client_capabilities = vim.lsp.protocol.make_client_capabilities()
-        local cmp_nvim_capabilities = cmp_nvim_lsp.default_capabilities()
-        client_capabilities = vim.tbl_deep_extend("force", client_capabilities, cmp_nvim_capabilities)
-
-        mason.setup()
-        mason_installer.setup({ ensure_installed = vim.tbl_keys(mason_servers or {}) })
-        mason_lsp_config.setup({
-            handlers = {
-                function(server_name)
-                    local server = mason_servers[server_name] or {}
-                    server.capabilities = vim.tbl_deep_extend("force", {}, client_capabilities, server.capabilities or {})
-
-                    -- DISABLE highlighting
-                    -- server.capabilities.semanticTokensProvider = nil
-
-                    server.on_attach = handle_on_attach
-                    lsp_config[server_name].setup(server)
-                end,
-            },
-        })
-
-        local zls_config = {}
-        zls_config.capabilities = vim.tbl_deep_extend("force", client_capabilities, {
-            offsetEncoding = { "utf-16" },
-        })
-        zls_config.on_attach = handle_on_attach
-        lsp_config.zls.setup(zls_config)
 
         vim.api.nvim_create_autocmd("LspAttach", {
             callback = function(args)

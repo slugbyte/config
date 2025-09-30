@@ -2,7 +2,7 @@ if status is-interactive
     set -U fish_greeting ""
     fish_add_path "$HOME/.cargo/bin"
     fish_add_path "$HOME/go/bin"
-    fish_add_path "/usr/local/go/bin"
+    fish_add_path /usr/local/go/bin
     fish_add_path "$HOME/workspace/conf/bin"
     fish_add_path "$HOME/workspace/exec/bin"
 
@@ -125,9 +125,9 @@ if status is-interactive
     set -gx PAGER (which less)
     set -gx TOPER (which htop)
     set -gx MANPAGER (which less)
-    set -gx EDITOR (which nvim)
+    set -gx EDITOR (which hx)
     set -gx LC_ALL 'en_US.UTF-8'
-    set -gx TERM 'alacritty'
+    # set -gx TERM 'alacritty'
     set -gx EZA_COLORS 'ex=38;2;120;153;120:fi=38;2;204;204;204:di=38;2;85;85;85:b0=38;2;215;0;0:or=38;2;215;0;0:ln=38;2;112;128;144:lp=38;2;112;128;144:lc=38;2;112;128;144:lm=38;2;112;128;144:bd=38;2;119;136;170:cd=38;2;119;136;170:pi=38;2;119;136;170:so=38;2;119;136;170:ur=38;2;122;122;122:uw=38;2;122;122;122:ux=38;2;122;122;122:ue=38;2;122;122;122:gr=38;2;122;122;122:gw=38;2;122;122;122:gx=38;2;122;122;122:tr=38;2;122;122;122:tw=38;2;122;122;122:tx=38;2;122;122;122:su=38;2;122;122;122:sf=38;2;122;122;122:xa=38;2;122;122;122:hd=38;2;68;68;68:bl=38;2;122;122;122:cc=38;2;122;122;122:da=38;2;122;122;122:in=38;2;122;122;122:xx=38;2;122;122;122:ga=38;2;120;153;120:gd=38;2;255;170;136:gm=38;2;119;136;170:gv=38;2;119;136;170:gt=38;2;119;136;170:df=38;2;122;122;122:ds=38;2;122;122;122:sb=38;2;85;85;85:sn=38;2;170;170;170:uu=38;2;85;85;85:un=38;2;85;85;85:gu=38;2;85;85;85:gn=38;2;85;85;85:sc=38;2;204;204;204:bu=38;2;204;204;204:cm=38;2;122;122;122:tm=38;2;122;122;122:co=38;2;122;122;122:do=38;2;122;122;122:cr=38;2;255;170;136:im=38;2;122;122;122:lo=38;2;122;122;122:mu=38;2;122;122;122:vi=38;2;122;122;122:mp=38;2;122;122;122'
     # set -gx XDG_CONFIG_HOME $HOME/.config
     # set -gx XDG_CACHE_HOME $HOME/.cache
@@ -152,26 +152,25 @@ if status is-interactive
     set -gx WAYLAND_DISPLAY $WAYLAND_DISPLAY
     set -gx SWAYSOCK $SWAYSOCK
 
-
     # SECRET ENV
     if test -d $w/hide/env
-        for env_file in $w/hide/env/*.fish 
+        for env_file in $w/hide/env/*.fish
             source $env_file
         end
     end
 
     # env by uname
     switch (uname)
-    case Linux
-        if set -q WAYLAND_DISPLAY
-            set -gx COPYER wl-copy
-        else
-        set -gx COPYER "xclip -in -selection clipboard"
-        end
-        set -gx trash "$HOME/.local/share/Trash/files"
-    case Darwin
-        set -gx COPYER (which pbcopy)
-        set -gx trash "$HOME/.Trash"
+        case Linux
+            if set -q WAYLAND_DISPLAY
+                set -gx COPYER wl-copy
+            else
+                set -gx COPYER "xclip -in -selection clipboard"
+            end
+            set -gx trash "$HOME/.local/share/Trash/files"
+        case Darwin
+            set -gx COPYER (which pbcopy)
+            set -gx trash "$HOME/.Trash"
     end
 
     # git
@@ -180,10 +179,10 @@ if status is-interactive
             jj desc $argv
             return
         end
-       git commit -S $argv && git verify-commit HEAD
+        git commit -S $argv && git verify-commit HEAD
     end
 
-    function git_open 
+    function git_open
         if test -d .jj
             git -C $(jj git root) open
             return
@@ -199,7 +198,7 @@ if status is-interactive
         git_commit --amend $argv
     end
 
-    function git_stat 
+    function git_stat
         if test -d .jj
             jj status --no-pager
             return
@@ -210,15 +209,15 @@ if status is-interactive
     function git_diff
         if test -d .jj
             jj diff $argv
-            return 
+            return
         end
         git diff $argv
     end
 
-    function git_branch 
+    function git_branch
         if test -d .jj
             jj bookmark $argv
-            return 
+            return
         end
         git branch $argv
     end
@@ -286,13 +285,13 @@ if status is-interactive
     end
 
     function git_push
-        if  test -d ./.jj
+        if test -d ./.jj
             jj bookmark set develop -r @- --allow-backwards
             jj git push -r develop --allow-new
             return
         end
         set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test $branch = "HEAD"
+        if test $branch = HEAD
             echo "ERROR: cannot push from detatched state."
             return -1
         end
@@ -301,24 +300,23 @@ if status is-interactive
 
     function git_push_upstream
         set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test $branch = "HEAD"
+        if test $branch = HEAD
             echo "ERROR: cannot push from detatched state."
             return -1
         end
         git push upstream $branch $argv --tags
     end
 
-
     function git_log
-        if  test -d ./.jj
+        if test -d ./.jj
             jj log
             return
         end
-      git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit 
+        git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit
     end
 
     # trash
-    function trash 
+    function trash
         if not test -d $trash
             log_red "ERROR: no trash dir found"
         end
@@ -357,16 +355,16 @@ if status is-interactive
     end
 
     function trash_clean
-      find $trash -maxdepth 1 -mtime +20 | xargs -I {} (which rm) -rfv {}
+        find $trash -maxdepth 1 -mtime +20 | xargs -I {} (which rm) -rfv {}
     end
 
     function trash_help
-      echo $COLOR_GRAY6"DELETEING STUFF:"$COLOR_RESET
-      echo "trash            - move a file to the trash"
-      echo "del              - actually delete file"
-      echo
-      echo $COLOR_GRAY6"MANAGE TRASH_DIR:"$COLOR_RESET
-      echo "trash_clean      - delete files older than 20 days"
+        echo $COLOR_GRAY6"DELETEING STUFF:"$COLOR_RESET
+        echo "trash            - move a file to the trash"
+        echo "del              - actually delete file"
+        echo
+        echo $COLOR_GRAY6"MANAGE TRASH_DIR:"$COLOR_RESET
+        echo "trash_clean      - delete files older than 20 days"
     end
 
     # screenshot
@@ -398,7 +396,7 @@ if status is-interactive
         sudo apt autoremove
     end
 
-    function _linux_sc 
+    function _linux_sc
         set -l OUTPUT_PATH (_sc_output_path $argv)
         if not test $status -eq 0
             printf "$OUTPUT_PATH"
@@ -410,7 +408,7 @@ if status is-interactive
         log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
     end
 
-    function _linux_sca 
+    function _linux_sca
         set -l OUTPUT_PATH (_sc_output_path $argv)
         if not test $status -eq 0
             printf "$OUTPUT_PATH"
@@ -467,7 +465,7 @@ if status is-interactive
         if test (count $argv) -gt 0
             set query $argv
         end
-        set -l check_module (go list ./... | fzf --delimiter "/" --with-nth -1 -q $query) 
+        set -l check_module (go list ./... | fzf --delimiter "/" --with-nth -1 -q $query)
         gotestsum --format testname $check_module
     end
 
@@ -493,13 +491,13 @@ if status is-interactive
     # alias ch="git checkout"
     # alias d="git_diff"
     alias del=(which rm)
-    alias e="nvim"
+    alias e="hx"
     # alias f="git_fetch"
     # alias g="echo naw"
     # alias h="echo nam"
     # alias i="echo naw"
-    alias j="e -c ':lua require(\"unruly-worker\").boost.telescope.find_files()'"
-    alias J="e -c ':lua require(\"unruly-worker\").boost.telescope.live_grep()'"
+    # alias j="e -c ':lua require(\"unruly-worker\").boost.telescope.find_files()'"
+    # alias J="e -c ':lua require(\"unruly-worker\").boost.telescope.live_grep()'"
     # alias k="echo naw"
     # alias l="git_log"
     alias ls="eza -F --group-directories-first"
@@ -511,7 +509,7 @@ if status is-interactive
     alias md="mkdir -p"
     alias n="z"
     alias N="zi"
-    # alias o='git_open'
+    alias o='git_open'
     # alias O="xdg-open"
     alias p="git_push"
     # alias pu="git_push_upstream"
@@ -521,6 +519,7 @@ if status is-interactive
     alias rm="trash_help"
     # alias s="git status --short"
     alias s="git_stat"
+    alias stream="QT_QPA_PLATFROM=xcb obs"
     # alias t="echo naw"
     alias tlist='tmux list-sessions'
     alias tname='tmux rename-session -t'
@@ -536,29 +535,28 @@ if status is-interactive
     # alias x="git_reset"
     # alias y="echo naw"
 
-
     # alias by uname
     switch (uname)
-    case Linux
-        alias xi="sudo apt-get install"
-        alias xr="sudo apt-get remove"
-        alias xq="sudo apt-cache show"
-        alias xu="_linux_xu"
-        alias xs="_linux_xs"
-        alias sc="_linux_sc"
-        alias sca="_linux_sca"
-    case Darwin
-        alias xi="brew install"                # I - install
-        alias xs="brew search"                 # S - search
-        alias xu="brew update && brew upgrade" # U - update
-        alias xr="brew uninstall"              # R - remove
-        alias xq="brew info"                   # R - query info 
-        alias sc="_mac_sc"
-        alias sca="_mac_sca"
+        case Linux
+            alias xi="sudo apt-get install"
+            alias xr="sudo apt-get remove"
+            alias xq="sudo apt-cache show"
+            alias xu="_linux_xu"
+            alias xs="_linux_xs"
+            alias sc="_linux_sc"
+            alias sca="_linux_sca"
+        case Darwin
+            alias xi="brew install" # I - install
+            alias xs="brew search" # S - search
+            alias xu="brew update && brew upgrade" # U - update
+            alias xr="brew uninstall" # R - remove
+            alias xq="brew info" # R - query info 
+            alias sc="_mac_sc"
+            alias sca="_mac_sca"
     end
 
     function jj_prompt
-        if test -d ./.jj 
+        if test -d ./.jj
             set jj_desc (jj log --no-graph --template 'description' -r @ | head -n 1)
             if test -z $jj_desc
                 echo "$COLOR_BLUE (no desc)"
@@ -573,14 +571,14 @@ if status is-interactive
         set git_branch_color $COLOR_ORANGE
         set git_branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
         if test $status -ne 0
-            set  git_branch ""
+            set git_branch ""
         end
 
         set git_status (git status --porcelain 2> /dev/null)
         if test -z "$git_status"
             set git_branch_color $COLOR_GRAY6
         end
-        if test "$git_branch" = "HEAD" 
+        if test "$git_branch" = HEAD
             set git_branch $COLOR_RED"(detatched) "
         end
         if test -n "$git_branch"
@@ -598,9 +596,8 @@ end
 
 # jj util completion fish | source
 
-if not pgrep -u $USER ssh-agent > /dev/null
+if not pgrep -u $USER ssh-agent >/dev/null
     eval (ssh-agent -c)
     set -Ux SSH_AUTH_SOCK $SSH_AUTH_SOCK
     set -Ux SSH_AGENT_PID $SSH_AGENT_PID
 end
-

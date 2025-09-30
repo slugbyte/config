@@ -44,7 +44,7 @@ require("lazy").setup({
     },
     change_detection = {
         enabled = true,
-        notify = false,
+        notify = true,
     },
     install = { colorscheme = { "lackluster-hack" } },
     dev = {

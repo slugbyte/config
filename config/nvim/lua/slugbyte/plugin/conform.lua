@@ -6,7 +6,6 @@
 -- go goimports https://pkg.go.dev/golang.org/x/tools/cmd/goimports
 -- go gofmt https://pkg.go.dev/cmd/gofmt#section-sourcefiles
 -- go golines https://github.com/segmentio/golines
--- templ https://templ.guide/quick-start/installation
 -- sh https://github.com/koalaman/shellcheck
 
 return {
@@ -26,9 +25,7 @@ return {
         formatters_by_ft = {
             lua = { "stylua" },
             go = { "goimports", "gofmt", "golines" },
-            templ = { "templ" },
-            -- zig = { " zigfmt" },
-            -- sh = { "shellcheck" },
+            sh = { "shellcheck" },
         },
     },
 }
