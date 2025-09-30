@@ -1,0 +1,116 @@
+theme  = "lackluster"
+
+[editor]
+line-number = "relative"
+cursorline =  true
+true-color = true
+popup-border = "none"
+color-modes =  true
+completion-timeout  =  5
+preview-completion-insert = false
+text-width = 110
+
+[editor.statusline]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "VISUAL"
+
+[editor.lsp]
+display-progress-messages = true
+
+[editor.cursor-shape]
+normal = "block"
+insert = "bar"
+select = "block"
+
+[editor.auto-pairs]
+'(' = ')'
+'{' = '}'
+'[' = ']'
+'"' = '"'
+'`' = '`'
+'<' = '>'
+'|' = '|' # todo only in zig files
+
+[keys.normal]
+y = "move_char_left"
+n = "move_visual_line_down"
+N = "join_selections_space"
+e = "move_visual_line_up"
+o = "move_char_right"
+O = "goto_line_end"
+Y = "goto_line_start"
+w = "move_next_word_start"
+W = "move_prev_word_start"
+b  = "move_next_long_word_start"
+B = "move_prev_long_word_start"
+h = "find_next_char"
+H = "find_prev_char"
+t = "find_till_char"
+T = "till_prev_char"
+R = "repeat_last_motion"
+r = "replace"
+f = "search_next"
+F = "search_prev"
+M = "@mm"
+tab = "flip_selections"
+esc = "keep_primary_selection"
+backspace = "remove_primary_selection"
+u = "undo"
+U = "redo"
+z = "replay_macro"
+Z = "record_macro"
+k = "yank"
+
+l = "open_below"
+L = "open_above"
+C-j = "file_picker" 
+q = ":wa"
+Q = ":qa"
+C-q = ":qa!"
+C-s = "vsplit"
+C-h =  "hsplit"
+C-y = "jump_view_left"
+C-n = "jump_view_down"
+C-e = "jump_view_up"
+C-o = "jump_view_right"
+C-f = "wonly"
+
+[keys.normal.C-w]
+y = "jump_view_left"
+n = "jump_view_down"
+e = "jump_view_up"
+o = "jump_view_right"
+f = "wonly"
+
+[keys.select]
+y = "extend_char_left"
+n = "extend_visual_line_down"
+e = "extend_visual_line_up"
+o = "extend_char_right"
+O = "goto_line_end"
+Y = "goto_line_start"
+w = "extend_next_word_start"
+W = "extend_prev_word_start"
+b = "extend_next_long_word_start"
+B = "extend_prev_long_word_start"
+h = "extend_next_char"
+H = "extend_prev_char"
+t = "extend_till_char"
+T = "extend_till_prev_char"
+R = "repeat_last_motion"
+f = "extend_search_next"
+F = "extend_search_prev"
+tab = "flip_selections"
+esc = "keep_primary_selection"
+backspace = "remove_primary_selection"
+
+u = "undo"
+U = "redo"
+z = "replay_macro"
+Z = "record_macro"
+k = "yank"
+
+[keys.insert]
+C-l = "goto_next_tabstop"
+C-k = "goto_prev_tabstop"
