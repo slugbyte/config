@@ -40,7 +40,6 @@
 "ui.virtual.inlay-hint.parameter" = "orange"
 "ui.virtual.inlay-hint.type" = "red"
 "ui.virtual.wrap"   =  {fg = "gray4"}
-"ui.virtual.jump-label" =  {fg = "blue"}
 "ui.highlight" = {bg = "gray3"}
 # "ui.highlight.frameline" = {}
 "ui.cursorline.primary" =  {bg = "#171717"}
@@ -59,7 +58,9 @@
 "error" = { fg = "red"}
 "info"  = "gray4"
 "hint" = "gray4"
-"special"  =  "blue"
+
+"ui.virtual.jump-label" =  {fg = "yellow"}
+"special"  =  "gray6b"
 
 # editing area
 "diagnostic" = {fg = "gray4"}
@@ -68,26 +69,28 @@
 "diagnostic.unnecessary" = { fg = "gray4", modifiers = ["dim"]} 
 "diagnostic.deprecated" = { fg = "gray4", modifiers = ["crossed_out"]} 
 
-"tag" = {fg =  "gray5"}
-"string" = "lack"
-"string.special" = "green"
+"tag" = {fg =  "gray8"}
+# "string" = {  fg = "#989fba"} 
+# "string" = {  fg = "#b5bacc"} 
+"string" = {  fg = "#818f9e"} 
+# "string.special" = "red"
+"constant.character.escape" = { fg = "gray6"}
 "comment" =  "comment"  
 "variable" = {fg = "gray8"}
-"variable.other.memeber" = {fg = "gray7"}
-"variable.parameter" =  "param" 
+"variable.other.memeber" = {fg = "gray8"}
+"variable.parameter" =  "gray8" 
 "constant" = "gray7"
-"constant.builtin" = "gray6" 
-"function" = {fg = "gray6b"}
-"function.method" = { fg = "gray6"}
-"function.builtin" = {fg = "gray5" , modifiers  = [ "bold"]}
-"keyword" =  "special_keyword"
-"keyword.control.return" =  "green"
-"keyword.control.exception" =  "blue"
-"keyword.operator" = "punctuation"
+"constant.builtin" = "gray7" 
+"function" = {fg = "gray7"}
+"function.builtin" = {fg = "gray6"}
+"keyword" =  "gray6b"
+"keyword.control.return" =  "gray6b"
+# "keyword.control.exception" =  "#ccbbaa"
+"keyword.operator" = "gray6"
 "operator" = "gray6"
 "punctuation"  = "gray6"
 "type" = {fg = "gray7"}
-"type.enum" = "special_keyword"
+"type.enum" = "gray7"
 
 "diff" = {fg = "gray3"}
 "diff.plus" = {fg = "green"}
@@ -113,7 +116,8 @@
 [palette]
 lack = "#708090"
 luster = "#deeeed"
-orange = "#ffaa88"
+# orange = "#ffaa88"
+orange = "#ccaa88"
 yellow = "#abab77"
 green = "#789978"
 blue = "#7788aa"

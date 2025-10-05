@@ -1,4 +1,4 @@
-theme  = "lackluster"
+theme  = "blank"
 
 [editor]
 line-number = "relative"
@@ -15,10 +15,13 @@ end-of-line-diagnostics = "hint"
 # [editor.inline-diagnostics]
 # cursor-line = "warning" #
 
+[editor.auto-save]
+focus-lost = true
+
 [editor.statusline]
-mode.normal = "NORMAL"
-mode.insert = "INSERT"
-mode.select = "VISUAL"
+mode.normal = "normal"
+mode.insert = "insert"
+mode.select = "visual"
 
 [editor.lsp]
 display-progress-messages = true
