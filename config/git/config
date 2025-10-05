@@ -3,7 +3,7 @@
     email = slugbyte@slugbyte.com
     signingkey = 0A56A83BE20DC703
 [core]
-    editor = nvim
+    editor = hx
 [commit]
     verbose = true
     gpgSign = true

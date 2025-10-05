@@ -45,6 +45,7 @@ return {
         end
 
         local lsp_servers = {
+            rust_analyzer = {},
             bashls = {},
             clangd = {},
             html = {},

@@ -93,6 +93,8 @@
 "type" = {fg = "gray7"}
 # "type.builtin" = {fg = "gray"}
 
+"diff" = {fg = "gray3"}
+
 [palette]
 lack = "#708090"
 luster = "#deeeed"
