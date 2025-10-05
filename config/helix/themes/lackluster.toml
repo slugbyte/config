@@ -55,19 +55,18 @@
 
 # gutter
 "warning" = "orange"
-"error" = "yellow"
+# "error" = { fg = "orange", modifiers = ["dim"] }
+"error" = { fg = "red"}
 "info"  = "gray4"
 "hint" = "gray4"
 "special"  =  "blue"
 
 # editing area
-"diagnostic" = {underline = {color = "gray4", style = "curl"}  }
-"diagnostic.hint" = {underline = {color = "gray4"}}
-"diagnostic.info" = {underline = {color = "gray4"}}
-"diagnostic.warning" = {underline = {color = "gray4", style = "curl"}}
-"diagnostic.error" = {underline = {color = "gray4", style = "curl"}}
-"diagnostic.unnecessary" = {modifiers = ["dim"]}
-"diagnostic.deprecated" = {modifiers = ["crossed_out"]}
+"diagnostic" = {fg = "gray4"}
+"diagnostic.warning" = {fg = "gray4", underline = {color = "gray4", style = "curl"}}
+"diagnostic.error" = {fg = "gray4", underline = {color = "gray4", style = "curl"}}
+"diagnostic.unnecessary" = { fg = "gray4", modifiers = ["dim"]} 
+"diagnostic.deprecated" = { fg = "gray4", modifiers = ["crossed_out"]} 
 "tabstop" = "gray4" # snippit  placeholder
 
 "tag" = {fg =  "gray5"}
@@ -95,9 +94,13 @@
 
 "diff" = {fg = "gray3"}
 "diff.plus" = {fg = "green"}
-"diff.minus" = {fg = "orange"}
+"diff.minus" = {fg = "red"}  
 "diff.delta" = {fg = "blue"}
-"diff.delta.conflict" = {fg = "red"}
+"diff.delta.conflict" = {fg = "yellow"}
+
+"diff.plus.gutter" = {fg = "gray4"}
+"diff.minus.gutter" = {fg = "red", modifiers = ["dim"]}
+"diff.delta.gutter" = {fg = "gray4", modifiers = ["dim"]}
 
 "markup.heading" = { fg = "gray5"}
 "markup.heading.1" = { fg = "gray6"}

@@ -10,6 +10,10 @@ completion-timeout  =  5
 preview-completion-insert = false
 text-width = 100
 rulers = [100]
+gutters = [  "diff", "line-numbers", "spacer", "diagnostics",  ]
+end-of-line-diagnostics = "hint"
+# [editor.inline-diagnostics]
+# cursor-line = "warning" #
 
 [editor.statusline]
 mode.normal = "NORMAL"
