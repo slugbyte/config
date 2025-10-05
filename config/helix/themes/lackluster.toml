@@ -33,7 +33,7 @@
 "ui.text.focus" = {bg = "gray3"} # selected  picker  text
 "ui.text.info" = {fg = "gray8"} 
 "ui.text.directory" = {fg = "gray6"}
-# "ui.virtual.ruler" = {fg = "red"}
+"ui.virtual.ruler" = {bg = "#171717"}
 # "ui.virtual.whitespace" = {}
 # "ui.virtual.indent-guide" = {}
 "ui.virtual.inlay-hint" = "gray4"
@@ -94,6 +94,23 @@
 # "type.builtin" = {fg = "gray"}
 
 "diff" = {fg = "gray3"}
+"diff.plus" = {fg = "green"}
+"diff.minus" = {fg = "orange"}
+"diff.delta" = {fg = "blue"}
+"diff.delta.conflict" = {fg = "red"}
+
+"markup.heading" = { fg = "gray5"}
+"markup.heading.1" = { fg = "gray6"}
+"markup.list" = { fg = "gray4" }
+"markup.quote" = { fg = "gray5"  }
+"markup.raw" = {fg = "lack"}
+"markup.raw.block" = {fg = "lack",  modifiers = ["bold"]}
+"markup.link" = "blue"
+"markup.link.url" = { fg = "green"}
+
+"markup.bold" = { modifiers = ["bold"]}
+"markup.italic" = { modifiers = ["italic"]}
+"markup.strikethrough" = { modifiers = ["crossed_out"]}
 
 [palette]
 lack = "#708090"
@@ -122,3 +139,5 @@ exception = "#505050"
 special_keyword = "#666666"
 param = "#8e8e8e"
 whitespace = "#202020"
+
+

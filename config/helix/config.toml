@@ -8,7 +8,8 @@ popup-border = "none"
 color-modes =  true
 completion-timeout  =  5
 preview-completion-insert = false
-text-width = 110
+text-width = 100
+rulers = [100]
 
 [editor.statusline]
 mode.normal = "NORMAL"
