@@ -3,18 +3,20 @@
     email = slugbyte@slugbyte.com
 	signingKey = /home/slugbyte/.ssh/slugbyte.pub
     # signingkey = 0A56A83BE20DC703
-[core]
-    editor = hx
+[gpg]
+    program = gpg
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = /home/slugbyte/workspace/conf/config/git/allowed_signers
 [commit]
     verbose = true
     gpgSign = true
 [tag]
     gpgSign = true
+[core]
+    editor = hx
 [pull]
     rebase = true
-[gpg]
-    program = gpg
-	format = ssh
 [init]
   defaultBranch = main
 [color]
@@ -45,5 +47,3 @@
     header = 255
     branch = 4
     nobranch = 1
-[gpg "ssh"]
-	allowedSignersFile = /home/slugbyte/workspace/conf/config/git/allowed_signers
