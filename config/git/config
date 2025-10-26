@@ -1,6 +1,6 @@
 [user]
     name = Duncan Marsh
-    email = duncan@slugbyte.com
+    email = slugbyte@slugbyte.com
 	signingKey = /home/slugbyte/.ssh/slugbyte.pub
     # signingkey = 0A56A83BE20DC703
 [core]
