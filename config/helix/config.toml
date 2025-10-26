@@ -1,4 +1,4 @@
-theme  = "blank"
+# theme  = "lackluster"
 
 [editor]
 line-number = "relative"
@@ -10,10 +10,8 @@ completion-timeout  =  5
 preview-completion-insert = false
 text-width = 100
 rulers = [100]
-gutters = [  "diff", "line-numbers", "spacer", "diagnostics",  ]
-end-of-line-diagnostics = "hint"
-# [editor.inline-diagnostics]
-# cursor-line = "warning" #
+gutters = [  "diff", "line-numbers", "spacer", "diagnostics",  "spacer"]
+end-of-line-diagnostics = "warning"
 
 [editor.auto-save]
 focus-lost = true
@@ -22,29 +20,14 @@ focus-lost = true
 mode.normal = "normal"
 mode.insert = "insert"
 mode.select = "visual"
+right = ["diagnostics", "selections", "register", "position", "position-percentage", "file-encoding"]
 
 [editor.lsp]
 display-progress-messages = true
 
-[editor.cursor-shape]
-insert = "bar"
-
-[editor.auto-pairs]
-'(' = ')'
-'{' = '}'
-'[' = ']'
-'"' = '"'
-'`' = '`'
-"'" = "'"
-'|' = '|' # todo only in zig files
-
 [keys.normal]
-C-r = "rename_symbol"
-C-d = "goto_definition"
-C-j = "file_picker" 
 q = ":wa"
 Q = ":qa"
-C-q = ":qa!"
 
 [keys.insert]
 C-l = "goto_next_tabstop"

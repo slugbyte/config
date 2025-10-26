@@ -1,7 +1,8 @@
 [user]
     name = Duncan Marsh
     email = slugbyte@slugbyte.com
-    signingkey = 0A56A83BE20DC703
+	signKey = /home/slugbyte/.ssh/slugbyte.pub
+    # signingkey = 0A56A83BE20DC703
 [core]
     editor = hx
 [commit]
@@ -13,6 +14,7 @@
     rebase = true
 [gpg]
     program = gpg
+	format = ssh
 [init]
   defaultBranch = main
 [color]

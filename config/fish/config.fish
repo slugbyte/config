@@ -126,6 +126,7 @@ if status is-interactive
     set -gx TOPER (which htop)
     set -gx MANPAGER (which less)
     set -gx EDITOR (which hx)
+    set -gx RUST_BACKTRACE 1
     set -gx HELIX_RUNTIME "$HOME/workspace/code/helix/runtime"
     set -gx LC_ALL 'en_US.UTF-8'
     # set -gx TERM 'alacritty'
@@ -299,6 +300,20 @@ if status is-interactive
         git push origin $branch $argv --tags
     end
 
+    function git_push_main
+        if test -d ./.jj
+            jj bookmark set main -r @- --allow-backwards
+            jj git push -r main --allow-new
+            return
+        end
+        set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
+        if test $branch = HEAD
+            echo "ERROR: cannot push from detatched state."
+            return -1
+        end
+        git push origin $branch $argv --tags
+    end
+
     function git_push_upstream
         set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
         if test $branch = HEAD
@@ -317,43 +332,43 @@ if status is-interactive
     end
 
     # trash
-    function trash
-        if not test -d $trash
-            log_red "ERROR: no trash dir found"
-        end
-        if test (count $argv) -eq 0
-            log_orange "USAGE ERROR: NOTHING TO TRASH"
-            echo "trash <files..>"
-        end
-        for f in $argv
-            set SOURCE_BASENAME (basename $f)
-            set -l CURRENT_DATE (date +'%Y%m%d%H%M%S')
-            # $f not exist
-            if not test -e $f
-                log_orange "WARN: no such file [$f]"
-                continue
-            end
-            # $f is a directory
-            if test -d $f
-                set -l RANDOM_NUMBER (random 0 10000000000)
-                set -l OUTPUT_BASENAME $SOURCE_BASENAME"_$CURRENT_DATE"_"$RANDOM_NUMBER"
-                set -l OUTPUT_PATH "$trash/$OUTPUT_BASENAME"
-                set -l SOURCE_PATH (readlink -f $f)
-                mv "$f" "$OUTPUT_PATH"
-                touch "$OUTPUT_PATH"
-                echo "$SOURCE_BASENAME -> \$trash/$OUTPUT_BASENAME"
-                continue
-            end
-            # $f is not a directory
-            set -l CHECKSUM (shasum "$f" | cut -d ' ' -f 1 | sed -e 's/[[:space:]]*$//')
-            set -l OUTPUT_BASENAME $SOURCE_BASENAME"_"$CURRENT_DATE"_"$CHECKSUM
-            set -l OUTPUT_PATH "$trash/$OUTPUT_BASENAME"
-            set -l SOURCE_PATH (readlink -f $f)
-            mv "$f" "$OUTPUT_PATH"
-            touch "$OUTPUT_PATH"
-            echo "$SOURCE_BASENAME -> \$trash/$OUTPUT_BASENAME"
-        end
-    end
+    # function trash
+    #     if not test -d $trash
+    #         log_red "ERROR: no trash dir found"
+    #     end
+    #     if test (count $argv) -eq 0
+    #         log_orange "USAGE ERROR: NOTHING TO TRASH"
+    #         echo "trash <files..>"
+    #     end
+    #     for f in $argv
+    #         set SOURCE_BASENAME (basename $f)
+    #         set -l CURRENT_DATE (date +'%Y%m%d%H%M%S')
+    #         # $f not exist
+    #         if not test -e $f
+    #             log_orange "WARN: no such file [$f]"
+    #             continue
+    #         end
+    #         # $f is a directory
+    #         if test -d $f
+    #             set -l RANDOM_NUMBER (random 0 10000000000)
+    #             set -l OUTPUT_BASENAME $SOURCE_BASENAME"_$CURRENT_DATE"_"$RANDOM_NUMBER"
+    #             set -l OUTPUT_PATH "$trash/$OUTPUT_BASENAME"
+    #             set -l SOURCE_PATH (readlink -f $f)
+    #             move -b "$f" "$OUTPUT_PATH"
+    #             touch "$OUTPUT_PATH"
+    #             echo "$SOURCE_BASENAME -> \$trash/$OUTPUT_BASENAME"
+    #             continue
+    #         end
+    #         # $f is not a directory
+    #         set -l CHECKSUM (shasum "$f" | cut -d ' ' -f 1 | sed -e 's/[[:space:]]*$//')
+    #         set -l OUTPUT_BASENAME $SOURCE_BASENAME"_"$CURRENT_DATE"_"$CHECKSUM
+    #         set -l OUTPUT_PATH "$trash/$OUTPUT_BASENAME"
+    #         set -l SOURCE_PATH (readlink -f $f)
+    #         move -b "$f" "$OUTPUT_PATH"
+    #         touch "$OUTPUT_PATH"
+    #         echo "$SOURCE_BASENAME -> \$trash/$OUTPUT_BASENAME"
+    #     end
+    # end
 
     function trash_clean
         find $trash -maxdepth 1 -mtime +20 | xargs -I {} (which rm) -rfv {}
@@ -483,6 +498,7 @@ if status is-interactive
     # alias b="git_branch"
     alias bye="sudo shutdown -h now"
     alias zzz="sudo systemctl suspend"
+    alias logout="swaymsg exit"
     # alias B="git branch -a"
     # alias c="git_commit"
     # alias c="git_commit"
@@ -492,6 +508,7 @@ if status is-interactive
     # alias ch="git checkout"
     # alias d="git_diff"
     alias del=(which rm)
+    alias mv="move"
     alias e="hx"
     # alias f="git_fetch"
     # alias g="echo naw"
@@ -512,7 +529,8 @@ if status is-interactive
     alias N="zi"
     alias o='git_open'
     # alias O="xdg-open"
-    alias p="git_push"
+    alias p="git_push_main"
+    alias P="git_push"
     # alias pu="git_push_upstream"
     # alias q="echo naw"
     # alias r="git rebase -Si"

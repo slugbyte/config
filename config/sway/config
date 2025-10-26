@@ -1,7 +1,8 @@
 # User Guide:  https://i3wm.org/docs/userguide.html
 
-set $super Mod4
-set $meta Mod1
+set $meta Mod4
+set $alt Mod1
+set $hyper Mod1+Mod4+Shift+ctrl
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
@@ -27,78 +28,85 @@ bindsym XF86AudioMute exec pamixer -t
 bindsym XF86AudioLowerVolume exec pamixer -d 5
 bindsym XF86AudioRaiseVolume exec pamixer -i 5
 
-# Use Mouse+$super to drag floating windows to their wanted position
-floating_modifier $super
+# Use Mouse+$meta to drag floating windows to their wanted position
+floating_modifier $meta
 
 # start a terminal
-bindsym $super+Return exec ghostty 
+bindsym $meta+Return exec ghostty 
 # firefox
-bindsym $meta+Return exec firefox
+bindsym $hyper+Return exec firefox
 # [t]ake screenshot
-bindsym $super+t exec --no-startup-id maim --select "/home/$USER/Downloads/sc-$(date +'%Y-%m-%d-%H%M%S')-unknown.png"
+bindsym $meta+t exec --no-startup-id maim --select "/home/$USER/Downloads/sc-$(date +'%Y-%m-%d-%H%M%S')-unknown.png"
 
 # kill focused window
-bindsym $super+w kill
+bindsym $meta+w kill
+bindsym $meta+backspace kill
 
 # rofi
-bindsym $super+space  exec "rofi -combi-modi window,drun,ssh -theme lackluster -show combi -monitor -0"
+bindsym $meta+space  exec "rofi -combi-modi window,drun,ssh -theme lackluster -show combi -monitor -0"
+
 
 # change focus
-bindsym $super+y focus left
-bindsym $super+n focus down
-bindsym $super+e focus up
-bindsym $super+o focus right
+bindsym $meta+y focus left
+bindsym $meta+n focus down
+bindsym $meta+e focus up
+bindsym $meta+o focus right
 
 # alternatively, you can use the cursor keys:
-bindsym $super+Left focus left
-bindsym $super+Down focus down
-bindsym $super+Up focus up
-bindsym $super+Right focus right
+# bindsym $meta+Left focus left
+# bindsym $meta+Down focus down
+# bindsym $meta+Up focus up
+# bindsym $meta+Right focus right
 
 # move/swap focused window
-bindsym $super+Shift+y move left
-bindsym $super+Shift+n move down
-bindsym $super+Shift+e move up
-bindsym $super+Shift+o move right
+bindsym $hyper+y move left
+bindsym $hyper+n move down
+bindsym $hyper+e move up
+bindsym $hyper+o move right
 
 # alternatively, you can use the cursor keys:
-bindsym $super+Shift+Left focus left; move left
-bindsym $super+Shift+Down focus down; move down
-bindsym $super+Shift+Up move up
-bindsym $super+Shift+Right move right
+# bindsym $meta+Shift+Left focus left; move left
+# bindsym $meta+Shift+Down focus down; move down
+# bindsym $meta+Shift+Up move up
+# bindsym $meta+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $super+s split h
+bindsym $meta+s split h
 
 # split in vertical orientation
-bindsym $super+h split v
+bindsym $meta+h split v
 
 # toggle fullscreen
-bindsym $super+f fullscreen toggle
+bindsym $meta+f fullscreen toggle
 
 # toggle float
-bindsym $meta+f floating toggle
+bindsym $hyper+f floating toggle
 
-# toggle layout
-bindsym $super+l layout toggle stacking splith splitv
+# toggle layout (Mode)
+bindsym $meta+m layout toggle stacking splith splitv
 
 # focus the parent container
-# bindsym $super+a focus parent
+# bindsym $meta+a focus parent
 
 # focus the child container
-#bindsym $super+d focus child
+#bindsym $meta+d focus child
 
 # speed switch workspace
-bindsym $meta+n workspace 1
-bindsym $meta+e workspace 2
-bindsym $meta+o workspace 3
-bindsym $meta+i workspace 4
+# bindsym $hyper+n workspace 1
+# bindsym $hyper+e workspace 2
+# bindsym $hyper+o workspace 3
+# bindsym $hyper+i workspace 4
+# 
+bindsym $meta+l workspace 1
+bindsym $meta+comma workspace 2
+bindsym $meta+period workspace 3
+bindsym $meta+slash workspace 4
 
 # speed move window to workspace
-bindsym $meta+l move container to workspace 1; workspace 1
-bindsym $meta+comma move container to workspace 2; workspace 2
-bindsym $meta+period move container to workspace 3; workspace 3
-bindsym $meta+slash move container to workspace 4; workspace 4
+bindsym $hyper+l move container to workspace 1; workspace 1
+bindsym $hyper+comma move container to workspace 2; workspace 2
+bindsym $hyper+period move container to workspace 3; workspace 3
+bindsym $hyper+slash move container to workspace 4; workspace 4
 
 # switch workspace
 bindsym $meta+1 workspace 1
@@ -113,20 +121,21 @@ bindsym $meta+9 workspace 9
 bindsym $meta+0 workspace 10
 
 # move window to workspace
-bindsym $meta+Shift+1 move container to workspace 1; workspace 1
-bindsym $meta+Shift+2 move container to workspace 2; workspace 2
-bindsym $meta+Shift+3 move container to workspace 3; workspace 3
-bindsym $meta+Shift+4 move container to workspace 4; workspace 4
-bindsym $meta+Shift+5 move container to workspace 5; workspace 5
-bindsym $meta+Shift+6 move container to workspace 6; workspace 6
-bindsym $meta+Shift+7 move container to workspace 7; workspace 7
-bindsym $meta+Shift+8 move container to workspace 8; workspace 8
-bindsym $meta+Shift+9 move container to workspace 9; workspace 9
-bindsym $meta+Shift+0 move container to workspace 10; workspace 10
+bindsym $hyper+1 move container to workspace 1; workspace 1
+bindsym $hyper+2 move container to workspace 2; workspace 2
+bindsym $hyper+3 move container to workspace 3; workspace 3
+bindsym $hyper+4 move container to workspace 4; workspace 4
+bindsym $hyper+5 move container to workspace 5; workspace 5
+bindsym $hyper+6 move container to workspace 6; workspace 6
+bindsym $hyper+7 move container to workspace 7; workspace 7
+bindsym $hyper+8 move container to workspace 8; workspace 8
+bindsym $hyper+9 move container to workspace 9; workspace 9
+bindsym $hyper+0 move container to workspace 10; workspace 10
 
-bindsym $super+Shift+r reload 
-bindsym $super+Shift+l exec "swaymsg exit"
+bindsym $hyper+r reload 
+# bindsym $meta+Shift+l exec "swaymsg exit"
 
+bindsym $meta+r mode "resize"
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -145,15 +154,14 @@ mode "resize" {
         bindsym Up resize shrink height 50 px or 50 ppt
         bindsym Right resize grow width 50 px or 50 ppt
 
-        # back to normal: Enter or Escape or $super+r
+        # back to normal: Enter or Escape or $meta+r
         bindsym Return mode "default"
         bindsym Escape mode "default"
-        # bindsym $super+r mode "default"
+        # bindsym $meta+r mode "default"
 }
 
 font pango:HackerHacker 12
 
-bindsym $meta+r mode "resize"
 
 # THEME
 set $lack   #708090

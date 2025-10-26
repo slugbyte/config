@@ -2,7 +2,12 @@
 
 [user]
 name = "Duncan Marsh"
-email = "duncan@slugbyte.com"
+email = "slugbyte@slugbyte.com"
+
+[signing]
+behavior = "own"
+backend = "ssh"
+key = "~/.ssh/slugbyte.pub"
 
 [aliases]
 e = ["edit"]
@@ -17,4 +22,5 @@ pager = ":builtin"
 conflict-marker-style = "snapshot"
 default-command = "log"
 
-
+[git]
+sign-on-push = true
