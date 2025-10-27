@@ -154,6 +154,12 @@ if status is-interactive
     set -gx WAYLAND_DISPLAY $WAYLAND_DISPLAY
     set -gx SWAYSOCK $SWAYSOCK
 
+    set -gx PAINT_PROJECT_DIR $data/paint/project
+    set -gx PAINT_DEBUG_DIR $data/paint/debug
+    set -gx PAINT_DATA_DIR $data/paint/data
+    set -gx PAINT_STATE_DIR $data/paint/state
+    set -gx PAINT_CACHE_DIR $data/paint/cache
+
     # SECRET ENV
     if test -d $w/hide/env
         for env_file in $w/hide/env/*.fish
@@ -495,7 +501,8 @@ if status is-interactive
     alias ,,="cd -"
     # alias a="git add"
     # alias A="git add ."
-    # alias b="git_branch"
+    alias b="zig build -freference-trace=10 --summary failures"
+    alias t="zig test -freference-trace=10"
     alias bye="sudo shutdown -h now"
     alias zzz="sudo systemctl suspend"
     alias logout="swaymsg exit"

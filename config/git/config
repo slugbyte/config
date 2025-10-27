@@ -2,7 +2,6 @@
     name = Duncan Marsh
     email = slugbyte@slugbyte.com
 	signingKey = /home/slugbyte/.ssh/slugbyte.pub
-    # signingkey = 0A56A83BE20DC703
 [gpg]
     program = gpg
 	format = ssh
