@@ -31,6 +31,23 @@ if status is-interactive
     set -gx COLOR_GRAY8 \033'[38;2;204;204;204m'
     set -gx COLOR_GRAY9 \033'[38;2;221;221;221m'
 
+    set -gx COLOR_BG_LACK \033'[48;2;112;128;144m'
+    set -gx COLOR_BG_LUSTER \033'[48;2;222;238;237m'
+    set -gx COLOR_BG_ORANGE \033'[48;2;255;170;136m'
+    set -gx COLOR_BG_GREEN \033'[48;2;120;153;120m'
+    set -gx COLOR_BG_BLUE \033'[48;2;119;136;170m'
+    set -gx COLOR_BG_RED \033'[48;2;215;0;0m'
+    set -gx COLOR_BG_BLACK \033'[48;2;0;0;0m'
+    set -gx COLOR_BG_GRAY1 \033'[48;2;8;8;8m'
+    set -gx COLOR_BG_GRAY2 \033'[48;2;25;25;25m'
+    set -gx COLOR_BG_GRAY3 \033'[48;2;42;42;42m'
+    set -gx COLOR_BG_GRAY4 \033'[48;2;68;68;68m'
+    set -gx COLOR_BG_GRAY5 \033'[48;2;85;85;85m'
+    set -gx COLOR_BG_GRAY6 \033'[48;2;122;122;122m'
+    set -gx COLOR_BG_GRAY7 \033'[48;2;170;170;170m'
+    set -gx COLOR_BG_GRAY8 \033'[48;2;204;204;204m'
+    set -gx COLOR_BG_GRAY9 \033'[48;2;221;221;221m'
+
     set -gx fish_color_end 7a7a7a
     set -gx fish_color_error ffaa88
     set -gx fish_color_quote 708090
@@ -126,7 +143,7 @@ if status is-interactive
     set -gx TOPER (which htop)
     set -gx MANPAGER (which less)
     set -gx EDITOR (which hx)
-    set -gx RUST_BACKTRACE 1
+    set -gx RUST_BACKTRACE full
     set -gx HELIX_RUNTIME "$HOME/workspace/code/helix/runtime"
     set -gx LC_ALL 'en_US.UTF-8'
     # set -gx TERM 'alacritty'
@@ -140,7 +157,7 @@ if status is-interactive
     set -gx LESS_TERMCAP_md $COLOR_GRAY6 # bold
     set -gx LESS_TERMCAP_mb $COLOR_BLUE # blink
     set -gx LESS_TERMCAP_us $COLOR_GREEN # underline
-    set -gx LESS_TERMCAP_so $COLOR_ORANGE # standout
+    set -gx LESS_TERMCAP_so $COLOR_BG_BLUE # standout
     set -gx LESS_TERMCAP_me $COLOR_RESET
     set -gx LESS_TERMCAP_se $COLOR_RESET
     set -gx LESS_TERMCAP_ue $COLOR_RESET
@@ -171,13 +188,13 @@ if status is-interactive
     switch (uname)
         case Linux
             if set -q WAYLAND_DISPLAY
-                set -gx COPYER wl-copy
+                set -gx CLIPBOARD_CMD wl-copy
             else
-                set -gx COPYER "xclip -in -selection clipboard"
+                set -gx CLIPBOARD_CMD "xclip -in -selection clipboard"
             end
             set -gx trash "$HOME/.local/share/Trash/files"
         case Darwin
-            set -gx COPYER (which pbcopy)
+            set -gx CLIPBOARD_CMD (which pbcopy)
             set -gx trash "$HOME/.Trash"
     end
 
@@ -200,7 +217,7 @@ if status is-interactive
 
     function git_commit_amend
         if test -d .jj
-            jj new
+            jj desc $argv
             return
         end
         git_commit --amend $argv
@@ -279,6 +296,10 @@ if status is-interactive
     end
 
     function git_pull_upstream
+        if test -d ./.jj
+            jj git fetch
+            return
+        end
         if test (count $argv) -gt 0
             git pull upstream $argv -v
             return -1
@@ -320,15 +341,6 @@ if status is-interactive
         git push origin $branch $argv --tags
     end
 
-    function git_push_upstream
-        set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test $branch = HEAD
-            echo "ERROR: cannot push from detatched state."
-            return -1
-        end
-        git push upstream $branch $argv --tags
-    end
-
     function git_log
         if test -d ./.jj
             jj log
@@ -337,92 +349,17 @@ if status is-interactive
         git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit
     end
 
-    # trash
-    # function trash
-    #     if not test -d $trash
-    #         log_red "ERROR: no trash dir found"
-    #     end
-    #     if test (count $argv) -eq 0
-    #         log_orange "USAGE ERROR: NOTHING TO TRASH"
-    #         echo "trash <files..>"
-    #     end
-    #     for f in $argv
-    #         set SOURCE_BASENAME (basename $f)
-    #         set -l CURRENT_DATE (date +'%Y%m%d%H%M%S')
-    #         # $f not exist
-    #         if not test -e $f
-    #             log_orange "WARN: no such file [$f]"
-    #             continue
-    #         end
-    #         # $f is a directory
-    #         if test -d $f
-    #             set -l RANDOM_NUMBER (random 0 10000000000)
-    #             set -l OUTPUT_BASENAME $SOURCE_BASENAME"_$CURRENT_DATE"_"$RANDOM_NUMBER"
-    #             set -l OUTPUT_PATH "$trash/$OUTPUT_BASENAME"
-    #             set -l SOURCE_PATH (readlink -f $f)
-    #             move -b "$f" "$OUTPUT_PATH"
-    #             touch "$OUTPUT_PATH"
-    #             echo "$SOURCE_BASENAME -> \$trash/$OUTPUT_BASENAME"
-    #             continue
-    #         end
-    #         # $f is not a directory
-    #         set -l CHECKSUM (shasum "$f" | cut -d ' ' -f 1 | sed -e 's/[[:space:]]*$//')
-    #         set -l OUTPUT_BASENAME $SOURCE_BASENAME"_"$CURRENT_DATE"_"$CHECKSUM
-    #         set -l OUTPUT_PATH "$trash/$OUTPUT_BASENAME"
-    #         set -l SOURCE_PATH (readlink -f $f)
-    #         move -b "$f" "$OUTPUT_PATH"
-    #         touch "$OUTPUT_PATH"
-    #         echo "$SOURCE_BASENAME -> \$trash/$OUTPUT_BASENAME"
-    #     end
-    # end
-
     function trash_clean
         find $trash -maxdepth 1 -mtime +20 | xargs -I {} (which rm) -rfv {}
     end
 
-    function trash_help
-        echo $COLOR_GRAY6"DELETEING STUFF:"$COLOR_RESET
-        echo "trash            - move a file to the trash"
-        echo "del              - actually delete file"
-        echo
-        echo $COLOR_GRAY6"MANAGE TRASH_DIR:"$COLOR_RESET
-        echo "trash_clean      - delete files older than 20 days"
-    end
-
     # screenshot
-    function _sc_output_path
-        if test (count $argv) -eq 0
-            log_red "ERROR: screen capture requires a name"
-            echo "\n\$ sc <name>\n"
-            return 1
-        end
-        set -l DATE (date +"%Y-%m-%d-%H%M%S")
-        set -l NAME "sc-"$DATE"-"$argv[1]".png"
-        set -l NAME (echo $NAME | string replace -a " " "-" | string replace -a "_" "-")
-        set -l OUTPUT_PATH "$temp/$NAME"
-        echo "$OUTPUT_PATH"
-    end
-
-    # linux
-    function _linux_xs
-        if test (count $argv) -eq 0
-            log_red "ERROR: must provide search term"
-            return
-        end
-        sudo apt-cache search $argv | fzf
-    end
-
-    function _linux_xu
-        sudo apt update
-        sudo apt upgrade
-        sudo apt autoremove
-    end
 
     function _linux_sc
-        set -l OUTPUT_PATH (_sc_output_path $argv)
+        set -l OUTPUT_PATH (scfilepath $argv)
         if not test $status -eq 0
-            printf "$OUTPUT_PATH"
-            return $status
+            echo $OUTPUT_PATH # its the error msg
+            return 1
         end
         grim -g (slurp -d) $OUTPUT_PATH
 
@@ -431,72 +368,25 @@ if status is-interactive
     end
 
     function _linux_sca
-        set -l OUTPUT_PATH (_sc_output_path $argv)
+        set -l OUTPUT_PATH (scfilepath $argv)
         if not test $status -eq 0
-            printf "$OUTPUT_PATH"
-            return $status
+            echo $OUTPUT_PATH # its the error msg
+            return 1
         end
-        grim -o DP-3 $OUTPUT_PATH
+        grim -g (slurp -o) $OUTPUT_PATH
         # scrot $OUTPUT_PATH
         log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
     end
 
-    # mac
-    function _mac_sc
-        set -l OUTPUT_PATH (_sc_output_path $argv)
-        if not test $status -eq 0
-            printf "$OUTPUT_PATH"
-            return $status
-        end
-        screencapture -t png -i -J selection "$SC_NAME"
-        log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
-    end
-
-    function _mac_sca
-        set -l OUTPUT_PATH (_sc_output_path $argv)
-        if not test $status -eq 0
-            printf "$OUTPUT_PATH"
-            return $status
-        end
-        screencapture -t png "$SC_NAME"
-        log_blue "[SCREEN CAPTURE] "(basename $OUTPUT_PATH)
-    end
-
-    function check
-        log_blue check $CHECK_LAST
-        gotestsum $CHECK_LAST
-    end
-
-    function fcheck
-        set -l query ""
-        if test (count $argv) -gt 0
-            set query $argv
-        end
-        set -l temp_check_last (fzf -f _test.go |fzf -q $query)
-        if test -z $temp_check_last
-            log_orange "check not updated"
-            return
-        end
-        set -gx CHECK_LAST $temp_check_last
-        log_blue check $CHECK_LAST
-        gotestsum $CHECK_LAST
-    end
-
-    function mcheck
-        set -l query ""
-        if test (count $argv) -gt 0
-            set query $argv
-        end
-        set -l check_module (go list ./... | fzf --delimiter "/" --with-nth -1 -q $query)
-        gotestsum --format testname $check_module
-    end
-
-    function acheck
-        log_blue check all
-        gotestsum
-    end
-
     # alias
+    # force safeutils
+    alias mv "echo use move or sysmv"
+    alias cp "echo use copy or syscp"
+    alias rm "echo use trash or sysrm"
+    alias syscp=(which cp)
+    alias sysmv=(which mv)
+    alias sysrm=(which rm)
+
     alias ..="cd .."
     alias ,,="cd -"
     # alias a="git add"
@@ -511,11 +401,12 @@ if status is-interactive
     # alias c="git_commit"
     # alias C="git_commit_amend"
     # alias C="git_commit --amend --no-edit"
-    alias copy=$COPYER
+    alias clipboard=$CLIPBOARD_CMD
     # alias ch="git checkout"
     # alias d="git_diff"
-    alias del=(which rm)
-    alias mv="move"
+    # alias del=(which rm)
+    # alias mv="move"
+    # alias cp="copy"
     alias e="hx"
     # alias f="git_fetch"
     # alias g="echo naw"
@@ -542,7 +433,6 @@ if status is-interactive
     # alias q="echo naw"
     # alias r="git rebase -Si"
     alias R="source ~/.config/fish/config.fish"
-    alias rm="trash_help"
     # alias s="git status --short"
     alias s="git_stat"
     alias stream="QT_QPA_PLATFROM=xcb obs"
@@ -564,19 +454,9 @@ if status is-interactive
     # alias by uname
     switch (uname)
         case Linux
-            alias xi="sudo apt-get install"
-            alias xr="sudo apt-get remove"
-            alias xq="sudo apt-cache show"
-            alias xu="_linux_xu"
-            alias xs="_linux_xs"
-            alias sc="_linux_sc"
-            alias sca="_linux_sca"
+            alias scselect="_linux_sc"
+            alias scmonitor="_linux_sca"
         case Darwin
-            alias xi="brew install" # I - install
-            alias xs="brew search" # S - search
-            alias xu="brew update && brew upgrade" # U - update
-            alias xr="brew uninstall" # R - remove
-            alias xq="brew info" # R - query info 
             alias sc="_mac_sc"
             alias sca="_mac_sca"
     end
@@ -618,6 +498,10 @@ if status is-interactive
         printf "$git_branch$dir$jj_desc$COLOR_RESET\n| "
     end
 
+end
+
+function math
+    echo "$argv" | bc
 end
 
 # jj util completion fish | source

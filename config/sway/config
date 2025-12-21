@@ -133,7 +133,7 @@ bindsym $hyper+9 move container to workspace 9; workspace 9
 bindsym $hyper+0 move container to workspace 10; workspace 10
 
 bindsym $hyper+r reload 
-# bindsym $meta+Shift+l exec "swaymsg exit"
+bindsym $meta+Shift+l exec "swaymsg exit"
 
 bindsym $meta+r mode "resize"
 # resize window (you can also use the mouse for that)
