@@ -1,7 +1,7 @@
 [user]
     name = Duncan Marsh
     email = slugbyte@slugbyte.com
-	signingKey = /home/slugbyte/.ssh/slugbyte.pub
+	signingKey = /home/slugbyte/.ssh/id_ed25519.pub
 [gpg]
     program = gpg
 	format = ssh
