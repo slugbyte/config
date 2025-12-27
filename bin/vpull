@@ -1,0 +1,27 @@
+#!/usr/bin/env fish
+
+if test -d ./.jj
+    jj git fetch
+    return
+end
+
+# Parse arguments
+set -l branch $argv[1]
+set -l remote $argv[2]
+
+# Default remote to 'origin' if not specified
+if test -z $remote
+    set remote origin
+end
+
+# Get current branch if branch not specified or is '-'
+if test -z $branch; or test $branch = -
+    set branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
+    if test -z $branch
+        echo "Error: Not a git repository"
+        return 1
+    end
+end
+
+echo "Pulling from $remote/$branch"
+git pull $remote $branch -v

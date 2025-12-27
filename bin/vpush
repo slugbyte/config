@@ -1,0 +1,38 @@
+#!/usr/bin/env fish
+
+if test -d ./.jj
+    set -l branch $argv[1]
+    if test -z $branch
+        set branch main
+    end
+    jj bookmark set $branch -r @- --allow-backwards
+    jj git push -r $branch --allow-new
+    return
+end
+
+# Parse arguments
+set -l branch ""
+set -l force ""
+
+for arg in $argv
+    switch $arg
+        case -f --force
+            set force --force
+        case '*'
+            if test -z "$branch"
+                set branch $arg
+            end
+    end
+end
+
+# Get current branch if branch not specified or is '-'
+if test -z $branch; or test $branch = -
+    set branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
+    if test $branch = HEAD
+        echo "ERROR: cannot push from detached state."
+        return 1
+    end
+end
+
+echo git push origin $branch $force
+git push origin $branch --tags $force

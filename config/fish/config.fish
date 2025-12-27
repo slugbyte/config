@@ -76,150 +76,7 @@ if status is-interactive
             set -gx trash "$HOME/.Trash"
     end
 
-    # git
-    function git_commit
-        if test -d .jj
-            jj desc $argv
-            return
-        end
-        git commit -S $argv && git verify-commit HEAD
-    end
-
-    function git_open
-        if test -d .jj
-            git -C $(jj git root) open
-            return
-        end
-        git open
-    end
-
-    function git_commit_amend
-        if test -d .jj
-            jj desc $argv
-            return
-        end
-        git_commit --amend $argv
-    end
-
-    function git_stat
-        if test -d .jj
-            jj status --no-pager
-            return
-        end
-        git status
-    end
-
-    function git_diff
-        if test -d .jj
-            jj diff $argv
-            return
-        end
-        git diff $argv
-    end
-
-    function git_branch
-        if test -d .jj
-            jj bookmark $argv
-            return
-        end
-        git branch $argv
-    end
-
-    function git_reset
-        if test -d .jj
-            jj abandon $argv
-            return
-        end
-        git reset
-    end
-
-    function git_fetch
-        if test -d .jj
-            jj git fetch
-            return
-        end
-        git fetch -pv
-    end
-
-    function git_pull_rebase
-        if test (count $argv) -gt 0
-            git pull origin $argv -v --rebase=interactive
-            return
-        end
-        set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test -z $branch
-            echo "Error: Not a git repository"
-            return
-        end
-        echo "Pulling from $branch"
-        git pull origin $branch -v --rebase=interactive
-    end
-
-    function git_pull
-        if test -d ./.jj
-            jj git fetch
-            return
-        end
-        if test (count $argv) -gt 0
-            git pull origin $argv -v
-            return -1
-        end
-        set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test -z $branch
-            echo "Error: Not a git repository"
-            return -1
-        end
-        echo "Pulling from $branch"
-        git pull origin $branch -v
-    end
-
-    function git_pull_upstream
-        if test -d ./.jj
-            jj git fetch
-            return
-        end
-        if test (count $argv) -gt 0
-            git pull upstream $argv -v
-            return -1
-        end
-        set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test -z $branch
-            echo "Error: Not a git repository"
-            return -1
-        end
-        echo "Pulling from $branch"
-        git pull upstream $branch -v
-    end
-
-    function git_push
-        if test -d ./.jj
-            jj bookmark set develop -r @- --allow-backwards
-            jj git push -r develop --allow-new
-            return
-        end
-        set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test $branch = HEAD
-            echo "ERROR: cannot push from detatched state."
-            return -1
-        end
-        git push origin $branch $argv --tags
-    end
-
-    function git_push_main
-        if test -d ./.jj
-            jj bookmark set main -r @- --allow-backwards
-            jj git push -r main --allow-new
-            return
-        end
-        set -l branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test $branch = HEAD
-            echo "ERROR: cannot push from detatched state."
-            return -1
-        end
-        git push origin $branch $argv --tags
-    end
-
-    function git_log
+    function vlog
         if test -d ./.jj
             jj log
             return
@@ -261,12 +118,12 @@ if status is-interactive
     alias md="mkdir -p"
     alias n="z"
     alias N="zi"
-    alias o='git_open'
+    alias o='vopen'
     alias O="xdg-open"
     alias p="git_push_main"
     alias P="git_push"
     alias R="source ~/.config/fish/config.fish"
-    alias s="git_stat"
+    alias s="vstat"
 
     alias pkginstall="omarchy-pkg-install"
     alias pkgremove="omarchy-pkg-remove"
@@ -292,8 +149,8 @@ if status is-interactive
             set git_branch ""
         end
 
-        set git_status (git status --porcelain 2> /dev/null)
-        if test -z "$git_status"
+        set vstatus (git status --porcelain 2> /dev/null)
+        if test -z "$vstatus"
             set git_branch_color $COLOR_GRAY6
         end
         if test "$git_branch" = HEAD

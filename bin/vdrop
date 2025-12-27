@@ -1,0 +1,7 @@
+#!/usr/bin/env fish
+
+if test -d .jj
+    jj abandon $argv
+    return
+end
+git reset $argv

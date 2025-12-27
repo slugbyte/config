@@ -1,0 +1,7 @@
+#!/usr/bin/env fish
+
+if test -d .jj
+	git -C $(jj git root) open
+	return
+end
+git open
