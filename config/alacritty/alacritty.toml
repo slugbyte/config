@@ -5,18 +5,18 @@ size = 14
 y = -3
 
 [font.normal]
-family = "HackerHacker"
+family = "JetBrainsMono Nerd Font"
 style = "Regular"
 
-# family = "HackerHacker"
+# family = "JetBrainsMono Nerd Font"
 # style = "Light"
 
 # screenshot
-# family = "HackerHacker"
+# family = "JetBrainsMono Nerd Font"
 # style = "Regular"
 
 # retro hacker 
-# family = "HackerHacker"
+# family = "JetBrainsMono Nerd Font"
 # style = "Regular"
 
 [colors.primary]

@@ -1,0 +1,45 @@
+# Dynamic theme colors
+config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
+
+# Font
+font-family = "JetBrainsMono Nerd Font"
+font-style = Regular
+font-size = 12
+
+# Window
+window-theme = ghostty
+window-padding-x = 14
+window-padding-y = 14
+confirm-close-surface=false
+resize-overlay = never
+gtk-toolbar-style = flat
+
+# Cursor styling
+cursor-style = "block"
+cursor-style-blink = false
+
+# Cursor styling + SSH session terminfo
+# (all shell integration options must be passed together)
+shell-integration-features = no-cursor,ssh-env
+
+# Keyboard bindings
+keybind = shift+insert=paste_from_clipboard
+keybind = control+insert=copy_to_clipboard
+
+# dont open config on ctrl+,
+keybind = ctrl+,=ignore
+
+# mouse-scroll-multiplier = 0.95
+keybind = ctrl+g>shift+y=resize_split:left,200
+keybind = ctrl+g>shift+n=resize_split:down,200
+keybind = ctrl+g>shift+e=resize_split:up,200
+keybind = ctrl+g>shift+o=resize_split:right,200
+keybind = ctrl+g>shift+i=inspector:toggle
+
+keybind = alt+s=new_split:right
+keybind = alt+h=new_split:down
+keybind = alt+x=close_surface
+keybind = alt+y=goto_split:left
+keybind = alt+n=goto_split:down
+keybind = alt+e=goto_split:up
+keybind = alt+o=goto_split:right

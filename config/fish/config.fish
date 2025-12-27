@@ -63,6 +63,10 @@ if status is-interactive
         end
     end
 
+    function manfzf
+        man -k . | fzf --preview 'man {1}' | awk '{print $1}' | xargs man
+    end
+
     # env by uname
     switch (uname)
         case Linux
@@ -83,9 +87,9 @@ if status is-interactive
 
     # alias
     # system
-    alias bye="omarchy-cmd-shutdown"
-    alias lock="omarchy-cmd-idle"
-    alias reboot="omarchy-cmd-reboot"
+    alias bye="sudo omarchy-cmd-shutdown"
+    alias lock="omarchy-lock-screen"
+    alias reboot="sudo omarchy-cmd-reboot"
     alias night="omarchy-toggle-nightlight"
     alias screenshot "omarchy-cmd-screenshot smart clipboard"
 
