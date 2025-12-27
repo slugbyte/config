@@ -84,6 +84,10 @@ if status is-interactive
         git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit
     end
 
+    function ebin
+        hx (which $argv[1])
+    end
+
     # alias
     # system
     alias bye="omarchy-cmd-shutdown"
