@@ -84,6 +84,7 @@ if status is-interactive
     function ebin
         hx (which $argv[1])
     end
+    complete -c ebin -a "(complete -C '')" --no-files # ebin autocomplets commands
 
     # alias
     # system

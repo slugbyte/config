@@ -35,4 +35,9 @@ if test -z $branch; or test $branch = -
 end
 
 echo git push origin $branch $force
-git push origin $branch --tags $force
+
+if test -n $force
+    git push origin $branch --tags $force
+else
+    git push origin $branch --tags
+end
