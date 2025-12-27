@@ -2,11 +2,11 @@ if status is-interactive
     set -U fish_greeting ""
     source ~/.config/fish/color.fish
 
+    fish_add_path "$HOME/workspace/conf/bin"
+    fish_add_path "$HOME/workspace/exec/bin"
     fish_add_path "$HOME/.cargo/bin"
     fish_add_path "$HOME/go/bin"
     fish_add_path /usr/local/go/bin
-    fish_add_path "$HOME/workspace/conf/bin"
-    fish_add_path "$HOME/workspace/exec/bin"
 
     # zoxide 
     zoxide init fish | source
@@ -21,6 +21,7 @@ if status is-interactive
     set -gx exec "$w/exec"
     set -gx temp "$HOME/Downloads"
     set -gx image "$data/image"
+    set -gx video "$data/video"
 
     set -gx EMAIL 'slugbyte@slugbyte.com'
     set -gx FULLNAME 'Duncan Marsh'
@@ -76,14 +77,6 @@ if status is-interactive
             set -gx trash "$HOME/.Trash"
     end
 
-    function vlog
-        if test -d ./.jj
-            jj log
-            return
-        end
-        git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit
-    end
-
     function ebin
         hx (which $argv[1])
     end
@@ -94,8 +87,11 @@ if status is-interactive
     alias lock="omarchy-cmd-idle"
     alias reboot="omarchy-cmd-reboot"
     alias night="omarchy-toggle-nightlight"
+    alias screenshot "omarchy-cmd-screenshot smart clipboard"
 
-    alias system_update="omarchy-update"
+    alias xu="omarchy-update"
+    alias xi="omarchy-pkg-install"
+    alias xr="omarchy-pkg-remove"
 
     # force safeutils
     alias mv "echo use move or sysmv"
@@ -120,61 +116,43 @@ if status is-interactive
     alias tree='eza -F --tree --group-directories-first -L 2'
     alias treee='eza -F --tree --group-directories-first'
     alias md="mkdir -p"
+    alias math="calc -p"
     alias n="z"
     alias N="zi"
-    alias o='vopen'
-    alias O="xdg-open"
-    alias p="git_push_main"
-    alias P="git_push"
     alias R="source ~/.config/fish/config.fish"
-    alias s="vstat"
-
-    alias pkginstall="omarchy-pkg-install"
-    alias pkgremove="omarchy-pkg-remove"
-
-    alias screenshot "omarchy-cmd-screenshot smart clipboard"
-
-    function jj_prompt
-        if test -d ./.jj
-            set jj_desc (jj log --no-graph --template 'description' -r @ | head -n 1)
-            if test -z $jj_desc
-                echo "$COLOR_BLUE (no desc)"
-                return
-            end
-            echo "$COLOR_BLUE ($jj_desc)"
-        end
-    end
 
     function fish_prompt
-        set jj_desc (jj_prompt)
-        set git_branch_color $COLOR_ORANGE
-        set git_branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        if test $status -ne 0
-            set git_branch ""
+        set -l jj_desc ""
+        set -l git_desc ""
+        if test -d .jj
+            set -l desc (jj log --no-graph -r @ -T 'description.first_line()' 2>/dev/null)
+            if test -z "$desc"
+                set jj_desc "$COLOR_GRAY7 (no desc)"
+            else
+                set jj_desc "$COLOR_GRAY7 ($desc)"
+            end
+        else
+            if test -d .git
+                set -l git_branch (git rev-parse --abbrev-ref HEAD 2>/dev/null)
+                set -l git_dirty ""
+                if test -n "$git_branch"
+                    if test "$git_branch" = HEAD
+                        set git_branch _
+                    end
+                    set -l vstatus (git status --porcelain 2>/dev/null)
+                    if test -n "$vstatus"
+                        set git_dirty "*"
+                    end
+                    set git_desc " $COLOR_GRAY7""[$git_dirty$git_branch] "
+                end
+            end
         end
 
-        set vstatus (git status --porcelain 2> /dev/null)
-        if test -z "$vstatus"
-            set git_branch_color $COLOR_GRAY6
-        end
-        if test "$git_branch" = HEAD
-            set git_branch $COLOR_RED"(detatched) "
-        end
-        if test -n "$git_branch"
-            set git_branch $git_branch_color"[$git_branch] "
-        end
-        set dir (echo $PWD | string replace $HOME "")
-        if test -z $dir
-            set dir "~"
-        end
-        set dir $COLOR_GRAY5$dir
-        printf "$git_branch$dir$jj_desc$COLOR_RESET\n| "
+        set -l dir (string replace -r "^$HOME" "~" $PWD)
+
+        printf "%s%s%s%s%s\n| " "$COLOR_GRAY5" "$dir" "$git_desc" "$jj_desc" "$COLOR_RESET"
     end
 
-end
-
-function math
-    echo "$argv" | bc
 end
 
 if not pgrep -u $USER ssh-agent >/dev/null

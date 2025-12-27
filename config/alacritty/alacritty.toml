@@ -8,15 +8,15 @@ y = -3
 family = "HackerHacker"
 style = "Regular"
 
-# family = "JetBrainsMonoNL Nerd Font"
+# family = "HackerHacker"
 # style = "Light"
 
 # screenshot
-# family = "Hack Nerd Font Mono"
+# family = "HackerHacker"
 # style = "Regular"
 
 # retro hacker 
-# family = "MonaspiceKr Nerd Font"
+# family = "HackerHacker"
 # style = "Regular"
 
 [colors.primary]

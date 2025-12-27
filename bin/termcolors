@@ -1,0 +1,90 @@
+#!/usr/bin/env node
+
+const { stdout } = process;
+
+const cols = stdout.columns || 80;
+const rows = stdout.rows || 24;
+
+// ANSI escape helpers
+const bg = (n) => `\x1b[48;5;${n}m`;
+const fg = (n) => `\x1b[38;5;${n}m`;
+const reset = '\x1b[0m';
+
+// Contrast color for text on background
+const contrastFg = (n) => {
+  // Simple heuristic: colors 0-7, 16-27, 232-243 are dark
+  if (n <= 7 || (n >= 16 && n <= 27) || (n >= 232 && n <= 243)) {
+    return fg(255); // white text
+  }
+  if (n >= 8 && n <= 15) {
+    return fg(0); // black text for bright colors
+  }
+  // For 216-color cube (16-231): check if it's dark
+  if (n >= 16 && n <= 231) {
+    const idx = n - 16;
+    const r = Math.floor(idx / 36);
+    const g = Math.floor((idx % 36) / 6);
+    const b = idx % 6;
+    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+    return luminance < 2.5 ? fg(255) : fg(0);
+  }
+  // Grayscale (232-255)
+  return n < 244 ? fg(255) : fg(0);
+};
+
+// Calculate layout
+const swatchWidth = 6; // "  NNN " 
+const minSwatchDisplay = swatchWidth + 2;
+const swatchesPerRow = Math.max(1, Math.floor(cols / minSwatchDisplay));
+
+function printColorGrid(start, end, title) {
+  console.log(`\n${fg(255)}${title}${reset}\n`);
+  
+  let col = 0;
+  for (let n = start; n <= end; n++) {
+    const label = String(n).padStart(3);
+    stdout.write(`${bg(n)}${contrastFg(n)} ${label} ${reset} `);
+    col++;
+    if (col >= swatchesPerRow) {
+      stdout.write('\n');
+      col = 0;
+    }
+  }
+  if (col !== 0) stdout.write('\n');
+}
+
+function printForegroundSamples(start, end, title) {
+  console.log(`\n${fg(255)}${title}${reset}\n`);
+  
+  let col = 0;
+  for (let n = start; n <= end; n++) {
+    const label = String(n).padStart(3);
+    stdout.write(`${fg(n)}█${label}${reset} `);
+    col++;
+    if (col >= swatchesPerRow) {
+      stdout.write('\n');
+      col = 0;
+    }
+  }
+  if (col !== 0) stdout.write('\n');
+}
+
+// Print different color sections
+console.log(`\n${'─'.repeat(Math.min(cols, 60))}`);
+console.log(`  Terminal: ${cols}x${rows}  |  256 Color Palette Viewer`);
+console.log(`${'─'.repeat(Math.min(cols, 60))}`);
+
+// System colors (0-15)
+printColorGrid(0, 7, '── System Colors (0-7) ──');
+printColorGrid(8, 15, '── Bright Colors (8-15) ──');
+
+// 216 color cube (16-231)
+printColorGrid(16, 231, '── 216 Color Cube (16-231) ──');
+
+// Grayscale (232-255)
+printColorGrid(232, 255, '── Grayscale (232-255) ──');
+
+// Foreground samples
+printForegroundSamples(0, 255, '── Foreground Colors ──');
+
+console.log();
