@@ -1,0 +1,3 @@
+#!/usr/bin/env fish
+
+git commit -S $argv && git verify-commit HEAD

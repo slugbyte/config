@@ -6,7 +6,7 @@
     program = gpg
 	format = ssh
 [gpg "ssh"]
-	allowedSignersFile = /home/slugbyte/workspace/conf/config/git/allowed_signers
+	allowedSignersFile = /home/slugbyte/.ssh/al
 [commit]
     verbose = true
     gpgSign = true
@@ -45,4 +45,4 @@
     unmerged = 3
     header = 255
     branch = 4
-    nobranch = 1
+ 
