@@ -11,7 +11,9 @@
     "bluetooth",
     "network",
     "pulseaudio",
+    "disk",
     "cpu",
+    "memory",
     "battery",
     "temperature",
     "clock"
@@ -59,14 +61,20 @@
     },
   "cpu": {
     "interval": 5,
-    "format": "󰍛",
+    "format": "({usage}% CPU)",
     "on-click": "omarchy-launch-or-focus-tui btop",
     "on-click-right": "alacritty"
   },
+  "memory": {
+    "format": "({}% MEM) "
+  },
+  "disk": {
+    "format": "({percentage_used}% DISK)"
+  },
   "clock": {
-    "format": "{:%Y-%m-%d %H:%M}",
-    // "format-alt": "{:L%d %B W%V %Y}",
+    "format": "{:%A %Y-%m-%d %H:%M}",
     "tooltip": false,
+    "on-click": "clipdate",
     "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
   },
   "network": {

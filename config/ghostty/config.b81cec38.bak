@@ -43,4 +43,3 @@ keybind = alt+y=goto_split:left
 keybind = alt+n=goto_split:down
 keybind = alt+e=goto_split:up
 keybind = alt+o=goto_split:right
-keybind = shift+enter=text:\x1b\r
