@@ -88,11 +88,7 @@ if status is-interactive
 
     # alias
     # system
-    alias bye="sudo omarchy-cmd-shutdown"
-    alias lock="omarchy-lock-screen"
-    alias reboot="sudo omarchy-cmd-reboot"
-    alias night="omarchy-toggle-nightlight"
-    alias screenshot "omarchy-cmd-screenshot smart clipboard"
+    alias night="omarchy-toggle-nightlight &>/dev/null"
 
     alias xu="omarchy-update"
     alias xi="omarchy-pkg-install"

@@ -1,0 +1,4 @@
+#!/bin/bash
+system-monitor-off 
+loginctl lock-session
+

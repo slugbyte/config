@@ -2,9 +2,12 @@
 config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
 
 # Font
+# font-family = "JetBrainsMono Nerd Font"
 font-family = "JetBrainsMono Nerd Font"
 font-style = Regular
 font-size = 12
+# -calt disables programming ligatures
+font-feature = -calt 
 
 # Window
 window-theme = ghostty
@@ -29,6 +32,7 @@ keybind = control+insert=copy_to_clipboard
 # dont open config on ctrl+,
 keybind = ctrl+,=ignore
 
+
 # mouse-scroll-multiplier = 0.95
 keybind = ctrl+g>shift+y=resize_split:left,200
 keybind = ctrl+g>shift+n=resize_split:down,200
@@ -36,6 +40,8 @@ keybind = ctrl+g>shift+e=resize_split:up,200
 keybind = ctrl+g>shift+o=resize_split:right,200
 keybind = ctrl+g>shift+i=inspector:toggle
 
+
+keybind = alt+r=reload_config
 keybind = alt+s=new_split:right
 keybind = alt+h=new_split:down
 keybind = alt+x=close_surface

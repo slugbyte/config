@@ -1,0 +1,7 @@
+#!/bin/bash
+for monitor in $(hyprctl monitors -j | jq -r '.[].name'); do
+    hyprctl dispatch dpms on "$monitor"
+    sleep 0.3
+done
+
+brightnessctl -r
