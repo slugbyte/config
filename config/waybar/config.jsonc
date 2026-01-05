@@ -9,8 +9,8 @@
   "modules-right": [
     "group/tray-expander",
     "bluetooth",
-    "network",
     "pulseaudio",
+    "network",
     "disk",
     "cpu",
     "memory",
@@ -78,16 +78,14 @@
     "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
   },
   "network": {
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "format": "{icon}",
-    "format-wifi": "{icon}",
-    "format-ethernet": "󰀂",
-    "format-disconnected": "󰤮",
+    "format-icons": ["0", "1", "2", "3", "4", "5"],
+    "format-wifi": "({icon}/5 WIFI)",
+    "format-ethernet": "(OK NET)",
+    "format-disconnected": "(NO NET)",
     "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
-    "spacing": 1,
     "on-click": "omarchy-launch-wifi"
   },
   "battery": {
@@ -118,12 +116,12 @@
     "on-click": "omarchy-launch-bluetooth"
   },
   "pulseaudio": {
-    "format": "{icon}",
+    "format": "({volume}% VOL)",
     "on-click": "omarchy-launch-or-focus-tui wiremix",
     "on-click-right": "pamixer -t",
     "tooltip-format": "Playing at {volume}%",
     "scroll-step": 5,
-    "format-muted": "",
+    "format-muted": "(MUTE VOL)",
     "format-icons": {
       "default": ["", "", ""]
     }
