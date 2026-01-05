@@ -6,7 +6,7 @@ if test -d ./.jj
         set branch main
     end
     jj bookmark set $branch -r @- --allow-backwards
-    jj git push -r $branch --allow-new
+    jj git push -r $branch
     return
 end
 

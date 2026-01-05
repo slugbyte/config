@@ -37,3 +37,7 @@ concat(
   diff.git(),
 )
 '''
+
+[remotes.origin]
+auto-track-bookmarks = "glob:*"
+
