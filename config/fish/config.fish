@@ -1,18 +1,13 @@
 if status is-interactive
     set -U fish_greeting ""
-    source ~/.config/fish/color.fish
-
-    fish_add_path "$HOME/workspace/conf/bin"
-    fish_add_path "$HOME/workspace/exec/bin"
-    fish_add_path "$HOME/.cargo/bin"
-    fish_add_path "$HOME/go/bin"
-    fish_add_path /usr/local/go/bin
+    source ~/.config/fish/theme.fish
 
     # zoxide 
     zoxide init fish | source
 
     # ENV
     set -gx w "$HOME/workspace"
+    set -gx drop "$HOME/Dropbox"
     set -gx code "$w/code"
     set -gx conf "$w/conf"
     set -gx data "$w/data"
@@ -56,13 +51,6 @@ if status is-interactive
     set -gx LESS_TERMCAP_se $COLOR_RESET
     set -gx LESS_TERMCAP_ue $COLOR_RESET
 
-    # SECRET ENV
-    if test -d $w/hide/env
-        for env_file in $w/hide/env/*.fish
-            source $env_file
-        end
-    end
-
     function manfzf
         man -k . | fzf --preview 'man {1}' | awk '{print $1}' | xargs man
     end
@@ -104,7 +92,7 @@ if status is-interactive
 
     # ls/exa
     alias ls="eza -F --group-directories-first"
-    alias ll="ls -la --git --no-user --no-time"
+    alias ll="ls -la --git --no-user"
     alias la="ls -a"
     alias l1="ls -1a"
 
@@ -121,6 +109,8 @@ if status is-interactive
     alias n="z"
     alias N="zi"
     alias R="source ~/.config/fish/config.fish"
+    alias bin="chmod +x"
+    # alias bash="SHELL=(which bash) env bash"
 
     function fish_prompt
         set -l jj_desc ""
@@ -144,23 +134,23 @@ if status is-interactive
                     if test -n "$vstatus"
                         set git_dirty "*"
                     end
-                    set git_desc " $COLOR_GRAY7""[$git_dirty$git_branch] "
+                    set git_desc " $COLOR_GRAY7""git [$git_dirty$git_branch] "
                 end
             end
         end
-
         set -l dir (string replace -r "^$HOME" "~" $PWD)
-
         printf "%s%s%s%s%s\n| " "$COLOR_GRAY5" "$dir" "$git_desc" "$jj_desc" "$COLOR_RESET"
     end
 
 end
 
-if not pgrep -u $USER ssh-agent >/dev/null
-    eval (ssh-agent -c)
-    set -Ux SSH_AUTH_SOCK $SSH_AUTH_SOCK
-    set -Ux SSH_AGENT_PID $SSH_AGENT_PID
-end
+# deprecated
+# if not pgrep -u $USER ssh-agent >/dev/null
+#     echo "creatin agent"
+#     eval (ssh-agent -c)
+#     set -Ux SSH_AUTH_SOCK $SSH_AUTH_SOCK
+#     set -Ux SSH_AGENT_PID $SSH_AGENT_PID
+# end
 
 # deprecated tmux
 # alias tlist='tmux list-sessions'

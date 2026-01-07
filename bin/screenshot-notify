@@ -1,13 +1,16 @@
 #!/bin/bash
 SCREENSHOT_PATH=$(screenshot)
-action=$(timeout 2 notify-send "Screenshot taken" "$SCREENSHOT_PATH" \
-  --action="default=Open in Paint" \
-  --icon="$SCREENSHOT_PATH"
-  --expire-time=2000 \
-  --wait)
 
-if [[ "$action" == "default" ]]; then
-  krita "$SCREENSHOT_PATH"
+if [[ -n "$SCREENSHOT_PATH" ]]; then
+  action=$(timeout 2 notify-send "Screenshot taken" "$SCREENSHOT_PATH" \
+    --action="default=Open in Paint" \
+    --icon="$SCREENSHOT_PATH"
+    --expire-time=2000 \
+    --wait)
+
+  if [[ "$action" == "default" ]]; then
+    krita "$SCREENSHOT_PATH"
+  fi
 fi
 
 echo $SCREENSHOT_PATH

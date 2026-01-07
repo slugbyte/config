@@ -1,7 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
-SETUVAR --export SSH_AGENT_PID:1257
-SETUVAR --export SSH_AUTH_SOCK:/home/slugbyte/\x2essh/agent/s\x2eIc9tROLw2v\x2eagent\x2eyFGkmdreVa
+SETUVAR --export SSH_AGENT_PID:1258
+SETUVAR --export SSH_AUTH_SOCK:/home/slugbyte/\x2essh/agent/s\x2eIc9tROLw2v\x2eagent\x2eniswB8Ctlk
 SETUVAR __fish_initialized:3800
 SETUVAR --export fish_color_autosuggestion:2a2a2a
 SETUVAR fish_color_cancel:\x2dr
@@ -31,4 +31,4 @@ SETUVAR --export fish_pager_color_completion:cccccc
 SETUVAR --export fish_pager_color_description:7a7a7a
 SETUVAR --export fish_pager_color_prefix:999999
 SETUVAR --export fish_pager_color_progress:555555
-SETUVAR fish_user_paths:/home/slugbyte/workspace/exec/bin\x1e/home/slugbyte/workspace/conf/bin\x1e/usr/local/go/bin\x1e/home/slugbyte\x1e/home/slugbyte/workspace/lang/bin\x1e/home/slugbyte/workspace/lang/zig\x1e/home/slugbyte/workspace/conf/exec\x1e/opt/nvim\x2dlinux64/bin\x1e/home/slugbyte/go/bin\x1e/home/slugbyte/\x2ecargo/bin
+SETUVAR fish_user_paths:/home/slugbyte/\x2elocal/bin\x1e/home/slugbyte/workspace/exec/bin\x1e/home/slugbyte/workspace/conf/bin\x1e/usr/local/go/bin\x1e/home/slugbyte\x1e/home/slugbyte/workspace/lang/bin\x1e/home/slugbyte/workspace/lang/zig\x1e/home/slugbyte/workspace/conf/exec\x1e/opt/nvim\x2dlinux64/bin\x1e/home/slugbyte/go/bin\x1e/home/slugbyte/\x2ecargo/bin

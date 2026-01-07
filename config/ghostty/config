@@ -1,5 +1,50 @@
 # Dynamic theme colors
-config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
+# config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
+
+# black
+palette = 0=#080808  
+# red
+palette = 1=#d70000  
+# green
+palette = 2=#789978  
+# yellow
+palette = 3=#ffaa88  
+# blue
+palette = 4=#7788aa  
+# magenta
+palette = 5=#d7007d  
+# cyan
+palette = 6=#708090  
+# white
+palette = 7=#deeeed  
+# bright black
+palette = 8=#444444  
+# bright red
+palette = 9=#d70000  
+# bright green
+palette = 10=#789978 
+# bright yellow
+palette = 11=#ffaa88 
+# bright blue
+palette = 12=#7788aa 
+# bright magenta
+palette = 13=#d7007d 
+# bright cyan
+palette = 14=#708090 
+# bright white
+palette = 15=#deeeed 
+
+
+# background = 0a0a0a
+# foreground = deeeed
+background = #121212
+foreground = #e0e0e0
+cursor-color = deeeed
+selection-background = deeeed
+selection-foreground = 0a0a0a
+# Cursor styling
+cursor-style = "block"
+cursor-style-blink = false
 
 # Font
 # font-family = "JetBrainsMono Nerd Font"
@@ -13,13 +58,11 @@ font-feature = -calt
 window-theme = ghostty
 window-padding-x = 14
 window-padding-y = 14
-confirm-close-surface=false
 resize-overlay = never
 gtk-toolbar-style = flat
+confirm-close-surface=false
 
-# Cursor styling
-cursor-style = "block"
-cursor-style-blink = false
+command = /usr/bin/fish
 
 # Cursor styling + SSH session terminfo
 # (all shell integration options must be passed together)
@@ -31,7 +74,6 @@ keybind = control+insert=copy_to_clipboard
 
 # dont open config on ctrl+,
 keybind = ctrl+,=ignore
-
 
 # mouse-scroll-multiplier = 0.95
 keybind = ctrl+g>shift+y=resize_split:left,200
