@@ -1,0 +1,2 @@
+#!/bin/bash
+system-launch-floating-tui killme $(hyprctl activewindow -j | jq '.pid')

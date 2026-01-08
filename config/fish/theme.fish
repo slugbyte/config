@@ -34,6 +34,16 @@ set -gx COLOR_BG_GRAY7 \033'[48;2;170;170;170m'
 set -gx COLOR_BG_GRAY8 \033'[48;2;204;204;204m'
 set -gx COLOR_BG_GRAY9 \033'[48;2;221;221;221m'
 
+# LESS COLORS
+set -gx LESS_TERMCAP_md $COLOR_GRAY6 # bold
+set -gx LESS_TERMCAP_mb $COLOR_BLUE # blink
+set -gx LESS_TERMCAP_us $COLOR_GREEN # underline
+set -gx LESS_TERMCAP_so $COLOR_BG_BLUE # standout
+set -gx LESS_TERMCAP_me $COLOR_RESET
+set -gx LESS_TERMCAP_se $COLOR_RESET
+set -gx LESS_TERMCAP_ue $COLOR_RESET
+
+# FISH SYNTAX HIGHLIGHTS
 set -l theme_keyword 7a7a7a
 set -l theme_string 708090
 set -l theme_normal CCCCCC

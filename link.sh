@@ -1,105 +1,118 @@
-#!/usr/bin/env bash
+  #!/usr/bin/env bash
+  set -euo pipefail
 
-WORKSPACE_DIR="$HOME/workspace"
-TEMP_DIR="$HOME/Downloads/"
-TRASH_DIR="$HOME/.local/share/Trash"
-CONF_DIR="$WORKSPACE_DIR/conf"
-DROPBOX_DIR="$HOME/Dropbox"
+  #############################################################################
+  # VARS
+  #############################################################################
+  DRY_RUN=true
+  [[ "${1:-}" == "--plz" ]] && DRY_RUN=false
+  work="$HOME/workspace"
+  conf="$work/conf"
+  code="$work/code"
+  temp="$HOME/Downloads"
+  drop="$HOME/Dropbox"
+  trash="$HOME/.local/share/Trash/files"
 
-ARG="$1"
+  trashed_filepath_list=()
 
-mkdir -p "$WORKSPACE_DIR/code" 
-# mkdir -p "$WORKSPACE_DIR/exec"
-# mkdir -p "$WORKSPACE_DIR/data"
-# mkdir -p "$WORKSPACE_DIR/gang"
-# mkdir -p "$WORKSPACE_DIR/hist"
-# mkdir -p "$WORKSPACE_DIR/lang"
-# mkdir -p "$WORKSPACE_DIR/play"
-# mkdir -p "$WORKSPACE_DIR/play"
-# mkdir -p "$WORKSPACE_DIR/work"
-ln -sf "$TEMP_DIR" "$WORKSPACE_DIR/temp"
-
-if [[ ! -d "$CONF_DIR" ]];then
-  git clone git@github.com:slugbyte/config.git "$WORKSPACE_DIR/conf"
-fi
-
-
-
-echo "[BLOINGO]"
-echo "   WORKSPACE_DIR=$WORKSPACE_DIR"
-echo "   TEMP_DIR=$TEMP_DIR"
-echo "   TRASH_DIR=$TRASH_DIR"
-
-if [[ ! -d "$TRASH_DIR" ]];then
-  echo "ABORT: TRASH_DIR DOES NOT EXIST"
-  echo "   $TRASH_DIR"
-  exit 1
-fi
-
-exec_if_plz(){
-  # place exec_if_plz before line to exec_if_plz it
-  # example ```$ exec_if_plz mv $1  $TRASH_DEST_PATH```
-  if [[ "$ARG" = "--plz" ]];then
-    "$@"
-  else
-    echo "    [MOCK]" "$@"
-  fi
-}
-
-backup_if_exist(){
-  if [[ -e "$1" ]]; then
-    TRASH_DATE=$(date "+%Y%m%d%H%M%S")
-    TRASH_SOURCE_NAME=$(basename "$1")
-    TRASH_DEST_PATH="$TRASH_DIR/config-backup_if_exist-$TRASH_DATE.$TRASH_SOURCE_NAME"
-    exec_if_plz mv "$1"  "$TRASH_DEST_PATH"
-    echo "    [BACKUP] $1 -> $TRASH_DEST_PATH"
-  fi
-}
-
-link_drobox_dirs(){
-    echo "[LINK DROPBOX]"
-    if [[ -d "$DROPBOX_DIR/data" ]];then
-        exec_if_plz ln -sf $DROPBOX_DIR/data $WORKSPACE_DIR/data
-    fi
-
-    if [[ -d "$DROPBOX_DIR/gang" ]];then
-        exec_if_plz ln -sf $DROPBOX_DIR/gang $WORKSPACE_DIR/gang
-    fi
-}
-
-link_config(){
-  SOURCE_DIR="$1"
-  SOURCE_FILE_LIST=$(ls -a "$SOURCE_DIR" | grep -v "^\.*$" | grep -v .DS_Store)
-  DEST_DIR="$2"
-  echo
-  echo "[SOURCE_DIR] $SOURCE_DIR"
-  for SOURCE_FILE in $SOURCE_FILE_LIST; do
-    LINK_SOURCE="$SOURCE_DIR/$SOURCE_FILE"
-    LINK_TARGET="$DEST_DIR/$SOURCE_FILE"
-    echo "  $SOURCE_FILE: $LINK_SOURCE"
-    backup_if_exist "$LINK_TARGET"
-    if [[ -d "$LINK_SOURCE" ]];then 
-      exec_if_plz ln -sf "$LINK_SOURCE" "$LINK_TARGET"
-      echo "    [SOFT_LINK] $LINK_TARGET -> $LINK_SOURCE"
+  #############################################################################
+  # FUNCTIONS
+  #############################################################################
+  # run a command if DRY_RUN is false, print the command if its true
+  # $ run_safe cmd --arg1 --arg2 --arg3
+  run_safe(){
+    if $DRY_RUN;then
+      echo "[MOCK]" "$@"
     else
-      exec_if_plz ln -f "$LINK_SOURCE" "$LINK_TARGET"
-      echo "    [HARD_LINK] $LINK_TARGET -> $LINK_SOURCE"
+      # silent in non mock mode
+      "$@" >/dev/null 2>&1
     fi
+  }
+
+  # trash a file if it exists and is not a symlink
+  # $ trash_existing ./file/to/trash
+  trash_existing(){
+    # skip if doesn't exist or is a symlink
+    [[ -e "$1" ]] || return 0
+    [[ -L "$1" ]] && return 0
+  
+    trashed_filepath_list+=("$1")
+    if command -v trash >/dev/null 2>&1; then
+      run_safe trash "$1"
+    else
+      local dest
+      dest="$trash/$(basename "$1").backup.$$.$RANDOM"
+      run_safe mv "$1" "$dest"
+    fi
+  }
+  
+
+  # if $src exists force link to $dest, if $dest is exists trash it before linking
+  # $ link_if_exists $src $dest
+  link_if_exists(){
+    if [[ -e "$1" ]];then
+      trash_existing "$2"
+      run_safe ln -sf "$1" "$2"
+      echo "[LINK] ${1/#$conf/\$conf} -> ${2/#$HOME/\~}"
+    fi
+  }
+
+  # link all the config files in a $conf subdirectiry
+  # $link_config $conf/config ~/.config
+  # $link_config $conf/home ~/
+  link_config(){
+    local src_dir="$1"
+    local dest_dir="$2"
+    echo
+    echo "[SOURCE_DIR] ${src_dir/#$conf/\$conf}"
+    for src_path in "$src_dir"/* "$src_dir"/.[!.]*; do
+      [[ -e "$src_path" ]] || continue # skip if not exists
+      local dest_path="$dest_dir/$(basename "$src_path")"
+      link_if_exists "$src_path" "$dest_path"
+    done
+  }
+  #############################################################################
+  # PROGRAM
+  #############################################################################
+   
+  # guard that $conf exists
+  if [[ ! -d "$conf" ]];then
+    echo "[ERROR] expected conf to be installed in: $conf"
+    exit 1
+  fi
+
+  # guard that dropbox exists
+  if [[ ! -d "$drop" ]];then
+    echo "[ERROR] Dropbox must be setup first"
+    exit 1
+  fi
+
+  echo "[BLOINGO] lets begin!"
+
+  # flush out $work to have all expected links and dirs
+  mkdir -p "$code" 
+  mkdir -p "$trash"
+  mkdir -p ~/.local/bin
+
+  link_config "$work/conf/config" "$HOME/.config"
+  link_config "$work/conf/home" "$HOME"
+
+  if $DRY_RUN;then
+    echo
+    echo "[GLORB]"
+    echo "   GLORB will do NO work without magic words."
+    echo "   Now wait $(whoami) run | $ link.sh --plz | , ok?"
+  else
+    echo
+    echo "[GLORB]"
+    echo "    $RANDOM is a lucky number, don't $(whoami) think?"
+    echo "    GLORB work is complete."
+  fi
+
+# at the end of the script
+if (( ${#trashed_filepath_list[@]} > 0 )); then
+  echo
+  for f in "${trashed_filepath_list[@]}"; do
+    echo "WARNING: TRASHED OLD $f"
   done
-}
-
-link_config "$WORKSPACE_DIR/conf/config" "$HOME/.config"
-link_config "$WORKSPACE_DIR/conf/home" "$HOME"
-link_drobox_dirs
-
-if [[ $ARG = "--plz" ]];then
-  echo
-  echo "[GLORB]"
-  echo "    $RANDOM is a lucky number, don't $(whoami) think?"
-  echo "    GLORB work is complete."
-else
-  echo
-  echo "[GLORB]"
-  echo "   GLORB will do NO work without magic words."
-  echo "   Now wait $(whoami) run | $ link.sh --plz | , ok?"
 fi

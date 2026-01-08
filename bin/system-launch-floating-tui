@@ -1,0 +1,4 @@
+#!/bin/bash
+
+exec setsid uwsm-app -- xdg-terminal-exec --app-id=com.slugbyte.float -e "$1" "${@:2}"
+
