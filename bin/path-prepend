@@ -1,0 +1,11 @@
+#!/bin/sh
+if [ -z "$1" ]; then
+    echo "Usage: prepend-path <directory>" >&2
+    exit 1
+fi
+
+case ":$PATH:" in
+    *:"$1":*) echo "$PATH" ;;
+    *) echo "$1:$PATH" ;;
+esac
+

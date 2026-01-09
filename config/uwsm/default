@@ -1,0 +1,6 @@
+# Changes require a restart to take effect.
+
+export TERMINAL=xdg-terminal-exec
+export EDITOR=e
+export OMARCHY_SCREENSHOT_DIR="$HOME/Dropbox/data/image/screenshot"
+export OMARCHY_SCREENRECORD_DIR="$HOME/Dropbox/data/video/screenrecord"
