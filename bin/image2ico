@@ -1,0 +1,16 @@
+#!/bin/bash
+# WARN: ico format has limits max size to 256x256 and works best with square images
+# its best to just use 256x256 png images
+# 
+# $ image2ico $image-filepath [outname]
+# outfile fill be in same directory as the input filepath
+# it will error if the output filepath allready exists
+# outfile will allways have the extension .ico
+img="$1"
+out="${img}"
+out="${2:-$out}"
+out="${out%.*}.ico"
+out="$(dirname "$img")/$(basename "$out")"
+
+magick "$img" -define icon:auto-resize=256,128,64,48,32,16 "$out"
+

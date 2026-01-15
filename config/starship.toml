@@ -1,0 +1,13 @@
+add_newline = true
+command_timeout = 200
+format = "[$directory]($style)\nBASH $character"
+
+[character]
+error_symbol = "[x](bold #666666)"
+success_symbol = "[:](bold #666666)"
+
+[directory]
+style = "bold #666666"
+format = "[$path]($style) "
+truncation_length = 0
+truncate_to_repo = false

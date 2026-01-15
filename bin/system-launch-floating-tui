@@ -1,5 +1,5 @@
 #!/bin/bash
 # launch a tui in a floating window
 # $ system-launch-floating-tui program args..
-exec setsid uwsm-app -- xdg-terminal-exec --app-id=com.slugbyte.float -e "$1" "${@:2}"
+exec setsid uwsm-app -- xdg-terminal-exec --app-id=com.slugbyte.popup -e "$1" "${@:2}"
 
