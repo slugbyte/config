@@ -1,14 +1,14 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d ./.jj
+if [[ -d ./.jj ]]; then
     echo "ERROR: git_add not supported in jj repositories"
-    return 1
-end
+    exit 1
+fi
 
 # If no arguments, add everything
-if test (count $argv) -eq 0
+if [[ $# -eq 0 ]]; then
     git add .
 else
     # Add specified files
-    git add $argv
-end
+    git add "$@"
+fi

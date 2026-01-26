@@ -1,8 +1,7 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d ./.jj
-    jj log
-    return
-end
+if [[ -d ./.jj ]]; then
+    jj log -r 'all()' -n 10
+    exit 0
+fi
 git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit
-

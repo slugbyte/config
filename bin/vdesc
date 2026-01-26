@@ -1,16 +1,16 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d .jj
-    if test -n "$argv[1]"
-        jj desc -m "$argv[1]"
+if [[ -d .jj ]]; then
+    if [[ -n "$1" ]]; then
+        jj desc -m "$1"
     else
         jj desc
-    end
-    return
-end
+    fi
+    exit 0
+fi
 
-if test -n "$argv[1]"
-    git commit --amend -S -m "$argv[1]" && git verify-commit HEAD
+if [[ -n "$1" ]]; then
+    git commit --amend -S -m "$1" && git verify-commit HEAD
 else
     git commit --amend -S && git verify-commit HEAD
-end
+fi

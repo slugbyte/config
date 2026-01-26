@@ -1,5 +1,6 @@
 alias xu="omarchy-update"
 alias xi="omarchy-pkg-install"
+alias xia="omarchy-pkg-aur-install"
 alias xr="omarchy-pkg-remove"
 
 # force safeutils

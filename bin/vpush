@@ -1,43 +1,42 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d ./.jj
-    set -l branch $argv[1]
-    if test -z $branch
-        set branch main
-    end
-    jj bookmark set $branch -r @- --allow-backwards
-    jj git push -r $branch
-    return
-end
+if [[ -d ./.jj ]]; then
+    branch="${1:-main}"
+    jj bookmark set "$branch" -r @- --allow-backwards
+    jj git push -r "$branch"
+    exit 0
+fi
 
 # Parse arguments
-set -l branch ""
-set -l force ""
+branch=""
+force=""
 
-for arg in $argv
-    switch $arg
-        case -f --force
-            set force --force
-        case '*'
-            if test -z "$branch"
-                set branch $arg
-            end
-    end
-end
+for arg in "$@"; do
+    case "$arg" in
+        -f|--force)
+            force="--force"
+            ;;
+        *)
+            if [[ -z "$branch" ]]; then
+                branch="$arg"
+            fi
+            ;;
+    esac
+done
 
 # Get current branch if branch not specified or is '-'
-if test -z $branch; or test $branch = -
-    set branch (git rev-parse --abbrev-ref HEAD 2> /dev/null)
-    if test $branch = HEAD
+if [[ -z "$branch" || "$branch" == "-" ]]; then
+    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    if [[ "$branch" == "HEAD" ]]; then
         echo "ERROR: cannot push from detached state."
-        return 1
-    end
-end
+        exit 1
+    fi
+fi
 
-echo git push origin $branch $force
+echo "git push origin $branch $force"
 
-if test -n $force
-    git push origin $branch --tags $force
+if [[ -n "$force" ]]; then
+    git push origin "$branch" --tags $force
 else
-    git push origin $branch --tags
-end
+    git push origin "$branch" --tags
+fi

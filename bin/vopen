@@ -1,16 +1,14 @@
-#!/usr/bin/env fish
+#!/bin/bash
 # vopen [branch]
 
-if test -d .jj
-    set branch main
-    if test -n "$argv[1]"
-        set branch "$argv[1]"
-    end
-    git -C $(jj git root) open origin $branch
-    return
-end
-if test -n "$argv[1]"
-    git open origin "$argv[1]"
+if [[ -d .jj ]]; then
+    branch="${1:-main}"
+    git -C "$(jj git root)" open origin "$branch"
+    exit 0
+fi
+
+if [[ -n "$1" ]]; then
+    git open origin "$1"
 else
     git open
-end
+fi

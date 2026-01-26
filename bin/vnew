@@ -1,8 +1,8 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d .jj
+if [[ -d .jj ]]; then
     jj new
-    return
-end
+    exit 0
+fi
 
-git commit -S $argv && git verify-commit HEAD
+git commit -S "$@" && git verify-commit HEAD

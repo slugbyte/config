@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+    echo "Usage: tempc <temperature>"
+    echo "Example: tempc 71c or tempc 200f"
+    exit 1
+fi
+
+input="$1"
+value="${input%[cCfF]}"
+unit="${input: -1}"
+
+if ! [[ "$value" =~ ^-?[0-9]+\.?[0-9]*$ ]]; then
+    echo "Error: Invalid temperature value"
+    exit 1
+fi
+
+case "$unit" in
+    c|C)
+        celsius="$value"
+        fahrenheit=$(echo "scale=1; ($celsius * 9/5) + 32" | bc)
+        ;;
+    f|F)
+        fahrenheit="$value"
+        celsius=$(echo "scale=1; ($fahrenheit - 32) * 5/9" | bc)
+        ;;
+    *)
+        echo "Error: Temperature must end with 'c' or 'f'"
+        exit 1
+        ;;
+esac
+
+result=$(printf "%.0f°C(%.0f°F)" "$celsius" "$fahrenheit")
+wl-copy "$result"
+echo "clipboard: $result"

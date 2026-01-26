@@ -1,7 +1,7 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d .jj
-    jj diff $argv
-    return
-end
-git diff $argv
+if [[ -d .jj ]]; then
+    jj diff "$@"
+    exit 0
+fi
+git diff "$@"

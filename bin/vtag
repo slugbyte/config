@@ -1,22 +1,17 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d ./.jj
+if [[ -d ./.jj ]]; then
     echo "ERROR: vtag not supported in jj repositories"
-    return 1
-end
+    exit 1
+fi
 
-set -l tag_name $argv[1]
-set -l commit $argv[2]
+tag_name="$1"
+commit="${2:-HEAD}"
 
-if test -z $tag_name
+if [[ -z "$tag_name" ]]; then
     echo "ERROR: tag name required"
     echo "Usage: git_tag <tag_name> [commit]"
-    return 1
-end
+    exit 1
+fi
 
-if test -z $commit
-    set commit HEAD
-end
-
-git tag -sv $tag_name $commit
-
+git tag -sv "$tag_name" "$commit"

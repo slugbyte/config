@@ -1,7 +1,7 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d .jj
+if [[ -d .jj ]]; then
     jj status --no-pager
-    return
-end
+    exit 0
+fi
 git status

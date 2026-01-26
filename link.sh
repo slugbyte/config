@@ -34,7 +34,10 @@
   trash_existing(){
     # skip if doesn't exist or is a symlink
     [[ -e "$1" ]] || return 0
-    [[ -L "$1" ]] && return 0
+    if [[ -L "$1" ]]; then
+      rm "$1"
+      return 0
+    fi
   
     trashed_filepath_list+=("$1")
     if command -v trash >/dev/null 2>&1; then

@@ -1,7 +1,7 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-if test -d .jj
-    jj abandon $argv
-    return
-end
-git reset $argv
+if [[ -d .jj ]]; then
+    jj abandon "$@"
+    exit 0
+fi
+git reset "$@"

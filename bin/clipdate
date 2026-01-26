@@ -1,5 +1,5 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
-set d (date +%Y-%m-%d)
-echo -n $d | wl-copy
-notify-send "Date Copied" $d
+d=$(date +%Y-%m-%d)
+echo -n "$d" | wl-copy
+notify-send "Date Copied" "$d"
