@@ -57,5 +57,5 @@ case "$unit" in
 esac
 
 result=$(printf "%.0f°C(%.0f°F)" "$celsius" "$fahrenheit")
-wl-copy "$result"
+echo "$result" | wl-copy
 echo "clipboard: $result"

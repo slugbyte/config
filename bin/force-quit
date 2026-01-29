@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Force quit a Hyprland window using an interactive fzf menu
+
+# Check for fzf
+if ! command -v fzf &> /dev/null; then
+    echo "Error: fzf is required but not installed."
+    exit 1
+fi
+
+# Get window list from hyprctl
+windows=$(hyprctl clients -j | jq -r '.[] | "\(.address) | \(.class) | \(.title)"')
+
+if [[ -z "$windows" ]]; then
+    echo "No windows found."
+    exit 0
+fi
+
+# Show interactive menu with fzf
+selected=$(echo "$windows" | fzf \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="Force Quit > " \
+    --header="Select a window to kill (ESC to cancel)" \
+    --header-first \
+    --preview-window=hidden)
+
+if [[ -n "$selected" ]]; then
+    address=$(echo "$selected" | cut -d'|' -f1 | xargs)
+    echo "Killing window: $selected"
+    hyprctl dispatch closewindow address:"$address"
+else
+    echo "Cancelled."
+fi

@@ -20,4 +20,4 @@ if [[ "$1" == "--help" ]]; then
     exit 0
 fi
 
-system-launch-floating-tui killme $(hyprctl activewindow -j | jq '.pid')
+system-launch-floating-tui killme $(hyprctl activewindow -j | jq '.address')

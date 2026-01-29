@@ -6,6 +6,7 @@
   "height": 40,
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-Center": ["custom/update", "custom/voxtype", "custom/screenrecording-indicator"],
+
   "modules-right": [
     "group/tray-expander",
     "bluetooth",
@@ -15,9 +16,17 @@
     "cpu",
     "memory",
     "battery",
+    "custom/claudebar",
     "temperature",
     "clock"
   ],
+  "custom/claudebar": {
+    "exec": "~/.local/bin/claudebar.ts",
+    "interval": 60,
+    "return-type": "json",
+    "tooltip": false,
+    "on-click": "xdg-open https://claude.ai/settings/usage"
+  },
   "hyprland/workspaces": {
     "on-click": "activate",
     "format": "{icon}",

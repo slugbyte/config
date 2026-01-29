@@ -14,7 +14,7 @@ export user="$drop/user"
 export temp="$HOME/Downloads"
 export image="$data/image"
 export video="$data/video"
-export trash="~/.local/share/Trash/files"
+export trash="$HOME/.local/share/Trash/files"
 
 # e is my editor
 export EDITOR="$(which e)"

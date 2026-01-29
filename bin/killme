@@ -1,0 +1,148 @@
+#!/bin/bash
+
+VERSION="2026.01.29"
+DESCRIPTION="killme is an interactive menu for killing or signaling the active Hyprland window."
+
+actions=("Kill" "SIGUSR1" "SIGUSR2" "Cancel")
+descriptions=("Kill the window" "Send SIGUSR1" "Send SIGUSR2" "Cancel")
+cursor=0
+
+print_help() {
+    cat <<EOF
+killme - Kill or signal a Hyprland window
+
+Usage: killme <window_id> [options]
+
+Arguments:
+  window_id   The Hyprland window address (hex, e.g., 0x5a1b2c3d)
+
+Options:
+  --help      Show this help message
+  --version   Show version (build date)
+  --describe  Show a brief description
+
+Navigation:
+  ↑/↓ or n/e  Move selection
+  Enter       Confirm action
+  q/Esc       Cancel and quit
+EOF
+}
+
+get_window_info() {
+    window_id="$1"
+    window_json=$(hyprctl clients -j | jq -r ".[] | select(.address == $window_id)")
+    if [[ -z "$window_json" ]]; then
+        echo "Error: Window with ID '$window_id' not found"
+        exit 1
+    fi
+    window_class=$(echo "$window_json" | jq -r '.class')
+    window_title=$(echo "$window_json" | jq -r '.title')
+    window_pid=$(echo "$window_json" | jq -r '.pid')
+}
+
+render() {
+    clear
+    echo "$window_class - $window_title"
+    echo
+
+    for i in "${!actions[@]}"; do
+        if [[ $i -eq $cursor ]]; then
+            echo "> [${actions[$i]}] ${descriptions[$i]}"
+        else
+            echo "   ${actions[$i]}"
+        fi
+    done
+
+    echo
+    echo "Use ↑/↓ or n/e to navigate, Enter to confirm, q/esc to quit"
+}
+
+handle_action() {
+    case "${actions[$cursor]}" in
+        "Kill")
+            hyprctl dispatch closewindow "address:$window_id"
+            echo "Killed: $window_class - $window_title"
+            ;;
+        "SIGUSR1")
+            kill -USR1 "$window_pid"
+            echo "Sent SIGUSR1 to PID $window_pid ($window_class)"
+            ;;
+        "SIGUSR2")
+            kill -USR2 "$window_pid"
+            echo "Sent SIGUSR2 to PID $window_pid ($window_class)"
+            ;;
+        "Cancel")
+            echo "Canceled"
+            ;;
+    esac
+}
+
+main() {
+    case "$1" in
+        --help|-h)
+            print_help
+            exit 0
+            ;;
+        --version|-v)
+            echo "killme version: $VERSION"
+            exit 0
+            ;;
+        --describe)
+            echo "$DESCRIPTION"
+            exit 0
+            ;;
+        "")
+            echo "Error: Window ID required"
+            echo "Usage: killme <window_id>"
+            exit 1
+            ;;
+    esac
+
+    get_window_info "$1"
+
+    # Hide cursor and save terminal state
+    tput civis
+    stty -echo
+
+    trap 'tput cnorm; stty echo; exit' INT TERM EXIT
+
+    while true; do
+        render
+
+        # Read single keypress
+        read -rsn1 key
+
+        # Handle escape sequences (arrow keys)
+        if [[ $key == $'\x1b' ]]; then
+            read -rsn2 -t 0.1 key
+            case "$key" in
+                '[A') key="up" ;;    # Up arrow
+                '[B') key="down" ;;  # Down arrow
+                '') key="esc" ;;     # Just escape
+            esac
+        fi
+
+        case "$key" in
+            up|e|h)
+                ((cursor--))
+                [[ $cursor -lt 0 ]] && cursor=$((${#actions[@]} - 1))
+                ;;
+            down|n|l)
+                ((cursor++))
+                [[ $cursor -ge ${#actions[@]} ]] && cursor=0
+                ;;
+            q|esc)
+                clear
+                echo "Canceled"
+                exit 0
+                ;;
+            '')  # Enter key
+                clear
+                handle_action
+                exit 0
+                ;;
+        esac
+    done
+}
+
+main "$@"
