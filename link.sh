@@ -35,7 +35,7 @@
     # skip if doesn't exist or is a symlink
     [[ -e "$1" ]] || return 0
     if [[ -L "$1" ]]; then
-      rm "$1"
+      run_safe rm "$1"
       return 0
     fi
   
@@ -60,7 +60,7 @@
     fi
   }
 
-  # link all the config files in a $conf subdirectiry
+  # link all the config files in a $conf subdirectory
   # $link_config $conf/config ~/.config
   # $link_config $conf/home ~/
   link_config(){
