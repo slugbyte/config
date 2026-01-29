@@ -1,8 +1,37 @@
 #!/bin/bash
-# $ image2jpg $image-filepath [outname]
-# outfile fill be in same directory as the input filepath
-# it will error if the output filepath allready exists
-# outfile will allways have the extension .jpg
+# image2jpg - Convert image to high-quality JPG
+#
+# Converts any image to JPG format at 95% quality with metadata
+# stripped. Output is saved in the same directory as input.
+# Fails if output file already exists.
+#
+# Usage:
+#   image2jpg <image> [outname]
+#
+# Examples:
+#   image2jpg photo.png           # creates photo.jpg
+#   image2jpg icon.webp thumb     # creates thumb.jpg
+#   image2jpg ~/img/pic.bmp       # creates ~/img/pic.jpg
+
+[[ "$1" == "--describe" ]] && echo "Convert image to high-quality JPG format" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: image2jpg <image> [outname]"
+    echo ""
+    echo "Convert image to high-quality JPG format."
+    echo "  image     Input image file"
+    echo "  outname   Output filename (default: input name)"
+    echo ""
+    echo "Output: 95% quality, metadata stripped"
+    echo "Fails if output already exists."
+    exit 0
+fi
+
+if [[ -z "$1" ]]; then
+    echo "Usage: image2jpg <image> [outname]"
+    exit 1
+fi
+
 img="$1"
 out="${img}"
 out="${2:-$out}"
@@ -10,7 +39,7 @@ out="${out%.*}.jpg"
 out="$(dirname "$img")/$(basename "$out")"
 
 if [[ -f $out ]];then
-  echo "ERROR: output path allready exists $out"
+  echo "ERROR: output path already exists $out"
   exit 1
 fi
 

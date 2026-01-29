@@ -1,4 +1,27 @@
 #!/bin/bash
+# vnew - Create a new commit/change
+#
+# Unified wrapper for creating commits. In jj repos, creates a new
+# empty change. In git repos, creates a GPG-signed commit.
+#
+# Usage:
+#   vnew [git-commit-args...]
+#
+# Examples:
+#   vnew                       # new change (jj) or commit staged (git)
+#   vnew -m "feat: add login"  # commit with message (git)
+#   vnew -a -m "fix bug"       # commit all tracked files (git)
+
+[[ "$1" == "--describe" ]] && echo "Create a new commit/change" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vnew [git-commit-args...]"
+    echo ""
+    echo "Create a new commit/change."
+    echo "  jj: runs 'jj new'"
+    echo "  git: runs 'git commit -S' (GPG signed)"
+    exit 0
+fi
 
 if [[ -d .jj ]]; then
     jj new

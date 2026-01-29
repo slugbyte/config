@@ -1,5 +1,31 @@
 #!/bin/bash
-# $ system-toggle-floast [width height]
+# system-toggle-window-float - Toggle floating mode for active window
+#
+# Toggles the active Hyprland window between floating and tiled mode.
+# When floating, the window is pinned, resized, and centered. When
+# tiling, pin is removed first if needed.
+#
+# Usage:
+#   system-toggle-window-float [width] [height]
+#
+# Examples:
+#   system-toggle-window-float           # use default 1300x900
+#   system-toggle-window-float 800 600   # custom size
+#   system-toggle-window-float 1920 1080 # larger floating window
+
+[[ "$1" == "--describe" ]] && echo "Toggle floating mode for active Hyprland window" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: system-toggle-window-float [width] [height]"
+    echo ""
+    echo "Toggle floating mode for active Hyprland window."
+    echo "  width    Window width when floating (default: 1300)"
+    echo "  height   Window height when floating (default: 900)"
+    echo ""
+    echo "Floating windows are pinned and centered."
+    exit 0
+fi
+
 width=${1:-1300}
 height=${2:-900}
 

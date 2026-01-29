@@ -1,4 +1,31 @@
 #!/bin/bash
+# vpush - Push commits to remote
+#
+# Unified wrapper for pushing to remote. In jj repos, sets bookmark
+# and pushes. In git repos, pushes branch with tags to origin.
+#
+# Usage:
+#   vpush [branch] [-f|--force]
+#
+# Examples:
+#   vpush              # push current branch to origin
+#   vpush main         # push main branch to origin
+#   vpush feature -f   # force push feature branch
+#   vpush -            # push current branch (explicit)
+
+[[ "$1" == "--describe" ]] && echo "Push commits to remote" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vpush [branch] [-f|--force]"
+    echo ""
+    echo "Push commits to remote."
+    echo "  branch      Branch to push (default: current branch, '-' for current)"
+    echo "  -f,--force  Force push (use with caution)"
+    echo ""
+    echo "  jj: sets bookmark and runs 'jj git push'"
+    echo "  git: runs 'git push origin <branch> --tags'"
+    exit 0
+fi
 
 if [[ -d ./.jj ]]; then
     branch="${1:-main}"

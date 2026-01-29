@@ -1,0 +1,42 @@
+#!/bin/bash
+# scripts - List all custom scripts with descriptions
+#
+# Lists all executable scripts in $conf/bin along with their
+# --describe output. Useful for discovering available tools.
+#
+# Usage:
+#   scripts
+#
+# Examples:
+#   scripts              # list all scripts with descriptions
+#   scripts | grep video # find video-related scripts
+
+[[ "$1" == "--describe" ]] && echo "List all custom scripts with descriptions" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: scripts"
+    echo ""
+    echo "List all custom scripts in \$conf/bin with their descriptions."
+    echo "Each script's --describe output is shown."
+    exit 0
+fi
+
+bin_dir="${conf:-$HOME/workspace/conf}/bin"
+
+if [[ ! -d "$bin_dir" ]]; then
+    echo "Error: bin directory not found: $bin_dir"
+    exit 1
+fi
+
+for script in "$bin_dir"/*; do
+    [[ -x "$script" ]] || continue
+    [[ -f "$script" ]] || continue
+    name=$(basename "$script")
+    [[ "$name" == "README.md" ]] && continue
+    desc=$("$script" --describe 2>/dev/null)
+    if [[ -n "$desc" ]]; then
+        printf "%-30s %s\n" "$name" "$desc"
+    else
+        printf "%-30s %s\n" "$name" "(no description)"
+    fi
+done

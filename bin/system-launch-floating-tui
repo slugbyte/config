@@ -1,5 +1,26 @@
 #!/bin/bash
-# launch a tui in a floating window
-# $ system-launch-floating-tui program args..
-exec setsid uwsm-app -- xdg-terminal-exec --app-id=com.slugbyte.popup -e "$1" "${@:2}"
+# system-launch-floating-tui - Launch TUI app in floating terminal
+#
+# Launches a terminal application in a floating window using the
+# popup app-id for Hyprland window rules.
+#
+# Usage:
+#   system-launch-floating-tui <program> [args...]
+#
+# Examples:
+#   system-launch-floating-tui htop
+#   system-launch-floating-tui btop
+#   system-launch-floating-tui nvim /tmp/note.md
 
+[[ "$1" == "--describe" ]] && echo "Launch TUI program in floating terminal" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: system-launch-floating-tui <program> [args...]"
+    echo ""
+    echo "Launch a TUI program in a floating terminal window."
+    echo "  program   The TUI program to run"
+    echo "  args      Arguments passed to the program"
+    exit 0
+fi
+
+exec setsid uwsm-app -- xdg-terminal-exec --app-id=com.slugbyte.popup -e "$1" "${@:2}"

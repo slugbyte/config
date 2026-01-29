@@ -1,4 +1,25 @@
 #!/bin/bash
+# vfetch - Fetch from remote repository
+#
+# Unified wrapper for fetching remote changes. Works with both jj
+# and git repositories.
+#
+# Usage:
+#   vfetch
+#
+# Examples:
+#   vfetch             # fetch all remotes and prune stale refs
+
+[[ "$1" == "--describe" ]] && echo "Fetch from remote repository" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vfetch"
+    echo ""
+    echo "Fetch from remote repository."
+    echo "  jj: runs 'jj git fetch'"
+    echo "  git: runs 'git fetch -patv' (prune, all, tags, verbose)"
+    exit 0
+fi
 
 if [[ -d ./.jj ]]; then
     jj git fetch

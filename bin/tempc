@@ -1,4 +1,30 @@
 #!/bin/bash
+# tempc - Convert temperature and copy to clipboard
+#
+# Converts between Celsius and Fahrenheit, copies the result to
+# clipboard, and prints it. Input must end with 'c' or 'f'.
+#
+# Usage:
+#   tempc <temperature>
+#
+# Examples:
+#   tempc 100c         # convert 100C to F, copies "100C(212F)"
+#   tempc 72f          # convert 72F to C, copies "22C(72F)"
+#   tempc -40c         # works with negative values
+
+[[ "$1" == "--describe" ]] && echo "Convert temperature between C and F" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: tempc <temperature>"
+    echo ""
+    echo "Convert temperature and copy result to clipboard."
+    echo "  temperature   Number followed by 'c' or 'f'"
+    echo ""
+    echo "Examples:"
+    echo "  tempc 100c    # 100C -> 100C(212F)"
+    echo "  tempc 72f     # 72F -> 22C(72F)"
+    exit 0
+fi
 
 if [[ -z "$1" ]]; then
     echo "Usage: tempc <temperature>"

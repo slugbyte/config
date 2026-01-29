@@ -1,11 +1,37 @@
 #!/bin/bash
-# WARN: ico format has limits max size to 256x256 and works best with square images
-# its best to just use 256x256 png images
-# 
-# $ image2ico $image-filepath [outname]
-# outfile fill be in same directory as the input filepath
-# it will error if the output filepath allready exists
-# outfile will allways have the extension .ico
+# image2ico - Convert image to ICO format
+#
+# Converts any image to Windows ICO format with multiple sizes
+# (256, 128, 64, 48, 32, 16). Best results with square images.
+# Note: ICO format limits max size to 256x256.
+#
+# Usage:
+#   image2ico <image> [outname]
+#
+# Examples:
+#   image2ico logo.png            # creates logo.ico
+#   image2ico icon.webp favicon   # creates favicon.ico
+#   image2ico ~/img/app.png       # creates ~/img/app.ico
+
+[[ "$1" == "--describe" ]] && echo "Convert image to Windows ICO format" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: image2ico <image> [outname]"
+    echo ""
+    echo "Convert image to Windows ICO format."
+    echo "  image     Input image file (square recommended)"
+    echo "  outname   Output filename (default: input name)"
+    echo ""
+    echo "Creates multi-size ICO: 256, 128, 64, 48, 32, 16px"
+    echo "Note: ICO max size is 256x256"
+    exit 0
+fi
+
+if [[ -z "$1" ]]; then
+    echo "Usage: image2ico <image> [outname]"
+    exit 1
+fi
+
 img="$1"
 out="${img}"
 out="${2:-$out}"
@@ -14,3 +40,4 @@ out="$(dirname "$img")/$(basename "$out")"
 
 magick "$img" -define icon:auto-resize=256,128,64,48,32,16 "$out"
 
+echo "$out"

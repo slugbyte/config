@@ -1,4 +1,26 @@
 #!/bin/bash
+# vdiff - Show changes/diff
+#
+# Unified wrapper for viewing diffs. Works with both jj and git
+# repositories, passing through any additional arguments.
+#
+# Usage:
+#   vdiff [args...]
+#
+# Examples:
+#   vdiff              # show all uncommitted changes
+#   vdiff --staged     # show staged changes (git)
+#   vdiff HEAD~1       # diff against previous commit
+
+[[ "$1" == "--describe" ]] && echo "Show repository changes/diff" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vdiff [args...]"
+    echo ""
+    echo "Show changes/diff in the repository."
+    echo "All arguments are passed to the underlying VCS command."
+    exit 0
+fi
 
 if [[ -d .jj ]]; then
     jj diff "$@"

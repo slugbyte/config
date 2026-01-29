@@ -1,4 +1,25 @@
 #!/bin/bash
+# system-monitor-on - Turn on all monitors
+#
+# Enables DPMS (Display Power Management) for all Hyprland monitors
+# and restores saved brightness level.
+#
+# Usage:
+#   system-monitor-on
+#
+# Examples:
+#   system-monitor-on  # wake up all displays
+
+[[ "$1" == "--describe" ]] && echo "Turn on all monitors and restore brightness" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: system-monitor-on"
+    echo ""
+    echo "Turn on all monitors and restore brightness."
+    echo "Uses hyprctl dpms and brightnessctl."
+    exit 0
+fi
+
 for monitor in $(hyprctl monitors -j | jq -r '.[].name'); do
     hyprctl dispatch dpms on "$monitor"
     sleep 0.3

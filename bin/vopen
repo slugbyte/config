@@ -1,5 +1,26 @@
 #!/bin/bash
-# vopen [branch]
+# vopen - Open repository in browser
+#
+# Unified wrapper for opening the remote repository in a web browser.
+# Uses git-open to open GitHub/GitLab/etc pages.
+#
+# Usage:
+#   vopen [branch]
+#
+# Examples:
+#   vopen              # open current branch in browser
+#   vopen main         # open main branch in browser
+#   vopen feature/foo  # open specific branch
+
+[[ "$1" == "--describe" ]] && echo "Open repository in browser" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vopen [branch]"
+    echo ""
+    echo "Open repository in browser."
+    echo "  branch   Branch to open (default: current branch or main for jj)"
+    exit 0
+fi
 
 if [[ -d .jj ]]; then
     branch="${1:-main}"

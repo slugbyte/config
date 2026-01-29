@@ -1,4 +1,27 @@
 #!/bin/bash
+# vdrop - Discard changes or abandon commits
+#
+# Unified wrapper for discarding work. In jj repos, abandons the
+# specified revision. In git repos, resets changes.
+#
+# Usage:
+#   vdrop [args...]
+#
+# Examples:
+#   vdrop              # reset all changes (git)
+#   vdrop HEAD~1       # reset to previous commit (git)
+#   vdrop @            # abandon current change (jj)
+
+[[ "$1" == "--describe" ]] && echo "Discard changes or abandon commits" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vdrop [args...]"
+    echo ""
+    echo "Discard changes or abandon commits."
+    echo "  jj: runs 'jj abandon'"
+    echo "  git: runs 'git reset'"
+    exit 0
+fi
 
 if [[ -d .jj ]]; then
     jj abandon "$@"

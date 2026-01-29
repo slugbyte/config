@@ -1,4 +1,25 @@
 #!/bin/bash
+# screenshot-notify - Take screenshot with notification
+#
+# Takes a screenshot using the screenshot tool and shows a notification
+# with option to open the result in Krita for editing.
+#
+# Usage:
+#   screenshot-notify
+#
+# Examples:
+#   screenshot-notify  # take screenshot, show notification with "Open in Paint" action
+
+[[ "$1" == "--describe" ]] && echo "Take screenshot and show notification" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: screenshot-notify"
+    echo ""
+    echo "Take screenshot and show notification."
+    echo "Click notification to open in Krita for editing."
+    exit 0
+fi
+
 SCREENSHOT_PATH=$(screenshot)
 
 if [[ -n "$SCREENSHOT_PATH" ]]; then

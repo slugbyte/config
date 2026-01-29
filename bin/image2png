@@ -1,8 +1,37 @@
 #!/bin/bash
-# $ image2png $image-filepath [outname]
-# outfile fill be in same directory as the input filepath
-# it will error if the output filepath allready exists
-# outfile will allways have the extension .png
+# image2png - Convert image to optimized PNG
+#
+# Converts any image to PNG format with maximum compression.
+# Output is saved in the same directory as input. Fails if
+# output file already exists.
+#
+# Usage:
+#   image2png <image> [outname]
+#
+# Examples:
+#   image2png photo.jpg           # creates photo.png
+#   image2png icon.webp logo      # creates logo.png
+#   image2png ~/img/pic.bmp       # creates ~/img/pic.png
+
+[[ "$1" == "--describe" ]] && echo "Convert image to optimized PNG format" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: image2png <image> [outname]"
+    echo ""
+    echo "Convert image to optimized PNG format."
+    echo "  image     Input image file"
+    echo "  outname   Output filename (default: input name)"
+    echo ""
+    echo "Output is saved in same directory as input."
+    echo "Fails if output already exists."
+    exit 0
+fi
+
+if [[ -z "$1" ]]; then
+    echo "Usage: image2png <image> [outname]"
+    exit 1
+fi
+
 img="$1"
 out="${img}"
 out="${2:-$out}"
@@ -10,7 +39,7 @@ out="${out%.*}.png"
 out="$(dirname "$img")/$(basename "$out")"
 
 if [[ -f $out ]];then
-  echo "ERROR: output path allready exists $out"
+  echo "ERROR: output path already exists $out"
   exit 1
 fi
 

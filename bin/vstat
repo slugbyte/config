@@ -1,4 +1,25 @@
 #!/bin/bash
+# vstat - Show repository status
+#
+# Unified wrapper for showing working directory status. Works with
+# both jj and git repositories.
+#
+# Usage:
+#   vstat
+#
+# Examples:
+#   vstat              # show status of working directory
+
+[[ "$1" == "--describe" ]] && echo "Show repository status" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vstat"
+    echo ""
+    echo "Show repository status."
+    echo "  jj: runs 'jj status --no-pager'"
+    echo "  git: runs 'git status'"
+    exit 0
+fi
 
 if [[ -d .jj ]]; then
     jj status --no-pager

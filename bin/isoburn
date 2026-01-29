@@ -1,4 +1,30 @@
 #!/bin/bash
+# isoburn - Write ISO image to disk/USB drive
+#
+# Burns an ISO file to a disk or USB drive using dd. Requires sudo.
+# Use with caution - this will overwrite the target device completely.
+#
+# Usage:
+#   isoburn <iso_file> <disk_path>
+#
+# Examples:
+#   isoburn ubuntu.iso /dev/sdb       # write Ubuntu ISO to USB
+#   isoburn arch.iso /dev/sdc         # write Arch ISO to disk
+#   isoburn ~/Downloads/fedora.iso /dev/sdd
+
+[[ "$1" == "--describe" ]] && echo "Write ISO image to disk/USB drive" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: isoburn <iso_file> <disk_path>"
+    echo ""
+    echo "Write ISO image to disk/USB drive."
+    echo "  iso_file    Path to ISO file"
+    echo "  disk_path   Target device (e.g., /dev/sdb)"
+    echo ""
+    echo "WARNING: This will overwrite the entire target device!"
+    echo "Requires sudo privileges."
+    exit 0
+fi
 
 if [[ $# -ne 2 ]]; then
     echo "Usage: isoburn <iso_file> <disk_path>"

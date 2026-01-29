@@ -1,4 +1,27 @@
 #!/usr/bin/env node
+// termcolors - Display 256-color terminal palette
+//
+// Shows all 256 terminal colors as swatches with their color codes.
+// Useful for picking colors for terminal themes and configurations.
+//
+// Usage:
+//   termcolors
+//
+// Examples:
+//   termcolors         # display full 256 color palette
+
+if (process.argv[2] === "--describe") {
+  console.log("Display 256-color terminal palette");
+  process.exit(0);
+}
+
+if (process.argv[2] === "--help") {
+  console.log("Usage: termcolors");
+  console.log("");
+  console.log("Display 256-color terminal palette viewer.");
+  console.log("Shows system colors, 216-color cube, and grayscale.");
+  process.exit(0);
+}
 
 const { stdout } = process;
 

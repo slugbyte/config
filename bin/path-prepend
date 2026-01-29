@@ -1,6 +1,32 @@
 #!/bin/sh
+# path-prepend - Prepend directory to PATH
+#
+# Outputs a new PATH with the given directory prepended. If the
+# directory is already in PATH, outputs PATH unchanged. Use with
+# eval or in shell config.
+#
+# Usage:
+#   path-prepend <directory>
+#
+# Examples:
+#   path-prepend /usr/local/bin    # prepend if not present
+#   export PATH=$(path-prepend ~/.local/bin)
+#   eval "export PATH=$(path-prepend ~/bin)"
+
+[ "$1" = "--describe" ] && echo "Prepend directory to PATH if not present" && exit 0
+
+if [ "$1" = "--help" ]; then
+    echo "Usage: path-prepend <directory>"
+    echo ""
+    echo "Output PATH with directory prepended (if not already present)."
+    echo "  directory   Path to prepend"
+    echo ""
+    echo "Example: export PATH=\$(path-prepend ~/.local/bin)"
+    exit 0
+fi
+
 if [ -z "$1" ]; then
-    echo "Usage: prepend-path <directory>" >&2
+    echo "Usage: path-prepend <directory>" >&2
     exit 1
 fi
 
@@ -8,4 +34,3 @@ case ":$PATH:" in
     *:"$1":*) echo "$PATH" ;;
     *) echo "$1:$PATH" ;;
 esac
-

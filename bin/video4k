@@ -1,10 +1,34 @@
-
 #!/bin/bash
-# $ video4k filepath
-# ripped from omarchy
-# creates a 1080p image thats good for sharing online
-# renames file inplace and changes extension go `-1080p.mp4`
-# ffmpeg -i $1 -c:v libx265 -preset slow -crf 24 -c:a aac -b:a 192k ${1%.*}-optimized.mp4
+# video4k - Optimize video to 1080p with high quality
+#
+# Converts video to 1080p using H.265/HEVC codec with high quality
+# settings. Output is letterboxed/pillarboxed to exactly 1920x1080.
+# Good for sharing optimized videos online.
+#
+# Usage:
+#   video4k <input_file>
+#
+# Examples:
+#   video4k recording.mov      # creates recording-optimized.mp4
+#   video4k ~/Videos/clip.avi  # creates ~/Videos/clip-optimized.mp4
+
+[[ "$1" == "--describe" ]] && echo "Optimize video to 1080p with H.265 codec" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: video4k <input_file>"
+    echo ""
+    echo "Optimize video to 1080p with H.265 codec."
+    echo "  input_file   Video file to convert"
+    echo ""
+    echo "Output: <input>-optimized.mp4 (1920x1080, letterboxed)"
+    echo "Codec: H.265/HEVC, CRF 24, AAC 192k audio"
+    exit 0
+fi
+
+if [[ -z "$1" ]]; then
+    echo "Usage: video4k <input_file>"
+    exit 1
+fi
 
 ffmpeg -i "$1" \
   -vf "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black" \

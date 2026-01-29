@@ -1,4 +1,23 @@
 #!/bin/bash
+# clipdate - Copy current date to clipboard
+#
+# Copies today's date in YYYY-MM-DD format to the Wayland clipboard
+# and shows a notification.
+#
+# Usage:
+#   clipdate
+#
+# Examples:
+#   clipdate           # copies "2024-01-15" to clipboard
+
+[[ "$1" == "--describe" ]] && echo "Copy current date (YYYY-MM-DD) to clipboard" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: clipdate"
+    echo ""
+    echo "Copy current date (YYYY-MM-DD) to clipboard and show notification."
+    exit 0
+fi
 
 d=$(date +%Y-%m-%d)
 echo -n "$d" | wl-copy

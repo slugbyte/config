@@ -1,2 +1,23 @@
 #!/bin/bash
+# system-killme - Kill active window's process interactively
+#
+# Launches the 'killme' TUI in a floating terminal to manage/kill
+# the process of the currently active Hyprland window.
+#
+# Usage:
+#   system-killme
+#
+# Examples:
+#   system-killme      # open killme for active window's process
+
+[[ "$1" == "--describe" ]] && echo "Kill active window's process interactively" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: system-killme"
+    echo ""
+    echo "Launch killme TUI for the active window's process."
+    echo "Opens in a floating terminal window."
+    exit 0
+fi
+
 system-launch-floating-tui killme $(hyprctl activewindow -j | jq '.pid')

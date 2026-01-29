@@ -1,4 +1,31 @@
 #!/bin/bash
+# vdesc - Edit commit description/message
+#
+# Unified wrapper for editing commit messages. In jj repos, edits the
+# current change description. In git repos, amends the last commit
+# message with GPG signing.
+#
+# Usage:
+#   vdesc [message]
+#
+# Examples:
+#   vdesc                      # open editor to edit message
+#   vdesc "fix: typo"          # set message directly
+#   vdesc "feat: add login"    # amend last commit message (git)
+
+[[ "$1" == "--describe" ]] && echo "Edit commit description/message" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vdesc [message]"
+    echo ""
+    echo "Edit commit description/message."
+    echo "  No args    Open editor to edit message"
+    echo "  message    Set message directly"
+    echo ""
+    echo "In jj: edits current change description"
+    echo "In git: amends last commit message (GPG signed)"
+    exit 0
+fi
 
 if [[ -d .jj ]]; then
     if [[ -n "$1" ]]; then

@@ -1,4 +1,28 @@
 #!/bin/bash
+# vadd - Stage files for git commit
+#
+# Unified wrapper for staging files. Works with git repositories only
+# (not supported in jj repositories). Stages all files if no arguments
+# provided, or specific files if paths are given.
+#
+# Usage:
+#   vadd [files...]
+#
+# Examples:
+#   vadd               # stage all changes (git add .)
+#   vadd file.txt      # stage specific file
+#   vadd src/ lib/     # stage multiple paths
+
+[[ "$1" == "--describe" ]] && echo "Stage files for git commit" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vadd [files...]"
+    echo ""
+    echo "Stage files for git commit."
+    echo "  No args    Stage all changes (git add .)"
+    echo "  files...   Stage specific files"
+    exit 0
+fi
 
 if [[ -d ./.jj ]]; then
     echo "ERROR: git_add not supported in jj repositories"

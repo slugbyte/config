@@ -1,3 +1,23 @@
 #!/bin/bash
+# path-print - Print PATH entries one per line
+#
+# Displays each directory in the PATH environment variable on its
+# own line for easy reading and debugging.
+#
+# Usage:
+#   path-print
+#
+# Examples:
+#   path-print              # list all PATH entries
+#   path-print | grep local # find local paths
+
+[[ "$1" == "--describe" ]] && echo "Print PATH entries one per line" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: path-print"
+    echo ""
+    echo "Print each PATH entry on a separate line."
+    exit 0
+fi
 
 echo $PATH | tr ':' '\n'

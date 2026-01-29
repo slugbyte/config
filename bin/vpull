@@ -1,4 +1,31 @@
 #!/bin/bash
+# vpull - Pull changes from remote
+#
+# Unified wrapper for pulling remote changes. In jj repos, fetches
+# from git remote. In git repos, pulls with optional branch and remote.
+#
+# Usage:
+#   vpull [branch] [remote]
+#
+# Examples:
+#   vpull                  # pull current branch from origin
+#   vpull main             # pull main branch from origin
+#   vpull feature upstream # pull feature branch from upstream
+#   vpull -                # pull current branch (explicit)
+
+[[ "$1" == "--describe" ]] && echo "Pull changes from remote" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vpull [branch] [remote]"
+    echo ""
+    echo "Pull changes from remote."
+    echo "  branch   Branch to pull (default: current branch, '-' for current)"
+    echo "  remote   Remote to pull from (default: origin)"
+    echo ""
+    echo "  jj: runs 'jj git fetch'"
+    echo "  git: runs 'git pull <remote> <branch>'"
+    exit 0
+fi
 
 if [[ -d ./.jj ]]; then
     jj git fetch

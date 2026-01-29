@@ -1,4 +1,26 @@
 #!/bin/bash
+# vtag - Create a signed git tag
+#
+# Creates a GPG-signed, annotated tag. Not supported in jj repositories.
+#
+# Usage:
+#   vtag <tag_name> [commit]
+#
+# Examples:
+#   vtag v1.0.0            # tag HEAD as v1.0.0
+#   vtag v1.0.0 abc123     # tag specific commit
+#   vtag release-2024      # tag HEAD with custom name
+
+[[ "$1" == "--describe" ]] && echo "Create a signed git tag" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vtag <tag_name> [commit]"
+    echo ""
+    echo "Create a signed git tag."
+    echo "  tag_name  Name for the tag (required)"
+    echo "  commit    Commit to tag (default: HEAD)"
+    exit 0
+fi
 
 if [[ -d ./.jj ]]; then
     echo "ERROR: vtag not supported in jj repositories"
@@ -10,7 +32,7 @@ commit="${2:-HEAD}"
 
 if [[ -z "$tag_name" ]]; then
     echo "ERROR: tag name required"
-    echo "Usage: git_tag <tag_name> [commit]"
+    echo "Usage: vtag <tag_name> [commit]"
     exit 1
 fi
 

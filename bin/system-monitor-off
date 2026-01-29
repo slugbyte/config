@@ -1,4 +1,25 @@
 #!/bin/bash
+# system-monitor-off - Turn off all monitors
+#
+# Disables DPMS (Display Power Management) for all Hyprland monitors,
+# turning off displays while keeping the session active.
+#
+# Usage:
+#   system-monitor-off
+#
+# Examples:
+#   system-monitor-off  # turn off all displays
+
+[[ "$1" == "--describe" ]] && echo "Turn off all monitors (DPMS off)" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: system-monitor-off"
+    echo ""
+    echo "Turn off all monitors (DPMS off)."
+    echo "Session remains active, move mouse or press key to wake."
+    exit 0
+fi
+
 for monitor in $(hyprctl monitors -j | jq -r '.[].name'); do
     hyprctl dispatch dpms off "$monitor"
     sleep 0.3

@@ -1,4 +1,25 @@
 #!/bin/bash
+# vlog - Show commit history
+#
+# Unified wrapper for viewing commit history. Shows a formatted,
+# colorized log with graph visualization.
+#
+# Usage:
+#   vlog
+#
+# Examples:
+#   vlog               # show commit history with graph
+
+[[ "$1" == "--describe" ]] && echo "Show commit history with graph" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vlog"
+    echo ""
+    echo "Show commit history with graph visualization."
+    echo "  jj: shows last 10 commits"
+    echo "  git: shows colored graph with author and relative date"
+    exit 0
+fi
 
 if [[ -d ./.jj ]]; then
     jj log -r 'all()' -n 10

@@ -1,4 +1,24 @@
 #!/bin/bash
+# system-lock - Lock the session and turn off monitors
+#
+# Turns off all monitors and locks the session using loginctl.
+# Convenient shortcut for stepping away from the computer.
+#
+# Usage:
+#   system-lock
+#
+# Examples:
+#   system-lock        # turn off monitors and lock session
+
+[[ "$1" == "--describe" ]] && echo "Lock session and turn off monitors" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: system-lock"
+    echo ""
+    echo "Turn off monitors and lock the session."
+    echo "Combines system-monitor-off with loginctl lock-session."
+    exit 0
+fi
+
 system-monitor-off 
 loginctl lock-session
-
