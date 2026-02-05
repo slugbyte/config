@@ -38,15 +38,17 @@ pkill slurp && exit 0
 
 get_rectangles() {
   local active_workspace=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .activeWorkspace.id')
-  hyprctl monitors -j | jq -r --arg ws "$active_workspace" '.[] | select(.activeWorkspace.id == ($ws | tonumber)) | "\(.x),\(.y) \((.width / .scale) | floor)x\((.height / .scale) | floor)"'
+  hyprctl monitors -j | jq -r --arg ws "$active_workspace" '.[] | select(.activeWorkspace.id == ($ws | tonumber)) | "\(.x),\(.y) \((if .transform % 2 == 1 then .height else .width end / .scale) | floor)x\((if .transform % 2 == 1 then .width else .height end / .scale) | floor)"'
   hyprctl clients -j | jq -r --arg ws "$active_workspace" '.[] | select(.workspace.id == ($ws | tonumber)) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
 }
 
 RECTS=$(get_rectangles)
-wayfreeze & PID=$!
-sleep .1
+# TODO: add wayfreeze back once it supports rotated monitors (transform != 0).
+# wayfreeze 0.1.0 ignores Wayland output transforms, so the frozen overlay
+# appears upside-down/rotated on monitors with a non-zero transform value.
+# The fix was merged upstream (PR #24) but hasn't landed in a release yet.
+# See: https://github.com/Jappie3/wayfreeze
 SELECTION=$(echo "$RECTS" | slurp 2>/dev/null)
-kill $PID 2>/dev/null
 
 # If the selction area is L * W < 20, we'll assume you were trying to select whichever
 # window or output it was inside of to prevent accidental 2px snapshots

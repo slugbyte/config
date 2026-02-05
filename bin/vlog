@@ -22,6 +22,8 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 if [[ -d ./.jj ]]; then
+    jj status
+    echo 
     jj log -r 'all()' -n 10
     exit 0
 fi

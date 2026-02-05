@@ -14,7 +14,7 @@ gutters = [  "diff", "line-numbers", "spacer", "diagnostics",  "spacer"]
 end-of-line-diagnostics = "warning"
 
 [editor.auto-save]
-focus-lost = true
+focus-lost = false
 
 [editor.statusline]
 mode.normal = "normal"
