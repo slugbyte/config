@@ -26,10 +26,14 @@ if status is-interactive
         set -l git_desc ""
         if test -d .jj
             set -l desc (jj log --no-graph -r @ -T 'description.first_line()' 2>/dev/null)
+            set -l jj_dirty ""
+            if test -n "$(jj diff 2>/dev/null)"
+                set jj_dirty "* "
+            end
             if test -z "$desc"
-                set jj_desc "$COLOR_GRAY7 (no desc)"
+                set jj_desc "$COLOR_GRAY7 $jj_dirty(no desc)"
             else
-                set jj_desc "$COLOR_GRAY7 ($desc)"
+                set jj_desc "$COLOR_GRAY7 $jj_dirty($desc)"
             end
         else
             if test -d .git
