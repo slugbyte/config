@@ -24,7 +24,7 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 if [[ -d .jj ]]; then
-    jj new
+    jj new "$@"
     exit 0
 fi
 
