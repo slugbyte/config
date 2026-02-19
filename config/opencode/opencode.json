@@ -1,4 +1,22 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "system"
+  "theme": "system",
+  "default_agent": "plan",
+  "agent": {
+    "plan": {
+      "color": "#a0a0a0"
+    },
+    "build": {
+      "color": "#789978"
+    }
+  },
+  "permission": {
+    "external_directory": {
+      "~/.local/share/mise/installs/zig/**": "allow",
+      "~/workspace/note/**": "allow"
+    },
+    "edit": {
+      "~/.local/share/mise/installs/zig/**": "deny"
+    }
+  }
 }

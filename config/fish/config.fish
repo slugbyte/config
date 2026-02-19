@@ -55,9 +55,14 @@ if status is-interactive
         set -l duration_info ""
         if test $CMD_DURATION -lt 1000
             set duration_info " $COLOR_GRAY5""$CMD_DURATION"ms
-        else
-            set -l secs (echo "scale=1; $CMD_DURATION / 1000" | bc)
+        else if test $CMD_DURATION -lt 60000
+            set -l secs (math --scale=1 "$CMD_DURATION / 1000")
             set duration_info " $COLOR_GRAY5""$secs"s
+        else
+            set -l total_secs (math --scale=0 "$CMD_DURATION / 1000")
+            set -l mins (math --scale=0 "$total_secs / 60")
+            set -l rem_secs (math --scale=0 "$total_secs % 60")
+            set duration_info " $COLOR_GRAY5""$mins"m"$rem_secs"s
         end
 
         # red prompt indicator on failure
