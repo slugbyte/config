@@ -21,7 +21,10 @@ if [[ "$1" == "--help" ]]; then
     exit 0
 fi
 
-if [[ -d .jj ]]; then
+vcs_info=$(vdetect) || exit 1
+vcs="${vcs_info%% *}"
+
+if [[ "$vcs" == "jj" ]]; then
     jj status --no-pager
     exit 0
 fi

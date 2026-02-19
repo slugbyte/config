@@ -2,29 +2,50 @@
 # vlog - Show commit history
 #
 # Unified wrapper for viewing commit history. Shows a formatted,
-# colorized log with graph visualization.
+# colorized log with graph visualization. Accepts optional arguments
+# to customize output.
 #
 # Usage:
-#   vlog
+#   vlog [args...]
 #
 # Examples:
 #   vlog               # show commit history with graph
+#   vlog -n 5          # show last 5 commits
+#   vlog --oneline     # compact output (git)
 
 [[ "$1" == "--describe" ]] && echo "Show commit history with graph" && exit 0
 
 if [[ "$1" == "--help" ]]; then
-    echo "Usage: vlog"
+    echo "Usage: vlog [args...]"
     echo ""
     echo "Show commit history with graph visualization."
-    echo "  jj: shows last 10 commits"
+    echo "All arguments are passed to the underlying VCS command."
+    echo ""
+    echo "Defaults:"
+    echo "  jj: shows status + last 10 commits"
     echo "  git: shows colored graph with author and relative date"
     exit 0
 fi
 
-if [[ -d ./.jj ]]; then
+vcs_info=$(vdetect) || exit 1
+vcs="${vcs_info%% *}"
+
+if [[ "$vcs" == "jj" ]]; then
     jj status
-    echo 
-    jj log -r 'all()' -n 10
+    echo
+    if [[ $# -eq 0 ]]; then
+        jj log -r 'all()' -n 10
+    else
+        jj log "$@"
+    fi
     exit 0
 fi
-git log --graph --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' --abbrev-commit
+
+if [[ $# -eq 0 ]]; then
+    git log \
+        --graph \
+        --pretty=format:'%C(bold blue)%h%Creset %C(cyan)[%cr] %C(magenta)%an%Creset - %Creset%s%C(yellow)%d%Creset' \
+        --abbrev-commit
+else
+    git log "$@"
+fi

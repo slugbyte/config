@@ -2,38 +2,69 @@
 # vtag - Create a signed git tag
 #
 # Creates a GPG-signed, annotated tag. Not supported in jj repositories.
+# Supports inline messages with -m flag or opens editor if omitted.
 #
 # Usage:
-#   vtag <tag_name> [commit]
+#   vtag <tag_name> [commit] [-m <message>]
 #
 # Examples:
-#   vtag v1.0.0            # tag HEAD as v1.0.0
-#   vtag v1.0.0 abc123     # tag specific commit
-#   vtag release-2024      # tag HEAD with custom name
+#   vtag v1.0.0                        # tag HEAD, opens editor
+#   vtag v1.0.0 abc123                 # tag specific commit, opens editor
+#   vtag v1.0.0 -m "Release 1.0.0"    # tag HEAD with inline message
+#   vtag v1.0.0 abc123 -m "Release"   # tag commit with inline message
 
 [[ "$1" == "--describe" ]] && echo "Create a signed git tag" && exit 0
 
 if [[ "$1" == "--help" ]]; then
-    echo "Usage: vtag <tag_name> [commit]"
+    echo "Usage: vtag <tag_name> [commit] [-m <message>]"
     echo ""
     echo "Create a signed git tag."
     echo "  tag_name  Name for the tag (required)"
     echo "  commit    Commit to tag (default: HEAD)"
+    echo "  -m msg    Tag message (default: opens editor)"
     exit 0
 fi
 
-if [[ -d ./.jj ]]; then
+vcs_info=$(vdetect) || exit 1
+vcs="${vcs_info%% *}"
+
+if [[ "$vcs" == "jj" ]]; then
     echo "ERROR: vtag not supported in jj repositories"
     exit 1
 fi
 
-tag_name="$1"
-commit="${2:-HEAD}"
+# Parse arguments
+tag_name=""
+commit=""
+message=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -m)
+            shift
+            message="$1"
+            ;;
+        *)
+            if [[ -z "$tag_name" ]]; then
+                tag_name="$1"
+            elif [[ -z "$commit" ]]; then
+                commit="$1"
+            fi
+            ;;
+    esac
+    shift
+done
+
+commit="${commit:-HEAD}"
 
 if [[ -z "$tag_name" ]]; then
     echo "ERROR: tag name required"
-    echo "Usage: vtag <tag_name> [commit]"
+    echo "Usage: vtag <tag_name> [commit] [-m <message>]"
     exit 1
 fi
 
-git tag -sv "$tag_name" "$commit"
+if [[ -n "$message" ]]; then
+    git tag -sv "$tag_name" "$commit" -m "$message"
+else
+    git tag -sv "$tag_name" "$commit"
+fi

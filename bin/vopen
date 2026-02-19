@@ -22,9 +22,13 @@ if [[ "$1" == "--help" ]]; then
     exit 0
 fi
 
-if [[ -d .jj ]]; then
+vcs_info=$(vdetect) || exit 1
+vcs="${vcs_info%% *}"
+vcs_root="${vcs_info#* }"
+
+if [[ "$vcs" == "jj" ]]; then
     branch="${1:-main}"
-    git -C "$(jj git root)" open origin "$branch"
+    git -C "$vcs_root" open origin "$branch"
     exit 0
 fi
 

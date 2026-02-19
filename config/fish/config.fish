@@ -53,20 +53,20 @@ if status is-interactive
         # duration info (always shown)
         set -l duration_info ""
         if test $CMD_DURATION -lt 1000
-            set duration_info " $COLOR_ORANGE""$CMD_DURATION"ms
+            set duration_info " $COLOR_GRAY5""$CMD_DURATION"ms
         else
             set -l secs (echo "scale=1; $CMD_DURATION / 1000" | bc)
-            set duration_info " $COLOR_ORANGE""$secs"s
+            set duration_info " $COLOR_GRAY5""$secs"s
         end
 
         # red prompt indicator on failure
         set -l prompt_color "$COLOR_GRAY5"
         if test $last_status -ne 0
-            set prompt_color "$COLOR_RED"
+            set prompt_color "$COLOR_ORANGE"
         end
 
         set -l dir (string replace -r "^$HOME" "~" $PWD)
-        printf "%s%s%s%s%s\n%s| %s" "$COLOR_GRAY5" "$dir" "$vcs_info" "$duration_info" "$COLOR_RESET" "$prompt_color" "$COLOR_RESET"
+        printf "%s%s%s%s%s\n%s| %s" "$COLOR_GRAY5" "$dir" "$duration_info" "$vcs_info" "$COLOR_RESET" "$prompt_color" "$COLOR_RESET"
     end
 
     # FUNCS

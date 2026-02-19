@@ -1,0 +1,50 @@
+#!/bin/bash
+# vdetect - Detect version control system and repo root
+#
+# Detects whether the current directory is inside a jj or git repository
+# and outputs the VCS type and root path. Works from any subdirectory.
+# jj is checked first since jj repos also have a git backend.
+#
+# Usage:
+#   vdetect
+#
+# Output:
+#   <vcs> <root_path>
+#
+# Examples:
+#   vdetect                # "jj /home/user/myrepo" or "git /home/user/myrepo"
+#   vcs_info=$(vdetect)    # capture output
+#   vcs="${vcs_info%% *}"  # extract "jj" or "git"
+#   root="${vcs_info#* }"  # extract root path
+
+[[ "$1" == "--describe" ]] && echo "Detect version control system and repo root" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vdetect"
+    echo ""
+    echo "Detect the version control system for the current directory."
+    echo "Outputs '<vcs> <root_path>' to stdout."
+    echo "  jj is checked first (takes priority over git)"
+    echo "  Exits 1 if not in a recognized repository"
+    echo ""
+    echo "Parsing:"
+    echo '  vcs_info=$(vdetect)'
+    echo '  vcs="${vcs_info%% *}"'
+    echo '  root="${vcs_info#* }"'
+    exit 0
+fi
+
+jj_root=$(jj root 2>/dev/null)
+if [[ $? -eq 0 ]]; then
+    echo "jj $jj_root"
+    exit 0
+fi
+
+git_root=$(git rev-parse --show-toplevel 2>/dev/null)
+if [[ $? -eq 0 ]]; then
+    echo "git $git_root"
+    exit 0
+fi
+
+echo "ERROR: not in a version control repository" >&2
+exit 1

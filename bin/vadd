@@ -24,8 +24,11 @@ if [[ "$1" == "--help" ]]; then
     exit 0
 fi
 
-if [[ -d ./.jj ]]; then
-    echo "ERROR: git_add not supported in jj repositories"
+vcs_info=$(vdetect) || exit 1
+vcs="${vcs_info%% *}"
+
+if [[ "$vcs" == "jj" ]]; then
+    echo "ERROR: vadd not supported in jj repositories"
     exit 1
 fi
 
