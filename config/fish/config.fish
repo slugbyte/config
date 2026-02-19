@@ -6,7 +6,7 @@ source ~/.config/slugbyte/env.sh
 
 if status is-interactive
     # DISABLE GREETING
-    set -U fish_greeting ""
+    set -g fish_greeting ""
 
     # LOAD EXTERNAL
     try-cli init | source
@@ -22,6 +22,7 @@ if status is-interactive
 
     # SET PROMPT
     function fish_prompt
+        set -l last_status $status
         set -l vcs_info ""
         # try jj first (single call for desc + dirty via template)
         set -l jj_out (jj log --no-graph -r @ -T 'separate("\t", if(empty, "", "*"), description.first_line())' 2>/dev/null)
@@ -33,22 +34,39 @@ if status is-interactive
                 set desc "no desc"
             end
             set vcs_info "$COLOR_GRAY7 $dirty($desc)"
-        else if git rev-parse --is-inside-work-tree &>/dev/null
-            # fall back to git
-            set -l branch (git rev-parse --abbrev-ref HEAD 2>/dev/null)
-            if test -n "$branch"
-                if test "$branch" = HEAD
+        else
+            # fall back to git (single call)
+            set -l porcelain (git status --porcelain -b 2>/dev/null)
+            if test $status -eq 0
+                set -l branch (string replace -r '^## (.+?)(\.\.\..+)?$' '$1' -- $porcelain[1])
+                if test "$branch" = "HEAD (no branch)"
                     set branch _
                 end
                 set -l dirty ""
-                if test -n "$(git status --porcelain 2>/dev/null)"
+                if test (count $porcelain) -gt 1
                     set dirty "*"
                 end
                 set vcs_info " $COLOR_GRAY7""git [$dirty$branch] "
             end
         end
+
+        # duration info (always shown)
+        set -l duration_info ""
+        if test $CMD_DURATION -lt 1000
+            set duration_info " $COLOR_ORANGE""$CMD_DURATION"ms
+        else
+            set -l secs (echo "scale=1; $CMD_DURATION / 1000" | bc)
+            set duration_info " $COLOR_ORANGE""$secs"s
+        end
+
+        # red prompt indicator on failure
+        set -l prompt_color "$COLOR_GRAY5"
+        if test $last_status -ne 0
+            set prompt_color "$COLOR_RED"
+        end
+
         set -l dir (string replace -r "^$HOME" "~" $PWD)
-        printf "%s%s%s%s\n| " "$COLOR_GRAY5" "$dir" "$vcs_info" "$COLOR_RESET"
+        printf "%s%s%s%s%s\n%s| %s" "$COLOR_GRAY5" "$dir" "$vcs_info" "$duration_info" "$COLOR_RESET" "$prompt_color" "$COLOR_RESET"
     end
 
     # FUNCS
