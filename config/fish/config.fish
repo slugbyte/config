@@ -25,9 +25,10 @@ if status is-interactive
         set -l last_status $status
         set -l vcs_info ""
         # try jj first (single call for desc + dirty via template)
-        set -l jj_out (jj log --no-graph -r @ -T 'separate("\t", if(empty, "", "*"), description.first_line())' 2>/dev/null)
+        set -l jj_out (jj log --no-graph -r @ -T 'concat(if(empty, "", "*"), "\t", description.first_line())' 2>/dev/null)
         if test $status -eq 0
-            set -l parts (string split \t -- $jj_out)
+            set -l tab (printf '\t')
+            set -l parts (string split -m 2 $tab -- $jj_out)
             set -l dirty $parts[1]
             set -l desc $parts[2]
             if test -z "$desc"
