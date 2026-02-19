@@ -22,37 +22,33 @@ if status is-interactive
 
     # SET PROMPT
     function fish_prompt
-        set -l jj_desc ""
-        set -l git_desc ""
-        if test -d .jj
-            set -l desc (jj log --no-graph -r @ -T 'description.first_line()' 2>/dev/null)
-            set -l jj_dirty ""
-            if test -n "$(jj diff 2>/dev/null)"
-                set jj_dirty "* "
-            end
+        set -l vcs_info ""
+        # try jj first (single call for desc + dirty via template)
+        set -l jj_out (jj log --no-graph -r @ -T 'separate("\t", if(empty, "", "*"), description.first_line())' 2>/dev/null)
+        if test $status -eq 0
+            set -l parts (string split \t -- $jj_out)
+            set -l dirty $parts[1]
+            set -l desc $parts[2]
             if test -z "$desc"
-                set jj_desc "$COLOR_GRAY7 $jj_dirty(no desc)"
-            else
-                set jj_desc "$COLOR_GRAY7 $jj_dirty($desc)"
+                set desc "no desc"
             end
-        else
-            if test -d .git
-                set -l git_branch (git rev-parse --abbrev-ref HEAD 2>/dev/null)
-                set -l git_dirty ""
-                if test -n "$git_branch"
-                    if test "$git_branch" = HEAD
-                        set git_branch _
-                    end
-                    set -l vstatus (git status --porcelain 2>/dev/null)
-                    if test -n "$vstatus"
-                        set git_dirty "*"
-                    end
-                    set git_desc " $COLOR_GRAY7""git [$git_dirty$git_branch] "
+            set vcs_info "$COLOR_GRAY7 $dirty($desc)"
+        else if git rev-parse --is-inside-work-tree &>/dev/null
+            # fall back to git
+            set -l branch (git rev-parse --abbrev-ref HEAD 2>/dev/null)
+            if test -n "$branch"
+                if test "$branch" = HEAD
+                    set branch _
                 end
+                set -l dirty ""
+                if test -n "$(git status --porcelain 2>/dev/null)"
+                    set dirty "*"
+                end
+                set vcs_info " $COLOR_GRAY7""git [$dirty$branch] "
             end
         end
         set -l dir (string replace -r "^$HOME" "~" $PWD)
-        printf "%s%s%s%s%s\n| " "$COLOR_GRAY5" "$dir" "$git_desc" "$jj_desc" "$COLOR_RESET"
+        printf "%s%s%s%s\n| " "$COLOR_GRAY5" "$dir" "$vcs_info" "$COLOR_RESET"
     end
 
     # FUNCS
