@@ -1,5 +1,6 @@
 ---
 description: "Create a jj change description based on current working copy changes."
+model: openai/gpt-5.2-codex
 ---
 Create a jj change description based on current working copy changes.
 
