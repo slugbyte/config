@@ -53,6 +53,7 @@ if status is-interactive
 
         # duration info (always shown)
         set -l duration_info ""
+        test -n "$CMD_DURATION"; or set CMD_DURATION 0
         if test $CMD_DURATION -lt 1000
             set duration_info " $COLOR_GRAY5""$CMD_DURATION"ms
         else if test $CMD_DURATION -lt 60000
