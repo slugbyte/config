@@ -45,9 +45,10 @@ For example: `note/2026-02-20-architecture-overview.md`
 - PascalCase for types and type files, camelCase for functions, snake_case for variables, SCREAMING_SNAKE_CASE for constants
 - Define explicit error sets, use `try` to propagate, reserve panics for unrecoverable states
 - Use `std.debug.assert` liberally to document and enforce invariants
-- Pair `init` with `defer deinit()`, always clean up resources
 - Document public APIs with `///`, keep comments focused on "why"
 - Inline tests: `test "TEST: <description>" { ... }`
+- In tests, alias the testing namespace with `const t = std.testing;` and use `t` for all assertions (e.g., `t.expect(...)`, `t.expectEqual(...)`)
+- Allocators: Always passed as params. Name params `gpa` or `arena` when lifetime is clear, `allocator` when the caller decides.
 - Use `zig fmt` for formatting
 
 ## Version Control Messages
