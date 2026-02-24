@@ -31,12 +31,23 @@ vcs_info=$(vdetect) || exit 1
 vcs="${vcs_info%% *}"
 
 if [[ "$vcs" == "jj" ]]; then
+    JJ_LOG_TEMPLATE='
+    separate(" ",
+      format_short_change_id(change_id),
+      if(description, description.first_line(), description_placeholder),
+      if(conflict, label("conflict", "conflict")),
+      if(empty, label("empty", "(empty)")),
+      committer.timestamp().ago(),
+      bookmarks,
+      tags,
+    ) ++ "\n"
+    '
     jj status
     echo
     if [[ $# -eq 0 ]]; then
-        jj log -r 'all()' -n 10
+        jj log -r 'all()' -n 10 --template "$JJ_LOG_TEMPLATE"
     else
-        jj log "$@"
+        jj log --template "$JJ_LOG_TEMPLATE" "$@"
     fi
     exit 0
 fi

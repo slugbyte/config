@@ -59,3 +59,20 @@ For both `jj desc` and `git commit`, use:
 
     - Bullet points with details
     - Markdown style body
+
+## Engineering Style
+
+Safety first, then performance, then developer experience.
+
+- Simple, explicit control flow. No recursion. Minimal abstractions.
+- Put a limit on everything -- all loops and queues need a fixed upper bound.
+- Assert both positive and negative space. Split compound assertions.
+- Declare variables at the smallest scope, closest to their use.
+- Always say why in comments, always say how in test descriptions.
+- Comments are sentences: capital letter, full stop, space after `//`.
+- Order in structs: fields, then types, then methods.
+- Add units/qualifiers last by descending significance: `latency_ms_max`.
+- Prefer simpler return types: `void` > `bool` > `T` > `?T` > `!T`.
+- Show division intent: `@divExact`, `@divFloor`, or `divCeil`.
+- Don't duplicate state. Compute values close to where they are used.
+- Pass options explicitly at call sites, don't rely on defaults.
