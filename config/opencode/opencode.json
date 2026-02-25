@@ -13,7 +13,8 @@
   "permission": {
     "external_directory": {
       "~/.local/share/mise/installs/zig/**": "allow",
-      "~/workspace/note/**": "allow"
+      "~/workspace/note/**": "allow",
+      "/tmp/**": "allow"
     },
     "edit": {
       "~/.local/share/mise/installs/zig/**": "deny"

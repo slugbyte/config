@@ -76,3 +76,12 @@ Safety first, then performance, then developer experience.
 - Show division intent: `@divExact`, `@divFloor`, or `divCeil`.
 - Don't duplicate state. Compute values close to where they are used.
 - Pass options explicitly at call sites, don't rely on defaults.
+
+### Data-Oriented Design
+
+Design features for how computers work, not how humans categorize things.
+Define inputs, outputs, and transforms before writing code and let data
+layout drive the architecture. Prefer contiguous homogeneous arrays over
+pointer-chasing. Separate hot data from cold, and use existence in an array
+to mean active -- no flags. Design for real data shapes, not hypothetical
+ones. Measure with a profiler; cache misses are invisible in source.
