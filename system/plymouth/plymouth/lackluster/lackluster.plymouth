@@ -1,0 +1,11 @@
+[Plymouth Theme]
+Name=Lackluster
+Description=Lackluster splash screen.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/lackluster
+ScriptFile=/usr/share/plymouth/themes/lackluster/lackluster.script
+ConsoleLogBackgroundColor=0x1a1b26
+MonospaceFont=Cantarell 11
+Font=Cantarell 11
