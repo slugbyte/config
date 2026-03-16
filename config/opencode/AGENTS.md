@@ -16,18 +16,31 @@ You have read access to the entire `~/.local/share/mise/installs/zig/` tree.
 When the user is working with Zig, you can reference the standard library source
 directly to answer questions or understand behavior.
 
-## Notes
 
-When asked to save or write a note, write it as a markdown file in the
-`./note/` directory using Obsidian-style markdown.
+## PLANS
+Plan files should be named <date>-<plan-name>.md (yyyy-mm-dd). 
+
+## ARCHIVING PLANS
+when i ask to archive plan files store them in ./.opencode/plans/ARCHIVE
+
+when archiving plans add the following text to the plans header.
+```
+> [!warning] Archived
+> This plan has been archived and is kept for reference only. It does not
+> reflect active work.
+```
+
+
+## Notes
+When asked to save or write a note, write it as a markdown file using Obsidian-style markdown.
 
 ### Filename
 
 Use a date-prefixed filename:
 
-    note/yyyy-mm-dd-note-name.md
+    ./note/yyyy-mm-dd-note-name.md
 
-For example: `note/2026-02-20-architecture-overview.md`
+For example: `./note/2026-02-20-architecture-overview.md`
 
 ### Format
 
@@ -77,7 +90,7 @@ Safety first, then performance, then developer experience.
 - Don't duplicate state. Compute values close to where they are used.
 - Pass options explicitly at call sites, don't rely on defaults.
 
-### Data-Oriented Design
+## Data-Oriented Design
 
 Design features for how computers work, not how humans categorize things.
 Define inputs, outputs, and transforms before writing code and let data

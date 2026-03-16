@@ -47,3 +47,4 @@ video/x-ms-asf=mpv.desktop
 video/x-ogm+ogg=mpv.desktop
 video/x-theora+ogg=mpv.desktop
 application/ogg=mpv.desktop
+inode/directory=org.gnome.Nautilus.desktop

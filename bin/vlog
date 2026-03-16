@@ -10,6 +10,7 @@
 #
 # Examples:
 #   vlog               # show commit history with graph
+#   vlog 15            # show last 15 commits (jj shorthand)
 #   vlog -n 5          # show last 5 commits
 #   vlog --oneline     # compact output (git)
 
@@ -46,6 +47,8 @@ if [[ "$vcs" == "jj" ]]; then
     echo
     if [[ $# -eq 0 ]]; then
         jj log -r 'all()' -n 10 --template "$JJ_LOG_TEMPLATE"
+    elif [[ $# -eq 1 && "$1" =~ ^[0-9]+$ ]]; then
+        jj log -r 'all()' -n "$1" --template "$JJ_LOG_TEMPLATE"
     else
         jj log --template "$JJ_LOG_TEMPLATE" "$@"
     fi

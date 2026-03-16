@@ -1,23 +1,33 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "system",
+  "autoupdate": false,
   "default_agent": "plan",
   "agent": {
     "plan": {
-      "color": "#a0a0a0"
+      "color": "#a0a0a0",
+      "permission": {
+        "edit": {
+          ".opencode/plans/**": "allow",
+          "~/.local/share/mise/installs/zig/**": "deny"
+        }
+      }
     },
     "build": {
-      "color": "#789978"
+      "color": "#789978",
+      "permission": {
+        "edit": {
+          ".opencode/plans/**": "allow",
+          "~/.local/share/mise/installs/zig/**": "deny"
+        }
+      }
     }
   },
   "permission": {
     "external_directory": {
       "~/.local/share/mise/installs/zig/**": "allow",
+      "~/.cache/autoresearch/**": "allow",
       "~/workspace/note/**": "allow",
       "/tmp/**": "allow"
-    },
-    "edit": {
-      "~/.local/share/mise/installs/zig/**": "deny"
     }
   }
 }

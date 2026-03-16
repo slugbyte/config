@@ -1,0 +1,57 @@
+#!/bin/bash
+# cpu-info - Print compact CPU usage summary
+#
+# Outputs compact CPU info for status bars, including usage percentage
+# and Linux CPU pressure (avg10).
+#
+# Usage:
+#   cpu-info
+#
+# Examples:
+#   cpu-info   # prints something like: (18% P0.12 CPU)
+
+set -euo pipefail
+
+[[ "${1:-}" == "--describe" ]] && echo "Print compact CPU usage with pressure" && exit 0
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: cpu-info"
+    echo ""
+    echo "Print compact CPU usage and CPU pressure."
+    exit 0
+fi
+
+state_file="/dev/shm/cpu-info-${UID}.state"
+if [[ ! -d "/dev/shm" ]] || [[ ! -w "/dev/shm" ]]; then
+    state_file="$HOME/.cache/cpu-info.state"
+fi
+
+read -r _ user nice system idle iowait irq softirq steal _ < /proc/stat
+
+idle_all=$((idle + iowait))
+non_idle=$((user + nice + system + irq + softirq + steal))
+total=$((idle_all + non_idle))
+
+usage_pct=0
+
+if [[ -f "$state_file" ]]; then
+    read -r prev_total prev_idle < "$state_file" || true
+    if [[ -n "${prev_total:-}" && -n "${prev_idle:-}" ]] && (( total > prev_total )); then
+        diff_total=$((total - prev_total))
+        diff_idle=$((idle_all - prev_idle))
+        busy=$((diff_total - diff_idle))
+        if (( diff_total > 0 )); then
+            usage_pct=$(((100 * busy + diff_total / 2) / diff_total))
+        fi
+    fi
+fi
+
+printf '%s %s\n' "$total" "$idle_all" > "$state_file"
+
+pressure="-"
+if [[ -r "/proc/pressure/cpu" ]]; then
+    pressure="$(awk '/^some/ { for (i = 1; i <= NF; i++) { if ($i ~ /^avg10=/) { split($i, p, "="); print p[2]; exit } } }' /proc/pressure/cpu)"
+    pressure="${pressure:--}"
+fi
+
+printf '(%s%% P%s CPU)\n' "$usage_pct" "$pressure"

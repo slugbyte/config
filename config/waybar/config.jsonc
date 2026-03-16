@@ -3,9 +3,9 @@
   "layer": "top",
   "position": "top",
   "spacing": 0,
-  "height": 40,
+  "height": 20,
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
-  "modules-Center": ["custom/update", "custom/voxtype", "custom/screenrecording-indicator"],
+  "modules-Center": ["custom/update", "custom/voxtype", "custom/screenrecording-indicator", "custom/idle-indicator", "custom/notification-silencing-indicator"],
 
   "modules-right": [
     "group/tray-expander",
@@ -13,19 +13,20 @@
     "pulseaudio",
     "network",
     "disk",
-    "cpu",
+    "custom/cpu",
     "memory",
     "battery",
-    "custom/claudebar",
+    "custom/ai-usage",
     "temperature",
     "clock"
   ],
-  "custom/claudebar": {
-    "exec": "~/.local/bin/claudebar.ts",
-    "interval": 60,
+  "custom/ai-usage": {
+    "exec": "~/workspace/conf/bin/ai-usage --waybar",
+    "interval": 300,
     "return-type": "json",
-    "tooltip": false,
-    "on-click": "xdg-open https://claude.ai/settings/usage"
+    "tooltip": true,
+    "on-click": "~/workspace/conf/bin/ai-usage --toggle && pkill -RTMIN+11 waybar",
+    "signal": 11
   },
   "hyprland/workspaces": {
     "on-click": "activate",
@@ -72,14 +73,16 @@
   "temperature": {
       "format": "{temperatureC}°C"
   },
-  "cpu": {
+  "custom/cpu": {
+    "exec": "~/workspace/conf/bin/cpu-info",
     "interval": 5,
-    "format": "({usage}% CPU)",
+    "tooltip": false,
     "on-click": "omarchy-launch-or-focus-tui btop",
     "on-click-right": "alacritty"
   },
   "memory": {
-    "format": "({}% MEM) "
+    "format": "({}% MEM) ",
+    "tooltip-format": "RAM: {used:0.1f}/{total:0.1f} GiB ({percentage}%)\nSWAP: {swapUsed:0.1f}/{swapTotal:0.1f} GiB ({swapPercentage}%)\nAvail: {avail:0.1f} GiB"
   },
   "disk": {
     "format": "({percentage_used}% DISK)"
@@ -92,10 +95,10 @@
   },
   "network": {
     "format-icons": ["0", "1", "2", "3", "4", "5"],
-    "format-wifi": "({icon}/5 WIFI)",
+    "format-wifi": "({icon}/5 {ifname})",
     "format-ethernet": "(OK NET)",
     "format-disconnected": "(NO NET)",
-    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-wifi": "{essid} [{ifname}]\nIP: {ipaddr}/{cidr} via {gwaddr}\nSignal: {signalStrength}% ({signaldBm} dBm) @ {frequency} GHz\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}  Σ{bandwidthTotalBytes}",
     "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
@@ -137,6 +140,7 @@
     "format-muted": "(MUTE VOL)",
     "format-icons": {
       "headphone": "",
+      "headset": "",
       "default": ["", "", ""]
     }
   },
@@ -170,6 +174,18 @@
     "tooltip": true,
     "on-click-right": "omarchy-voxtype-config",
     "on-click": "omarchy-voxtype-model"
+  },
+  "custom/idle-indicator": {
+    "on-click": "omarchy-toggle-idle",
+    "exec": "$OMARCHY_PATH/default/waybar/indicators/idle.sh",
+    "signal": 9,
+    "return-type": "json"
+  },
+  "custom/notification-silencing-indicator": {
+    "on-click": "omarchy-toggle-notification-silencing",
+    "exec": "$OMARCHY_PATH/default/waybar/indicators/notification-silencing.sh",
+    "signal": 10,
+    "return-type": "json"
   },
   "tray": {
     "icon-size": 12,

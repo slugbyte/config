@@ -28,15 +28,45 @@ if [[ ! -d "$bin_dir" ]]; then
     exit 1
 fi
 
+missing_describe=()
+missing_help=()
+
 for script in "$bin_dir"/*; do
     [[ -x "$script" ]] || continue
     [[ -f "$script" ]] || continue
     name=$(basename "$script")
     [[ "$name" == "README.md" ]] && continue
-    desc=$("$script" --describe 2>/dev/null)
+
+    if ! grep -q -- "--describe" "$script" 2>/dev/null; then
+        missing_describe+=("$name")
+    fi
+
+    if ! grep -q -- "--help" "$script" 2>/dev/null; then
+        missing_help+=("$name")
+    fi
+
+    # Only call --describe on scripts that explicitly support it.
+    if ! grep -q -- "--describe" "$script" 2>/dev/null; then
+        continue
+    fi
+
+    desc=$("$script" --describe 2>/dev/null | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g; s/[[:space:]]$//')
     if [[ -n "$desc" ]]; then
         printf "%-30s %s\n" "$name" "$desc"
     else
         printf "%-30s %s\n" "$name" "(no description)"
     fi
 done
+
+if (( ${#missing_describe[@]} > 0 )) || (( ${#missing_help[@]} > 0 )); then
+    echo ""
+    echo "Warning: Some scripts are missing expected flags."
+
+    if (( ${#missing_describe[@]} > 0 )); then
+        printf "- Missing --describe: %s\n" "${missing_describe[*]}"
+    fi
+
+    if (( ${#missing_help[@]} > 0 )); then
+        printf "- Missing --help: %s\n" "${missing_help[*]}"
+    fi
+fi

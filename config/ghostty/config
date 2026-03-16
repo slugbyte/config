@@ -92,3 +92,6 @@ keybind = alt+n=goto_split:down
 keybind = alt+e=goto_split:up
 keybind = alt+o=goto_split:right
 keybind = shift+enter=text:\x1b\r
+
+# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
+async-backend = epoll

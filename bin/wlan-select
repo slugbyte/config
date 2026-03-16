@@ -1,0 +1,169 @@
+#!/bin/bash
+# wlan-select - Select active Wi-Fi interface (wlan0/wlan1)
+#
+# Interactive selector for switching between wlan0 and wlan1.
+# Enables one interface, disables the other, and optionally toggles
+# performance mode (power save off) on the selected interface.
+#
+# Usage:
+#   wlan-select
+#
+# Examples:
+#   wlan-select   # choose interface from interactive fzf menu
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--describe" ]]; then
+    echo "Select wlan0 or wlan1 and switch active Wi-Fi"
+    exit 0
+fi
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: wlan-select"
+    echo ""
+    echo "Interactive Wi-Fi interface selector for wlan0/wlan1."
+    echo "Switches to one interface and disables the other."
+    exit 0
+fi
+
+require_command() {
+    local command_name="$1"
+    if ! command -v "$command_name" >/dev/null 2>&1; then
+        echo "Error: required command not found: $command_name"
+        exit 1
+    fi
+}
+
+interface_exists() {
+    local interface_name="$1"
+    [[ -d "/sys/class/net/$interface_name" ]]
+}
+
+run_as_root() {
+    if (( EUID == 0 )); then
+        "$@"
+    else
+        sudo "$@"
+    fi
+}
+
+route_default_interface() {
+    ip route get 1.1.1.1 2>/dev/null | awk '/ dev / { for (i = 1; i <= NF; i++) if ($i == "dev") { print $(i + 1); exit } }'
+}
+
+print_interface_status() {
+    local interface_name="$1"
+    if ! interface_exists "$interface_name"; then
+        echo "- $interface_name: missing"
+        return
+    fi
+
+    local link_output
+    link_output="$(iw dev "$interface_name" link 2>/dev/null || true)"
+
+    if [[ "$link_output" == *"Not connected."* ]] || [[ -z "$link_output" ]]; then
+        echo "- $interface_name: not connected"
+        return
+    fi
+
+    local ssid
+    local freq
+    local rx_rate
+    local tx_rate
+    ssid="$(printf '%s\n' "$link_output" | awk -F': ' '/SSID:/{print $2; exit}')"
+    freq="$(printf '%s\n' "$link_output" | awk -F': ' '/freq:/{print $2; exit}')"
+    rx_rate="$(printf '%s\n' "$link_output" | awk -F': ' '/rx bitrate:/{print $2; exit}')"
+    tx_rate="$(printf '%s\n' "$link_output" | awk -F': ' '/tx bitrate:/{print $2; exit}')"
+
+    echo "- $interface_name: SSID=$ssid freq=${freq}MHz rx=$rx_rate tx=$tx_rate"
+}
+
+show_status() {
+    echo "Current status:"
+    print_interface_status "wlan0"
+    print_interface_status "wlan1"
+
+    local route_output
+    route_output="$(ip route get 1.1.1.1 2>/dev/null || true)"
+    if [[ -n "$route_output" ]]; then
+        echo "- default route: ${route_output%%$'\n'*}"
+    else
+        echo "- default route: unavailable"
+    fi
+}
+
+switch_interface() {
+    local target_interface="$1"
+    local other_interface="$2"
+
+    if ! interface_exists "$target_interface"; then
+        echo "Error: interface $target_interface does not exist."
+        exit 1
+    fi
+
+    echo "Switching to $target_interface..."
+    run_as_root ip link set "$target_interface" up
+
+    if interface_exists "$other_interface"; then
+        run_as_root iw dev "$other_interface" disconnect >/dev/null 2>&1 || true
+        run_as_root ip link set "$other_interface" down
+    fi
+
+    local performance_choice
+    read -r -p "Enable performance mode on $target_interface (power save off)? [y/N] " performance_choice
+    if [[ "$performance_choice" =~ ^[Yy]$ ]]; then
+        run_as_root iw dev "$target_interface" set power_save off
+        echo "Performance mode enabled on $target_interface."
+    else
+        run_as_root iw dev "$target_interface" set power_save on
+        echo "Power save enabled on $target_interface."
+    fi
+
+    echo ""
+    echo "Verification:"
+    iw dev "$target_interface" link || true
+    local route_output
+    route_output="$(ip route get 1.1.1.1 2>/dev/null || true)"
+    if [[ -n "$route_output" ]]; then
+        echo "$route_output"
+    fi
+
+    local active_default_interface
+    active_default_interface="$(route_default_interface || true)"
+    if [[ "$active_default_interface" != "$target_interface" ]]; then
+        echo "Warning: default route is currently via ${active_default_interface:-unknown}, not $target_interface."
+        echo "This can happen while DHCP/route updates settle."
+    fi
+}
+
+require_command "iw"
+require_command "ip"
+require_command "fzf"
+
+selection="$(
+    printf '%s\n' \
+        "Use wlan0 (2.4 GHz)" \
+        "Use wlan1 (5 GHz)" \
+        "Status" \
+        "Quit" \
+    | fzf --prompt="wlan-select> " --height=12 --reverse --border --cycle || true
+)"
+
+if [[ -z "${selection:-}" ]] || [[ "$selection" == "Quit" ]]; then
+    exit 0
+fi
+
+case "$selection" in
+    "Use wlan0 (2.4 GHz)")
+        switch_interface "wlan0" "wlan1"
+        ;;
+    "Use wlan1 (5 GHz)")
+        switch_interface "wlan1" "wlan0"
+        ;;
+    "Status")
+        show_status
+        ;;
+    *)
+        echo "No action selected."
+        ;;
+esac

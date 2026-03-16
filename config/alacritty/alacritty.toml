@@ -46,3 +46,6 @@ white = '#deeeed'
 key = "F"
 mods = "Command"
 action = "ToggleSimpleFullscreen"
+
+[terminal]
+osc52 = "CopyPaste"

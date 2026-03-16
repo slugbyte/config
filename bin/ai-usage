@@ -1,0 +1,665 @@
+#!/usr/bin/env bun
+// ai-usage - Show AI provider usage and Waybar status
+//
+// Fetches usage data for Anthropic and OpenAI, caches state in one file,
+// and can render either human-readable output or Waybar JSON.
+//
+// Usage:
+//   ai-usage [--waybar] [--toggle]
+//
+// Examples:
+//   ai-usage            // print Anthropic and OpenAI usage
+//   ai-usage --waybar   // print Waybar JSON payload
+//   ai-usage --toggle   // switch selected provider
+
+import { homedir } from "node:os";
+import { join } from "node:path";
+
+const args = Bun.argv.slice(2);
+
+if (args.includes("--describe")) {
+  console.log("Show Anthropic/OpenAI usage for CLI or Waybar");
+  process.exit(0);
+}
+
+if (args.includes("--help")) {
+  console.log("Usage: ai-usage [--waybar] [--toggle]");
+  console.log("");
+  console.log("Show Anthropic/OpenAI usage for CLI or Waybar.");
+  console.log("  --waybar   Output Waybar JSON payload");
+  console.log("  --toggle   Toggle selected provider (anthropic/openai)");
+  process.exit(0);
+}
+
+type Provider = "anthropic" | "openai";
+type ErrorType = "none" | "rate_limit" | "auth" | "endpoint" | "network" | "unknown" | "missing_credentials";
+
+interface ProviderUsage {
+  session_pct: number;
+  weekly_pct: number;
+  session_resets_at: string;
+  weekly_resets_at: string;
+  updated_at_ms: number;
+}
+
+interface ProviderError {
+  consecutive_failures: number;
+  last_error_type: ErrorType;
+  last_error_message: string;
+  last_error_at_ms: number;
+}
+
+interface RefreshState {
+  last_attempt_ms: number;
+  succeeded: boolean;
+}
+
+interface ProviderState {
+  usage: ProviderUsage | null;
+  error: ProviderError;
+  refresh: RefreshState;
+}
+
+interface AiUsageState {
+  selected_provider: Provider;
+  providers: Record<Provider, ProviderState>;
+}
+
+interface ProviderReport {
+  provider: Provider;
+  usage: ProviderUsage | null;
+  stale: boolean;
+  error_type: ErrorType;
+  error_message: string;
+  consecutive_failures: number;
+}
+
+const HOME = homedir();
+const CACHE_PATH = join(HOME, ".cache", "ai-usage.json");
+const ANTHROPIC_CREDS_PATH = join(HOME, ".claude", ".credentials.json");
+const OPENAI_CREDS_PATH = join(HOME, ".codex", "auth.json");
+
+const ANTHROPIC_USAGE_URL = "https://api.anthropic.com/api/oauth/usage";
+const ANTHROPIC_TOKEN_URL = "https://console.anthropic.com/v1/oauth/token";
+const ANTHROPIC_CLIENT_ID = "9d1c250a-e61b-44d9-88ed-5944d1962f5e";
+
+const OPENAI_USAGE_URL = "https://chatgpt.com/backend-api/wham/usage";
+const OPENAI_TOKEN_URL = "https://auth.openai.com/oauth/token";
+const OPENAI_CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann";
+
+const CACHE_TTL_MS = 5 * 60 * 1000;
+const TOKEN_REFRESH_BUFFER_MS = 5 * 60 * 1000;
+const FAILURE_THRESHOLD = 3;
+
+function defaultProviderState(): ProviderState {
+  return {
+    usage: null,
+    error: {
+      consecutive_failures: 0,
+      last_error_type: "none",
+      last_error_message: "",
+      last_error_at_ms: 0,
+    },
+    refresh: {
+      last_attempt_ms: 0,
+      succeeded: false,
+    },
+  };
+}
+
+function defaultState(): AiUsageState {
+  return {
+    selected_provider: "anthropic",
+    providers: {
+      anthropic: defaultProviderState(),
+      openai: defaultProviderState(),
+    },
+  };
+}
+
+async function loadState(): Promise<AiUsageState> {
+  try {
+    const file = Bun.file(CACHE_PATH);
+    if (!(await file.exists())) return defaultState();
+
+    const raw = await file.text();
+    const parsed = JSON.parse(raw) as Partial<AiUsageState>;
+    const state = defaultState();
+
+    if (parsed.selected_provider === "anthropic" || parsed.selected_provider === "openai") {
+      state.selected_provider = parsed.selected_provider;
+    }
+
+    for (const provider of ["anthropic", "openai"] as const) {
+      const p = parsed.providers?.[provider];
+      if (!p) continue;
+      state.providers[provider].usage = p.usage ?? null;
+      state.providers[provider].error = {
+        consecutive_failures: p.error?.consecutive_failures ?? 0,
+        last_error_type: p.error?.last_error_type ?? "none",
+        last_error_message: p.error?.last_error_message ?? "",
+        last_error_at_ms: p.error?.last_error_at_ms ?? 0,
+      };
+      state.providers[provider].refresh = {
+        last_attempt_ms: p.refresh?.last_attempt_ms ?? 0,
+        succeeded: p.refresh?.succeeded ?? false,
+      };
+    }
+
+    return state;
+  } catch {
+    return defaultState();
+  }
+}
+
+async function saveState(state: AiUsageState): Promise<void> {
+  await Bun.write(CACHE_PATH, JSON.stringify(state, null, 2));
+}
+
+function formatCountdown(resetAt: string): string {
+  if (!resetAt) return "unknown";
+  const ms = new Date(resetAt).getTime() - Date.now();
+  if (!Number.isFinite(ms) || ms <= 0) return "now";
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  return h > 24 ? `${Math.floor(h / 24)}d${h % 24}h` : `${h}h${String(m).padStart(2, "0")}m`;
+}
+
+function isFresh(usage: ProviderUsage | null): boolean {
+  if (!usage) return false;
+  return Date.now() - usage.updated_at_ms <= CACHE_TTL_MS;
+}
+
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return null;
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+    return JSON.parse(Buffer.from(padded, "base64").toString("utf8")) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+function markSuccess(state: AiUsageState, provider: Provider): void {
+  state.providers[provider].error = {
+    consecutive_failures: 0,
+    last_error_type: "none",
+    last_error_message: "",
+    last_error_at_ms: 0,
+  };
+}
+
+function markError(state: AiUsageState, provider: Provider, errorType: ErrorType, message: string, incrementFailure: boolean): void {
+  const prev = state.providers[provider].error;
+  state.providers[provider].error = {
+    consecutive_failures: incrementFailure ? prev.consecutive_failures + 1 : prev.consecutive_failures,
+    last_error_type: errorType,
+    last_error_message: message,
+    last_error_at_ms: Date.now(),
+  };
+}
+
+async function shouldAttemptAnthropicRefresh(state: AiUsageState): Promise<boolean> {
+  const refresh = state.providers.anthropic.refresh;
+  const age_ms = Date.now() - refresh.last_attempt_ms;
+  if (refresh.succeeded && age_ms < 10 * 60 * 1000) return false;
+  if (!refresh.succeeded && age_ms < 2 * 60 * 1000) return false;
+  return true;
+}
+
+function updateRefreshState(state: AiUsageState, provider: Provider, succeeded: boolean): void {
+  state.providers[provider].refresh = {
+    last_attempt_ms: Date.now(),
+    succeeded,
+  };
+}
+
+async function fetchAnthropic(state: AiUsageState): Promise<ProviderReport> {
+  const provider: Provider = "anthropic";
+  const providerState = state.providers[provider];
+
+  if (isFresh(providerState.usage)) {
+    return {
+      provider,
+      usage: providerState.usage,
+      stale: false,
+      error_type: providerState.error.last_error_type,
+      error_message: providerState.error.last_error_message,
+      consecutive_failures: providerState.error.consecutive_failures,
+    };
+  }
+
+  const credsFile = Bun.file(ANTHROPIC_CREDS_PATH);
+  if (!(await credsFile.exists())) {
+    markError(state, provider, "missing_credentials", "Missing ~/.claude/.credentials.json", false);
+    return {
+      provider,
+      usage: providerState.usage,
+      stale: providerState.usage !== null,
+      error_type: "missing_credentials",
+      error_message: "Missing credentials",
+      consecutive_failures: state.providers[provider].error.consecutive_failures,
+    };
+  }
+
+  try {
+    const creds = await credsFile.json() as Record<string, unknown>;
+    const oauth = creds.claudeAiOauth as Record<string, unknown> | undefined;
+    if (!oauth?.accessToken) {
+      markError(state, provider, "missing_credentials", "No Anthropic access token", false);
+      return {
+        provider,
+        usage: providerState.usage,
+        stale: providerState.usage !== null,
+        error_type: "missing_credentials",
+        error_message: "No access token",
+        consecutive_failures: state.providers[provider].error.consecutive_failures,
+      };
+    }
+
+    let accessToken = oauth.accessToken as string;
+    const expiresAt = (oauth.expiresAt as number) ?? 0;
+
+    if (expiresAt < Date.now() + TOKEN_REFRESH_BUFFER_MS && oauth.refreshToken) {
+      if (await shouldAttemptAnthropicRefresh(state)) {
+        try {
+          const refreshRes = await fetch(ANTHROPIC_TOKEN_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              grant_type: "refresh_token",
+              client_id: ANTHROPIC_CLIENT_ID,
+              refresh_token: oauth.refreshToken as string,
+            }),
+          });
+
+          if (refreshRes.ok) {
+            const refreshData = await refreshRes.json() as Record<string, unknown>;
+            const newAccessToken = refreshData.access_token as string | undefined;
+            if (newAccessToken) {
+              accessToken = newAccessToken;
+              creds.claudeAiOauth = {
+                ...oauth,
+                accessToken: newAccessToken,
+                refreshToken: (refreshData.refresh_token as string) || oauth.refreshToken,
+                expiresAt: Date.now() + ((refreshData.expires_in as number) ?? 0) * 1000,
+              };
+              await Bun.write(ANTHROPIC_CREDS_PATH, JSON.stringify(creds, null, 2));
+              updateRefreshState(state, provider, true);
+            }
+          } else {
+            updateRefreshState(state, provider, false);
+          }
+        } catch {
+          updateRefreshState(state, provider, false);
+        }
+      }
+    }
+
+    const res = await fetch(ANTHROPIC_USAGE_URL, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "anthropic-beta": "oauth-2025-04-20",
+      },
+    });
+
+    if (!res.ok) {
+      if (res.status === 429) {
+        markError(state, provider, "rate_limit", "Anthropic rate limited (429)", false);
+        return {
+          provider,
+          usage: providerState.usage,
+          stale: providerState.usage !== null,
+          error_type: "rate_limit",
+          error_message: "Rate limited (429)",
+          consecutive_failures: state.providers[provider].error.consecutive_failures,
+        };
+      }
+
+      const errorType: ErrorType = res.status === 401 || res.status === 403
+        ? "auth"
+        : res.status === 404 || res.status === 410
+          ? "endpoint"
+          : "unknown";
+
+      markError(state, provider, errorType, `Anthropic API ${res.status}`, true);
+      return {
+        provider,
+        usage: providerState.usage,
+        stale: providerState.usage !== null,
+        error_type: errorType,
+        error_message: `API ${res.status}`,
+        consecutive_failures: state.providers[provider].error.consecutive_failures,
+      };
+    }
+
+    const data = await res.json() as Record<string, unknown>;
+    const fiveHour = data.five_hour as { utilization?: number; resets_at?: string } | undefined;
+    const sevenDay = data.seven_day as { utilization?: number; resets_at?: string } | undefined;
+
+    const usage: ProviderUsage = {
+      session_pct: Math.round(fiveHour?.utilization ?? 0),
+      weekly_pct: Math.round(sevenDay?.utilization ?? 0),
+      session_resets_at: fiveHour?.resets_at ?? "",
+      weekly_resets_at: sevenDay?.resets_at ?? "",
+      updated_at_ms: Date.now(),
+    };
+
+    state.providers[provider].usage = usage;
+    markSuccess(state, provider);
+
+    return {
+      provider,
+      usage,
+      stale: false,
+      error_type: "none",
+      error_message: "",
+      consecutive_failures: 0,
+    };
+  } catch (error) {
+    markError(state, provider, "network", `Network error: ${(error as Error).message}`, true);
+    return {
+      provider,
+      usage: providerState.usage,
+      stale: providerState.usage !== null,
+      error_type: "network",
+      error_message: "Network error",
+      consecutive_failures: state.providers[provider].error.consecutive_failures,
+    };
+  }
+}
+
+async function fetchOpenai(state: AiUsageState): Promise<ProviderReport> {
+  const provider: Provider = "openai";
+  const providerState = state.providers[provider];
+
+  if (isFresh(providerState.usage)) {
+    return {
+      provider,
+      usage: providerState.usage,
+      stale: false,
+      error_type: providerState.error.last_error_type,
+      error_message: providerState.error.last_error_message,
+      consecutive_failures: providerState.error.consecutive_failures,
+    };
+  }
+
+  const credsFile = Bun.file(OPENAI_CREDS_PATH);
+  if (!(await credsFile.exists())) {
+    markError(state, provider, "missing_credentials", "Missing ~/.codex/auth.json", false);
+    return {
+      provider,
+      usage: providerState.usage,
+      stale: providerState.usage !== null,
+      error_type: "missing_credentials",
+      error_message: "Missing credentials",
+      consecutive_failures: state.providers[provider].error.consecutive_failures,
+    };
+  }
+
+  try {
+    const creds = await credsFile.json() as Record<string, unknown>;
+    const tokens = creds.tokens as Record<string, unknown> | undefined;
+    if (!tokens?.access_token) {
+      markError(state, provider, "missing_credentials", "No OpenAI access token", false);
+      return {
+        provider,
+        usage: providerState.usage,
+        stale: providerState.usage !== null,
+        error_type: "missing_credentials",
+        error_message: "No access token",
+        consecutive_failures: state.providers[provider].error.consecutive_failures,
+      };
+    }
+
+    let accessToken = tokens.access_token as string;
+    const refreshToken = tokens.refresh_token as string | undefined;
+    const accountId = tokens.account_id as string | undefined;
+
+    const payload = decodeJwtPayload(accessToken);
+    const expiresS = typeof payload?.exp === "number" ? payload.exp : 0;
+    if (expiresS > 0 && expiresS < Math.floor(Date.now() / 1000) + 300 && refreshToken) {
+      try {
+        const refreshRes = await fetch(OPENAI_TOKEN_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            client_id: OPENAI_CLIENT_ID,
+            grant_type: "refresh_token",
+            refresh_token: refreshToken,
+            scope: "openid profile email",
+          }),
+        });
+
+        if (refreshRes.ok) {
+          const refreshData = await refreshRes.json() as Record<string, unknown>;
+          const newAccessToken = refreshData.access_token as string | undefined;
+          if (newAccessToken) {
+            accessToken = newAccessToken;
+            creds.tokens = {
+              ...tokens,
+              access_token: newAccessToken,
+              refresh_token: (refreshData.refresh_token as string) || refreshToken,
+              id_token: (refreshData.id_token as string) || tokens.id_token,
+            };
+            await Bun.write(OPENAI_CREDS_PATH, JSON.stringify(creds, null, 2));
+            updateRefreshState(state, provider, true);
+          }
+        } else {
+          updateRefreshState(state, provider, false);
+        }
+      } catch {
+        updateRefreshState(state, provider, false);
+      }
+    }
+
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    if (accountId) headers["chatgpt-account-id"] = accountId;
+
+    const res = await fetch(OPENAI_USAGE_URL, { headers });
+    if (!res.ok) {
+      if (res.status === 429) {
+        markError(state, provider, "rate_limit", "OpenAI rate limited (429)", false);
+        return {
+          provider,
+          usage: providerState.usage,
+          stale: providerState.usage !== null,
+          error_type: "rate_limit",
+          error_message: "Rate limited (429)",
+          consecutive_failures: state.providers[provider].error.consecutive_failures,
+        };
+      }
+
+      const errorType: ErrorType = res.status === 401 || res.status === 403
+        ? "auth"
+        : res.status === 404 || res.status === 410
+          ? "endpoint"
+          : "unknown";
+
+      markError(state, provider, errorType, `OpenAI API ${res.status}`, true);
+      return {
+        provider,
+        usage: providerState.usage,
+        stale: providerState.usage !== null,
+        error_type: errorType,
+        error_message: `API ${res.status}`,
+        consecutive_failures: state.providers[provider].error.consecutive_failures,
+      };
+    }
+
+    const data = await res.json() as Record<string, unknown>;
+    const rateLimit = data.rate_limit as Record<string, unknown> | undefined;
+    const primary = rateLimit?.primary_window as { used_percent?: number; reset_at?: number } | undefined;
+    const secondary = rateLimit?.secondary_window as { used_percent?: number; reset_at?: number } | undefined;
+
+    const toIso = (unixSeconds?: number): string => {
+      if (!unixSeconds || unixSeconds <= 0) return "";
+      return new Date(unixSeconds * 1000).toISOString();
+    };
+
+    const usage: ProviderUsage = {
+      session_pct: Math.round(primary?.used_percent ?? 0),
+      weekly_pct: Math.round(secondary?.used_percent ?? 0),
+      session_resets_at: toIso(primary?.reset_at),
+      weekly_resets_at: toIso(secondary?.reset_at),
+      updated_at_ms: Date.now(),
+    };
+
+    state.providers[provider].usage = usage;
+    markSuccess(state, provider);
+
+    return {
+      provider,
+      usage,
+      stale: false,
+      error_type: "none",
+      error_message: "",
+      consecutive_failures: 0,
+    };
+  } catch (error) {
+    markError(state, provider, "network", `Network error: ${(error as Error).message}`, true);
+    return {
+      provider,
+      usage: providerState.usage,
+      stale: providerState.usage !== null,
+      error_type: "network",
+      error_message: "Network error",
+      consecutive_failures: state.providers[provider].error.consecutive_failures,
+    };
+  }
+}
+
+function providerLabel(provider: Provider): string {
+  return provider === "anthropic" ? "CLAUDE" : "OPENAI";
+}
+
+function providerShort(provider: Provider): string {
+  return provider === "anthropic" ? "A" : "O";
+}
+
+function summarizeProvider(report: ProviderReport): string {
+  const label = providerLabel(report.provider);
+  if (report.usage) {
+    const staleMark = report.stale ? "~" : "";
+    const sessionCountdown = formatCountdown(report.usage.session_resets_at);
+    const weeklyCountdown = formatCountdown(report.usage.weekly_resets_at);
+    return `${label}: ${staleMark}${report.usage.weekly_pct}% week (${weeklyCountdown}), ${report.usage.session_pct}% now (${sessionCountdown})`;
+  }
+
+  const reason = report.error_type === "missing_credentials"
+    ? "missing credentials"
+    : report.error_message || report.error_type;
+  return `${label}: ${reason}`;
+}
+
+function buildWaybar(selected: Provider, reports: Record<Provider, ProviderReport>): Record<string, unknown> {
+  const selectedReport = reports[selected];
+  const selectedLabel = providerLabel(selected);
+  const selectedState = selectedReport.usage;
+  const hasEscalatedError = selectedReport.consecutive_failures >= FAILURE_THRESHOLD && selectedReport.error_type !== "rate_limit";
+
+  let text = "AI";
+  let cssClass = "";
+  let percentage = 0;
+
+  if (hasEscalatedError) {
+    text = `${selectedLabel} ERR`;
+    cssClass = "error";
+  } else if (selectedState) {
+    const staleMark = selectedReport.stale ? "~" : "";
+    const sessionCountdown = formatCountdown(selectedState.session_resets_at);
+    const weeklyCountdown = formatCountdown(selectedState.weekly_resets_at);
+    text = `(${providerShort(selected)} ${staleMark}${selectedState.weekly_pct}% ${weeklyCountdown}| ${staleMark}${selectedState.session_pct}% ${sessionCountdown})`;
+    percentage = selectedState.session_pct;
+
+    if (selectedState.weekly_pct >= 90) cssClass = "critical";
+    else if (selectedState.weekly_pct >= 75) cssClass = "warning";
+  } else if (selectedReport.error_type === "missing_credentials") {
+    text = `${selectedLabel} auth`;
+    cssClass = "warning";
+  } else {
+    text = `${selectedLabel} n/a`;
+    cssClass = "warning";
+  }
+
+  const tooltipLines = [
+    "AI Usage",
+    "─────────────────",
+    `Selected: ${selectedLabel}`,
+    "",
+    summarizeProvider(reports.anthropic),
+    summarizeProvider(reports.openai),
+  ];
+
+  for (const provider of ["anthropic", "openai"] as const) {
+    const r = reports[provider];
+    if (r.consecutive_failures >= FAILURE_THRESHOLD && r.error_type !== "rate_limit") {
+      const errorLabel = providerLabel(provider);
+      tooltipLines.push("", `${errorLabel} error x${r.consecutive_failures}: ${r.error_type}${r.error_message ? ` (${r.error_message})` : ""}`);
+    }
+  }
+
+  return {
+    text,
+    tooltip: tooltipLines.join("\n"),
+    class: cssClass,
+    percentage,
+  };
+}
+
+async function main(): Promise<void> {
+  const state = await loadState();
+
+  if (args.includes("--toggle")) {
+    state.selected_provider = state.selected_provider === "anthropic" ? "openai" : "anthropic";
+    await saveState(state);
+    if (!args.includes("--waybar")) {
+      console.log(`Selected provider: ${state.selected_provider}`);
+    }
+    return;
+  }
+
+  const [anthropicReport, openaiReport] = await Promise.all([
+    fetchAnthropic(state),
+    fetchOpenai(state),
+  ]);
+
+  const reports: Record<Provider, ProviderReport> = {
+    anthropic: anthropicReport,
+    openai: openaiReport,
+  };
+
+  await saveState(state);
+
+  if (args.includes("--waybar")) {
+    console.log(JSON.stringify(buildWaybar(state.selected_provider, reports)));
+    return;
+  }
+
+  console.log("AI Usage");
+  console.log("--------");
+  console.log(`Selected: ${state.selected_provider}`);
+  console.log(summarizeProvider(reports.anthropic));
+  console.log(summarizeProvider(reports.openai));
+
+  for (const provider of ["anthropic", "openai"] as const) {
+    const r = reports[provider];
+    if (r.consecutive_failures >= FAILURE_THRESHOLD && r.error_type !== "rate_limit") {
+      console.log(`${providerLabel(provider)} error threshold reached: ${r.consecutive_failures} consecutive failures (${r.error_type}).`);
+    }
+  }
+}
+
+main().catch((error) => {
+  const message = error instanceof Error ? error.message : "unknown error";
+  if (args.includes("--waybar")) {
+    console.log(JSON.stringify({ text: "AI err", tooltip: message, class: "error" }));
+    return;
+  }
+  console.error(`Error: ${message}`);
+  process.exit(1);
+});

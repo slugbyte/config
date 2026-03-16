@@ -1,6 +1,23 @@
 #!/usr/bin/env bash
 
-# Force quit a Hyprland window using an interactive fzf menu
+# force-quit - Force quit a Hyprland window
+#
+# Interactive selector for choosing a Hyprland window and closing it.
+#
+# Usage:
+#   force-quit
+#
+# Examples:
+#   force-quit   # pick a window from fzf and close it
+
+[[ "$1" == "--describe" ]] && echo "Force quit a Hyprland window" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: force-quit"
+    echo ""
+    echo "Force quit a Hyprland window using an interactive fzf menu."
+    exit 0
+fi
 
 # Check for fzf
 if ! command -v fzf &> /dev/null; then
