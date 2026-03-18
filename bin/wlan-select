@@ -1,169 +1,941 @@
-#!/bin/bash
-# wlan-select - Select active Wi-Fi interface (wlan0/wlan1)
-#
-# Interactive selector for switching between wlan0 and wlan1.
-# Enables one interface, disables the other, and optionally toggles
-# performance mode (power save off) on the selected interface.
-#
-# Usage:
-#   wlan-select
-#
-# Examples:
-#   wlan-select   # choose interface from interactive fzf menu
+#!/usr/bin/env bun
 
-set -euo pipefail
+/*
+Network stack overview (host snapshot, 2026-03-18):
+- Wi-Fi control plane: iwd service.
+- Addressing and routes: systemd-networkd service.
+- NetworkManager: not installed/active on this host.
+- Source of truth for state: iw, ip, networkctl.
 
-if [[ "${1:-}" == "--describe" ]]; then
-    echo "Select wlan0 or wlan1 and switch active Wi-Fi"
-    exit 0
-fi
+This script keeps the original wlan-select behavior:
+- Show status first.
+- Let user choose one active Wi-Fi interface.
+- Bring selected interface up and bring other Wi-Fi interfaces down.
+- Optionally toggle per-interface power save mode.
+- Sample all interfaces and keep worst-case link stats.
+*/
 
-if [[ "${1:-}" == "--help" ]]; then
-    echo "Usage: wlan-select"
-    echo ""
-    echo "Interactive Wi-Fi interface selector for wlan0/wlan1."
-    echo "Switches to one interface and disables the other."
-    exit 0
-fi
+const SAMPLE_WINDOW_MS = 10000;
+const SAMPLE_INTERVAL_MS = 500;
+const READ_TIMEOUT_MS = 2500;
+const MUTATION_TIMEOUT_MS = 6000;
 
-require_command() {
-    local command_name="$1"
-    if ! command -v "$command_name" >/dev/null 2>&1; then
-        echo "Error: required command not found: $command_name"
-        exit 1
-    fi
+let FAST_MODE = false;
+let ABORT_REQUESTED = false;
+let PREFERRED_BAND = "none";
+
+process.on("SIGINT", () => {
+  ABORT_REQUESTED = true;
+});
+
+process.on("SIGTERM", () => {
+  ABORT_REQUESTED = true;
+});
+
+const WORST_CASE_BY_INTERFACE = new Map();
+const PROBED_INTERFACES = new Set();
+const DRIVER_BY_INTERFACE = new Map();
+const HARDWARE_BY_INTERFACE = new Map();
+
+function text(bytes) {
+  return new TextDecoder().decode(bytes ?? new Uint8Array());
 }
 
-interface_exists() {
-    local interface_name="$1"
-    [[ -d "/sys/class/net/$interface_name" ]]
+function commandExists(commandName) {
+  return Bun.which(commandName) != null;
 }
 
-run_as_root() {
-    if (( EUID == 0 )); then
-        "$@"
-    else
-        sudo "$@"
-    fi
+function ensureNotAborted() {
+  if (ABORT_REQUESTED) {
+    throw new Error("Aborted by signal.");
+  }
 }
 
-route_default_interface() {
-    ip route get 1.1.1.1 2>/dev/null | awk '/ dev / { for (i = 1; i <= NF; i++) if ($i == "dev") { print $(i + 1); exit } }'
+function run(command, args = [], options = {}) {
+  const timeoutMs = options.timeoutMs ?? READ_TIMEOUT_MS;
+  const proc = Bun.spawnSync({
+    cmd: [command, ...args],
+    timeout: timeoutMs,
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+
+  const timedOut = proc.exitCode == null && proc.signalCode === "SIGTERM";
+
+  return {
+    exitCode: proc.exitCode ?? 124,
+    stdout: text(proc.stdout).trimEnd(),
+    stderr: text(proc.stderr).trimEnd(),
+    timedOut,
+  };
 }
 
-print_interface_status() {
-    local interface_name="$1"
-    if ! interface_exists "$interface_name"; then
-        echo "- $interface_name: missing"
-        return
-    fi
-
-    local link_output
-    link_output="$(iw dev "$interface_name" link 2>/dev/null || true)"
-
-    if [[ "$link_output" == *"Not connected."* ]] || [[ -z "$link_output" ]]; then
-        echo "- $interface_name: not connected"
-        return
-    fi
-
-    local ssid
-    local freq
-    local rx_rate
-    local tx_rate
-    ssid="$(printf '%s\n' "$link_output" | awk -F': ' '/SSID:/{print $2; exit}')"
-    freq="$(printf '%s\n' "$link_output" | awk -F': ' '/freq:/{print $2; exit}')"
-    rx_rate="$(printf '%s\n' "$link_output" | awk -F': ' '/rx bitrate:/{print $2; exit}')"
-    tx_rate="$(printf '%s\n' "$link_output" | awk -F': ' '/tx bitrate:/{print $2; exit}')"
-
-    echo "- $interface_name: SSID=$ssid freq=${freq}MHz rx=$rx_rate tx=$tx_rate"
+function runAsRoot(command, args = [], options = {}) {
+  const isRoot = typeof process.getuid === "function" && process.getuid() === 0;
+  if (isRoot) {
+    return run(command, args, options);
+  }
+  return run("sudo", [command, ...args], options);
 }
 
-show_status() {
-    echo "Current status:"
-    print_interface_status "wlan0"
-    print_interface_status "wlan1"
-
-    local route_output
-    route_output="$(ip route get 1.1.1.1 2>/dev/null || true)"
-    if [[ -n "$route_output" ]]; then
-        echo "- default route: ${route_output%%$'\n'*}"
-    else
-        echo "- default route: unavailable"
-    fi
+function runAsRootOrThrow(command, args = [], context = "privileged command", timeoutMs = MUTATION_TIMEOUT_MS) {
+  ensureNotAborted();
+  const result = runAsRoot(command, args, { timeoutMs });
+  if (result.timedOut) {
+    throw new Error(`${context} timed out after ${timeoutMs}ms.`);
+  }
+  if (result.exitCode !== 0) {
+    const detail = result.stderr || result.stdout || "no output";
+    throw new Error(`${context} failed: ${detail}`);
+  }
+  return result;
 }
 
-switch_interface() {
-    local target_interface="$1"
-    local other_interface="$2"
-
-    if ! interface_exists "$target_interface"; then
-        echo "Error: interface $target_interface does not exist."
-        exit 1
-    fi
-
-    echo "Switching to $target_interface..."
-    run_as_root ip link set "$target_interface" up
-
-    if interface_exists "$other_interface"; then
-        run_as_root iw dev "$other_interface" disconnect >/dev/null 2>&1 || true
-        run_as_root ip link set "$other_interface" down
-    fi
-
-    local performance_choice
-    read -r -p "Enable performance mode on $target_interface (power save off)? [y/N] " performance_choice
-    if [[ "$performance_choice" =~ ^[Yy]$ ]]; then
-        run_as_root iw dev "$target_interface" set power_save off
-        echo "Performance mode enabled on $target_interface."
-    else
-        run_as_root iw dev "$target_interface" set power_save on
-        echo "Power save enabled on $target_interface."
-    fi
-
-    echo ""
-    echo "Verification:"
-    iw dev "$target_interface" link || true
-    local route_output
-    route_output="$(ip route get 1.1.1.1 2>/dev/null || true)"
-    if [[ -n "$route_output" ]]; then
-        echo "$route_output"
-    fi
-
-    local active_default_interface
-    active_default_interface="$(route_default_interface || true)"
-    if [[ "$active_default_interface" != "$target_interface" ]]; then
-        echo "Warning: default route is currently via ${active_default_interface:-unknown}, not $target_interface."
-        echo "This can happen while DHCP/route updates settle."
-    fi
+function requireCommand(commandName) {
+  if (!commandExists(commandName)) {
+    console.error(`Error: required command not found: ${commandName}`);
+    process.exit(1);
+  }
 }
 
-require_command "iw"
-require_command "ip"
-require_command "fzf"
+function ensureSudoSession() {
+  const isRoot = typeof process.getuid === "function" && process.getuid() === 0;
+  if (isRoot) {
+    return;
+  }
 
-selection="$(
-    printf '%s\n' \
-        "Use wlan0 (2.4 GHz)" \
-        "Use wlan1 (5 GHz)" \
-        "Status" \
-        "Quit" \
-    | fzf --prompt="wlan-select> " --height=12 --reverse --border --cycle || true
-)"
+  if (!commandExists("sudo")) {
+    console.error("Error: required command not found: sudo");
+    process.exit(1);
+  }
 
-if [[ -z "${selection:-}" ]] || [[ "$selection" == "Quit" ]]; then
-    exit 0
-fi
+  const result = run("sudo", ["-v"], { timeoutMs: MUTATION_TIMEOUT_MS });
+  if (result.timedOut) {
+    console.error("Error: sudo authentication timed out.");
+    process.exit(1);
+  }
+  if (result.exitCode !== 0) {
+    const detail = result.stderr || result.stdout || "authentication failed";
+    console.error(`Error: sudo authentication failed: ${detail}`);
+    process.exit(1);
+  }
+}
 
-case "$selection" in
-    "Use wlan0 (2.4 GHz)")
-        switch_interface "wlan0" "wlan1"
-        ;;
-    "Use wlan1 (5 GHz)")
-        switch_interface "wlan1" "wlan0"
-        ;;
-    "Status")
-        show_status
-        ;;
-    *)
-        echo "No action selected."
-        ;;
-esac
+function interfaceExists(interfaceName) {
+  return Bun.file(`/sys/class/net/${interfaceName}`).exists();
+}
+
+function isWirelessInterface(interfaceName) {
+  const result = run("iw", ["dev", interfaceName, "info"], { timeoutMs: READ_TIMEOUT_MS });
+  return result.exitCode === 0;
+}
+
+function routeDefaultInterface() {
+  const result = run("ip", ["route", "get", "1.1.1.1"]);
+  if (result.exitCode !== 0 || !result.stdout) {
+    return "";
+  }
+  const match = result.stdout.match(/\bdev\s+(\S+)/);
+  return match?.[1] ?? "";
+}
+
+function listWirelessInterfaces() {
+  const result = run("iw", ["dev"]);
+  if (result.exitCode !== 0 || !result.stdout) {
+    return [];
+  }
+
+  return result.stdout
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("Interface "))
+    .map((line) => line.replace(/^Interface\s+/, "").trim())
+    .filter(Boolean);
+}
+
+function interfaceLinkState(interfaceName) {
+  const result = run("ip", ["-o", "link", "show", interfaceName]);
+  if (result.exitCode !== 0 || !result.stdout) {
+    return "-";
+  }
+  const match = result.stdout.match(/\bstate\s+(\S+)/);
+  return match?.[1] ?? "-";
+}
+
+function bandFromFrequency(frequency) {
+  if (!frequency) {
+    return "-";
+  }
+
+  const mhz = Number.parseFloat(frequency);
+  if (!Number.isFinite(mhz)) {
+    return `${frequency}M`;
+  }
+
+  if (mhz >= 5925 && mhz <= 7125) {
+    return "6G";
+  }
+  if (mhz >= 5000 && mhz < 5925) {
+    return "5G";
+  }
+  if (mhz >= 2400 && mhz < 2500) {
+    return "2.4G";
+  }
+
+  return `${Math.trunc(mhz)}M`;
+}
+
+function ratesFromBitrates(rxRate, txRate) {
+  const rxShort = (rxRate ?? "").trim().split(/\s+/)[0] ?? "";
+  const txShort = (txRate ?? "").trim().split(/\s+/)[0] ?? "";
+
+  if (rxShort && txShort) {
+    return `${rxShort}/${txShort}Mb`;
+  }
+  if (rxShort) {
+    return `${rxShort}/-Mb`;
+  }
+  if (txShort) {
+    return `-/${txShort}Mb`;
+  }
+  return "-";
+}
+
+function parseFirstNumber(value) {
+  const match = String(value ?? "").match(/-?\d+(?:\.\d+)?/);
+  if (!match) {
+    return null;
+  }
+
+  const parsed = Number.parseFloat(match[0]);
+  if (!Number.isFinite(parsed)) {
+    return null;
+  }
+
+  return parsed;
+}
+
+function formatRateValue(value) {
+  if (value == null || !Number.isFinite(value)) {
+    return "-";
+  }
+  return value.toFixed(1);
+}
+
+function formatSignalValue(value) {
+  if (value == null || !Number.isFinite(value)) {
+    return "-";
+  }
+  return `${value.toFixed(1)} dBm`;
+}
+
+function connectedLinkSnapshot(interfaceName) {
+  const result = run("iw", ["dev", interfaceName, "link"]);
+  if (result.exitCode !== 0 || !result.stdout.includes("Connected to")) {
+    return null;
+  }
+
+  const freq = result.stdout.match(/^\s*freq:\s*(.+)$/m)?.[1]?.trim() ?? "";
+  const signal = result.stdout.match(/^\s*signal:\s*(.+)$/m)?.[1]?.trim() ?? "-";
+  const ssid = result.stdout.match(/^\s*SSID:\s*(.+)$/m)?.[1]?.trim() ?? "-";
+  const rxRate = result.stdout.match(/^\s*rx bitrate:\s*(.+)$/m)?.[1]?.trim() ?? "";
+  const txRate = result.stdout.match(/^\s*tx bitrate:\s*(.+)$/m)?.[1]?.trim() ?? "";
+
+  const signalDbm = parseFirstNumber(signal);
+  const rxMbps = parseFirstNumber(rxRate);
+  const txMbps = parseFirstNumber(txRate);
+
+  return {
+    band: bandFromFrequency(freq),
+    signal: signal || "-",
+    ssid: ssid || "-",
+    rates: ratesFromBitrates(rxRate, txRate),
+    signalDbm,
+    rxMbps,
+    txMbps,
+  };
+}
+
+async function sampleWorstCaseStats(interfaceName, durationMs = SAMPLE_WINDOW_MS, intervalMs = SAMPLE_INTERVAL_MS) {
+  const startMs = Date.now();
+  const deadlineMs = startMs + durationMs;
+
+  let worstSignal = null;
+  let worstRx = null;
+  let worstTx = null;
+  let selectedBand = "-";
+  let selectedSsid = "-";
+  let samples = 0;
+
+  while (Date.now() < deadlineMs) {
+    ensureNotAborted();
+    const snapshot = connectedLinkSnapshot(interfaceName);
+    if (snapshot) {
+      samples += 1;
+
+      if (selectedBand === "-" && snapshot.band && snapshot.band !== "-") {
+        selectedBand = snapshot.band;
+      }
+      if (selectedSsid === "-" && snapshot.ssid && snapshot.ssid !== "-") {
+        selectedSsid = snapshot.ssid;
+      }
+
+      if (snapshot.signalDbm != null) {
+        if (worstSignal == null || snapshot.signalDbm < worstSignal) {
+          worstSignal = snapshot.signalDbm;
+        }
+      }
+
+      if (snapshot.rxMbps != null) {
+        if (worstRx == null || snapshot.rxMbps < worstRx) {
+          worstRx = snapshot.rxMbps;
+        }
+      }
+
+      if (snapshot.txMbps != null) {
+        if (worstTx == null || snapshot.txMbps < worstTx) {
+          worstTx = snapshot.txMbps;
+        }
+      }
+    }
+
+    await Bun.sleep(intervalMs);
+  }
+
+  if (samples === 0) {
+    return null;
+  }
+
+  return {
+    band: selectedBand,
+    signal: formatSignalValue(worstSignal),
+    ssid: selectedSsid,
+    rates: `${formatRateValue(worstRx)}/${formatRateValue(worstTx)}Mb`,
+    samples,
+  };
+}
+
+async function sampleInterfacesForWorstCase() {
+  const interfaces = listWirelessInterfaces();
+  if (interfaces.length === 0) {
+    return;
+  }
+
+  console.log(`Sampling interfaces (${SAMPLE_WINDOW_MS / 1000}s each)...`);
+  for (const interfaceName of interfaces) {
+    ensureNotAborted();
+
+    if (!interfaceExists(interfaceName) || !isWirelessInterface(interfaceName)) {
+      console.log(`- ${interfaceName}: done -> skipped (interface unavailable)`);
+      continue;
+    }
+
+    const initialLinkState = interfaceLinkState(interfaceName);
+    const wasDown = initialLinkState === "DOWN";
+
+    try {
+      if (wasDown) {
+        runAsRootOrThrow("ip", ["link", "set", interfaceName, "up"], `bring ${interfaceName} up for sampling`);
+      }
+
+      const worstCase = await sampleWorstCaseStats(interfaceName);
+      if (worstCase) {
+        WORST_CASE_BY_INTERFACE.set(interfaceName, worstCase);
+        if (wasDown) {
+          PROBED_INTERFACES.add(interfaceName);
+        }
+        console.log(`- ${interfaceName}: done -> worst signal ${worstCase.signal}, worst rates ${worstCase.rates}`);
+      } else {
+        console.log(`- ${interfaceName}: done -> no connected samples captured`);
+      }
+    } finally {
+      if (wasDown) {
+        const restoreResult = runAsRoot("ip", ["link", "set", interfaceName, "down"], { timeoutMs: MUTATION_TIMEOUT_MS });
+        if (restoreResult.exitCode !== 0 || restoreResult.timedOut) {
+          const detail = restoreResult.stderr || restoreResult.stdout || "no output";
+          console.error(`Warning: failed to restore ${interfaceName} to DOWN: ${detail}`);
+        }
+      }
+    }
+  }
+}
+
+function isInterfaceConnected(interfaceName) {
+  const result = run("iw", ["dev", interfaceName, "link"]);
+  return result.exitCode === 0 && result.stdout.includes("Connected to");
+}
+
+function currentWirelessInterface() {
+  const defaultInterface = routeDefaultInterface();
+  if (defaultInterface && interfaceExists(defaultInterface)) {
+    const infoResult = run("iw", ["dev", defaultInterface, "info"]);
+    if (infoResult.exitCode === 0) {
+      return defaultInterface;
+    }
+  }
+
+  for (const interfaceName of listWirelessInterfaces()) {
+    if (isInterfaceConnected(interfaceName)) {
+      return interfaceName;
+    }
+  }
+
+  return "";
+}
+
+function getInterfaceDriver(interfaceName) {
+  if (DRIVER_BY_INTERFACE.has(interfaceName)) {
+    return DRIVER_BY_INTERFACE.get(interfaceName);
+  }
+
+  const driverPath = `/sys/class/net/${interfaceName}/device/driver`;
+  const readlinkResult = run("readlink", ["-f", driverPath], { timeoutMs: READ_TIMEOUT_MS });
+  if (readlinkResult.exitCode === 0 && readlinkResult.stdout) {
+    const parts = readlinkResult.stdout.split("/").filter(Boolean);
+    const driverName = parts.at(-1) ?? "";
+    if (driverName) {
+      DRIVER_BY_INTERFACE.set(interfaceName, driverName);
+      return driverName;
+    }
+  }
+
+  if (commandExists("ethtool")) {
+    const ethtoolResult = run("ethtool", ["-i", interfaceName], { timeoutMs: READ_TIMEOUT_MS });
+    if (ethtoolResult.exitCode === 0) {
+      const match = ethtoolResult.stdout.match(/^driver:\s*(.+)$/m);
+      if (match?.[1]) {
+        const driverName = match[1].trim();
+        DRIVER_BY_INTERFACE.set(interfaceName, driverName);
+        return driverName;
+      }
+    }
+  }
+
+  DRIVER_BY_INTERFACE.set(interfaceName, "");
+  return "";
+}
+
+function getInterfacePowerMode(interfaceName) {
+  const result = run("iw", ["dev", interfaceName, "get", "power_save"]);
+  if (result.exitCode !== 0) {
+    return "-";
+  }
+  if (result.stdout.includes("Power save: off")) {
+    return "performance";
+  }
+  if (result.stdout.includes("Power save: on")) {
+    return "power_save";
+  }
+  return "-";
+}
+
+function getInterfaceHardwareName(interfaceName) {
+  if (HARDWARE_BY_INTERFACE.has(interfaceName)) {
+    return HARDWARE_BY_INTERFACE.get(interfaceName);
+  }
+
+  const devicePath = `/sys/class/net/${interfaceName}/device`;
+  if (!Bun.file(devicePath).exists()) {
+    HARDWARE_BY_INTERFACE.set(interfaceName, "");
+    return "";
+  }
+
+  if (commandExists("udevadm")) {
+    const udevResult = run("udevadm", ["info", "--query=property", `--path=${devicePath}`], { timeoutMs: READ_TIMEOUT_MS });
+    if (udevResult.exitCode === 0 && udevResult.stdout) {
+      const lines = udevResult.stdout.split("\n");
+      const pick = (key) => lines.find((line) => line.startsWith(`${key}=`))?.slice(key.length + 1) ?? "";
+
+      const vendor = pick("ID_VENDOR_FROM_DATABASE") || pick("ID_VENDOR");
+      const model = pick("ID_MODEL_FROM_DATABASE") || pick("ID_MODEL");
+
+      if (vendor && model) {
+        const hardwareName = `${vendor} ${model}`;
+        HARDWARE_BY_INTERFACE.set(interfaceName, hardwareName);
+        return hardwareName;
+      }
+      if (vendor) {
+        HARDWARE_BY_INTERFACE.set(interfaceName, vendor);
+        return vendor;
+      }
+      if (model) {
+        HARDWARE_BY_INTERFACE.set(interfaceName, model);
+        return model;
+      }
+    }
+  }
+
+  if (commandExists("lspci")) {
+    const slotResult = run("readlink", ["-f", devicePath], { timeoutMs: READ_TIMEOUT_MS });
+    const pciSlot = slotResult.stdout.split("/").filter(Boolean).at(-1) ?? "";
+    if (/^[0-9a-fA-F]{4}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}\.[0-9a-fA-F]$/.test(pciSlot)) {
+      const lspciResult = run("lspci", ["-s", pciSlot], { timeoutMs: READ_TIMEOUT_MS });
+      if (lspciResult.exitCode === 0 && lspciResult.stdout) {
+        const hardwareName = lspciResult.stdout.replace(/^\S+\s+/, "").trim();
+        HARDWARE_BY_INTERFACE.set(interfaceName, hardwareName);
+        return hardwareName;
+      }
+    }
+  }
+
+  HARDWARE_BY_INTERFACE.set(interfaceName, "");
+  return "";
+}
+
+function interfaceMenuLabel(interfaceName, currentInterface) {
+  let label = `${interfaceName}`;
+  if (currentInterface && interfaceName === currentInterface) {
+    label += " [current]";
+  }
+  return label;
+}
+
+function sanitize(value) {
+  return String(value ?? "-").replaceAll("\t", " ") || "-";
+}
+
+function normalizeBandForPreference(band) {
+  const value = String(band ?? "").trim();
+  if (value === "2.4G") {
+    return "2.4G";
+  }
+  if (value === "5G") {
+    return "5G";
+  }
+  if (value === "6G") {
+    return "6G";
+  }
+  return "-";
+}
+
+function interfaceBandForPreference(interfaceName) {
+  const worstCase = WORST_CASE_BY_INTERFACE.get(interfaceName);
+  if (worstCase?.band) {
+    return normalizeBandForPreference(worstCase.band);
+  }
+
+  const liveSnapshot = connectedLinkSnapshot(interfaceName);
+  if (liveSnapshot?.band) {
+    return normalizeBandForPreference(liveSnapshot.band);
+  }
+
+  return "-";
+}
+
+function bandMatchesPreference(interfaceBand) {
+  if (PREFERRED_BAND === "none") {
+    return false;
+  }
+  if (PREFERRED_BAND === "5G") {
+    return interfaceBand === "5G";
+  }
+  if (PREFERRED_BAND === "2.4G") {
+    return interfaceBand === "2.4G";
+  }
+  return false;
+}
+
+function sortInterfacesByPreference(interfaceNames) {
+  if (PREFERRED_BAND === "none") {
+    return [...interfaceNames];
+  }
+
+  return [...interfaceNames]
+    .map((interfaceName, index) => {
+      const band = interfaceBandForPreference(interfaceName);
+      const preferred = bandMatchesPreference(band);
+      return {
+        interfaceName,
+        preferred,
+        index,
+      };
+    })
+    .sort((left, right) => {
+      if (left.preferred !== right.preferred) {
+        return left.preferred ? -1 : 1;
+      }
+      return left.index - right.index;
+    })
+    .map((entry) => entry.interfaceName);
+}
+
+function interfaceStatusRow(interfaceName) {
+  let linkState = "-";
+  let connectionState = "disconnected";
+  let band = "-";
+  let signal = "-";
+  let ssid = "-";
+  let rates = "-";
+  let powerMode = "-";
+  let driverName = "-";
+  let hardwareName = "-";
+
+  if (!interfaceExists(interfaceName)) {
+    return {
+      iface: interfaceName,
+      link: "MISS",
+      state: "missing",
+      band: "-",
+      signal: "-",
+      ssid: "-",
+      rates: "-",
+      mode: "-",
+      driver: "-",
+      hardware: "-",
+    };
+  }
+
+  linkState = interfaceLinkState(interfaceName);
+
+  const liveSnapshot = connectedLinkSnapshot(interfaceName);
+  const worstCase = WORST_CASE_BY_INTERFACE.get(interfaceName);
+  if (liveSnapshot) {
+    connectionState = "connected";
+    if (worstCase) {
+      band = worstCase.band ?? "-";
+      signal = worstCase.signal ?? "-";
+      ssid = worstCase.ssid ?? "-";
+      rates = worstCase.rates ?? "-";
+    } else {
+      band = liveSnapshot.band;
+      signal = liveSnapshot.signal;
+      ssid = liveSnapshot.ssid;
+      rates = liveSnapshot.rates;
+    }
+  } else if (linkState === "DOWN" && PROBED_INTERFACES.has(interfaceName) && worstCase) {
+    connectionState = "probed";
+    band = worstCase.band ?? "-";
+    signal = worstCase.signal ?? "-";
+    ssid = worstCase.ssid ?? "-";
+    rates = worstCase.rates ?? "-";
+  }
+
+  driverName = getInterfaceDriver(interfaceName) || "-";
+  powerMode = getInterfacePowerMode(interfaceName) || "-";
+  hardwareName = getInterfaceHardwareName(interfaceName) || "-";
+
+  return {
+    iface: sanitize(interfaceName),
+    link: sanitize(linkState),
+    state: sanitize(connectionState),
+    band: sanitize(band),
+    signal: sanitize(signal),
+    ssid: sanitize(ssid),
+    rates: sanitize(rates),
+    mode: sanitize(powerMode),
+    driver: sanitize(driverName),
+    hardware: sanitize(hardwareName),
+  };
+}
+
+function printRouteWarnings(expectedInterface = "") {
+  if (!expectedInterface) {
+    return;
+  }
+
+  const defaultRoutesResult = run("ip", ["-4", "route", "show", "default"]);
+  const defaultRoutes = defaultRoutesResult.exitCode === 0 ? defaultRoutesResult.stdout.trim() : "";
+
+  if (!defaultRoutes) {
+    if (isInterfaceConnected(expectedInterface)) {
+      console.log(`Route warning: no default route detected for connected interface ${expectedInterface}.`);
+      return;
+    }
+    console.log("Route warning: no default route detected.");
+    return;
+  }
+
+  const lines = defaultRoutes.split("\n").map((line) => line.trim()).filter(Boolean);
+  if (lines.length > 1) {
+    const devs = Array.from(new Set(lines.map((line) => line.match(/\bdev\s+(\S+)/)?.[1]).filter(Boolean)));
+    if (devs.length > 0) {
+      console.log(`Route warning: multiple default routes detected (${devs.join(",")}).`);
+    } else {
+      console.log("Route warning: multiple default routes detected.");
+    }
+  }
+
+  const activeDefaultInterface = routeDefaultInterface();
+  if (activeDefaultInterface && activeDefaultInterface !== expectedInterface) {
+    console.log(`Route warning: default route via ${activeDefaultInterface}, expected ${expectedInterface}.`);
+  }
+}
+
+async function waitForExpectedRoute(expectedInterface, timeoutMs = 3500, intervalMs = 500) {
+  const deadlineMs = Date.now() + timeoutMs;
+  while (Date.now() < deadlineMs) {
+    ensureNotAborted();
+    const activeDefaultInterface = routeDefaultInterface();
+    if (activeDefaultInterface === expectedInterface) {
+      return true;
+    }
+    await Bun.sleep(intervalMs);
+  }
+  return false;
+}
+
+function buildStatusColumns() {
+  const signalTitle = FAST_MODE ? "SIGNAL (live)" : "SIGNAL (worst)";
+  const ratesTitle = FAST_MODE ? "RX/TX (live)" : "RX/TX (worst)";
+  return [
+    { key: "iface", title: "IFACE" },
+    { key: "link", title: "LINK" },
+    { key: "state", title: "STATE" },
+    { key: "band", title: "BAND" },
+    { key: "signal", title: signalTitle },
+    { key: "ssid", title: "SSID" },
+    { key: "rates", title: ratesTitle },
+    { key: "mode", title: "MODE" },
+    { key: "driver", title: "DRIVER" },
+    { key: "hardware", title: "HARDWARE" },
+  ];
+}
+
+function buildStatusWidths(rows, columns) {
+  const widths = new Map();
+  for (const column of columns) {
+    let max = column.title.length;
+    for (const row of rows) {
+      const valueLength = String(row[column.key]).length;
+      if (valueLength > max) {
+        max = valueLength;
+      }
+    }
+    widths.set(column.key, max);
+  }
+  return widths;
+}
+
+function tableTotalWidth(columns, widths) {
+  let total = 0;
+  for (const column of columns) {
+    total += widths.get(column.key);
+  }
+  total += (columns.length - 1) * 2;
+  return total;
+}
+
+function formatTableRow(row, columns, widths) {
+  return columns
+    .map((column) => String(row[column.key]).padEnd(widths.get(column.key)))
+    .join("  ");
+}
+
+function renderStatusTable(rows, columns, widths) {
+  const header = Object.fromEntries(columns.map((column) => [column.key, column.title]));
+  const divider = Object.fromEntries(columns.map((column) => [column.key, "-".repeat(widths.get(column.key))]));
+
+  console.log(formatTableRow(header, columns, widths));
+  console.log(formatTableRow(divider, columns, widths));
+  for (const row of rows) {
+    console.log(formatTableRow(row, columns, widths));
+  }
+}
+
+function renderStatusMultiline(rows, currentInterface) {
+  const signalLabel = FAST_MODE ? "signal (live)" : "signal (worst)";
+  const ratesLabel = FAST_MODE ? "rx/tx (live)" : "rx/tx (worst)";
+
+  for (const row of rows) {
+    const currentTag = row.iface === currentInterface ? " [current]" : "";
+    console.log(`${row.iface} [${row.state}]${currentTag}`);
+    console.log(`  band: ${row.band}`);
+    console.log(`  ${signalLabel}: ${row.signal}`);
+    console.log(`  mode: ${row.mode}`);
+    console.log(`  ssid: ${row.ssid}`);
+    console.log(`  ${ratesLabel}: ${row.rates}`);
+    console.log(`  link: ${row.link}`);
+    console.log(`  driver: ${row.driver}`);
+    console.log(`  hardware: ${row.hardware}`);
+    console.log("");
+  }
+}
+
+function showStatus(expectedInterface = "") {
+  const interfaces = listWirelessInterfaces();
+  if (interfaces.length === 0) {
+    console.log("No wireless interfaces detected.");
+    printRouteWarnings(expectedInterface);
+    return;
+  }
+
+  const rows = interfaces.map((name) => interfaceStatusRow(name));
+  const columns = buildStatusColumns();
+  const widths = buildStatusWidths(rows, columns);
+  const currentInterface = currentWirelessInterface();
+  const terminalWidth = process.stdout.columns ?? 0;
+  const totalWidth = tableTotalWidth(columns, widths);
+  const shouldUseMultiline = terminalWidth > 0 && totalWidth + 2 > terminalWidth;
+
+  if (shouldUseMultiline) {
+    renderStatusMultiline(rows, currentInterface);
+  } else {
+    renderStatusTable(rows, columns, widths);
+  }
+
+  printRouteWarnings(expectedInterface);
+}
+
+async function switchInterface(targetInterface) {
+  if (!interfaceExists(targetInterface)) {
+    console.error(`Error: interface ${targetInterface} does not exist.`);
+    process.exit(1);
+  }
+
+  if (!isWirelessInterface(targetInterface)) {
+    console.error(`Error: interface ${targetInterface} is not a wireless interface.`);
+    process.exit(1);
+  }
+
+  console.log(`Switching to ${targetInterface}...`);
+  runAsRootOrThrow("ip", ["link", "set", targetInterface, "up"], `bring ${targetInterface} up`);
+
+  for (const interfaceName of listWirelessInterfaces()) {
+    ensureNotAborted();
+    if (interfaceName === targetInterface) {
+      continue;
+    }
+    if (!interfaceExists(interfaceName)) {
+      continue;
+    }
+
+    const disconnectResult = runAsRoot("iw", ["dev", interfaceName, "disconnect"], { timeoutMs: MUTATION_TIMEOUT_MS });
+    if (disconnectResult.timedOut) {
+      console.error(`Warning: disconnect timed out on ${interfaceName}.`);
+    }
+
+    runAsRootOrThrow("ip", ["link", "set", interfaceName, "down"], `bring ${interfaceName} down`);
+  }
+
+  const response = (prompt(`Enable performance mode on ${targetInterface} (power save off)? [y/N] `) ?? "").trim();
+  if (/^[Yy]$/.test(response)) {
+    runAsRootOrThrow("iw", ["dev", targetInterface, "set", "power_save", "off"], `set performance mode on ${targetInterface}`);
+    console.log(`Performance mode enabled on ${targetInterface}.`);
+  } else {
+    runAsRootOrThrow("iw", ["dev", targetInterface, "set", "power_save", "on"], `set power save mode on ${targetInterface}`);
+    console.log(`Power save enabled on ${targetInterface}.`);
+  }
+
+  console.log("\nVerification:");
+  await waitForExpectedRoute(targetInterface);
+  showStatus(targetInterface);
+}
+
+async function pickMenuSelection(menuEntries) {
+  return pickMenuSelectionWithPrompt(menuEntries, "wlan-select> ");
+}
+
+async function pickMenuSelectionWithPrompt(menuEntries, promptText) {
+  const input = `${menuEntries.join("\n")}\n`;
+  const proc = Bun.spawn({
+    cmd: ["fzf", `--prompt=${promptText}`, "--height=12", "--reverse", "--border", "--cycle"],
+    stdin: "pipe",
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+
+  proc.stdin.write(input);
+  proc.stdin.end();
+
+  const exitCode = await proc.exited;
+  if (exitCode !== 0) {
+    return "";
+  }
+
+  const stdoutText = await new Response(proc.stdout).text();
+  return stdoutText.trim();
+}
+
+async function promptBandPreference() {
+  const selection = await pickMenuSelectionWithPrompt(
+    ["No preference", "Prefer 5G", "Prefer 2.4G"],
+    "band> ",
+  );
+
+  if (selection === "Prefer 5G") {
+    PREFERRED_BAND = "5G";
+    return;
+  }
+  if (selection === "Prefer 2.4G") {
+    PREFERRED_BAND = "2.4G";
+    return;
+  }
+  PREFERRED_BAND = "none";
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const hasFlag = (flag) => args.includes(flag);
+
+  FAST_MODE = hasFlag("--fast");
+
+  if (hasFlag("--describe")) {
+    console.log("Select detected Wi-Fi interface and switch active link");
+    return;
+  }
+
+  if (hasFlag("--help")) {
+    console.log("Usage: wlan-select [--fast]");
+    console.log("");
+    console.log("Interactive Wi-Fi interface selector for detected interfaces.");
+    console.log("Switches to one interface and disables the others.");
+    console.log("Use --fast to skip startup sampling and show live instant stats.");
+    return;
+  }
+
+  requireCommand("iw");
+  requireCommand("ip");
+  requireCommand("fzf");
+  ensureSudoSession();
+
+  if (!FAST_MODE) {
+    await promptBandPreference();
+  } else {
+    PREFERRED_BAND = "none";
+  }
+
+  if (!FAST_MODE) {
+    await sampleInterfacesForWorstCase();
+  }
+  if (PREFERRED_BAND !== "none") {
+    console.log(`Band preference: ${PREFERRED_BAND}`);
+  }
+  showStatus();
+  console.log("");
+
+  const interfaces = listWirelessInterfaces();
+  if (interfaces.length === 0) {
+    console.error("Error: no wireless interfaces detected.");
+    process.exit(1);
+  }
+
+  const currentInterface = currentWirelessInterface();
+  const sortedInterfaces = sortInterfacesByPreference(interfaces);
+  const menuEntries = sortedInterfaces.map((interfaceName) => interfaceMenuLabel(interfaceName, currentInterface));
+  menuEntries.push("Quit");
+
+  const selection = await pickMenuSelection(menuEntries);
+  if (!selection || selection === "Quit") {
+    return;
+  }
+
+  if (selection !== "Quit") {
+    const selectedInterface = selection.split(" ")[0];
+    await switchInterface(selectedInterface);
+    return;
+  }
+
+  console.log("No action selected.");
+}
+
+try {
+  await main();
+} catch (error) {
+  const message = error instanceof Error ? error.message : String(error);
+  if (ABORT_REQUESTED) {
+    console.error(`Aborted: ${message}`);
+  } else {
+    console.error(`Error: ${message}`);
+  }
+  process.exit(1);
+}
