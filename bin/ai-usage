@@ -23,11 +23,14 @@ if (args.includes("--describe")) {
 }
 
 if (args.includes("--help")) {
-  console.log("Usage: ai-usage [--waybar] [--toggle]");
+  console.log("Usage: ai-usage [--waybar] [--toggle] [--self-check]");
   console.log("");
   console.log("Show Anthropic/OpenAI usage for CLI or Waybar.");
   console.log("  --waybar   Output Waybar JSON payload");
   console.log("  --toggle   Toggle selected provider (anthropic/openai)");
+  console.log("  --self-check  Validate credentials/endpoints and exit");
+  console.log("");
+  console.log("Note: OpenAI usage currently uses an internal ChatGPT endpoint.");
   process.exit(0);
 }
 
@@ -80,7 +83,7 @@ const ANTHROPIC_CREDS_PATH = join(HOME, ".claude", ".credentials.json");
 const OPENAI_CREDS_PATH = join(HOME, ".codex", "auth.json");
 
 const ANTHROPIC_USAGE_URL = "https://api.anthropic.com/api/oauth/usage";
-const ANTHROPIC_TOKEN_URL = "https://console.anthropic.com/v1/oauth/token";
+const ANTHROPIC_TOKEN_URL = "https://platform.claude.com/v1/oauth/token";
 const ANTHROPIC_CLIENT_ID = "9d1c250a-e61b-44d9-88ed-5944d1962f5e";
 
 const OPENAI_USAGE_URL = "https://chatgpt.com/backend-api/wham/usage";
@@ -180,6 +183,191 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
   } catch {
     return null;
   }
+}
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
+
+function asNumber(value: unknown): number {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return 0;
+}
+
+function buildOpenaiUsage(data: Record<string, unknown>): ProviderUsage {
+  const rateLimit = asRecord(data.rate_limit);
+  const primary = asRecord(rateLimit?.primary_window);
+  const secondary = asRecord(rateLimit?.secondary_window);
+
+  const primaryPercent = asNumber(primary?.used_percent);
+  const secondaryPercent = asNumber(secondary?.used_percent);
+  const primaryReset = asNumber(primary?.reset_at);
+  const secondaryReset = asNumber(secondary?.reset_at);
+
+  const toIso = (unixSeconds: number): string => {
+    if (unixSeconds <= 0) return "";
+    return new Date(unixSeconds * 1000).toISOString();
+  };
+
+  return {
+    session_pct: Math.round(primaryPercent),
+    weekly_pct: Math.round(secondaryPercent),
+    session_resets_at: toIso(primaryReset),
+    weekly_resets_at: toIso(secondaryReset),
+    updated_at_ms: Date.now(),
+  };
+}
+
+interface SelfCheckResult {
+  provider: Provider;
+  passed: boolean;
+  lines: string[];
+}
+
+async function runAnthropicSelfCheck(): Promise<SelfCheckResult> {
+  const lines: string[] = [];
+  const credsFile = Bun.file(ANTHROPIC_CREDS_PATH);
+  if (!(await credsFile.exists())) {
+    lines.push("[fail] Missing ~/.claude/.credentials.json");
+    return { provider: "anthropic", passed: false, lines };
+  }
+
+  try {
+    const creds = await credsFile.json() as Record<string, unknown>;
+    const oauth = asRecord(creds.claudeAiOauth);
+    if (!oauth) {
+      lines.push("[fail] Missing claudeAiOauth object");
+      return { provider: "anthropic", passed: false, lines };
+    }
+
+    const accessToken = typeof oauth.accessToken === "string" ? oauth.accessToken : "";
+    const refreshToken = typeof oauth.refreshToken === "string" ? oauth.refreshToken : "";
+    const expiresAt = asNumber(oauth.expiresAt);
+
+    if (!accessToken) {
+      lines.push("[fail] Missing accessToken");
+      return { provider: "anthropic", passed: false, lines };
+    }
+
+    lines.push("[ok] Credentials present");
+    lines.push(refreshToken ? "[ok] Refresh token present" : "[warn] Refresh token missing");
+    lines.push(expiresAt > Date.now() ? "[ok] Access token not expired" : "[warn] Access token appears expired");
+
+    const res = await fetch(ANTHROPIC_USAGE_URL, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "anthropic-beta": "oauth-2025-04-20",
+      },
+    });
+
+    if (!res.ok) {
+      lines.push(`[fail] Usage endpoint returned HTTP ${res.status}`);
+      return { provider: "anthropic", passed: false, lines };
+    }
+
+    const data = await res.json() as Record<string, unknown>;
+    const fiveHour = asRecord(data.five_hour);
+    const sevenDay = asRecord(data.seven_day);
+    const fiveHourUtil = asNumber(fiveHour?.utilization);
+    const sevenDayUtil = asNumber(sevenDay?.utilization);
+
+    if (!fiveHour || !sevenDay) {
+      lines.push("[fail] Unexpected usage schema (missing five_hour/seven_day)");
+      return { provider: "anthropic", passed: false, lines };
+    }
+
+    lines.push("[ok] Usage endpoint reachable");
+    lines.push(`[ok] Usage schema valid (five_hour=${Math.round(fiveHourUtil)}%, seven_day=${Math.round(sevenDayUtil)}%)`);
+    return { provider: "anthropic", passed: true, lines };
+  } catch (error) {
+    lines.push(`[fail] Check failed: ${(error as Error).message}`);
+    return { provider: "anthropic", passed: false, lines };
+  }
+}
+
+async function runOpenaiSelfCheck(): Promise<SelfCheckResult> {
+  const lines: string[] = [];
+  const credsFile = Bun.file(OPENAI_CREDS_PATH);
+  if (!(await credsFile.exists())) {
+    lines.push("[fail] Missing ~/.codex/auth.json");
+    return { provider: "openai", passed: false, lines };
+  }
+
+  try {
+    const creds = await credsFile.json() as Record<string, unknown>;
+    const tokens = asRecord(creds.tokens);
+    if (!tokens) {
+      lines.push("[fail] Missing tokens object");
+      return { provider: "openai", passed: false, lines };
+    }
+
+    const accessToken = typeof tokens.access_token === "string" ? tokens.access_token : "";
+    const refreshToken = typeof tokens.refresh_token === "string" ? tokens.refresh_token : "";
+    const accountId = typeof tokens.account_id === "string" ? tokens.account_id : "";
+
+    if (!accessToken) {
+      lines.push("[fail] Missing access_token");
+      return { provider: "openai", passed: false, lines };
+    }
+
+    lines.push("[ok] Credentials present");
+    lines.push(refreshToken ? "[ok] Refresh token present" : "[warn] Refresh token missing");
+    lines.push(accountId ? "[ok] Account id present" : "[warn] Account id missing");
+
+    const payload = decodeJwtPayload(accessToken);
+    const expiresS = typeof payload?.exp === "number" ? payload.exp : 0;
+    lines.push(expiresS > Math.floor(Date.now() / 1000)
+      ? "[ok] Access token not expired"
+      : "[warn] Access token appears expired");
+
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    if (accountId) headers["chatgpt-account-id"] = accountId;
+
+    const res = await fetch(OPENAI_USAGE_URL, { headers });
+    if (!res.ok) {
+      lines.push(`[fail] Usage endpoint returned HTTP ${res.status}`);
+      return { provider: "openai", passed: false, lines };
+    }
+
+    const data = await res.json() as Record<string, unknown>;
+    const usage = buildOpenaiUsage(data);
+    lines.push("[ok] Usage endpoint reachable");
+    lines.push(`[ok] Usage schema valid (primary=${usage.session_pct}%, secondary=${usage.weekly_pct}%)`);
+    return { provider: "openai", passed: true, lines };
+  } catch (error) {
+    lines.push(`[fail] Check failed: ${(error as Error).message}`);
+    return { provider: "openai", passed: false, lines };
+  }
+}
+
+async function runSelfCheck(): Promise<number> {
+  const [anthropic, openai] = await Promise.all([
+    runAnthropicSelfCheck(),
+    runOpenaiSelfCheck(),
+  ]);
+
+  console.log("AI Usage Self-check");
+  console.log("-------------------");
+
+  for (const result of [anthropic, openai]) {
+    console.log(`${providerLabel(result.provider)}:`);
+    for (const line of result.lines) {
+      console.log(`  ${line}`);
+    }
+    console.log("");
+  }
+
+  console.log("Note: OpenAI usage uses the internal ChatGPT endpoint /backend-api/wham/usage.");
+  const allPassed = anthropic.passed && openai.passed;
+  console.log(allPassed ? "Overall: PASS" : "Overall: FAIL");
+  return allPassed ? 0 : 1;
 }
 
 function markSuccess(state: AiUsageState, provider: Provider): void {
@@ -492,22 +680,7 @@ async function fetchOpenai(state: AiUsageState): Promise<ProviderReport> {
     }
 
     const data = await res.json() as Record<string, unknown>;
-    const rateLimit = data.rate_limit as Record<string, unknown> | undefined;
-    const primary = rateLimit?.primary_window as { used_percent?: number; reset_at?: number } | undefined;
-    const secondary = rateLimit?.secondary_window as { used_percent?: number; reset_at?: number } | undefined;
-
-    const toIso = (unixSeconds?: number): string => {
-      if (!unixSeconds || unixSeconds <= 0) return "";
-      return new Date(unixSeconds * 1000).toISOString();
-    };
-
-    const usage: ProviderUsage = {
-      session_pct: Math.round(primary?.used_percent ?? 0),
-      weekly_pct: Math.round(secondary?.used_percent ?? 0),
-      session_resets_at: toIso(primary?.reset_at),
-      weekly_resets_at: toIso(secondary?.reset_at),
-      updated_at_ms: Date.now(),
-    };
+    const usage = buildOpenaiUsage(data);
 
     state.providers[provider].usage = usage;
     markSuccess(state, provider);
@@ -612,6 +785,10 @@ function buildWaybar(selected: Provider, reports: Record<Provider, ProviderRepor
 }
 
 async function main(): Promise<void> {
+  if (args.includes("--self-check")) {
+    process.exit(await runSelfCheck());
+  }
+
   const state = await loadState();
 
   if (args.includes("--toggle")) {

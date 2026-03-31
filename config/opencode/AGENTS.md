@@ -21,7 +21,7 @@ directly to answer questions or understand behavior.
 Plan files should be named <date>-<plan-name>.md (yyyy-mm-dd). 
 
 ## ARCHIVING PLANS
-when i ask to archive plan files store them in ./.opencode/plans/ARCHIVE
+when i ask to archive plan files store them in ./plan-archive
 
 when archiving plans add the following text to the plans header.
 ```

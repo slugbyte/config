@@ -48,3 +48,4 @@ video/x-ogm+ogg=mpv.desktop
 video/x-theora+ogg=mpv.desktop
 application/ogg=mpv.desktop
 inode/directory=org.gnome.Nautilus.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
