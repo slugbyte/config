@@ -4,54 +4,19 @@
   #############################################################################
   # VARS
   #############################################################################
-  DRY_RUN=true
-  [[ "${1:-}" == "--plz" ]] && DRY_RUN=false
   work="$HOME/workspace"
   conf="$work/conf"
   code="$work/code"
   temp="$HOME/Downloads"
   drop="$HOME/Dropbox"
-  trash="$HOME/.local/share/Trash/files"
 
-  trashed_filepath_list=()
+  # shared helpers: DRY_RUN, run_safe, trash_existing, link_if_exists
+  source "$conf/util/lib.sh" "$@"
 
   #############################################################################
   # FUNCTIONS
   #############################################################################
-  # run a command if DRY_RUN is false, print the command if its true
-  # $ run_safe cmd --arg1 --arg2 --arg3
-  run_safe(){
-    if $DRY_RUN;then
-      echo "[MOCK]" "$@"
-    else
-      # silent in non mock mode
-      "$@" >/dev/null 2>&1
-    fi
-  }
-
-  # trash a file if it exists and is not a symlink
-  # $ trash_existing ./file/to/trash
-  trash_existing(){
-    # skip if doesn't exist or is a symlink
-    [[ -e "$1" ]] || return 0
-    if [[ -L "$1" ]]; then
-      run_safe rm "$1"
-      return 0
-    fi
-  
-    trashed_filepath_list+=("$1")
-    if command -v trash >/dev/null 2>&1; then
-      run_safe trash "$1"
-    else
-      local dest
-      dest="$trash/$(basename "$1").backup.$$.$RANDOM"
-      run_safe mv "$1" "$dest"
-    fi
-  }
-  
-
-  # if $src exists force link to $dest, if $dest is exists trash it before linking
-  # $ link_if_exists $src $dest
+  # Override link_if_exists to use $conf-relative display paths.
   link_if_exists(){
     if [[ -e "$1" ]];then
       trash_existing "$2"
@@ -99,6 +64,14 @@
 
   link_config "$work/conf/config" "$HOME/.config"
   link_config "$work/conf/home" "$HOME"
+
+  # run install scripts for other configs
+  for install_script in "$conf/other"/*/install.sh; do
+    [[ -x "$install_script" ]] || continue
+    echo
+    echo "[INSTALL] ${install_script/#$conf/\$conf}"
+    bash "$install_script" "$@"
+  done
 
   if $DRY_RUN;then
     echo

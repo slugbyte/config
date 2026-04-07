@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)"
+    ],
+    "deny": [
+      "Edit(//home/slugbyte/.local/share/mise/installs/zig/**)",
+      "Bash(git push *)",
+      "Bash(jj git push *)"
+    ],
+    "ask": [
+      "Bash(sudo *)",
+      "Bash(rm *)",
+      "Bash(rmdir *)"
+    ],
+    "defaultMode": "plan",
+    "additionalDirectories": [
+      "//home/slugbyte/.local/share/mise/installs/zig",
+      "//home/slugbyte/.cache/autoresearch",
+      "//home/slugbyte/workspace/note",
+      "//tmp"
+    ]
+  },
+  "effortLevel": "high",
+  "plansDirectory": "plan",
+  "voiceEnabled": false,
+  "voice": {
+    "enabled": false,
+    "mode": "hold"
+  }
+}
