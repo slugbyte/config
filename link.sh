@@ -58,9 +58,9 @@
   echo "[BLOINGO] lets begin!"
 
   # flush out $work to have all expected links and dirs
-  mkdir -p "$code" 
-  mkdir -p "$trash"
-  mkdir -p ~/.local/bin
+  run_safe mkdir -p "$code"
+  run_safe mkdir -p "$trash"
+  run_safe mkdir -p ~/.local/bin
 
   link_config "$work/conf/config" "$HOME/.config"
   link_config "$work/conf/home" "$HOME"

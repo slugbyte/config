@@ -2,6 +2,15 @@
 
 - If you have unresolved questions or ambiguities about a task, ask before proceeding.
 
+## Todo Tool
+
+- Use the built-in `todo` tool for multi-step tasks, progress tracking, or when the user asks for a checklist.
+- Do not use the `todo` tool for trivial one-shot requests where tracking would add overhead.
+- Start with `todo.list` to reuse any relevant existing state before adding new items.
+- Keep todo items short, concrete, and actionable.
+- Mark items complete with `todo.toggle` as soon as the work is done.
+- Use `todo.clear` only when the list is obsolete or the user asks to reset it.
+
 ## Zig Standard Library
 
 The Zig standard library is installed via mise at:
@@ -18,11 +27,19 @@ directly to answer questions or understand behavior.
 
 
 ## PLANS
-Plan files should be named <date>-<plan-name>.md (yyyy-mm-dd). 
+Plan files are named `<plan-name>.md` with the creation date inside the file.
+Archived plans are named `<date>-<plan-name>.md` (yyyy-mm-dd).
+
+Use the `plan` cli for plan file workflows.
+
+- `plan new <feature-name>` creates a new plan in `./plan` with a `> created: <date>` line
+- `plan archive <plan-file...>` archives plans into `./plan-archive` with a date prefix
+- the project root is the directory that contains the `plan/` folder
+- do not manually move archived plan files when the cli can do it
+
+If a task is about creating, reviewing, merging, or archiving plan files, use the `plan` skill when available.
 
 ## ARCHIVING PLANS
-when i ask to archive plan files store them in ./plan-archive
-
 when archiving plans add the following text to the plans header.
 ```
 > [!warning] Archived

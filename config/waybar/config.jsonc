@@ -99,7 +99,7 @@
     "format-ethernet": "(OK NET)",
     "format-disconnected": "(NO NET)",
     "tooltip-format-wifi": "{essid} [{ifname}]\nIP: {ipaddr}/{cidr} via {gwaddr}\nSignal: {signalStrength}% ({signaldBm} dBm) @ {frequency} GHz\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}  Σ{bandwidthTotalBytes}",
-    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-ethernet": "Connected",
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
     "on-click": "omarchy-launch-wifi"

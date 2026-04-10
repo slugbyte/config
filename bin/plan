@@ -1,0 +1,264 @@
+#!/usr/bin/env bun
+/**
+ * plan - Manage plan files.
+ *
+ * Commands:
+ *   plan new <feature-name> [feature-name...]
+ *   plan archive <plan-file> [plan-file...]
+ *
+ * Examples:
+ *   plan new ui-animation
+ *   plan new "render cache"
+ *   plan archive plan/ui-animation.md
+ *   plan archive ./plan/a.md ./plan/b.md
+ */
+
+import { existsSync } from "node:fs";
+import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
+import path from "node:path";
+
+const ARCHIVE_WARNING = `> [!warning] Archived
+> This plan has been archived and is kept for reference only. It does not
+> reflect active work.
+`;
+
+function printHelp(): void {
+    console.log("Usage: plan <command> [args...]");
+    console.log("");
+    console.log("Manage plan files.");
+    console.log("");
+    console.log("Commands:");
+    console.log("  new <feature-name> [feature-name...]    Create one or more plan files in ./plan");
+    console.log("  archive <plan-file> [plan-file...]      Archive one or more plan files into ./plan-archive");
+    console.log("");
+    console.log("Global flags:");
+    console.log("  --help        Show this help");
+    console.log("  --describe    Print a short description");
+}
+
+function printNewHelp(): void {
+    console.log("Usage: plan new <feature-name> [feature-name...]");
+    console.log("");
+    console.log("Create one or more plan files in ./plan.");
+    console.log("  - Adds the creation date inside the file.");
+    console.log("  - Creates ./plan if it does not exist.");
+    console.log("  - Prints the created file path for each new plan.");
+}
+
+function printArchiveHelp(): void {
+    console.log("Usage: plan archive <plan-file> [plan-file...]");
+    console.log("");
+    console.log("Archive one or more plan files.");
+    console.log("  - Files must be inside a directory named 'plan'.");
+    console.log("  - Files are moved to the sibling 'plan-archive' directory.");
+    console.log("  - Creates ./plan-archive if it does not exist.");
+    console.log("  - Prepends the archive date to the filename.");
+    console.log("  - Adds the archive warning block if it is missing.");
+    console.log("  - If a destination file already exists, a numeric suffix is added.");
+}
+
+function fail(message: string): never {
+    console.error(`plan: ${message}`);
+    process.exit(1);
+}
+
+function currentDateString(): string {
+    const now = new Date();
+    const year = String(now.getFullYear());
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+function slugify(text: string): string {
+    const trimmed = text.trim().toLowerCase();
+    const without_extension = trimmed.endsWith(".md") ? trimmed.slice(0, -3) : trimmed;
+    const without_date_prefix = without_extension.replace(/^\d{4}-\d{2}-\d{2}-/, "");
+    const slug = without_date_prefix
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+/, "")
+        .replace(/-+$/, "")
+        .replace(/--+/g, "-");
+
+    if (slug.length === 0) {
+        fail(`invalid plan name: ${JSON.stringify(text)}`);
+    }
+    return slug;
+}
+
+function titleFromSlug(slug: string): string {
+    return slug
+        .split("-")
+        .filter((part) => part.length > 0)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+}
+
+function planTemplate(date_string: string, slug: string): string {
+    return `# ${titleFromSlug(slug)}\n> created: ${date_string}\n`;
+}
+
+function isPlanFile(file_path: string): boolean {
+    return path.basename(path.dirname(file_path)) === "plan";
+}
+
+function projectRootFromPlanFile(file_path: string): string {
+    return path.dirname(path.dirname(file_path));
+}
+
+function addArchiveWarning(content: string): string {
+    if (content.includes(ARCHIVE_WARNING.trim())) {
+        return content;
+    }
+
+    const lines = content.split(/\r?\n/);
+    let insert_index = 0;
+
+    if (lines.length > 0 && lines[0].startsWith("# ")) {
+        insert_index = 1;
+        if (insert_index < lines.length && lines[insert_index] === "") {
+            insert_index += 1;
+        }
+        if (
+            insert_index < lines.length &&
+            (lines[insert_index].startsWith("> created:") ||
+                lines[insert_index].startsWith("*") ||
+                lines[insert_index].startsWith("Date:"))
+        ) {
+            insert_index += 1;
+            if (insert_index < lines.length && lines[insert_index] === "") {
+                insert_index += 1;
+            }
+        }
+    }
+
+    const before = lines.slice(0, insert_index).join("\n");
+    const after = lines.slice(insert_index).join("\n");
+    const warning = `${ARCHIVE_WARNING}\n`;
+
+    if (before.length === 0) {
+        return `${warning}${after}`;
+    }
+    if (after.length === 0) {
+        return `${before}\n${warning}`;
+    }
+    return `${before}\n${warning}${after}`;
+}
+
+async function uniquePath(destination_path: string): Promise<string> {
+    if (!existsSync(destination_path)) {
+        return destination_path;
+    }
+
+    const parsed = path.parse(destination_path);
+    let index = 2;
+    while (true) {
+        const candidate = path.join(parsed.dir, `${parsed.name}-${index}${parsed.ext}`);
+        if (!existsSync(candidate)) {
+            return candidate;
+        }
+        index += 1;
+    }
+}
+
+async function commandNew(args: string[]): Promise<void> {
+    if (args.length === 1 && args[0] === "--help") {
+        printNewHelp();
+        return;
+    }
+    if (args.length === 0) {
+        printNewHelp();
+        process.exit(1);
+    }
+
+    const date_string = currentDateString();
+    const project_root = process.cwd();
+    const plan_dir = path.join(project_root, "plan");
+    await mkdir(plan_dir, { recursive: true });
+
+    for (const raw_name of args) {
+        const slug = slugify(raw_name);
+        const filename = `${slug}.md`;
+        const destination_path = await uniquePath(path.join(plan_dir, filename));
+        await writeFile(destination_path, planTemplate(date_string, slug), "utf8");
+        console.log(path.relative(project_root, destination_path));
+    }
+}
+
+async function commandArchive(args: string[]): Promise<void> {
+    if (args.length === 1 && args[0] === "--help") {
+        printArchiveHelp();
+        return;
+    }
+    if (args.length === 0) {
+        printArchiveHelp();
+        process.exit(1);
+    }
+
+    const resolved_paths = args.map((arg) => path.resolve(arg));
+    for (const file_path of resolved_paths) {
+        if (!isPlanFile(file_path)) {
+            fail(`file must be inside a directory named 'plan': ${file_path}`);
+        }
+        if (!existsSync(file_path)) {
+            fail(`file does not exist: ${file_path}`);
+        }
+    }
+
+    const project_root = projectRootFromPlanFile(resolved_paths[0]);
+    for (const file_path of resolved_paths) {
+        const file_root = projectRootFromPlanFile(file_path);
+        if (file_root !== project_root) {
+            fail("all files must belong to the same project root");
+        }
+    }
+
+    const archive_dir = path.join(project_root, "plan-archive");
+    await mkdir(archive_dir, { recursive: true });
+
+    for (const source_path of resolved_paths) {
+        const source_content = await readFile(source_path, "utf8");
+        const archived_content = addArchiveWarning(source_content);
+
+        const date_string = currentDateString();
+        const base_name = path.basename(source_path, ".md");
+        const stripped_name = base_name.replace(/^\d{4}-\d{2}-\d{2}-/, "");
+        const destination_name = `${date_string}-${stripped_name}.md`;
+        const destination_path = await uniquePath(path.join(archive_dir, destination_name));
+
+        await writeFile(destination_path, archived_content, "utf8");
+        await unlink(source_path);
+        console.log(`${path.relative(project_root, source_path)} -> ${path.relative(project_root, destination_path)}`);
+    }
+}
+
+const args = process.argv.slice(2);
+
+if (args.length === 1 && args[0] === "--describe") {
+    console.log("Create and archive dated project plan files");
+    process.exit(0);
+}
+
+if (args.length === 1 && args[0] === "--help") {
+    printHelp();
+    process.exit(0);
+}
+
+if (args.length === 0) {
+    printHelp();
+    process.exit(1);
+}
+
+const subcommand = args[0];
+const subcommand_args = args.slice(1);
+
+switch (subcommand) {
+    case "new":
+        await commandNew(subcommand_args);
+        break;
+    case "archive":
+        await commandArchive(subcommand_args);
+        break;
+    default:
+        fail(`unknown command: ${subcommand}`);
+}
