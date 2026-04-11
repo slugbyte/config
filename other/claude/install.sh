@@ -8,12 +8,11 @@ CONF_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$SCRIPT_DIR/../../util/lib.sh" "$@"
 
 run_safe mkdir -p "$TARGET"
-run_safe mkdir -p "$TARGET/skills"
 
 link_if_exists "$CONF_ROOT/config/opencode/AGENTS.md" "$TARGET/CLAUDE.md"
 link_if_exists "$SCRIPT_DIR/settings.json"       "$TARGET/settings.json"
-link_if_exists "$SCRIPT_DIR/skills/git"          "$TARGET/skills/git"
-link_if_exists "$SCRIPT_DIR/skills/jujutsu"      "$TARGET/skills/jujutsu"
+link_if_exists "$SCRIPT_DIR/statusline.sh"       "$TARGET/statusline.sh"
+link_if_exists "$SCRIPT_DIR/skills"              "$TARGET/skills"
 
 if (( ${#trashed_filepath_list[@]} > 0 )); then
   echo

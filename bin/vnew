@@ -1,34 +1,33 @@
 #!/bin/bash
-# vnew - Create a new commit/change
+# vnew - Create a new empty jj change
 #
-# Unified wrapper for creating commits. In jj repos, creates a new
-# empty change. In git repos, creates a GPG-signed commit.
+# Creates a new empty change in jj repositories without describing
+# the current one. For committing work, use vcommit instead.
 #
 # Usage:
-#   vnew [git-commit-args...]
+#   vnew [jj-new-args...]
 #
 # Examples:
-#   vnew                       # new change (jj) or commit staged (git)
-#   vnew -m "feat: add login"  # commit with message (git)
-#   vnew -a -m "fix bug"       # commit all tracked files (git)
+#   vnew                       # new empty change
+#   vnew -m "wip"              # new change with message
 
-[[ "$1" == "--describe" ]] && echo "Create a new commit/change" && exit 0
+[[ "$1" == "--describe" ]] && echo "Create a new empty jj change" && exit 0
 
 if [[ "$1" == "--help" ]]; then
-    echo "Usage: vnew [git-commit-args...]"
+    echo "Usage: vnew [jj-new-args...]"
     echo ""
-    echo "Create a new commit/change."
-    echo "  jj: runs 'jj new'"
-    echo "  git: runs 'git commit -S' (GPG signed)"
+    echo "Create a new empty jj change (jj only)."
+    echo "For committing work in either jj or git, use vcommit."
     exit 0
 fi
 
 vcs_info=$(vdetect) || exit 1
 vcs="${vcs_info%% *}"
 
-if [[ "$vcs" == "jj" ]]; then
-    jj new "$@"
-    exit 0
+if [[ "$vcs" != "jj" ]]; then
+    echo "ERROR: vnew is only supported in jj repositories" >&2
+    echo "Use 'vcommit' to commit work in git repositories." >&2
+    exit 1
 fi
 
-git commit -S "$@" && git verify-commit HEAD
+jj new "$@"

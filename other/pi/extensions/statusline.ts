@@ -24,9 +24,10 @@ function formatDuration(duration_ms: number): string {
 	return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-function getUsageTotals(ctx: ExtensionContext): { turnCount: number; sessionTokens: number; cost: number } {
+function getUsageTotals(ctx: ExtensionContext): { turnCount: number; inputTokens: number; outputTokens: number; cost: number } {
 	let turnCount = 0;
-	let sessionTokens = 0;
+	let inputTokens = 0;
+	let outputTokens = 0;
 	let cost = 0;
 
 	for (const entry of ctx.sessionManager.getBranch()) {
@@ -35,11 +36,12 @@ function getUsageTotals(ctx: ExtensionContext): { turnCount: number; sessionToke
 
 		const message = entry.message as AssistantMessage;
 		turnCount += 1;
-		sessionTokens += message.usage.totalTokens;
+		inputTokens += message.usage.input;
+		outputTokens += message.usage.output;
 		cost += message.usage.cost.total;
 	}
 
-	return { turnCount, sessionTokens, cost };
+	return { turnCount, inputTokens, outputTokens, cost };
 }
 
 export default function statusline(pi: ExtensionAPI) {
@@ -91,8 +93,10 @@ export default function statusline(pi: ExtensionAPI) {
 						parenClose;
 					const totalsPart =
 						parenOpen +
-						theme.fg("dim", "total ") +
-						theme.fg("muted", formatCount(usageTotals.sessionTokens)) +
+						theme.fg("dim", "tok ") +
+						theme.fg("muted", formatCount(usageTotals.inputTokens)) +
+						theme.fg("dim", ":") +
+						theme.fg("muted", formatCount(usageTotals.outputTokens)) +
 						theme.fg("dim", "/") +
 						theme.fg("muted", formatCost(usageTotals.cost)) +
 						parenClose;

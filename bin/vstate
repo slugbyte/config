@@ -1,0 +1,66 @@
+#!/bin/bash
+# vstate - Show full repository context
+#
+# Combines status, diff, and log into a single output for quick
+# situational awareness. Works with both jj and git repositories.
+#
+# Usage:
+#   vstate
+#
+# Examples:
+#   vstate             # show status + diff + recent history
+
+[[ "$1" == "--describe" ]] && echo "Show full repository context (status + diff + log)" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vstate"
+    echo ""
+    echo "Show full repository context: status, diff, and recent history."
+    echo "  jj: status + diff + last 10 commits"
+    echo "  git: status + staged diff + unstaged diff + last 20 commits"
+    exit 0
+fi
+
+vcs_info=$(vdetect) || exit 1
+vcs="${vcs_info%% *}"
+
+section() {
+    echo ""
+    echo "── $1 ──"
+}
+
+if [[ "$vcs" == "jj" ]]; then
+    JJ_LOG_TEMPLATE='
+    separate(" ",
+      format_short_change_id(change_id),
+      if(description, description.first_line(), description_placeholder),
+      if(conflict, label("conflict", "conflict")),
+      if(empty, label("empty", "(empty)")),
+      committer.timestamp().ago(),
+      bookmarks,
+      tags,
+    ) ++ "\n"
+    '
+
+    section "status"
+    jj status --no-pager
+
+    section "diff"
+    jj diff --no-pager
+
+    section "log"
+    jj log -r 'all()' -n 10 --no-pager --template "$JJ_LOG_TEMPLATE"
+    exit 0
+fi
+
+section "status"
+git status
+
+section "diff (staged)"
+git diff --cached
+
+section "diff (unstaged)"
+git diff
+
+section "log"
+git log --oneline -n 20

@@ -1,25 +1,31 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(*)"
-    ],
-    "deny": [
-      "Edit(//home/slugbyte/.local/share/mise/installs/zig/**)",
-      "Bash(git push *)",
-      "Bash(jj git push *)"
-    ],
-    "ask": [
-      "Bash(sudo *)",
-      "Bash(rm *)",
-      "Bash(rmdir *)"
-    ],
-    "defaultMode": "plan",
+    "defaultMode": "bypassPermissions",
     "additionalDirectories": [
       "//home/slugbyte/.local/share/mise/installs/zig",
       "//home/slugbyte/.cache/autoresearch",
       "//home/slugbyte/workspace/note",
       "//tmp"
+    ],
+    "skipDangerousModePermissionPrompt": true
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/slugbyte/.local/bin/tool-vcs-dirty-check.sh",
+            "timeout": 5
+          }
+        ]
+      }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash /home/slugbyte/.claude/statusline.sh"
   },
   "effortLevel": "high",
   "plansDirectory": "plan",
@@ -27,5 +33,6 @@
   "voice": {
     "enabled": false,
     "mode": "hold"
-  }
+  },
+  "skipDangerousModePermissionPrompt": true
 }

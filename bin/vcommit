@@ -1,0 +1,46 @@
+#!/bin/bash
+# vcommit - Commit current work
+#
+# Unified wrapper for committing. In jj repos, describes the current
+# change and starts a new one. In git repos, stages all tracked changes
+# and creates a GPG-signed commit.
+#
+# Usage:
+#   vcommit <message>
+#   vcommit
+#
+# Examples:
+#   vcommit "feat: add login"   # describe + new (jj), commit (git)
+#   vcommit                     # open editor for message
+
+[[ "$1" == "--describe" ]] && echo "Commit current work (describe+new for jj, commit for git)" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vcommit [message]"
+    echo ""
+    echo "Commit current work."
+    echo "  jj: describes the current change, then creates a new empty change"
+    echo "  git: stages all tracked changes and creates a GPG-signed commit"
+    echo ""
+    echo "  No args    Open editor for message"
+    echo "  message    Use message directly"
+    exit 0
+fi
+
+vcs_info=$(vdetect) || exit 1
+vcs="${vcs_info%% *}"
+
+if [[ "$vcs" == "jj" ]]; then
+    if [[ -n "$1" ]]; then
+        jj desc -m "$1" && jj new
+    else
+        jj desc && jj new
+    fi
+    exit 0
+fi
+
+if [[ -n "$1" ]]; then
+    git add -A && git commit -S -m "$1" && git verify-commit HEAD
+else
+    git add -A && git commit -S && git verify-commit HEAD
+fi

@@ -5,6 +5,7 @@
   "hideThinkingBlock": true,
   "enabledModels": [
     "claude-opus-4-6",
+    "claude-sonnet-4-6",
     "gpt-5.4"
   ],
   "theme": "lackluster",
