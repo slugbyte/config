@@ -1,63 +1,105 @@
-import { execSync } from "node:child_process";
+import { access } from "node:fs/promises";
+import { dirname, join, resolve } from "node:path";
 import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
 
-function run(cmd: string, cwd: string): string {
+type RepoInfo = {
+	kind: "jj" | "git";
+	root: string;
+};
+
+async function pathExists(path: string): Promise<boolean> {
 	try {
-		return execSync(cmd, { cwd, encoding: "utf-8", timeout: 5000 }).trim();
+		await access(path);
+		return true;
 	} catch {
-		return "";
+		return false;
 	}
 }
 
-function detectVCS(cwd: string): "jj" | "git" | null {
-	const result = run("vdetect", cwd);
-	if (result.startsWith("jj ")) return "jj";
-	if (result.startsWith("git ")) return "git";
-	return null;
+async function detectRepo(start: string): Promise<RepoInfo | null> {
+	let dir = resolve(start);
+
+	while (true) {
+		if (await pathExists(join(dir, ".jj"))) {
+			return { kind: "jj", root: dir };
+		}
+
+		if (await pathExists(join(dir, ".git"))) {
+			return { kind: "git", root: dir };
+		}
+
+		const parent = dirname(dir);
+		if (parent === dir) return null;
+		dir = parent;
+	}
 }
 
-function hasJJChanges(cwd: string): boolean {
-	const diff = run("jj diff --stat", cwd);
-	return diff.length > 0;
+async function hasJJChanges(pi: ExtensionAPI, root: string): Promise<boolean> {
+	const result = await pi.exec("jj", ["diff", "--summary"], {
+		cwd: root,
+		timeout: 5000,
+	});
+
+	if (result.code !== 0) return false;
+	return result.stdout.trim().length > 0;
 }
 
-function hasGitChanges(cwd: string): boolean {
-	const staged = run("git diff --cached --quiet; echo $?", cwd);
-	const unstaged = run("git diff --quiet HEAD; echo $?", cwd);
-	const untracked = run("git ls-files --others --exclude-standard", cwd);
-	return staged === "1" || unstaged === "1" || untracked.length > 0;
+async function hasGitChanges(pi: ExtensionAPI, root: string): Promise<boolean> {
+	const result = await pi.exec("git", ["status", "--porcelain"], {
+		cwd: root,
+		timeout: 5000,
+	});
+
+	if (result.code !== 0) return false;
+	return result.stdout.trim().length > 0;
+}
+
+function buildCommitPrompt(repo: RepoInfo): string {
+	const commitAction =
+		repo.kind === "jj"
+			? "describe the current change and create a new one with `vcommit`"
+			: "create a commit with `vcommit`";
+
+	return [
+		`The ${repo.kind} repo at ${repo.root} has uncommitted changes.`,
+		"Please inspect the current repo state and commit the pending work on my behalf.",
+		"Use `vstate` first.",
+		`Then ${commitAction}.`,
+		"Write the commit or change description yourself from the diff and recent conversation context.",
+		"Do not ask me for a commit message unless the changes are ambiguous or risky.",
+	].join("\n");
+}
+
+function requestAgentCommit(pi: ExtensionAPI, ctx: ExtensionContext, repo: RepoInfo): void {
+	const prompt = buildCommitPrompt(repo);
+
+	if (ctx.isIdle()) {
+		pi.sendUserMessage(prompt);
+	} else {
+		pi.sendUserMessage(prompt, { deliverAs: "followUp" });
+	}
 }
 
 async function checkVCS(pi: ExtensionAPI, ctx: ExtensionContext): Promise<void> {
 	if (!ctx.hasUI) return;
 
-	const cwd = ctx.cwd;
-	const vcs = detectVCS(cwd);
-	if (!vcs) return;
+	const repo = await detectRepo(ctx.cwd);
+	if (!repo) return;
 
-	if (vcs === "jj") {
-		if (!hasJJChanges(cwd)) return;
-		const desc = await ctx.ui.confirm(
-			"Undescribed jj changes",
-			"The working copy has changes. Describe and create a new change?",
-		);
-		if (!desc) return;
-		const message = await ctx.ui.input("Change description:");
-		if (!message) return;
-		run(`vcommit "${message.replace(/"/g, '\\"')}"`, cwd);
-		ctx.ui.notify("Change described and new change created.", "info");
-	} else {
-		if (!hasGitChanges(cwd)) return;
-		const commit = await ctx.ui.confirm(
-			"Uncommitted git changes",
-			"The working tree has changes. Commit before proceeding?",
-		);
-		if (!commit) return;
-		const message = await ctx.ui.input("Commit message:");
-		if (!message) return;
-		run(`vcommit "${message.replace(/"/g, '\\"')}"`, cwd);
-		ctx.ui.notify("Changes committed.", "info");
-	}
+	const isDirty = repo.kind === "jj" ? await hasJJChanges(pi, repo.root) : await hasGitChanges(pi, repo.root);
+	if (!isDirty) return;
+
+	const title = repo.kind === "jj" ? "Dirty jj working copy" : "Dirty git working tree";
+	const message =
+		repo.kind === "jj"
+			? "The working copy has changes. Ask pi to inspect them and run `vcommit` for you?"
+			: "The repo has uncommitted changes. Ask pi to inspect them and run `vcommit` for you?";
+
+	const shouldCommit = await ctx.ui.confirm(title, message);
+	if (!shouldCommit) return;
+
+	ctx.ui.notify(`Asking pi to commit ${repo.kind} changes...`, "info");
+	requestAgentCommit(pi, ctx, repo);
 }
 
 export default function vcsDirtyCheck(pi: ExtensionAPI): void {

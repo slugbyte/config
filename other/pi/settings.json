@@ -8,6 +8,9 @@
     "claude-sonnet-4-6",
     "gpt-5.4"
   ],
+  "skills": [
+    "~/.claude/skills"
+  ],
   "theme": "lackluster",
   "lastChangelogVersion": "0.66.1"
 }
