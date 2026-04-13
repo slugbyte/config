@@ -4,7 +4,7 @@
   "position": "top",
   "spacing": 0,
   "height": 20,
-  "modules-left": ["hyprland/workspaces", "hyprland/window"],
+  "modules-left": ["hyprland/workspaces", "custom/wname", "hyprland/window"],
   "modules-Center": ["custom/update", "custom/voxtype", "custom/screenrecording-indicator", "custom/idle-indicator", "custom/notification-silencing-indicator"],
 
   "modules-right": [
@@ -143,6 +143,14 @@
       "headset": "",
       "default": ["", "", ""]
     }
+  },
+  "custom/wname": {
+    "exec": "~/workspace/conf/bin/wname .",
+    "format": "({text})",
+    "interval": 1,
+    "hide-empty-text": true,
+    "tooltip": false,
+    "escape": true
   },
   "group/tray-expander": {
     "orientation": "inherit",

@@ -1,0 +1,180 @@
+#!/bin/bash
+# wname - Set or show custom names for Hyprland workspaces
+#
+# Stores per-workspace labels in ~/.cache/custom-workspace-names without
+# changing Hyprland's numeric workspace IDs. Useful for Waybar or other
+# tools that want a human-readable label for the active workspace.
+#
+# Usage:
+#   wname <id|.> [name...]
+#   wname --clear <id|.|all>
+#   wname x
+#   wname X
+#
+# Examples:
+#   wname 1 code review    # set workspace 1 name
+#   wname . inbox          # set current workspace name
+#   wname 1                # show workspace 1 name
+#   wname x                # clear current workspace name
+#   wname X                # clear all workspace names
+#   wname --clear .        # clear current workspace name
+#   wname --clear all      # clear all workspace names
+
+[[ "$1" == "--describe" || "$1" == "--description" ]] && echo "Set or show custom names for Hyprland workspaces" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: wname <id|.> [name...]"
+    echo ""
+    echo "Set, show, or clear custom names for Hyprland workspaces."
+    echo "Names are stored in ~/.cache/custom-workspace-names/ by workspace ID."
+    echo "  <id>            Numeric workspace ID"
+    echo "  .               Current workspace"
+    echo "  name...         Name to store for the workspace"
+    echo "  --clear target  Remove a name for <id>, ., or all"
+    echo "  x               Clear the current workspace name"
+    echo "  X               Clear all workspace names"
+    echo ""
+    echo "Examples:"
+    echo "  wname 1 code review"
+    echo "  wname . mail"
+    echo "  wname 2"
+    echo "  wname x"
+    echo "  wname X"
+    echo "  wname --clear ."
+    echo "  wname --clear all"
+    exit 0
+fi
+
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/custom-workspace-names"
+
+error() {
+    echo "ERROR: $*" >&2
+    exit 1
+}
+
+trim_whitespace() {
+    local value="$1"
+    value="${value#"${value%%[![:space:]]*}"}"
+    value="${value%"${value##*[![:space:]]}"}"
+    printf '%s' "$value"
+}
+
+ensure_cache_dir() {
+    mkdir -p "$CACHE_DIR" || error "Could not create cache directory: $CACHE_DIR"
+}
+
+get_current_workspace_id() {
+    local current_id
+    current_id=$(hyprctl activeworkspace 2>/dev/null | awk 'NR == 1 { print $3 }')
+
+    if [[ ! "$current_id" =~ ^[1-9][0-9]*$ ]]; then
+        error "Could not determine current Hyprland workspace ID"
+    fi
+
+    printf '%s\n' "$current_id"
+}
+
+resolve_workspace_id() {
+    local target="$1"
+
+    if [[ "$target" == "." ]]; then
+        get_current_workspace_id
+        return 0
+    fi
+
+    if [[ "$target" =~ ^[1-9][0-9]*$ ]]; then
+        printf '%s\n' "$target"
+        return 0
+    fi
+
+    error "Invalid workspace selector: $target"
+}
+
+name_path() {
+    local workspace_id="$1"
+    printf '%s/%s\n' "$CACHE_DIR" "$workspace_id"
+}
+
+show_name() {
+    local workspace_id="$1"
+    local path
+    local name
+
+    path=$(name_path "$workspace_id")
+    [[ -f "$path" ]] || return 0
+
+    IFS= read -r name < "$path" || true
+    name=$(trim_whitespace "$name")
+
+    [[ -n "$name" ]] && printf '%s\n' "$name"
+}
+
+set_name() {
+    local workspace_id="$1"
+    shift
+
+    local name="$*"
+    local path
+
+    name=$(trim_whitespace "$name")
+    [[ -n "$name" ]] || error "Name cannot be empty. Use --clear to remove a name"
+
+    ensure_cache_dir
+    path=$(name_path "$workspace_id")
+
+    printf '%s\n' "$name" > "$path" || error "Could not write workspace name: $path"
+}
+
+clear_name() {
+    local workspace_id="$1"
+    local path
+
+    path=$(name_path "$workspace_id")
+    [[ -f "$path" ]] || return 0
+
+    rm -f "$path" || error "Could not remove workspace name: $path"
+}
+
+clear_all_names() {
+    [[ -d "$CACHE_DIR" ]] || return 0
+    find "$CACHE_DIR" -mindepth 1 -maxdepth 1 -type f -delete || error "Could not clear workspace names"
+}
+
+if [[ "$1" == "--clear" ]]; then
+    [[ -n "$2" ]] || error "Missing clear target. Expected <id|.|all>"
+    [[ -z "$3" ]] || error "Too many arguments for --clear"
+
+    if [[ "$2" == "all" ]]; then
+        clear_all_names
+        exit 0
+    fi
+
+    workspace_id=$(resolve_workspace_id "$2")
+    clear_name "$workspace_id"
+    exit 0
+fi
+
+if [[ "$1" == "x" ]]; then
+    [[ -z "$2" ]] || error "Too many arguments for x"
+    workspace_id=$(resolve_workspace_id ".")
+    clear_name "$workspace_id"
+    exit 0
+fi
+
+if [[ "$1" == "X" ]]; then
+    [[ -z "$2" ]] || error "Too many arguments for X"
+    clear_all_names
+    exit 0
+fi
+
+[[ -n "$1" ]] || error "Missing workspace selector. Use --help for usage"
+
+workspace_id=$(resolve_workspace_id "$1")
+
+if [[ $# -eq 1 ]]; then
+    show_name "$workspace_id"
+    exit 0
+fi
+
+shift
+set_name "$workspace_id" "$@"

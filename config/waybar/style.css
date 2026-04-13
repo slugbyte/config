@@ -31,7 +31,7 @@
 }
 
 #workspaces {
-  margin-right: 20px;
+  margin-right: 6px;
 }
 
 #cpu,
@@ -59,6 +59,10 @@
 
 #custom-ai-usage {
   margin-right: 7.5px;
+}
+
+#custom-wname {
+  margin-right: 10px;
 }
 
 #custom-expand-icon {
