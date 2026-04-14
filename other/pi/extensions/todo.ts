@@ -26,6 +26,12 @@ interface TodoDetails {
 	todos: Todo[];
 	nextId: number;
 	error?: string;
+	addedId?: number;
+	addedText?: string;
+	toggledId?: number;
+	toggledText?: string;
+	toggledDone?: boolean;
+	clearedCount?: number;
 }
 
 const TodoParams = Type.Object({
@@ -142,13 +148,14 @@ export default function (pi: ExtensionAPI) {
 		async execute(_toolCallId, params, _signal, _onUpdate, _ctx) {
 			switch (params.action) {
 				case "list":
+					const completedCount = todos.filter((todo) => todo.done).length;
 					return {
 						content: [
 							{
 								type: "text",
 								text: todos.length
-									? todos.map((t) => `[${t.done ? "x" : " "}] #${t.id}: ${t.text}`).join("\n")
-									: "No todos",
+									? [`${completedCount}/${todos.length} completed`, ...todos.map((t) => `[${t.done ? "x" : " "}] #${t.id}: ${t.text}`)].join("\n")
+									: "No todos yet.",
 							},
 						],
 						details: { action: "list", todos: [...todos], nextId } as TodoDetails,
@@ -157,41 +164,54 @@ export default function (pi: ExtensionAPI) {
 				case "add": {
 					if (!params.text) {
 						return {
-							content: [{ type: "text", text: "Error: text required for add" }],
-							details: { action: "add", todos: [...todos], nextId, error: "text required" } as TodoDetails,
+							content: [{ type: "text", text: "Todo add requires text." }],
+							details: { action: "add", todos: [...todos], nextId, error: "todo add requires text" } as TodoDetails,
 						};
 					}
 					const newTodo: Todo = { id: nextId++, text: params.text, done: false };
 					todos.push(newTodo);
 					return {
 						content: [{ type: "text", text: `Added todo #${newTodo.id}: ${newTodo.text}` }],
-						details: { action: "add", todos: [...todos], nextId } as TodoDetails,
+						details: {
+							action: "add",
+							todos: [...todos],
+							nextId,
+							addedId: newTodo.id,
+							addedText: newTodo.text,
+						} as TodoDetails,
 					};
 				}
 
 				case "toggle": {
 					if (params.id === undefined) {
 						return {
-							content: [{ type: "text", text: "Error: id required for toggle" }],
-							details: { action: "toggle", todos: [...todos], nextId, error: "id required" } as TodoDetails,
+							content: [{ type: "text", text: "Todo toggle requires an id." }],
+							details: { action: "toggle", todos: [...todos], nextId, error: "todo toggle requires an id" } as TodoDetails,
 						};
 					}
 					const todo = todos.find((t) => t.id === params.id);
 					if (!todo) {
 						return {
-							content: [{ type: "text", text: `Todo #${params.id} not found` }],
+							content: [{ type: "text", text: `Todo #${params.id} was not found.` }],
 							details: {
 								action: "toggle",
 								todos: [...todos],
 								nextId,
-								error: `#${params.id} not found`,
+								error: `todo #${params.id} was not found`,
 							} as TodoDetails,
 						};
 					}
 					todo.done = !todo.done;
 					return {
 						content: [{ type: "text", text: `Todo #${todo.id} ${todo.done ? "completed" : "uncompleted"}` }],
-						details: { action: "toggle", todos: [...todos], nextId } as TodoDetails,
+						details: {
+							action: "toggle",
+							todos: [...todos],
+							nextId,
+							toggledId: todo.id,
+							toggledText: todo.text,
+							toggledDone: todo.done,
+						} as TodoDetails,
 					};
 				}
 
@@ -200,8 +220,8 @@ export default function (pi: ExtensionAPI) {
 					todos = [];
 					nextId = 1;
 					return {
-						content: [{ type: "text", text: `Cleared ${count} todos` }],
-						details: { action: "clear", todos: [], nextId: 1 } as TodoDetails,
+						content: [{ type: "text", text: count === 0 ? "Todo list was already empty." : `Cleared ${count} todos.` }],
+						details: { action: "clear", todos: [], nextId: 1, clearedCount: count } as TodoDetails,
 					};
 				}
 
@@ -241,9 +261,10 @@ export default function (pi: ExtensionAPI) {
 			switch (details.action) {
 				case "list": {
 					if (todoList.length === 0) {
-						return new Text(theme.fg("dim", "No todos"), 0, 0);
+						return new Text(theme.fg("dim", "No todos yet."), 0, 0);
 					}
-					let listText = theme.fg("muted", `${todoList.length} todo(s):`);
+					const completedCount = todoList.filter((todo) => todo.done).length;
+					let listText = theme.fg("muted", `${completedCount}/${todoList.length} completed`);
 					const display = expanded ? todoList : todoList.slice(0, 5);
 					for (const t of display) {
 						const check = t.done ? theme.fg("success", "✓") : theme.fg("dim", "○");
@@ -257,25 +278,54 @@ export default function (pi: ExtensionAPI) {
 				}
 
 				case "add": {
+					const addedId = details.addedId;
+					const addedText = details.addedText;
+					if (addedId !== undefined && addedText) {
+						return new Text(
+							theme.fg("success", "✓ Added todo ") +
+								theme.fg("accent", `#${addedId}`) +
+								" " +
+								theme.fg("muted", `— ${addedText}`),
+							0,
+							0,
+						);
+					}
 					const added = todoList[todoList.length - 1];
 					return new Text(
-						theme.fg("success", "✓ Added ") +
+						theme.fg("success", "✓ Added todo ") +
 							theme.fg("accent", `#${added.id}`) +
 							" " +
-							theme.fg("muted", added.text),
+							theme.fg("muted", `— ${added.text}`),
 						0,
 						0,
 					);
 				}
 
 				case "toggle": {
+					const toggledId = details.toggledId;
+					const toggledText = details.toggledText;
+					const toggledDone = details.toggledDone;
+					if (toggledId !== undefined && toggledText && toggledDone !== undefined) {
+						const statusText = toggledDone ? "completed" : "uncompleted";
+						return new Text(
+							theme.fg("success", "✓ Todo ") +
+								theme.fg("accent", `#${toggledId}`) +
+								" " +
+								theme.fg("muted", `${statusText} — ${toggledText}`),
+							0,
+							0,
+						);
+					}
 					const text = result.content[0];
 					const msg = text?.type === "text" ? text.text : "";
 					return new Text(theme.fg("success", "✓ ") + theme.fg("muted", msg), 0, 0);
 				}
 
-				case "clear":
-					return new Text(theme.fg("success", "✓ ") + theme.fg("muted", "Cleared all todos"), 0, 0);
+				case "clear": {
+					const clearedCount = details.clearedCount ?? 0;
+					const clearText = clearedCount === 0 ? "Todo list already empty" : `Cleared ${clearedCount} todos`;
+					return new Text(theme.fg("success", "✓ ") + theme.fg("muted", clearText), 0, 0);
+				}
 			}
 		},
 	});

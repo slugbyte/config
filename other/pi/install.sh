@@ -13,6 +13,7 @@ link_if_exists "$CONF_ROOT/config/opencode/AGENTS.md" "$TARGET/AGENTS.md"
 link_if_exists "$SCRIPT_DIR/settings.json" "$TARGET/settings.json"
 link_if_exists "$SCRIPT_DIR/extensions" "$TARGET/extensions"
 link_if_exists "$SCRIPT_DIR/skills" "$TARGET/skills"
+link_if_exists "$SCRIPT_DIR/templates" "$TARGET/prompts"
 link_if_exists "$SCRIPT_DIR/themes" "$TARGET/themes"
 
 if (( ${#trashed_filepath_list[@]} > 0 )); then

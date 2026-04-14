@@ -2,14 +2,15 @@
 // ai-usage - Show AI provider usage and Waybar status
 //
 // Fetches usage data for Anthropic and OpenAI, caches state in one file,
-// and can render either human-readable output or Waybar JSON.
+// and can render human-readable output, Waybar JSON, or machine JSON.
 //
 // Usage:
-//   ai-usage [--waybar] [--toggle]
+//   ai-usage [--waybar] [--json] [--toggle] [--self-check]
 //
 // Examples:
 //   ai-usage            // print Anthropic and OpenAI usage
 //   ai-usage --waybar   // print Waybar JSON payload
+//   ai-usage --json     // print machine-readable JSON payload
 //   ai-usage --toggle   // switch selected provider
 
 import { homedir } from "node:os";
@@ -23,11 +24,12 @@ if (args.includes("--describe")) {
 }
 
 if (args.includes("--help")) {
-  console.log("Usage: ai-usage [--waybar] [--toggle] [--self-check]");
+  console.log("Usage: ai-usage [--waybar] [--json] [--toggle] [--self-check]");
   console.log("");
-  console.log("Show Anthropic/OpenAI usage for CLI or Waybar.");
-  console.log("  --waybar   Output Waybar JSON payload");
-  console.log("  --toggle   Toggle selected provider (anthropic/openai)");
+  console.log("Show Anthropic/OpenAI usage for CLI, pi, or Waybar.");
+  console.log("  --waybar      Output Waybar JSON payload");
+  console.log("  --json        Output machine-readable JSON payload");
+  console.log("  --toggle      Toggle selected provider (anthropic/openai)");
   console.log("  --self-check  Validate credentials/endpoints and exit");
   console.log("");
   console.log("Note: OpenAI usage currently uses an internal ChatGPT endpoint.");
@@ -729,6 +731,31 @@ function summarizeProvider(report: ProviderReport): string {
   return `${label}: ${reason}`;
 }
 
+function buildJson(selected: Provider, reports: Record<Provider, ProviderReport>): Record<string, unknown> {
+  const toJson = (provider: Provider): Record<string, unknown> => {
+    const report = reports[provider];
+    return {
+      provider,
+      label: providerLabel(provider),
+      usage: report.usage,
+      stale: report.stale,
+      error_type: report.error_type,
+      error_message: report.error_message,
+      consecutive_failures: report.consecutive_failures,
+      summary: summarizeProvider(report),
+    };
+  };
+
+  return {
+    selected_provider: selected,
+    generated_at_ms: Date.now(),
+    providers: {
+      anthropic: toJson("anthropic"),
+      openai: toJson("openai"),
+    },
+  };
+}
+
 function buildWaybar(selected: Provider, reports: Record<Provider, ProviderReport>): Record<string, unknown> {
   const selectedReport = reports[selected];
   const selectedLabel = providerLabel(selected);
@@ -812,6 +839,11 @@ async function main(): Promise<void> {
 
   await saveState(state);
 
+  if (args.includes("--json")) {
+    console.log(JSON.stringify(buildJson(state.selected_provider, reports)));
+    return;
+  }
+
   if (args.includes("--waybar")) {
     console.log(JSON.stringify(buildWaybar(state.selected_provider, reports)));
     return;
@@ -833,8 +865,14 @@ async function main(): Promise<void> {
 
 main().catch((error) => {
   const message = error instanceof Error ? error.message : "unknown error";
+  if (args.includes("--json")) {
+    console.log(JSON.stringify({ error: message }));
+    process.exitCode = 1;
+    return;
+  }
   if (args.includes("--waybar")) {
     console.log(JSON.stringify({ text: "AI err", tooltip: message, class: "error" }));
+    process.exitCode = 1;
     return;
   }
   console.error(`Error: ${message}`);

@@ -48,3 +48,6 @@ export TRY_PATH="$play"
 # local/bin and $conf/bin need to be added to path
 export PATH=$($conf/bin/path-prepend "$HOME/.local/bin")
 export PATH=$($conf/bin/path-prepend "$conf/bin")
+
+# Load machine-local secrets if present.
+[ -f "$HOME/.config/slugbyte/secrets.sh" ] && . "$HOME/.config/slugbyte/secrets.sh"
