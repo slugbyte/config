@@ -1,6 +1,10 @@
 # Todo Review
 > created: 2026-04-15
 
+> [!warning] Archived
+> This plan has been archived and is kept for reference only. It does not
+> reflect active work.
+
 ## Goal
 
 Document the verified issues found during review of `other/pi/extensions/todo.ts`
