@@ -1,6 +1,10 @@
 # Version Control Skill
 > created: 2026-04-11
 
+> [!warning] Archived
+> This plan has been archived and is kept for reference only. It does not
+> reflect active work.
+
 ## Goal
 
 Replace the separate `git` and `jujutsu` skills with a single unified `vcs`

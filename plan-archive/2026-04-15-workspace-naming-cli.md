@@ -1,6 +1,10 @@
 # Workspace Naming Cli
 > created: 2026-04-13
 
+> [!warning] Archived
+> This plan has been archived and is kept for reference only. It does not
+> reflect active work.
+
 ## Goal
 
 Create a lightweight personal CLI for assigning human-readable labels to
