@@ -13,6 +13,7 @@ link_if_exists "$CONF_ROOT/config/opencode/AGENTS.md" "$TARGET/CLAUDE.md"
 link_if_exists "$SCRIPT_DIR/settings.json"       "$TARGET/settings.json"
 link_if_exists "$SCRIPT_DIR/statusline.sh"       "$TARGET/statusline.sh"
 link_if_exists "$SCRIPT_DIR/skills"              "$TARGET/skills"
+link_if_exists "$SCRIPT_DIR/commands"            "$TARGET/commands"
 
 if (( ${#trashed_filepath_list[@]} > 0 )); then
   echo
