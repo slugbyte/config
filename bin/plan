@@ -49,8 +49,7 @@ function printArchiveHelp(): void {
     console.log("Usage: plan archive <plan-file> [plan-file...]");
     console.log("");
     console.log("Archive one or more plan files.");
-    console.log("  - Files must be inside a directory named 'plan'.");
-    console.log("  - Files are moved to the sibling 'plan-archive' directory.");
+    console.log("  - Files are moved into the 'plan-archive' directory at the project root.");
     console.log("  - Creates ./plan-archive if it does not exist.");
     console.log("  - Prepends the archive date to the filename.");
     console.log("  - Adds the archive warning block if it is missing.");
@@ -98,12 +97,18 @@ function planTemplate(date_string: string, slug: string): string {
     return `# ${titleFromSlug(slug)}\n> created: ${date_string}\n`;
 }
 
-function isPlanFile(file_path: string): boolean {
-    return path.basename(path.dirname(file_path)) === "plan";
-}
-
-function projectRootFromPlanFile(file_path: string): string {
-    return path.dirname(path.dirname(file_path));
+function findProjectRoot(start_dir: string): string {
+    let current = start_dir;
+    while (true) {
+        if (existsSync(path.join(current, "plan")) || existsSync(path.join(current, "plan-archive"))) {
+            return current;
+        }
+        const parent = path.dirname(current);
+        if (parent === current) {
+            return start_dir;
+        }
+        current = parent;
+    }
 }
 
 function addArchiveWarning(content: string): string {
@@ -197,21 +202,12 @@ async function commandArchive(args: string[]): Promise<void> {
 
     const resolved_paths = args.map((arg) => path.resolve(arg));
     for (const file_path of resolved_paths) {
-        if (!isPlanFile(file_path)) {
-            fail(`file must be inside a directory named 'plan': ${file_path}`);
-        }
         if (!existsSync(file_path)) {
             fail(`file does not exist: ${file_path}`);
         }
     }
 
-    const project_root = projectRootFromPlanFile(resolved_paths[0]);
-    for (const file_path of resolved_paths) {
-        const file_root = projectRootFromPlanFile(file_path);
-        if (file_root !== project_root) {
-            fail("all files must belong to the same project root");
-        }
-    }
+    const project_root = findProjectRoot(process.cwd());
 
     const archive_dir = path.join(project_root, "plan-archive");
     await mkdir(archive_dir, { recursive: true });

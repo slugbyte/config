@@ -1,6 +1,6 @@
 {
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.4",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-sonnet-4-6",
   "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
   "enabledModels": [
@@ -12,5 +12,5 @@
     "~/.claude/skills"
   ],
   "theme": "lackluster",
-  "lastChangelogVersion": "0.66.1"
+  "lastChangelogVersion": "0.67.68"
 }

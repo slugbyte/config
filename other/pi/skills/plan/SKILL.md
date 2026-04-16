@@ -63,11 +63,14 @@ Use:
 
 ```bash
 plan archive ./plan/feature-name.md
+plan archive /any/path/to/file.md
 ```
+
+The CLI accepts any file path, not just files inside `./plan`.
 
 The CLI:
 
-- moves the file to `./plan-archive`
+- moves the file to `./plan-archive` at the project root (found by walking up from cwd)
 - prepends the archive date to the filename (e.g., `plan-archive/yyyy-mm-dd-feature-name.md`)
 - creates `./plan-archive` if needed
 - adds the archive warning note
@@ -105,5 +108,5 @@ A good default workflow is:
 ## Notes
 
 - The project root is the directory that contains the `plan/` folder.
-- `plan archive` accepts multiple files, but they must belong to the same project root.
+- `plan archive` accepts multiple files from any location.
 - `plan new` prints created paths, and `plan archive` prints source/destination mappings.

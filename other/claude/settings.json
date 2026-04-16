@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "permissions": {
     "defaultMode": "bypassPermissions",
     "additionalDirectories": [
@@ -27,12 +30,14 @@
     "type": "command",
     "command": "bash /home/slugbyte/.claude/statusline.sh"
   },
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "plansDirectory": "plan",
-  "voiceEnabled": false,
   "voice": {
     "enabled": false,
     "mode": "hold"
   },
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": false,
+  "autoMemoryEnabled": false,
+  "includeGitInstructions": false
 }

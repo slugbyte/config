@@ -1,0 +1,52 @@
+#!/bin/bash
+# vroot - Print the current project root path
+#
+# Walks upward from the current working directory looking for `.jj` or `.git`
+# markers. Prints the first matching ancestor. If no repository markers are
+# found, prints the current working directory instead.
+#
+# Usage:
+#   vroot
+#
+# Examples:
+#   vroot                 # print the repo root or current directory
+#   cd src/lib && vroot   # print the enclosing project root
+
+[[ "$1" == "--describe" ]] && echo "Print the current project root path" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: vroot"
+    echo ""
+    echo "Walk upward from the current directory looking for .jj or .git."
+    echo "Prints the first matching ancestor path to stdout."
+    echo "  .jj is checked before .git within the same directory"
+    echo "  If no repository markers are found, prints the current directory"
+    exit 0
+fi
+
+if [[ $# -ne 0 ]]; then
+    echo "ERROR: vroot does not accept positional arguments" >&2
+    exit 1
+fi
+
+current_dir=$(pwd -P)
+search_dir="$current_dir"
+
+while true; do
+    if [[ -e "$search_dir/.jj" ]]; then
+        echo "$search_dir"
+        exit 0
+    fi
+
+    if [[ -e "$search_dir/.git" ]]; then
+        echo "$search_dir"
+        exit 0
+    fi
+
+    if [[ "$search_dir" == "/" ]]; then
+        echo "$current_dir"
+        exit 0
+    fi
+
+    search_dir=$(dirname "$search_dir")
+done
