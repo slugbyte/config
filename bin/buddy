@@ -1,0 +1,48 @@
+#!/bin/bash
+# buddy - Read-only pi print-mode agent using GPT-5.5.
+#
+# Runs pi in print mode with only read-only tools enabled. Use buddy for
+# quick codebase questions, file summaries, and non-mutating analysis from
+# the terminal.
+#
+# Usage:
+#   buddy [pi args...] ["prompt"]
+#
+# Examples:
+#   buddy "Explain this repo structure"
+#   buddy @README.md "Summarize this file"
+#   printf 'Explain this repo structure\n' | buddy
+#   cat README.md | buddy "What does this project do?"
+
+[[ "${1:-}" == "--describe" ]] && echo "Read-only pi print-mode agent using GPT-5.5." && exit 0
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: buddy [pi args...] [\"prompt\"]"
+    echo ""
+    echo "Runs pi in print mode with GPT-5.5 and read-only tools."
+    echo "  [pi args...]  Additional arguments forwarded to pi."
+    echo "  prompt        Optional prompt to send to the agent."
+    echo ""
+    echo "Prompt input:"
+    echo "  Command-line prompt args are forwarded to pi."
+    echo "  Piped stdin is also forwarded to pi and merged into the prompt."
+    echo "  You may use command-line args, stdin, or both."
+    echo ""
+    echo "Behavior:"
+    echo "  Uses model openai-codex/gpt-5.5 by default."
+    echo "  Set BUDDY_MODEL to override the model."
+    echo "  Allows only read, grep, find, and ls tools."
+    echo "  Disables sessions and extension discovery."
+    exit 0
+fi
+
+set -euo pipefail
+
+model="${BUDDY_MODEL:-openai-codex/gpt-5.5}"
+
+exec pi -p \
+    --model "$model" \
+    --tools read,grep,find,ls \
+    --no-session \
+    --no-extensions \
+    "$@"

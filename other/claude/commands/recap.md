@@ -2,30 +2,19 @@
 description: Save a minimal recap of the current session
 argument-hint: [session-name]
 ---
-Create a minimal markdown recap of the current session and save it under the project root.
+Create a minimal markdown recap of the current session and archive it with the `plan` CLI.
 
 Workflow:
-1. Determine the project root with `vroot`.
-   - Run `vroot` and use the returned path as the project root.
-   - If `vroot` fails unexpectedly, ask before writing.
-2. Create `./recap` under the project root if it does not exist.
-3. Determine the session name from: $ARGUMENTS
-   - If a name was provided, use it.
-   - If no name was provided, generate a short, specific name from the session goals and outcome.
-   - Use a kebab-case slug for the filename.
+1. Run `vroot` (shell command in `~/bin`) to get the project root absolute path.
+2. Determine the session name from: $ARGUMENTS
+   - If provided, use it. Otherwise generate a short, specific kebab-case slug from the session goals/outcome.
    - Use a readable title in the document.
-4. Use today's date in `yyyy-mm-dd` format for the filename and the `> created:` line.
-5. Write the recap to `./recap/<yyyy-mm-dd>-<session-name>.md`.
-   - Do not overwrite an existing recap.
-   - If the filename already exists, append `-2`, `-3`, and so on.
-6. Base the recap on the current conversation, tool usage, files touched, and any subagents or swarms used.
-   - Do not invent details.
-   - If something was not used, say `None`.
-7. Keep the recap concise and easy to skim.
-   - Prefer bullets over prose.
-   - Do not dump the full transcript.
+3. Write the recap content to a scratch path: `/tmp/<session-name>.md`.
+4. Base content on the current conversation, tool usage, files touched, and any subagents used. Do not invent. If something was not used, say `None`.
+5. Keep it concise — prefer bullets over prose. Do not dump the full transcript.
+6. `cd` into the project root, then run `plan archive recap /tmp/<session-name>.md`. The CLI renames to `<date>-recap-<session-name>.md`, moves it into `./archive/recap/`, and injects the archive warning.
 
-Use this structure:
+Use this structure in the scratch file:
 
 ```md
 # Session Recap: <readable title>
@@ -67,5 +56,5 @@ Use this structure:
 
 Output:
 - Keep it brief.
-- Show the saved file path.
+- Show the archived path printed by `plan archive recap`.
 - Mention whether the session name was provided or generated.

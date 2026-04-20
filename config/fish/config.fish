@@ -12,6 +12,13 @@ if status is-interactive
     try-cli init | source
     zoxide init fish | source
     mise activate fish | source
+    set -l path_without_local_bin
+    for path_entry in $PATH
+        if test "$path_entry" != "$HOME/.local/bin"
+            set path_without_local_bin $path_without_local_bin $path_entry
+        end
+    end
+    set -gx PATH $HOME/.local/bin $path_without_local_bin
 
     # SET THEME
     source ~/.config/fish/theme.fish

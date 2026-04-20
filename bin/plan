@@ -1,59 +1,83 @@
 #!/usr/bin/env bun
 /**
- * plan - Manage plan files.
+ * plan - Manage plan files and archive anything into ./archive/.
+ *
+ * Layout:
+ *   plan/<slug>.md              simple plan file
+ *   plan/<slug>/<file>.md       feature dir with stage-tagged files
+ *   archive/<dirname>/...       archived records (plan/, bug/, recap/, ...)
  *
  * Commands:
- *   plan new <feature-name> [feature-name...]
- *   plan archive <plan-file> [plan-file...]
- *
- * Examples:
- *   plan new ui-animation
- *   plan new "render cache"
- *   plan archive plan/ui-animation.md
- *   plan archive ./plan/a.md ./plan/b.md
+ *   plan new <filename>
+ *   plan new <slug> <filename>
+ *   plan expand <slug> <oldfile> [newfile]
+ *   plan archive <dirname> <path> [path...]
  */
 
-import { existsSync } from "node:fs";
-import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
+import { existsSync, statSync } from "node:fs";
+import { mkdir, readdir, readFile, rename, rmdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const ARCHIVE_WARNING = `> [!warning] Archived
-> This plan has been archived and is kept for reference only. It does not
+> This work has been archived and is kept for reference only. It does not
 > reflect active work.
 `;
 
-function printHelp(): void {
-    console.log("Usage: plan <command> [args...]");
-    console.log("");
-    console.log("Manage plan files.");
-    console.log("");
-    console.log("Commands:");
-    console.log("  new <feature-name> [feature-name...]    Create one or more plan files in ./plan");
-    console.log("  archive <plan-file> [plan-file...]      Archive one or more plan files into ./plan-archive");
-    console.log("");
-    console.log("Global flags:");
-    console.log("  --help        Show this help");
-    console.log("  --describe    Print a short description");
+function printHelp(err = false): void {
+    const log = err ? console.error : console.log;
+    log("Usage: plan <command> [args...]");
+    log("");
+    log("Manage plan files and archive anything into ./archive/.");
+    log("");
+    log("Commands:");
+    log("  new <filename>                        Create plan/<filename>.md");
+    log("  new <slug> <filename>                 Create plan/<slug>/<filename>.md (dir)");
+    log("  expand <slug> <oldfile> [newfile]     Move plan/<oldfile>.md into plan/<slug>/");
+    log("  archive <dirname> <path> [path...]    Archive file(s) or dir(s) under archive/<dirname>/");
+    log("");
+    log("Global flags:");
+    log("  --help        Show this help");
+    log("  --describe    Print a short description");
 }
 
-function printNewHelp(): void {
-    console.log("Usage: plan new <feature-name> [feature-name...]");
-    console.log("");
-    console.log("Create one or more plan files in ./plan.");
-    console.log("  - Adds the creation date inside the file.");
-    console.log("  - Creates ./plan if it does not exist.");
-    console.log("  - Prints the created file path for each new plan.");
+function printNewHelp(err = false): void {
+    const log = err ? console.error : console.log;
+    log("Usage: plan new <filename>");
+    log("       plan new <slug> <filename>");
+    log("");
+    log("Create a new plan file.");
+    log("  - One-arg form creates plan/<filename>.md (a flat file).");
+    log("  - Two-arg form creates plan/<slug>/<filename>.md (a feature dir).");
+    log("  - Errors if the target file already exists.");
+    log("  - If the feature dir already exists, merges the new file in.");
+    log("  - Adds a '# Title' heading and '> created: <date>' line.");
 }
 
-function printArchiveHelp(): void {
-    console.log("Usage: plan archive <plan-file> [plan-file...]");
-    console.log("");
-    console.log("Archive one or more plan files.");
-    console.log("  - Files are moved into the 'plan-archive' directory at the project root.");
-    console.log("  - Creates ./plan-archive if it does not exist.");
-    console.log("  - Prepends the archive date to the filename.");
-    console.log("  - Adds the archive warning block if it is missing.");
-    console.log("  - If a destination file already exists, a numeric suffix is added.");
+function printExpandHelp(err = false): void {
+    const log = err ? console.error : console.log;
+    log("Usage: plan expand <slug> <oldfile> [newfile]");
+    log("");
+    log("Promote a flat plan into a feature dir, or merge into an existing one.");
+    log("  - Moves plan/<oldfile>.md into plan/<slug>/<oldfile>.md.");
+    log("  - If <newfile> is given, renames during the move.");
+    log("  - Creates plan/<slug>/ if missing; merges in if it exists.");
+    log("  - Errors if the destination file already exists.");
+}
+
+function printArchiveHelp(err = false): void {
+    const log = err ? console.error : console.log;
+    log("Usage: plan archive <dirname> <path> [path...]");
+    log("");
+    log("Archive a file or directory under ./archive/<dirname>/.");
+    log("");
+    log("  File:      archive/<dirname>/<date>-<dirname>-<slug>.md  (+warning if .md)");
+    log("  Directory: archive/<dirname>/<date>-<dirname>-<slug>/   (each entry dated + warned)");
+    log("");
+    log("  - Existing date prefix on the source name is stripped before re-dating.");
+    log("  - On collision, auto-suffix (-1, -2, ...).");
+    log("  - Rejects sources that already contain the archive warning.");
+    log("  - All sources are pre-validated before any mutation.");
+    log("  - Multiple <path> args archive in sequence.");
 }
 
 function fail(message: string): never {
@@ -63,10 +87,11 @@ function fail(message: string): never {
 
 function currentDateString(): string {
     const now = new Date();
-    const year = String(now.getFullYear());
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
+function stripDatePrefix(name: string): string {
+    return name.replace(/^\d{4}-\d{2}-\d{2}-/, "");
 }
 
 function slugify(text: string): string {
@@ -75,13 +100,9 @@ function slugify(text: string): string {
     const without_date_prefix = without_extension.replace(/^\d{4}-\d{2}-\d{2}-/, "");
     const slug = without_date_prefix
         .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+/, "")
-        .replace(/-+$/, "")
+        .replace(/^-+|-+$/g, "")
         .replace(/--+/g, "-");
-
-    if (slug.length === 0) {
-        fail(`invalid plan name: ${JSON.stringify(text)}`);
-    }
+    if (slug.length === 0) fail(`invalid name: ${JSON.stringify(text)}`);
     return slug;
 }
 
@@ -93,101 +114,208 @@ function titleFromSlug(slug: string): string {
         .join(" ");
 }
 
-function planTemplate(date_string: string, slug: string): string {
+function fileTemplate(date_string: string, slug: string): string {
     return `# ${titleFromSlug(slug)}\n> created: ${date_string}\n`;
 }
 
 function findProjectRoot(start_dir: string): string {
     let current = start_dir;
     while (true) {
-        if (existsSync(path.join(current, "plan")) || existsSync(path.join(current, "plan-archive"))) {
+        if (
+            existsSync(path.join(current, "plan")) ||
+            existsSync(path.join(current, "archive")) ||
+            existsSync(path.join(current, ".jj")) ||
+            existsSync(path.join(current, ".git"))
+        ) {
             return current;
         }
         const parent = path.dirname(current);
         if (parent === current) {
-            return start_dir;
+            fail("not in a project (no plan/, archive/, .jj, or .git found up-tree)");
         }
         current = parent;
     }
 }
 
 function addArchiveWarning(content: string): string {
-    if (content.includes(ARCHIVE_WARNING.trim())) {
-        return content;
-    }
-
     const lines = content.split(/\r?\n/);
     let insert_index = 0;
-
     if (lines.length > 0 && lines[0].startsWith("# ")) {
         insert_index = 1;
-        if (insert_index < lines.length && lines[insert_index] === "") {
-            insert_index += 1;
-        }
+        if (insert_index < lines.length && lines[insert_index] === "") insert_index += 1;
         if (
             insert_index < lines.length &&
             (lines[insert_index].startsWith("> created:") ||
-                lines[insert_index].startsWith("*") ||
+                /^\*\d{4}-\d{2}-\d{2}/.test(lines[insert_index]) ||
                 lines[insert_index].startsWith("Date:"))
         ) {
             insert_index += 1;
-            if (insert_index < lines.length && lines[insert_index] === "") {
-                insert_index += 1;
-            }
+            if (insert_index < lines.length && lines[insert_index] === "") insert_index += 1;
         }
     }
-
     const before = lines.slice(0, insert_index).join("\n");
     const after = lines.slice(insert_index).join("\n");
     const warning = `${ARCHIVE_WARNING}\n`;
-
-    if (before.length === 0) {
-        return `${warning}${after}`;
-    }
-    if (after.length === 0) {
-        return `${before}\n${warning}`;
-    }
+    if (before.length === 0) return `${warning}${after}`;
+    if (after.length === 0) return `${before}\n${warning}`;
     return `${before}\n${warning}${after}`;
 }
 
-async function uniquePath(destination_path: string): Promise<string> {
-    if (!existsSync(destination_path)) {
-        return destination_path;
-    }
+function hasArchiveWarning(content: string): boolean {
+    const top = content.split(/\r?\n/).slice(0, 20).join("\n");
+    return top.includes(ARCHIVE_WARNING.trim());
+}
 
-    const parsed = path.parse(destination_path);
-    let index = 2;
+function uniquePath(base_path: string, is_dir: boolean): string {
+    if (!existsSync(base_path)) return base_path;
+    const parsed = path.parse(base_path);
+    let index = 1;
     while (true) {
-        const candidate = path.join(parsed.dir, `${parsed.name}-${index}${parsed.ext}`);
-        if (!existsSync(candidate)) {
-            return candidate;
-        }
+        const candidate = is_dir
+            ? path.join(parsed.dir, `${parsed.name}-${index}`)
+            : path.join(parsed.dir, `${parsed.name}-${index}${parsed.ext}`);
+        if (!existsSync(candidate)) return candidate;
         index += 1;
     }
 }
+
+async function assertMissing(target_path: string, label: string): Promise<void> {
+    if (existsSync(target_path)) fail(`${label} already exists: ${target_path}`);
+}
+
+// ---------- new / expand ----------
 
 async function commandNew(args: string[]): Promise<void> {
     if (args.length === 1 && args[0] === "--help") {
         printNewHelp();
         return;
     }
-    if (args.length === 0) {
-        printNewHelp();
+    if (args.length === 0 || args.length > 2) {
+        printNewHelp(true);
         process.exit(1);
     }
 
     const date_string = currentDateString();
-    const project_root = process.cwd();
+    const project_root = findProjectRoot(process.cwd());
     const plan_dir = path.join(project_root, "plan");
-    await mkdir(plan_dir, { recursive: true });
 
-    for (const raw_name of args) {
-        const slug = slugify(raw_name);
-        const filename = `${slug}.md`;
-        const destination_path = await uniquePath(path.join(plan_dir, filename));
-        await writeFile(destination_path, planTemplate(date_string, slug), "utf8");
-        console.log(path.relative(project_root, destination_path));
+    if (args.length === 1) {
+        const slug = slugify(args[0]);
+        const file_path = path.join(plan_dir, `${slug}.md`);
+        await assertMissing(file_path, "file");
+        await mkdir(plan_dir, { recursive: true });
+        await writeFile(file_path, fileTemplate(date_string, slug), "utf8");
+        console.log(path.relative(project_root, file_path));
+        return;
     }
+
+    const dir_slug = slugify(args[0]);
+    const file_slug = slugify(args[1]);
+    const flat_collision = path.join(plan_dir, `${dir_slug}.md`);
+    if (existsSync(flat_collision)) {
+        fail(`flat plan already exists: ${path.relative(project_root, flat_collision)} (run 'plan expand' first)`);
+    }
+    const feature_dir = path.join(plan_dir, dir_slug);
+    const file_path = path.join(feature_dir, `${file_slug}.md`);
+    await assertMissing(file_path, "file");
+    await mkdir(feature_dir, { recursive: true });
+    await writeFile(file_path, fileTemplate(date_string, file_slug), "utf8");
+    console.log(path.relative(project_root, file_path));
+}
+
+async function commandExpand(args: string[]): Promise<void> {
+    if (args.length === 1 && args[0] === "--help") {
+        printExpandHelp();
+        return;
+    }
+    if (args.length < 2 || args.length > 3) {
+        printExpandHelp(true);
+        process.exit(1);
+    }
+
+    const project_root = findProjectRoot(process.cwd());
+    const plan_dir = path.join(project_root, "plan");
+    const dir_slug = slugify(args[0]);
+    const old_slug = slugify(args[1]);
+    const new_slug = args.length === 3 ? slugify(args[2]) : old_slug;
+
+    const source = path.join(plan_dir, `${old_slug}.md`);
+    if (!existsSync(source)) fail(`source file does not exist: ${path.relative(project_root, source)}`);
+
+    const feature_dir = path.join(plan_dir, dir_slug);
+    const destination = path.join(feature_dir, `${new_slug}.md`);
+    await assertMissing(destination, "file");
+    await mkdir(feature_dir, { recursive: true });
+    await rename(source, destination);
+    console.log(`${path.relative(project_root, source)} -> ${path.relative(project_root, destination)}`);
+}
+
+// ---------- archive ----------
+
+async function archiveFile(source: string, dirname: string, archive_dir: string): Promise<string> {
+    const date_string = currentDateString();
+    const base_name = path.basename(source);
+    const ext = path.extname(base_name);
+    const stem = base_name.slice(0, base_name.length - ext.length);
+    const stripped = stripDatePrefix(stem);
+    const slug = slugify(stripped);
+
+    const initial = path.join(archive_dir, `${date_string}-${dirname}-${slug}${ext}`);
+    const destination = uniquePath(initial, false);
+
+    if (ext === ".md") {
+        const content = await readFile(source, "utf8");
+        if (hasArchiveWarning(content)) fail(`source already contains archive warning: ${source}`);
+        await writeFile(destination, addArchiveWarning(content), "utf8");
+        await unlink(source);
+    } else {
+        await rename(source, destination);
+    }
+    return destination;
+}
+
+async function validateDirForArchive(source: string): Promise<void> {
+    const entries = await readdir(source, { withFileTypes: true });
+    for (const entry of entries) {
+        if (entry.isDirectory()) {
+            fail(`nested directories not supported: ${path.join(source, entry.name)}`);
+        }
+        if (entry.name.endsWith(".md")) {
+            const entry_path = path.join(source, entry.name);
+            const content = await readFile(entry_path, "utf8");
+            if (hasArchiveWarning(content)) fail(`entry already contains archive warning: ${entry_path}`);
+        }
+    }
+}
+
+async function archiveDirectory(source: string, dirname: string, archive_dir: string): Promise<string> {
+    const date_string = currentDateString();
+    const base_name = path.basename(source);
+    const stripped = stripDatePrefix(base_name);
+    const slug = slugify(stripped);
+
+    const entries = await readdir(source, { withFileTypes: true });
+
+    const initial = path.join(archive_dir, `${date_string}-${dirname}-${slug}`);
+    const destination = uniquePath(initial, true);
+    await mkdir(destination, { recursive: true });
+
+    for (const entry of entries) {
+        const entry_source = path.join(source, entry.name);
+        const entry_stripped = stripDatePrefix(entry.name);
+        const entry_destination = path.join(destination, `${date_string}-${entry_stripped}`);
+
+        if (entry.name.endsWith(".md")) {
+            const content = await readFile(entry_source, "utf8");
+            await writeFile(entry_destination, addArchiveWarning(content), "utf8");
+            await unlink(entry_source);
+        } else {
+            await rename(entry_source, entry_destination);
+        }
+    }
+
+    await rmdir(source);
+    return destination;
 }
 
 async function commandArchive(args: string[]): Promise<void> {
@@ -195,54 +323,62 @@ async function commandArchive(args: string[]): Promise<void> {
         printArchiveHelp();
         return;
     }
-    if (args.length === 0) {
-        printArchiveHelp();
+    if (args.length < 2) {
+        printArchiveHelp(true);
         process.exit(1);
     }
 
-    const resolved_paths = args.map((arg) => path.resolve(arg));
-    for (const file_path of resolved_paths) {
-        if (!existsSync(file_path)) {
-            fail(`file does not exist: ${file_path}`);
+    const dirname = args[0];
+    if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(dirname)) fail(`invalid dirname: ${JSON.stringify(dirname)}`);
+
+    const source_args = args.slice(1);
+    const project_root = findProjectRoot(process.cwd());
+    const archive_dir = path.join(project_root, "archive", dirname);
+
+    // Pre-validate every source before any mutation.
+    const validated: Array<{ source: string; isDir: boolean }> = [];
+    for (const raw of source_args) {
+        const source = path.resolve(raw);
+        if (!existsSync(source)) fail(`source does not exist: ${raw}`);
+        const stat = statSync(source);
+        if (stat.isDirectory()) {
+            await validateDirForArchive(source);
+            validated.push({ source, isDir: true });
+        } else {
+            if (source.endsWith(".md")) {
+                const content = await readFile(source, "utf8");
+                if (hasArchiveWarning(content)) fail(`source already contains archive warning: ${source}`);
+            }
+            validated.push({ source, isDir: false });
         }
     }
 
-    const project_root = findProjectRoot(process.cwd());
-
-    const archive_dir = path.join(project_root, "plan-archive");
     await mkdir(archive_dir, { recursive: true });
-
-    for (const source_path of resolved_paths) {
-        const source_content = await readFile(source_path, "utf8");
-        const archived_content = addArchiveWarning(source_content);
-
-        const date_string = currentDateString();
-        const base_name = path.basename(source_path, ".md");
-        const stripped_name = base_name.replace(/^\d{4}-\d{2}-\d{2}-/, "");
-        const destination_name = `${date_string}-${stripped_name}.md`;
-        const destination_path = await uniquePath(path.join(archive_dir, destination_name));
-
-        await writeFile(destination_path, archived_content, "utf8");
-        await unlink(source_path);
-        console.log(`${path.relative(project_root, source_path)} -> ${path.relative(project_root, destination_path)}`);
+    for (const { source, isDir } of validated) {
+        const destination = isDir
+            ? await archiveDirectory(source, dirname, archive_dir)
+            : await archiveFile(source, dirname, archive_dir);
+        console.log(`${path.relative(project_root, source)} -> ${path.relative(project_root, destination)}`);
     }
 }
+
+// ---------- top-level dispatch ----------
 
 const args = process.argv.slice(2);
 
 if (args.length === 1 && args[0] === "--describe") {
-    console.log("Create and archive dated project plan files");
+    console.log("Manage plan files and archive anything into ./archive/");
     process.exit(0);
+}
+
+if (args.length === 0) {
+    printHelp(true);
+    process.exit(1);
 }
 
 if (args.length === 1 && args[0] === "--help") {
     printHelp();
     process.exit(0);
-}
-
-if (args.length === 0) {
-    printHelp();
-    process.exit(1);
 }
 
 const subcommand = args[0];
@@ -251,6 +387,9 @@ const subcommand_args = args.slice(1);
 switch (subcommand) {
     case "new":
         await commandNew(subcommand_args);
+        break;
+    case "expand":
+        await commandExpand(subcommand_args);
         break;
     case "archive":
         await commandArchive(subcommand_args);
