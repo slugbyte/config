@@ -13,6 +13,7 @@ DRY_RUN=true
 
 trash="$HOME/.local/share/Trash/files"
 trashed_filepath_list=()
+dangling_filepath_list=()
 
 # Run a command if DRY_RUN is false, print the command if true.
 # $ run_safe cmd --arg1 --arg2 --arg3
@@ -52,5 +53,7 @@ link_if_exists(){
     trash_existing "$2"
     run_safe ln -sf "$1" "$2"
     echo "[LINK] $1 -> $2"
+  else
+    echo "[MISSING] source not found: $1" >&2
   fi
 }

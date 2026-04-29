@@ -22,7 +22,30 @@
       trash_existing "$2"
       run_safe ln -sf "$1" "$2"
       echo "[LINK] ${1/#$conf/\$conf} -> ${2/#$HOME/\~}"
+    else
+      echo "[MISSING] source not found: ${1/#$conf/\$conf}" >&2
     fi
+  }
+
+  # Prune top-level (depth 1) symlinks under $1 that point into $conf but no
+  # longer resolve. Scope is intentionally narrow: this only cleans up the
+  # blanket links created by link_config. Deeper installer-managed symlinks
+  # (e.g. ~/.claude/CLAUDE.md) are reset by their own install.sh on each run.
+  prune_dangling_links(){
+    local search_dir="$1"
+    while IFS= read -r -d '' link; do
+      local target
+      target="$(readlink "$link")"
+      [[ "$target" == "$conf"/* ]] || continue
+      [[ -e "$link" ]] && continue
+      dangling_filepath_list+=("$link -> $target")
+      if $DRY_RUN; then
+        echo "[DANGLING] ${link/#$HOME/\~} -> ${target/#$conf/\$conf}"
+      else
+        run_safe rm "$link"
+        echo "[PRUNED]   ${link/#$HOME/\~} -> ${target/#$conf/\$conf}"
+      fi
+    done < <(find "$search_dir" -maxdepth 1 -type l -print0 2>/dev/null)
   }
 
   # link all the config files in a $conf subdirectory
@@ -62,8 +85,11 @@
   run_safe mkdir -p "$trash"
   run_safe mkdir -p ~/.local/bin
 
-  link_config "$work/conf/config" "$HOME/.config"
-  link_config "$work/conf/home" "$HOME"
+  link_config "$conf/config" "$HOME/.config"
+  link_config "$conf/home" "$HOME"
+
+  prune_dangling_links "$HOME/.config"
+  prune_dangling_links "$HOME"
 
   # run install scripts for other configs
   for install_script in "$conf/other"/*/install.sh; do
@@ -90,5 +116,12 @@ if (( ${#trashed_filepath_list[@]} > 0 )); then
   echo
   for f in "${trashed_filepath_list[@]}"; do
     echo "WARNING: TRASHED OLD $f"
+  done
+fi
+
+if (( ${#dangling_filepath_list[@]} > 0 )); then
+  echo
+  for f in "${dangling_filepath_list[@]}"; do
+    echo "WARNING: DANGLING SYMLINK $f"
   done
 fi

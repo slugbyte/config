@@ -50,6 +50,10 @@ Safety first, then performance, then developer experience.
 - Don't duplicate state. Compute values close to where they are used.
 - Pass options explicitly at call sites, don't rely on defaults.
 
+## Output Style
+
+- ASCII only in your prose. No decorative unicode (→ ✓ ✗ •, em-dashes, smart quotes, box-drawing) and no emoji (✅ ❌ ⚠️ 🔴 🟡 🟢). Use `->`, `[x]`, `[ ]`, `-`, `--`, `"`. Preserve user text, code, logs, and filenames verbatim.
+
 ## Data-Oriented Design
 
 Design features for how computers work, not how humans categorize things.
@@ -61,7 +65,7 @@ ones. Measure with a profiler; cache misses are invisible in source.
 
 ## Agent Reviews (single-agent and multi-agent consolidation)
 
-- ASCII only in your review prose. No decorative unicode (→ ✓ ✗ •, em-dashes, smart quotes, box-drawing) and no emoji (✅ ❌ ⚠️ 🔴 🟡 🟢). Use `->`, `[x]`, `[ ]`, `-`, `--`, `"`. Preserve user text, code, logs, and filenames verbatim.
+- ASCII only -- see `Output Style`.
 - Label every review item with a mnemonic code so it can be referenced quickly: severity `C`/`H`/`M`/`L` for Critical/High/Medium/Low, numbered within: `C1`, `C2`, `H1`. Don't invent opaque codes like `I12` or `E12`.
 - Group review items into workflow buckets. Give each bucket a short label (`G1`, `G2`, ...) and a descriptive name (`Apply`, `Discuss`, `Blocked`). Define them at the top so items can be moved by reference, e.g. "move C2 to G2":
 

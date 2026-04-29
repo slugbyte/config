@@ -9,7 +9,7 @@ source "$SCRIPT_DIR/../../util/lib.sh" "$@"
 
 run_safe mkdir -p "$TARGET"
 
-link_if_exists "$CONF_ROOT/config/opencode/AGENTS.md" "$TARGET/AGENTS.md"
+link_if_exists "$CONF_ROOT/other/agent/AGENTS.md" "$TARGET/AGENTS.md"
 link_if_exists "$SCRIPT_DIR/settings.json" "$TARGET/settings.json"
 link_if_exists "$SCRIPT_DIR/extensions" "$TARGET/extensions"
 link_if_exists "$SCRIPT_DIR/skills" "$TARGET/skills"
