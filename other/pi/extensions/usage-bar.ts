@@ -3,7 +3,7 @@
  * https://github.com/hjanuschka/shitty-extensions/blob/main/extensions/usage-bar.ts
  *
  * Local changes:
- * - Uses the local `ai-usage --json` CLI as the data source.
+ * - Uses the local `bar-ai-usage --json` CLI as the data source.
  * - Renders as an above-editor widget instead of modifying the status line.
  */
 
@@ -177,7 +177,7 @@ export default function usageBar(pi: ExtensionAPI) {
 		refresh_in_flight = true;
 
 		try {
-			const result = await pi.exec("ai-usage", ["--json"], { timeout: COMMAND_TIMEOUT_MS });
+			const result = await pi.exec("bar-ai-usage", ["--json"], { timeout: COMMAND_TIMEOUT_MS });
 			if (result.code !== 0) {
 				latest_error = extractJsonError(result.stdout) ?? summarizeError(result.stdout, result.stderr);
 				installWidget(ctx);

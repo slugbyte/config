@@ -32,5 +32,5 @@ alias binmake="chmod a+x"
 alias manfzf="man -k . | fzf --preview 'man {1}' | awk '{print $1}' | xargs man"
 
 # zig development
-alias b="zig build -freference-trace=10 --summary failures"
+alias b="zig build -freference-trace=10 --summary failures -Dtarget=x86_64-linux-gnu"
 alias t="zig test -freference-trace=10"

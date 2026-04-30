@@ -1,0 +1,68 @@
+#!/bin/bash
+# ai-update - Update claude, pi, and codex via npm
+#
+# Reinstalls each CLI at @latest so major version bumps are picked up.
+# Plain `npm update -g` only moves within the existing semver range.
+#
+# Usage:
+#   ai-update
+
+set -uo pipefail
+
+[[ "${1:-}" == "--describe" ]] && echo "Update claude, pi, and codex via npm" && exit 0
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: ai-update"
+    echo ""
+    echo "Update the three AI CLIs to their latest npm versions."
+    echo "  claude  @anthropic-ai/claude-code"
+    echo "  pi      @mariozechner/pi-coding-agent"
+    echo "  codex   @openai/codex"
+    exit 0
+fi
+
+packages=(
+    "@anthropic-ai/claude-code"
+    "@mariozechner/pi-coding-agent"
+    "@openai/codex"
+)
+
+# Read installed version from `npm ls -g`. Empty string if missing.
+get_version() {
+    local pkg="$1"
+    npm ls -g "$pkg" --depth=0 2>/dev/null \
+        | grep -oE "${pkg}@[^ ]+" \
+        | head -1 \
+        | sed "s|${pkg}@||"
+}
+
+declare -A before_version
+for pkg in "${packages[@]}"; do
+    before_version[$pkg]="$(get_version "$pkg")"
+done
+
+failed=0
+
+for pkg in "${packages[@]}"; do
+    echo ":: updating $pkg"
+    if ! npm install -g "${pkg}@latest"; then
+        echo "ERROR: failed to update $pkg" >&2
+        failed=1
+    fi
+done
+
+echo ""
+echo "Version report"
+echo "--------------"
+for pkg in "${packages[@]}"; do
+    before="${before_version[$pkg]:-none}"
+    after="$(get_version "$pkg")"
+    after="${after:-none}"
+    if [[ "$before" == "$after" ]]; then
+        printf '  %-32s %s (unchanged)\n' "$pkg" "$after"
+    else
+        printf '  %-32s %s -> %s\n' "$pkg" "$before" "$after"
+    fi
+done
+
+exit $failed

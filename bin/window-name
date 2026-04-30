@@ -1,29 +1,29 @@
 #!/bin/bash
-# wname - Set or show custom names for Hyprland workspaces
+# window-name - Set or show custom names for Hyprland workspaces
 #
 # Stores per-workspace labels in ~/.cache/custom-workspace-names without
 # changing Hyprland's numeric workspace IDs. Useful for Waybar or other
 # tools that want a human-readable label for the active workspace.
 #
 # Usage:
-#   wname <id|.> [name...]
-#   wname --clear <id|.|all>
-#   wname x
-#   wname X
+#   window-name <id|.> [name...]
+#   window-name --clear <id|.|all>
+#   window-name x
+#   window-name X
 #
 # Examples:
-#   wname 1 code review    # set workspace 1 name
-#   wname . inbox          # set current workspace name
-#   wname 1                # show workspace 1 name
-#   wname x                # clear current workspace name
-#   wname X                # clear all workspace names
-#   wname --clear .        # clear current workspace name
-#   wname --clear all      # clear all workspace names
+#   window-name 1 code review    # set workspace 1 name
+#   window-name . inbox          # set current workspace name
+#   window-name 1                # show workspace 1 name
+#   window-name x                # clear current workspace name
+#   window-name X                # clear all workspace names
+#   window-name --clear .        # clear current workspace name
+#   window-name --clear all      # clear all workspace names
 
 [[ "$1" == "--describe" || "$1" == "--description" ]] && echo "Set or show custom names for Hyprland workspaces" && exit 0
 
 if [[ "$1" == "--help" ]]; then
-    echo "Usage: wname <id|.> [name...]"
+    echo "Usage: window-name <id|.> [name...]"
     echo ""
     echo "Set, show, or clear custom names for Hyprland workspaces."
     echo "Names are stored in ~/.cache/custom-workspace-names/ by workspace ID."
@@ -35,13 +35,13 @@ if [[ "$1" == "--help" ]]; then
     echo "  X               Clear all workspace names"
     echo ""
     echo "Examples:"
-    echo "  wname 1 code review"
-    echo "  wname . mail"
-    echo "  wname 2"
-    echo "  wname x"
-    echo "  wname X"
-    echo "  wname --clear ."
-    echo "  wname --clear all"
+    echo "  window-name 1 code review"
+    echo "  window-name . mail"
+    echo "  window-name 2"
+    echo "  window-name x"
+    echo "  window-name X"
+    echo "  window-name --clear ."
+    echo "  window-name --clear all"
     exit 0
 fi
 

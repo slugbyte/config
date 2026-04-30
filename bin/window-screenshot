@@ -1,36 +1,49 @@
 #!/bin/bash
-# screenshot - Take a screenshot with area selection
+# window-screenshot - Take a screenshot with area selection and notification
 #
 # Interactive screenshot tool for Hyprland. Freezes screen, allows
 # region selection with slurp, captures with grim, copies to clipboard,
-# and saves to file. Clicking on a window captures that window.
+# and saves to file. Clicking on a window captures that window. Shows
+# a notification with an "Open in Krita" action by default.
 #
 # Usage:
-#   screenshot [label]
+#   window-screenshot [--no-notify] [label]
 #
 # Examples:
-#   screenshot                # saves as screenshot-20240115-143022.png
-#   screenshot bugfix         # saves as screenshot-20240115-143022-bugfix.png
-#   screenshot "ui update"    # spaces converted to dashes
+#   window-screenshot                # saves as screenshot-20240115-143022.png and notifies
+#   window-screenshot --no-notify    # silent capture, no notification
+#   window-screenshot bugfix         # saves as screenshot-20240115-143022-bugfix.png
+#   window-screenshot "ui update"    # spaces converted to dashes
 
-[[ "$1" == "--describe" ]] && echo "Take screenshot with interactive area selection" && exit 0
+[[ "$1" == "--describe" ]] && echo "Take screenshot with interactive area selection and notification" && exit 0
 
 if [[ "$1" == "--help" ]]; then
-    echo "Usage: screenshot [label]"
+    echo "Usage: window-screenshot [--no-notify] [label]"
     echo ""
     echo "Take screenshot with interactive area selection."
-    echo "  label   Optional suffix for filename"
+    echo "  --no-notify   Suppress the notification"
+    echo "  label         Optional suffix for filename"
     echo ""
-    echo "Output: \$OMARCHY_SCREENSHOT_DIR or \$XDG_PICTURES_DIR/screenshot-*.png"
+    echo "Output: \$OMARCHY_SCREENSHOT_DIR, \$XDG_PICTURES_DIR, or \$HOME/Pictures (screenshot-*.png)"
     echo "Also copies to clipboard and symlinks to 'last'."
+    echo "Clicking the notification opens the result in Krita."
     exit 0
+fi
+
+NOTIFY=1
+if [[ "$1" == "--no-notify" ]]; then
+    NOTIFY=0
+    shift
 fi
 
 [[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
 OUTPUT_DIR="${OMARCHY_SCREENSHOT_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures}}"
 
 if [[ ! -d "$OUTPUT_DIR" ]]; then
-  notify-send "Screenshot directory does not exist: $OUTPUT_DIR" -u critical -t 3000
+  echo "window-screenshot: output directory does not exist: $OUTPUT_DIR" >&2
+  if (( NOTIFY )); then
+    notify-send "Screenshot directory does not exist: $OUTPUT_DIR" -u critical -t 3000
+  fi
   exit 1
 fi
 
@@ -50,8 +63,9 @@ RECTS=$(get_rectangles)
 # See: https://github.com/Jappie3/wayfreeze
 SELECTION=$(echo "$RECTS" | slurp 2>/dev/null)
 
-# If the selction area is L * W < 20, we'll assume you were trying to select whichever
-# window or output it was inside of to prevent accidental 2px snapshots
+# If the selection area is L * W < 20, assume the user clicked inside a
+# window/output rather than dragged a tiny region; expand to that container
+# to prevent accidental 2px snapshots.
 if [[ "$SELECTION" =~ ^([0-9]+),([0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]]; then
   if (( ${BASH_REMATCH[3]} * ${BASH_REMATCH[4]} < 20 )); then
     click_x="${BASH_REMATCH[1]}"
@@ -82,4 +96,16 @@ wl-copy < "$SCREENSHOT_PATH"
 
 ln -sf "$SCREENSHOT_PATH" "$OUTPUT_DIR/last"
 
-echo $SCREENSHOT_PATH
+echo "$SCREENSHOT_PATH"
+
+if (( NOTIFY )); then
+  action=$(timeout 2 notify-send "Screenshot taken" "$SCREENSHOT_PATH" \
+    --action="default=Open in Krita" \
+    --icon="$SCREENSHOT_PATH" \
+    --expire-time=2000 \
+    --wait)
+
+  if [[ "$action" == "default" ]]; then
+    krita "$SCREENSHOT_PATH"
+  fi
+fi

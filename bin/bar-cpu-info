@@ -1,21 +1,21 @@
 #!/bin/bash
-# cpu-info - Print compact CPU usage summary
+# bar-cpu-info - Print compact CPU usage summary
 #
 # Outputs compact CPU info for status bars, including usage percentage
 # and Linux CPU pressure (avg10).
 #
 # Usage:
-#   cpu-info
+#   bar-cpu-info
 #
 # Examples:
-#   cpu-info   # prints something like: (18% P0.12 CPU)
+#   bar-cpu-info   # prints something like: (18% P0.12 CPU)
 
 set -euo pipefail
 
 [[ "${1:-}" == "--describe" ]] && echo "Print compact CPU usage with pressure" && exit 0
 
 if [[ "${1:-}" == "--help" ]]; then
-    echo "Usage: cpu-info"
+    echo "Usage: bar-cpu-info"
     echo ""
     echo "Print compact CPU usage and CPU pressure."
     exit 0

@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# window-force-quit - Force quit a Hyprland window
+#
+# Interactive selector for choosing a Hyprland window and closing it.
+# The menu also offers a "[Quit all windows]" entry that closes every
+# window via omarchy-hyprland-window-close-all.
+#
+# Usage:
+#   window-force-quit
+#
+# Examples:
+#   window-force-quit   # pick a window from fzf and close it
+
+[[ "$1" == "--describe" ]] && echo "Force quit a Hyprland window" && exit 0
+
+if [[ "$1" == "--help" ]]; then
+    echo "Usage: window-force-quit"
+    echo ""
+    echo "Force quit a Hyprland window using an interactive fzf menu."
+    echo "Selecting [Quit all windows] runs omarchy-hyprland-window-close-all."
+    exit 0
+fi
+
+# Check for fzf
+if ! command -v fzf &> /dev/null; then
+    echo "ERROR: fzf is required but not installed." >&2
+    exit 1
+fi
+
+# Get window list from hyprctl
+windows=$(hyprctl clients -j | jq -r '.[] | "\(.address) | \(.class) | \(.title)"')
+
+if [[ -z "$windows" ]]; then
+    echo "No windows found."
+    exit 0
+fi
+
+# Sentinel address for the "quit all" entry. Real Hyprland addresses are
+# hex pointers, so this string can never collide with a window address.
+QUIT_ALL_SENTINEL="__QUIT_ALL__"
+quit_all_entry="$QUIT_ALL_SENTINEL | [Quit all windows] | run omarchy-hyprland-window-close-all"
+
+# Show interactive menu with fzf, with the quit-all entry pinned at the top.
+selected=$(printf '%s\n%s\n' "$quit_all_entry" "$windows" | fzf \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="Force Quit > " \
+    --header="Select a window to kill (ESC to cancel)" \
+    --header-first \
+    --preview-window=hidden)
+
+if [[ -z "$selected" ]]; then
+    echo "Cancelled."
+    exit 0
+fi
+
+address=$(echo "$selected" | cut -d'|' -f1 | xargs)
+
+if [[ "$address" == "$QUIT_ALL_SENTINEL" ]]; then
+    echo "Closing all windows."
+    exec omarchy-hyprland-window-close-all
+fi
+
+echo "Killing window: $selected"
+hyprctl dispatch closewindow address:"$address"

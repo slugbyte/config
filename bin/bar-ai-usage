@@ -1,17 +1,17 @@
 #!/usr/bin/env bun
-// ai-usage - Show AI provider usage and Waybar status
+// bar-ai-usage - Show AI provider usage and Waybar status
 //
 // Fetches usage data for Anthropic and OpenAI, caches state in one file,
 // and can render human-readable output, Waybar JSON, or machine JSON.
 //
 // Usage:
-//   ai-usage [--waybar] [--json] [--toggle] [--self-check]
+//   bar-ai-usage [--waybar] [--json] [--toggle] [--self-check]
 //
 // Examples:
-//   ai-usage            // print Anthropic and OpenAI usage
-//   ai-usage --waybar   // print Waybar JSON payload
-//   ai-usage --json     // print machine-readable JSON payload
-//   ai-usage --toggle   // switch selected provider
+//   bar-ai-usage            // print Anthropic and OpenAI usage
+//   bar-ai-usage --waybar   // print Waybar JSON payload
+//   bar-ai-usage --json     // print machine-readable JSON payload
+//   bar-ai-usage --toggle   // switch selected provider
 
 import { homedir } from "node:os";
 import { join } from "node:path";
@@ -24,7 +24,7 @@ if (args.includes("--describe")) {
 }
 
 if (args.includes("--help")) {
-  console.log("Usage: ai-usage [--waybar] [--json] [--toggle] [--self-check]");
+  console.log("Usage: bar-ai-usage [--waybar] [--json] [--toggle] [--self-check]");
   console.log("");
   console.log("Show Anthropic/OpenAI usage for CLI, pi, or Waybar.");
   console.log("  --waybar      Output Waybar JSON payload");
@@ -95,6 +95,7 @@ const OPENAI_CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann";
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const TOKEN_REFRESH_BUFFER_MS = 5 * 60 * 1000;
 const FAILURE_THRESHOLD = 3;
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 function defaultProviderState(): ProviderState {
   return {
@@ -168,6 +169,17 @@ function formatCountdown(resetAt: string): string {
   const h = Math.floor(ms / 3600000);
   const m = Math.floor((ms % 3600000) / 60000);
   return h > 24 ? `${Math.floor(h / 24)}d${h % 24}h` : `${h}h${String(m).padStart(2, "0")}m`;
+}
+
+// Percent of the window's time that has elapsed, given when it resets.
+function timeElapsedPct(resetAt: string, windowMs: number): number {
+  if (!resetAt) return 0;
+  const remaining = new Date(resetAt).getTime() - Date.now();
+  if (!Number.isFinite(remaining)) return 0;
+  const elapsed = windowMs - remaining;
+  if (elapsed <= 0) return 0;
+  if (elapsed >= windowMs) return 100;
+  return Math.round((elapsed / windowMs) * 100);
 }
 
 function isFresh(usage: ProviderUsage | null): boolean {
@@ -722,7 +734,8 @@ function summarizeProvider(report: ProviderReport): string {
     const staleMark = report.stale ? "~" : "";
     const sessionCountdown = formatCountdown(report.usage.session_resets_at);
     const weeklyCountdown = formatCountdown(report.usage.weekly_resets_at);
-    return `${label}: ${staleMark}${report.usage.weekly_pct}% week (${weeklyCountdown}), ${report.usage.session_pct}% now (${sessionCountdown})`;
+    const weeklyTimePct = timeElapsedPct(report.usage.weekly_resets_at, WEEK_MS);
+    return `${label}: ${staleMark}${report.usage.weekly_pct}% week / ${weeklyTimePct}% time (${weeklyCountdown}), ${report.usage.session_pct}% now (${sessionCountdown})`;
   }
 
   const reason = report.error_type === "missing_credentials"
@@ -773,7 +786,8 @@ function buildWaybar(selected: Provider, reports: Record<Provider, ProviderRepor
     const staleMark = selectedReport.stale ? "~" : "";
     const sessionCountdown = formatCountdown(selectedState.session_resets_at);
     const weeklyCountdown = formatCountdown(selectedState.weekly_resets_at);
-    text = `(${providerShort(selected)} ${staleMark}${selectedState.weekly_pct}% ${weeklyCountdown}| ${staleMark}${selectedState.session_pct}% ${sessionCountdown})`;
+    const weeklyTimePct = timeElapsedPct(selectedState.weekly_resets_at, WEEK_MS);
+    text = `(${providerShort(selected)} ${staleMark}${selectedState.weekly_pct}%q ${weeklyTimePct}%t ${weeklyCountdown}| ${staleMark}${selectedState.session_pct}% ${sessionCountdown})`;
     percentage = selectedState.session_pct;
 
     if (selectedState.weekly_pct >= 90) cssClass = "critical";
