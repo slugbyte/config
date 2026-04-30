@@ -33,6 +33,13 @@ Format:
     - Bullet points with details
     - Markdown style body
 
+## Project Root
+
+- Use the `vroot` command (in `~/bin`) whenever you need a project root path.
+- It prints the nearest ancestor containing `.jj`, then `.git`, then the current
+  directory as fallback.
+- Prefer `vroot` over guessing path depth or assuming `cwd == project root`.
+
 ## Engineering Style
 
 Safety first, then performance, then developer experience.
