@@ -1,12 +1,12 @@
 ---
-name: personal-scripts
+name: slugbin
 description: >
   Conventions for creating or modifying personal scripts in ~/workspace/conf/bin.
   Trigger when adding, editing, or discussing scripts in the bin directory.
 allowed-tools: Bash(chmod *), Write, Edit, Read
 ---
 
-# Personal Scripts Skill
+# Slugbin
 
 Use this skill when creating or modifying scripts in `~/workspace/conf/bin`.
 

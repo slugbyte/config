@@ -1,10 +1,10 @@
 ---
-name: buddy-review
+name: buddy
 description: REQUIRED when the user explicitly says "buddy", "task-buddy", or "verify-buddy" (or plurals "buddies", "task-buddies", "verify-buddies", and close variants like "use buddy", "run a task-buddy", "do a verify-buddy", "run 4 verify-buddies"). Do not trigger on generic phrases like "second opinion", "external review", "another model", or "GPT" -- only on the literal terms buddy / task-buddy / verify-buddy (and their plurals).
 allowed-tools: Bash(buddy *), Bash(vdiff *), Agent, Read
 ---
 
-# Buddy Review
+# Buddy
 
 `buddy` is a read-only wrapper around `pi -p` running an external
 model. Use it for second opinions, never as the primary author.
