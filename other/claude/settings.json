@@ -13,6 +13,7 @@
     ],
     "skipDangerousModePermissionPrompt": true
   },
+  "model": "opus[1m]",
   "allowedMcpServers": [],
   "hooks": {
     "SessionStart": [
@@ -34,12 +35,13 @@
   },
   "effortLevel": "xhigh",
   "plansDirectory": "plan",
+  "tui": "fullscreen",
   "voice": {
     "enabled": false,
     "mode": "hold"
   },
   "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
-  "voiceEnabled": false,
-  "theme": "dark-ansi"
+  "theme": "dark-ansi",
+  "voiceEnabled": false
 }
