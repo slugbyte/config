@@ -1,0 +1,73 @@
+#!/bin/bash
+# system-4k - Toggle the primary display between 4k and 1080p
+#
+# Swaps which Hyprland monitor profile active.conf points at (4k @ 1.6
+# scale, or the monitor default @ 1x), then reloads Hyprland. Defaults to "on"
+# (4k) when no argument is given. GDK_SCALE only affects newly launched
+# apps, so already-open GTK windows keep their old scale until relaunched.
+#
+# Usage:
+#   system-4k [on|off]
+#
+# Examples:
+#   system-4k          # enable 4k (default)
+#   system-4k on       # 4k 3840x2160 @ 1.6 scale
+#   system-4k off      # monitor default resolution @ 1x scale
+
+set -uo pipefail
+
+[[ "${1:-}" == "--describe" ]] && echo "Toggle the primary display between 4k and 1080p" && exit 0
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: system-4k [on|off]"
+    echo ""
+    echo "Toggle the primary display between 4k and 1080p, then reload Hyprland."
+    echo "Defaults to 'on' when no argument is given."
+    echo "  on     4k 3840x2160 @ 1.6 scale (default)"
+    echo "  off    monitor default resolution @ 1x scale"
+    echo ""
+    echo "Note: GDK_SCALE changes only apply to newly launched apps;"
+    echo "relaunch open GTK windows to pick up the new scale."
+    exit 0
+fi
+
+monitor_dir="$HOME/.config/hypr/monitor"
+active="$monitor_dir/active.conf"
+
+mode="${1:-on}"
+case "$mode" in
+    on)  profile="$monitor_dir/on.conf" ;;
+    off) profile="$monitor_dir/off.conf" ;;
+    *)
+        echo "ERROR: unknown mode '$mode' (expected: on, off)" >&2
+        exit 1
+        ;;
+esac
+
+if [[ ! -f "$profile" ]]; then
+    echo "ERROR: profile not found: $profile" >&2
+    exit 1
+fi
+
+cp "$profile" "$active" || {
+    echo "ERROR: failed to write $active" >&2
+    exit 1
+}
+
+# A live reload re-reads the monitor scale immediately. If hyprctl is
+# unavailable (e.g. run outside a Hyprland session) the profile is still
+# written and applies on next start, so this is a warning, not an error.
+if command -v hyprctl >/dev/null 2>&1 && hyprctl reload >/dev/null 2>&1; then
+    reload_note="hyprland reloaded"
+else
+    reload_note="hyprland NOT reloaded (applies on next start)"
+fi
+
+# Waybar does not auto-reload and reads the monitor scale at startup, so a
+# scale change leaves it mis-sized until restarted.
+if command -v omarchy-restart-waybar >/dev/null 2>&1; then
+    omarchy-restart-waybar >/dev/null 2>&1
+fi
+
+echo "system-4k: $mode active ($(basename "$profile")) -- $reload_note, waybar restarted"
+echo "note: relaunch GTK apps to pick up the new GDK_SCALE"

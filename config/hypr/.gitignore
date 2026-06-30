@@ -1,1 +1,3 @@
 shaders/
+# Machine-local active display profile, swapped by `system-4k`.
+monitor/active.conf

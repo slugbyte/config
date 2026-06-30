@@ -91,6 +91,15 @@
   prune_dangling_links "$HOME/.config"
   prune_dangling_links "$HOME"
 
+  # Seed the machine-local display profile if absent (default: 4k on).
+  # active.conf is gitignored and swapped by `system-4k`, but monitors.conf
+  # sources it, so it must exist before Hyprland starts on a fresh machine.
+  monitor_active="$conf/config/hypr/monitor/active.conf"
+  if [[ ! -e "$monitor_active" ]]; then
+    run_safe cp "$conf/config/hypr/monitor/on.conf" "$monitor_active"
+    echo "[SEED] config/hypr/monitor/active.conf <- on.conf"
+  fi
+
   # run install scripts for other configs
   for install_script in "$conf/other"/*/install.sh; do
     [[ -x "$install_script" ]] || continue
